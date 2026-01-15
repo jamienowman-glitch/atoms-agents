@@ -1,0 +1,15 @@
+description: Executes a CrewAI Crew with Sequential processes, defining Agents and
+  Tasks inline.
+framework: crewai
+parameters:
+  topic:
+    type: string
+    description: Primary topic or input for the crew.
+    default: AI Agents
+mode_id: CrewAI.Crew.Sequential
+invoke_entrypoint: runtime.crewai.modes.crew_sequential.run
+supports_streaming: none
+required_params:
+- topic
+pinned_version_ref: integration/crewai/PINNED_VERSION.md
+notes: UNKNOWN

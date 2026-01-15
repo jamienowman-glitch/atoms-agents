@@ -1,0 +1,2345 @@
+[
+  {
+    "meta": {
+      "atom_kind": "accordion_item",
+      "version": "1.0.0"
+    },
+    "content": {
+      "title": "Is this a migrated atom?",
+      "body": "Yes, it has been manually updated to show that we can recover legacy functionality."
+    },
+    "typography": {
+      "title": {
+        "size": "16px",
+        "weight": 600,
+        "letter_spacing": "0px",
+        "width": 100,
+        "slant": 0,
+        "animation": {
+          "animation_mode": "OFF",
+          "animation_style": "BREATHE_IN"
+        },
+        "color": "#000"
+      },
+      "body": {
+        "size": "14px",
+        "weight": 400,
+        "letter_spacing": "0px",
+        "width": 100,
+        "slant": 0,
+        "animation": {
+          "animation_mode": "OFF",
+          "animation_style": "BREATHE_IN"
+        },
+        "color": "#444",
+        "line_height": "1.5"
+      }
+    },
+    "color": {
+      "background": "#ffffff",
+      "border": "#dddddd",
+      "expanded_bg": "#f9f9f9"
+    },
+    "border": {
+      "width": "1px",
+      "color": "#dddddd",
+      "radius": "4px"
+    },
+    "spacing": {
+      "padding": {
+        "top": "16px",
+        "right": "16px",
+        "bottom": "16px",
+        "left": "16px"
+      }
+    },
+    "size": {
+      "width": "100%"
+    },
+    "layout": {
+      "status": "NA",
+      "reason": "Internal"
+    },
+    "effects": {
+      "status": "NA",
+      "reason": "Internal"
+    },
+    "media": {
+      "status": "NA",
+      "reason": "Internal"
+    },
+    "interaction": {
+      "open_by_default": false
+    },
+    "linking": {
+      "status": "NA"
+    },
+    "data_binding": {
+      "status": "ENABLED"
+    },
+    "tracking": {
+      "analytics_event_name": "accordion_open"
+    },
+    "accessibility": {
+      "role": "button"
+    },
+    "constraints": {
+      "status": "NA"
+    },
+    "id": "accordion_item",
+    "kind": "accordion_item"
+  },
+  {
+    "meta": {
+      "atom_kind": "blackboard_node",
+      "version": "1.0.0"
+    },
+    "content": {
+      "name": {
+        "content": "Shared Blackboard",
+        "placeholder": "Name"
+      },
+      "is_persistent": {
+        "content": false,
+        "controller_kind": "boolean"
+      }
+    },
+    "style": {
+      "background_color": "#333333",
+      "text_color": "#ffffff"
+    },
+    "id": "blackboard_node",
+    "kind": "blackboard_node"
+  },
+  {
+    "meta": {
+      "atom_kind": "columns_grid",
+      "version": "1.0.0"
+    },
+    "content": {
+      "status": "NA",
+      "reason": "Layout only"
+    },
+    "typography": {
+      "status": "NA",
+      "reason": "Layout only"
+    },
+    "color": {
+      "background": "transparent",
+      "border": "transparent",
+      "text": "inherit"
+    },
+    "border": {
+      "width": "0px",
+      "radius": "0px",
+      "style": "none",
+      "color": "transparent"
+    },
+    "spacing": {
+      "padding": {
+        "top": "0px",
+        "right": "0px",
+        "bottom": "0px",
+        "left": "0px"
+      },
+      "margin": {
+        "top": "0px",
+        "right": "0px",
+        "bottom": "0px",
+        "left": "0px"
+      },
+      "gap": "20px"
+    },
+    "size": {
+      "width": "100%",
+      "height": "auto"
+    },
+    "layout": {
+      "display": "grid",
+      "grid_template_columns": "1fr 1fr",
+      "align_items": "start",
+      "stack_on_mobile": true
+    },
+    "effects": {
+      "opacity": 1
+    },
+    "media": {
+      "status": "NA",
+      "reason": "Layout"
+    },
+    "interaction": {
+      "enabled": false
+    },
+    "linking": {
+      "status": "NA",
+      "reason": "Layout"
+    },
+    "data_binding": {
+      "status": "ENABLED"
+    },
+    "tracking": {
+      "status": "NA",
+      "reason": "Layout"
+    },
+    "accessibility": {
+      "role": "group",
+      "label": "Columns"
+    },
+    "constraints": {
+      "allowed_children": [
+        "rich_text_block",
+        "image_with_text",
+        "video_block",
+        "cta_button"
+      ],
+      "allowed_edits": [
+        "layout",
+        "spacing"
+      ]
+    },
+    "id": "columns_grid",
+    "kind": "columns_grid"
+  },
+  {
+    "meta": {
+      "atom_kind": "connector_node",
+      "version": "1.0.0"
+    },
+    "content": {
+      "connector_name": {
+        "content": "Connector Name",
+        "placeholder": "e.g. Shopify"
+      },
+      "connector_version": {
+        "content": "v1.0.0",
+        "placeholder": "vX.Y.Z"
+      },
+      "badge_text": {
+        "content": "Platform",
+        "placeholder": "Platform Name"
+      }
+    },
+    "style": {
+      "background_color": "#ffffff",
+      "border_color": "#e0e0e0",
+      "text_color": "#000000"
+    },
+    "id": "connector_node",
+    "kind": "connector_node"
+  },
+  {
+    "meta": {
+      "atom_kind": "cta_button",
+      "version": "1.0.0"
+    },
+    "content": {
+      "text": {
+        "content": "Click me",
+        "placeholder": "Button text"
+      },
+      "bindings": {
+        "status": "NA",
+        "reason": "Basic CTA"
+      },
+      "merge_tags": {
+        "status": "NA",
+        "reason": "Basic CTA"
+      },
+      "conditional": {
+        "status": "NA",
+        "reason": "Basic CTA"
+      }
+    },
+    "typography": {
+      "base": {
+        "family_preset": "roboto_flex",
+        "size": "16px",
+        "weight": 500,
+        "letter_spacing": "0px",
+        "width": 100,
+        "slant": 0,
+        "animation": {
+          "animation_mode": "OFF",
+          "animation_style": "BREATHE_IN"
+        },
+        "line_height": "1.2",
+        "text_align": "center",
+        "text_decoration": "none"
+      },
+      "mobile": {},
+      "desktop": {}
+    },
+    "color": {
+      "background": "#000000",
+      "text": "#FFFFFF",
+      "border": "transparent",
+      "hover_background": "#333333",
+      "hover_text": "#FFFFFF"
+    },
+    "border": {
+      "width": "0px",
+      "radius": "4px",
+      "style": "solid",
+      "color": "transparent"
+    },
+    "spacing": {
+      "padding": {
+        "top": "12px",
+        "right": "24px",
+        "bottom": "12px",
+        "left": "24px"
+      },
+      "margin": {
+        "top": "0px",
+        "right": "0px",
+        "bottom": "0px",
+        "left": "0px"
+      },
+      "gap": "8px"
+    },
+    "size": {
+      "width": "auto",
+      "height": "auto",
+      "min_width": "0px",
+      "max_width": "100%"
+    },
+    "layout": {
+      "display": "inline-flex",
+      "align_self": "auto",
+      "justify_content": "center"
+    },
+    "effects": {
+      "opacity": 1,
+      "shadow": "none"
+    },
+    "media": {
+      "status": "NA",
+      "reason": "Icon slot handled via children or separate atom for now"
+    },
+    "interaction": {
+      "enabled": true,
+      "cursor": "pointer",
+      "states": {
+        "hover": {},
+        "pressed": {},
+        "focus": {}
+      }
+    },
+    "linking": {
+      "mode": "href",
+      "href": "#",
+      "target": "_self",
+      "rel": "noopener",
+      "action_type": "navigate",
+      "action_payload": {}
+    },
+    "data_binding": {
+      "status": "ENABLED"
+    },
+    "tracking": {
+      "analytics_event_name": "cta_click",
+      "conversion_goal_id": "",
+      "experiment_id": "",
+      "impression_event": false,
+      "click_event": true,
+      "utm_defaults": {}
+    },
+    "accessibility": {
+      "role": "button",
+      "label": "Click me",
+      "tab_index": 0,
+      "keyboard_nav": true
+    },
+    "constraints": {
+      "allowed_edits": [
+        "content",
+        "typography",
+        "color",
+        "border",
+        "spacing",
+        "linking"
+      ],
+      "email_safe": true
+    },
+    "id": "cta_button",
+    "kind": "cta_button"
+  },
+  {
+    "meta": {
+      "atom_kind": "divider",
+      "version": "1.0.0"
+    },
+    "content": {
+      "status": "NA",
+      "reason": "Divider"
+    },
+    "typography": {
+      "status": "NA",
+      "reason": "Divider"
+    },
+    "color": {
+      "border": "#e5e5e5"
+    },
+    "border": {
+      "width": "1px",
+      "style": "solid",
+      "color": "current_color"
+    },
+    "spacing": {
+      "padding": {
+        "top": "20px",
+        "right": "0px",
+        "bottom": "20px",
+        "left": "0px"
+      },
+      "margin": {
+        "top": "0px",
+        "right": "0px",
+        "bottom": "0px",
+        "left": "0px"
+      },
+      "gap": "0px"
+    },
+    "size": {
+      "width": "100%",
+      "height": "1px"
+    },
+    "layout": {
+      "display": "block"
+    },
+    "effects": {
+      "opacity": 1
+    },
+    "media": {
+      "status": "NA",
+      "reason": "Divider"
+    },
+    "interaction": {
+      "enabled": false
+    },
+    "linking": {
+      "status": "NA",
+      "reason": "Divider"
+    },
+    "data_binding": {
+      "status": "NA",
+      "reason": "Divider"
+    },
+    "tracking": {
+      "status": "NA",
+      "reason": "Divider"
+    },
+    "accessibility": {
+      "role": "separator"
+    },
+    "constraints": {
+      "allowed_edits": [
+        "spacing",
+        "color",
+        "border"
+      ]
+    },
+    "id": "divider",
+    "kind": "divider"
+  },
+  {
+    "meta": {
+      "atom_kind": "dm_card",
+      "version": "1.0.0"
+    },
+    "content": {
+      "title": "Order Update",
+      "subtitle": "Your package has shipped!",
+      "image": "https://via.placeholder.com/400x200",
+      "buttons": [
+        {
+          "label": "Track Package",
+          "action": "track"
+        },
+        {
+          "label": "View Receipt",
+          "action": "view"
+        }
+      ]
+    },
+    "typography": {
+      "title": {
+        "size": "16px",
+        "weight": 600,
+        "letter_spacing": "0px",
+        "width": 100,
+        "slant": 0,
+        "animation": {
+          "animation_mode": "OFF",
+          "animation_style": "BREATHE_IN"
+        }
+      },
+      "subtitle": {
+        "size": "14px",
+        "weight": 400,
+        "letter_spacing": "0px",
+        "width": 100,
+        "slant": 0,
+        "animation": {
+          "animation_mode": "OFF",
+          "animation_style": "BREATHE_IN"
+        },
+        "color": "#666"
+      }
+    },
+    "color": {
+      "background": "#ffffff",
+      "border": "#e0e0e0"
+    },
+    "border": {
+      "width": "1px",
+      "radius": "12px",
+      "style": "solid",
+      "color": "current_color"
+    },
+    "spacing": {
+      "padding": {
+        "top": "0",
+        "right": "0",
+        "bottom": "0",
+        "left": "0"
+      },
+      "margin": {
+        "top": "8px",
+        "right": "0",
+        "bottom": "8px",
+        "left": "0"
+      },
+      "gap": "8px"
+    },
+    "size": {
+      "width": "280px"
+    },
+    "layout": {
+      "display": "flex",
+      "flex_direction": "column"
+    },
+    "effects": {
+      "shadow": "0 2px 8px rgba(0,0,0,0.1)"
+    },
+    "media": {
+      "status": "NA",
+      "reason": "In content"
+    },
+    "interaction": {
+      "enabled": true
+    },
+    "linking": {
+      "status": "NA",
+      "reason": "Buttons"
+    },
+    "data_binding": {
+      "status": "ENABLED"
+    },
+    "tracking": {
+      "analytics_event_name": "card_view"
+    },
+    "accessibility": {
+      "role": "article"
+    },
+    "constraints": {
+      "mobile_optimized": true
+    },
+    "id": "dm_card",
+    "kind": "dm_card"
+  },
+  {
+    "meta": {
+      "atom_kind": "dm_gallery",
+      "version": "1.0.0"
+    },
+    "content": {
+      "cards": [
+        {
+          "title": "Item 1",
+          "image": "https://via.placeholder.com/200"
+        },
+        {
+          "title": "Item 2",
+          "image": "https://via.placeholder.com/200"
+        },
+        {
+          "title": "Item 3",
+          "image": "https://via.placeholder.com/200"
+        }
+      ]
+    },
+    "typography": {
+      "title": {
+        "size": "14px",
+        "weight": 600,
+        "letter_spacing": "0px",
+        "width": 100,
+        "slant": 0,
+        "animation": {
+          "animation_mode": "OFF",
+          "animation_style": "BREATHE_IN"
+        }
+      }
+    },
+    "color": {
+      "background": "transparent"
+    },
+    "border": {
+      "status": "NA",
+      "reason": "Layout"
+    },
+    "spacing": {
+      "padding": {
+        "top": "10px",
+        "right": "10px",
+        "bottom": "10px",
+        "left": "10px"
+      },
+      "margin": {
+        "top": "0",
+        "right": "0",
+        "bottom": "0",
+        "left": "0"
+      },
+      "gap": "12px"
+    },
+    "size": {
+      "width": "100%",
+      "height": "auto"
+    },
+    "layout": {
+      "display": "flex",
+      "overflow_x": "scroll"
+    },
+    "effects": {
+      "status": "NA",
+      "reason": "Layout"
+    },
+    "media": {
+      "status": "NA",
+      "reason": "In cards"
+    },
+    "interaction": {
+      "enabled": true
+    },
+    "linking": {
+      "status": "NA",
+      "reason": "In cards"
+    },
+    "data_binding": {
+      "status": "ENABLED"
+    },
+    "tracking": {
+      "status": "NA",
+      "reason": "Carousel"
+    },
+    "accessibility": {
+      "role": "list",
+      "label": "Carousel"
+    },
+    "constraints": {
+      "mobile_optimized": true
+    },
+    "id": "dm_gallery",
+    "kind": "dm_gallery"
+  },
+  {
+    "meta": {
+      "atom_kind": "dm_message_text",
+      "version": "1.0.0"
+    },
+    "content": {
+      "text": "Hello, how can I help you today?",
+      "sender": "bot"
+    },
+    "typography": {
+      "base": {
+        "family_preset": "system",
+        "size": "15px",
+        "weight": 400,
+        "slant": 0,
+        "width": 100,
+        "letter_spacing": "0px",
+        "animation": {
+          "animation_mode": "OFF",
+          "animation_style": "BREATHE_IN"
+        },
+        "line_height": "1.4",
+        "color": "#000000"
+      }
+    },
+    "color": {
+      "background": "#e0e0e0",
+      "user_background": "#0084ff",
+      "user_text": "#ffffff"
+    },
+    "border": {
+      "radius": "18px"
+    },
+    "spacing": {
+      "padding": {
+        "top": "10px",
+        "right": "16px",
+        "bottom": "10px",
+        "left": "16px"
+      },
+      "margin": {
+        "top": "4px",
+        "right": "0",
+        "bottom": "4px",
+        "left": "0"
+      },
+      "gap": "0"
+    },
+    "size": {
+      "max_width": "75%"
+    },
+    "layout": {
+      "display": "flex"
+    },
+    "effects": {
+      "status": "NA",
+      "reason": "Mobile UI"
+    },
+    "media": {
+      "status": "NA",
+      "reason": "Text"
+    },
+    "interaction": {
+      "enabled": false
+    },
+    "linking": {
+      "status": "NA",
+      "reason": "Text"
+    },
+    "data_binding": {
+      "status": "ENABLED"
+    },
+    "tracking": {
+      "status": "NA",
+      "reason": "Text"
+    },
+    "accessibility": {
+      "role": "log"
+    },
+    "constraints": {
+      "mobile_optimized": true
+    },
+    "id": "dm_message_text",
+    "kind": "dm_message_text"
+  },
+  {
+    "meta": {
+      "atom_kind": "dm_quick_replies",
+      "version": "1.0.0"
+    },
+    "content": {
+      "options": [
+        "Yes",
+        "No",
+        "Maybe"
+      ]
+    },
+    "typography": {
+      "base": {
+        "size": "14px",
+        "weight": 600,
+        "letter_spacing": "0px",
+        "width": 100,
+        "slant": 0,
+        "animation": {
+          "animation_mode": "OFF",
+          "animation_style": "BREATHE_IN"
+        },
+        "color": "#0084ff"
+      }
+    },
+    "color": {
+      "background": "#ffffff",
+      "border": "#0084ff",
+      "active_background": "#0084ff",
+      "active_text": "#ffffff"
+    },
+    "border": {
+      "width": "1px",
+      "radius": "16px",
+      "style": "solid",
+      "color": "current_color"
+    },
+    "spacing": {
+      "padding": {
+        "top": "8px",
+        "right": "16px",
+        "bottom": "8px",
+        "left": "16px"
+      },
+      "margin": {
+        "top": "8px",
+        "right": "0",
+        "bottom": "8px",
+        "left": "0"
+      },
+      "gap": "8px"
+    },
+    "size": {
+      "width": "auto"
+    },
+    "layout": {
+      "display": "flex",
+      "wrap": "wrap"
+    },
+    "effects": {
+      "status": "NA",
+      "reason": "Mobile"
+    },
+    "media": {
+      "status": "NA",
+      "reason": "Text"
+    },
+    "interaction": {
+      "enabled": true
+    },
+    "linking": {
+      "status": "NA",
+      "reason": "Action"
+    },
+    "data_binding": {
+      "status": "ENABLED"
+    },
+    "tracking": {
+      "analytics_event_name": "quick_reply_click"
+    },
+    "accessibility": {
+      "role": "group"
+    },
+    "constraints": {
+      "mobile_optimized": true
+    },
+    "id": "dm_quick_replies",
+    "kind": "dm_quick_replies"
+  },
+  {
+    "meta": {
+      "atom_kind": "email_button",
+      "version": "1.0.0"
+    },
+    "content": {
+      "label": "Click Me"
+    },
+    "typography": {
+      "family": "arial",
+      "size": "16px",
+      "slant": 0,
+      "width": 100,
+      "letter_spacing": "0px",
+      "animation": {
+        "animation_mode": "OFF",
+        "animation_style": "BREATHE_IN"
+      },
+      "weight": "bold",
+      "color": "#ffffff"
+    },
+    "color": {
+      "background": "#007bff"
+    },
+    "border": {
+      "radius": "4px"
+    },
+    "spacing": {
+      "padding": {
+        "top": "12px",
+        "right": "24px",
+        "bottom": "12px",
+        "left": "24px"
+      },
+      "margin": {
+        "top": "0",
+        "right": "0",
+        "bottom": "20px",
+        "left": "0"
+      },
+      "gap": "0"
+    },
+    "size": {
+      "width": "auto"
+    },
+    "layout": {
+      "display": "inline-block",
+      "align": "center"
+    },
+    "effects": {
+      "status": "NA",
+      "reason": "Email"
+    },
+    "media": {
+      "status": "NA",
+      "reason": "Button"
+    },
+    "interaction": {
+      "enabled": true
+    },
+    "linking": {
+      "href": "#"
+    },
+    "data_binding": {
+      "status": "ENABLED"
+    },
+    "tracking": {
+      "analytics_event_name": "email_cta_click"
+    },
+    "accessibility": {
+      "role": "button"
+    },
+    "constraints": {
+      "email_safe": true,
+      "vml_support": false
+    },
+    "id": "email_button",
+    "kind": "email_button"
+  },
+  {
+    "meta": {
+      "atom_kind": "email_image",
+      "version": "1.0.0"
+    },
+    "content": {
+      "src": "https://via.placeholder.com/600x200",
+      "alt": "Header Image"
+    },
+    "typography": {
+      "status": "NA",
+      "reason": "Image"
+    },
+    "color": {
+      "status": "NA",
+      "reason": "Image"
+    },
+    "border": {
+      "width": "0px",
+      "radius": "0px"
+    },
+    "spacing": {
+      "padding": {
+        "top": "0",
+        "right": "0",
+        "bottom": "20px",
+        "left": "0"
+      },
+      "margin": {
+        "top": "0",
+        "right": "0",
+        "bottom": "0",
+        "left": "0"
+      },
+      "gap": "0"
+    },
+    "size": {
+      "width": "100%",
+      "max_width": "600px",
+      "height": "auto"
+    },
+    "layout": {
+      "display": "block",
+      "align": "center"
+    },
+    "effects": {
+      "status": "NA",
+      "reason": "Email"
+    },
+    "media": {
+      "status": "NA",
+      "reason": "Using content"
+    },
+    "interaction": {
+      "enabled": true
+    },
+    "linking": {
+      "href": "#"
+    },
+    "data_binding": {
+      "status": "ENABLED"
+    },
+    "tracking": {
+      "analytics_event_name": "email_click"
+    },
+    "accessibility": {
+      "role": "img",
+      "label": "Image"
+    },
+    "constraints": {
+      "email_safe": true,
+      "max_width": "600px"
+    },
+    "id": "email_image",
+    "kind": "email_image"
+  },
+  {
+    "meta": {
+      "atom_kind": "email_social_row",
+      "version": "1.0.0"
+    },
+    "content": {
+      "networks": [
+        {
+          "id": "fb",
+          "icon": "https://via.placeholder.com/24",
+          "url": "#"
+        },
+        {
+          "id": "tw",
+          "icon": "https://via.placeholder.com/24",
+          "url": "#"
+        },
+        {
+          "id": "ig",
+          "icon": "https://via.placeholder.com/24",
+          "url": "#"
+        }
+      ]
+    },
+    "typography": {
+      "status": "NA",
+      "reason": "Icons"
+    },
+    "color": {
+      "status": "NA",
+      "reason": "Icons"
+    },
+    "border": {
+      "status": "NA",
+      "reason": "Icons"
+    },
+    "spacing": {
+      "padding": {
+        "top": "20px",
+        "right": "0",
+        "bottom": "20px",
+        "left": "0"
+      },
+      "margin": {
+        "top": "0",
+        "right": "0",
+        "bottom": "0",
+        "left": "0"
+      },
+      "gap": "12px"
+    },
+    "size": {
+      "icon_size": "24px",
+      "weight": 400,
+      "slant": 0,
+      "width": 100,
+      "letter_spacing": "0px",
+      "animation": {
+        "animation_mode": "OFF",
+        "animation_style": "BREATHE_IN"
+      }
+    },
+    "layout": {
+      "display": "flex",
+      "justify": "center"
+    },
+    "effects": {
+      "status": "NA",
+      "reason": "Email"
+    },
+    "media": {
+      "status": "NA",
+      "reason": "Using content"
+    },
+    "interaction": {
+      "enabled": true
+    },
+    "linking": {
+      "status": "NA",
+      "reason": "Per icon"
+    },
+    "data_binding": {
+      "status": "ENABLED"
+    },
+    "tracking": {
+      "analytics_event_name": "social_click"
+    },
+    "accessibility": {
+      "role": "group",
+      "label": "Social Links"
+    },
+    "constraints": {
+      "email_safe": true
+    },
+    "id": "email_social_row",
+    "kind": "email_social_row"
+  },
+  {
+    "meta": {
+      "atom_kind": "email_text",
+      "version": "1.0.0"
+    },
+    "content": {
+      "text": "Hello there, this is an email body."
+    },
+    "typography": {
+      "base": {
+        "family_preset": "arial",
+        "size": "16px",
+        "weight": 400,
+        "slant": 0,
+        "width": 100,
+        "letter_spacing": "0px",
+        "animation": {
+          "animation_mode": "OFF",
+          "animation_style": "BREATHE_IN"
+        },
+        "line_height": "1.5",
+        "color": "#333333"
+      }
+    },
+    "color": {
+      "status": "NA",
+      "reason": "Typography"
+    },
+    "border": {
+      "status": "NA",
+      "reason": "Text"
+    },
+    "spacing": {
+      "padding": {
+        "top": "0",
+        "right": "0",
+        "bottom": "0",
+        "left": "0"
+      },
+      "margin": {
+        "top": "0",
+        "right": "0",
+        "bottom": "16px",
+        "left": "0"
+      },
+      "gap": "0"
+    },
+    "size": {
+      "width": "100%"
+    },
+    "layout": {
+      "display": "block"
+    },
+    "effects": {
+      "status": "NA",
+      "reason": "Email"
+    },
+    "media": {
+      "status": "NA",
+      "reason": "Text"
+    },
+    "interaction": {
+      "enabled": false
+    },
+    "linking": {
+      "status": "NA",
+      "reason": "Text inline"
+    },
+    "data_binding": {
+      "status": "ENABLED",
+      "merge_tags": true
+    },
+    "tracking": {
+      "status": "NA",
+      "reason": "Text"
+    },
+    "accessibility": {
+      "role": "article"
+    },
+    "constraints": {
+      "email_safe": true,
+      "allowed_fonts": [
+        "arial",
+        "verdana",
+        "georgia",
+        "times"
+      ]
+    },
+    "id": "email_text",
+    "kind": "email_text"
+  },
+  {
+    "meta": {
+      "atom_kind": "featured_collection_grid",
+      "version": "1.0.0"
+    },
+    "content": {
+      "title": "New Arrivals",
+      "collection_source": "frontpage"
+    },
+    "typography": {
+      "heading": {
+        "size": "32px",
+        "weight": 700,
+        "letter_spacing": "0px",
+        "width": 100,
+        "slant": 0,
+        "animation": {
+          "animation_mode": "OFF",
+          "animation_style": "BREATHE_IN"
+        },
+        "align": "center"
+      }
+    },
+    "color": {
+      "background": "transparent"
+    },
+    "border": {
+      "status": "NA",
+      "reason": "Layout"
+    },
+    "spacing": {
+      "padding": {
+        "top": "40px",
+        "right": "20px",
+        "bottom": "40px",
+        "left": "20px"
+      },
+      "margin": {
+        "top": "0",
+        "right": "0",
+        "bottom": "0",
+        "left": "0"
+      },
+      "gap": "20px"
+    },
+    "size": {
+      "width": "100%"
+    },
+    "layout": {
+      "display": "grid",
+      "grid_template_columns": "repeat(auto-fill, minmax(280px, 1fr))",
+      "gap": "20px"
+    },
+    "effects": {
+      "status": "NA",
+      "reason": "Layout"
+    },
+    "media": {
+      "status": "NA",
+      "reason": "Layout"
+    },
+    "interaction": {
+      "enabled": false
+    },
+    "linking": {
+      "status": "NA",
+      "reason": "Layout"
+    },
+    "data_binding": {
+      "status": "ENABLED",
+      "source": "shopify_collection"
+    },
+    "tracking": {
+      "status": "NA",
+      "reason": "Layout"
+    },
+    "accessibility": {
+      "role": "feed",
+      "label": "Collection"
+    },
+    "constraints": {
+      "allowed_children": [
+        "featured_product_card"
+      ]
+    },
+    "id": "featured_collection_grid",
+    "kind": "featured_collection_grid"
+  },
+  {
+    "meta": {
+      "atom_kind": "featured_product_card",
+      "version": "1.0.0"
+    },
+    "content": {
+      "product": {
+        "title": "Classic T-Shirt",
+        "price": "$29.99",
+        "image_src": "https://via.placeholder.com/300x400"
+      },
+      "button_label": "Add to Cart"
+    },
+    "typography": {
+      "title": {
+        "size": "18px",
+        "weight": 600,
+        "letter_spacing": "0px",
+        "width": 100,
+        "slant": 0,
+        "animation": {
+          "animation_mode": "OFF",
+          "animation_style": "BREATHE_IN"
+        }
+      },
+      "price": {
+        "size": "16px",
+        "weight": 400,
+        "letter_spacing": "0px",
+        "width": 100,
+        "slant": 0,
+        "animation": {
+          "animation_mode": "OFF",
+          "animation_style": "BREATHE_IN"
+        },
+        "color": "#666"
+      }
+    },
+    "color": {
+      "background": "#fff",
+      "border": "#eee"
+    },
+    "border": {
+      "width": "1px",
+      "radius": "8px",
+      "style": "solid",
+      "color": "current_color"
+    },
+    "spacing": {
+      "padding": {
+        "top": "16px",
+        "right": "16px",
+        "bottom": "16px",
+        "left": "16px"
+      },
+      "margin": {
+        "top": "0",
+        "right": "0",
+        "bottom": "0",
+        "left": "0"
+      },
+      "gap": "12px"
+    },
+    "size": {
+      "width": "100%",
+      "height": "auto"
+    },
+    "layout": {
+      "display": "flex",
+      "flex_direction": "column"
+    },
+    "effects": {
+      "shadow": "none",
+      "hover_shadow": "0 4px 12px rgba(0,0,0,0.1)"
+    },
+    "media": {
+      "status": "NA",
+      "reason": "Product Image"
+    },
+    "interaction": {
+      "enabled": true
+    },
+    "linking": {
+      "href": "/products/classic-t-shirt"
+    },
+    "data_binding": {
+      "status": "ENABLED",
+      "source": "shopify_product"
+    },
+    "tracking": {
+      "analytics_event_name": "product_click",
+      "conversion_goal_id": "add_to_cart"
+    },
+    "accessibility": {
+      "role": "article",
+      "label": "Product Card"
+    },
+    "constraints": {
+      "allowed_edits": [
+        "typography",
+        "color",
+        "border"
+      ]
+    },
+    "id": "featured_product_card",
+    "kind": "featured_product_card"
+  },
+  {
+    "meta": {
+      "atom_kind": "heading_block",
+      "version": "1.0.0"
+    },
+    "content": {
+      "text": {
+        "content": "Headline",
+        "placeholder": "Enter headline",
+        "transform": "none",
+        "truncation": "none"
+      },
+      "bindings": {
+        "status": "ENABLED"
+      },
+      "merge_tags": {
+        "status": "ENABLED"
+      },
+      "conditional": {
+        "status": "ENABLED"
+      }
+    },
+    "typography": {
+      "base": {
+        "family_preset": "roboto_flex",
+        "size": "32px",
+        "weight": 700,
+        "letter_spacing": "0px",
+        "width": 100,
+        "slant": 0,
+        "animation": {
+          "animation_mode": "OFF",
+          "animation_style": "BREATHE_IN"
+        },
+        "line_height": "1.2",
+        "text_align": "left",
+        "text_decoration": "none"
+      },
+      "mobile": {
+        "size": "24px",
+        "slant": 0,
+        "width": 100,
+        "letter_spacing": "0px",
+        "animation": {
+          "animation_mode": "OFF",
+          "animation_style": "BREATHE_IN"
+        }
+      },
+      "desktop": {}
+    },
+    "color": {
+      "text": "#000000",
+      "background": "transparent",
+      "border": "transparent",
+      "text_gradient": {
+        "status": "NA",
+        "reason": "MVP"
+      }
+    },
+    "border": {
+      "status": "NA",
+      "reason": "Headings traditionally do not have borders, handled by container"
+    },
+    "spacing": {
+      "padding": {
+        "top": "0px",
+        "right": "0px",
+        "bottom": "16px",
+        "left": "0px"
+      },
+      "margin": {
+        "top": "0px",
+        "right": "0px",
+        "bottom": "0px",
+        "left": "0px"
+      },
+      "gap": "0px"
+    },
+    "size": {
+      "width": "100%",
+      "height": "auto"
+    },
+    "layout": {
+      "display": "block",
+      "positioning": "flow"
+    },
+    "effects": {
+      "opacity": 1,
+      "shadow": "none"
+    },
+    "media": {
+      "status": "NA",
+      "reason": "Text only"
+    },
+    "interaction": {
+      "enabled": false,
+      "cursor": "default",
+      "states": {
+        "status": "NA",
+        "reason": "Static text"
+      }
+    },
+    "linking": {
+      "status": "NA",
+      "reason": "Use Link Block or wrap in anchor"
+    },
+    "data_binding": {
+      "status": "ENABLED",
+      "fallback": "Headline"
+    },
+    "tracking": {
+      "status": "NA",
+      "reason": "Headings do not inherently track clicks"
+    },
+    "accessibility": {
+      "role": "heading",
+      "level": 1,
+      "label": "Headline",
+      "aria": {}
+    },
+    "constraints": {
+      "allowed_edits": [
+        "content",
+        "typography",
+        "color",
+        "spacing"
+      ],
+      "email_safe": true
+    },
+    "id": "heading_block",
+    "kind": "heading_block"
+  },
+  {
+    "meta": {
+      "atom_kind": "hero_image_banner",
+      "version": "1.0.0"
+    },
+    "content": {
+      "text": {
+        "title": "Welcome",
+        "subtitle": "Start your journey",
+        "button_label": "Shop Now"
+      },
+      "image": {
+        "src": "https://via.placeholder.com/1200x600",
+        "alt": "Hero Banner"
+      }
+    },
+    "typography": {
+      "title": {
+        "family_preset": "roboto_flex",
+        "size": "48px",
+        "weight": 700,
+        "letter_spacing": "0px",
+        "width": 100,
+        "slant": 0,
+        "animation": {
+          "animation_mode": "OFF",
+          "animation_style": "BREATHE_IN"
+        }
+      },
+      "subtitle": {
+        "family_preset": "roboto_flex",
+        "size": "20px",
+        "weight": 400,
+        "letter_spacing": "0px",
+        "width": 100,
+        "slant": 0,
+        "animation": {
+          "animation_mode": "OFF",
+          "animation_style": "BREATHE_IN"
+        }
+      }
+    },
+    "color": {
+      "text": "#ffffff",
+      "background": "#000000",
+      "overlay_opacity": 0.3
+    },
+    "border": {
+      "status": "NA",
+      "reason": "Hero"
+    },
+    "spacing": {
+      "padding": {
+        "top": "80px",
+        "right": "40px",
+        "bottom": "80px",
+        "left": "40px"
+      },
+      "margin": {
+        "top": "0px",
+        "right": "0px",
+        "bottom": "0px",
+        "left": "0px"
+      },
+      "gap": "24px"
+    },
+    "size": {
+      "width": "100%",
+      "height": "600px"
+    },
+    "layout": {
+      "display": "flex",
+      "flex_direction": "column",
+      "align_items": "center",
+      "justify_content": "center"
+    },
+    "effects": {
+      "status": "NA",
+      "reason": "Hero"
+    },
+    "media": {
+      "status": "NA",
+      "reason": "Using content.image"
+    },
+    "interaction": {
+      "enabled": true
+    },
+    "linking": {
+      "href": "#"
+    },
+    "data_binding": {
+      "status": "ENABLED"
+    },
+    "tracking": {
+      "analytics_event_name": "hero_click",
+      "conversion_goal_id": "view_hero"
+    },
+    "accessibility": {
+      "role": "banner",
+      "label": "Hero"
+    },
+    "constraints": {
+      "allowed_edits": [
+        "content",
+        "color",
+        "spacing",
+        "typography"
+      ]
+    },
+    "id": "hero_image_banner",
+    "kind": "hero_image_banner"
+  },
+  {
+    "meta": {
+      "atom_kind": "image_with_text",
+      "version": "1.0.0"
+    },
+    "content": {
+      "text": {
+        "title": "Feature Highlight",
+        "body": "Descriptive text goes here."
+      },
+      "image": {
+        "src": "https://via.placeholder.com/600x400",
+        "alt": "Feature"
+      }
+    },
+    "typography": {
+      "title": {
+        "size": "24px",
+        "weight": 600,
+        "letter_spacing": "0px",
+        "width": 100,
+        "slant": 0,
+        "animation": {
+          "animation_mode": "OFF",
+          "animation_style": "BREATHE_IN"
+        }
+      },
+      "body": {
+        "size": "16px",
+        "weight": 400,
+        "letter_spacing": "0px",
+        "width": 100,
+        "slant": 0,
+        "animation": {
+          "animation_mode": "OFF",
+          "animation_style": "BREATHE_IN"
+        },
+        "line_height": "1.5"
+      }
+    },
+    "color": {
+      "background": "#f8f8f8",
+      "text": "#222",
+      "image_bg": "#ddd"
+    },
+    "border": {
+      "status": "NA",
+      "reason": "Feature block"
+    },
+    "spacing": {
+      "padding": {
+        "top": "0",
+        "right": "0",
+        "bottom": "0",
+        "left": "0"
+      },
+      "margin": {
+        "top": "0",
+        "right": "0",
+        "bottom": "20px",
+        "left": "0"
+      },
+      "gap": "40px"
+    },
+    "size": {
+      "width": "100%",
+      "height": "auto"
+    },
+    "layout": {
+      "display": "flex",
+      "flex_direction": "row",
+      "align_items": "center",
+      "stack_on_mobile": true
+    },
+    "effects": {
+      "status": "NA",
+      "reason": "Feature"
+    },
+    "media": {
+      "status": "NA",
+      "reason": "Using content.image"
+    },
+    "interaction": {
+      "enabled": false
+    },
+    "linking": {
+      "status": "NA",
+      "reason": "Usually static"
+    },
+    "data_binding": {
+      "status": "ENABLED"
+    },
+    "tracking": {
+      "status": "NA",
+      "reason": "Static"
+    },
+    "accessibility": {
+      "role": "group",
+      "label": "Feature"
+    },
+    "constraints": {
+      "allowed_edits": [
+        "content",
+        "layout",
+        "typography"
+      ]
+    },
+    "id": "image_with_text",
+    "kind": "image_with_text"
+  },
+  {
+    "meta": {
+      "atom_kind": "lens_header_node",
+      "version": "1.0.0"
+    },
+    "content": {
+      "title_text": {
+        "content": "LENS TITLE",
+        "placeholder": "LENS TITLE"
+      },
+      "subtitle_text": {
+        "content": "Description of this lens",
+        "placeholder": "Description"
+      }
+    },
+    "style": {
+      "text_color": "#888888",
+      "line_color": "#eeeeee"
+    },
+    "id": "lens_header_node",
+    "kind": "lens_header_node"
+  },
+  {
+    "meta": {
+      "atom_kind": "nav_bar",
+      "version": "1.0.0"
+    },
+    "content": {
+      "links": [
+        {
+          "label": "Home",
+          "href": "/"
+        },
+        {
+          "label": "Shop",
+          "href": "/shop"
+        }
+      ]
+    },
+    "typography": {
+      "base": {
+        "family_preset": "roboto_flex",
+        "size": "14px",
+        "weight": 500,
+        "letter_spacing": "0px",
+        "width": 100,
+        "slant": 0,
+        "animation": {
+          "animation_mode": "OFF",
+          "animation_style": "BREATHE_IN"
+        }
+      }
+    },
+    "color": {
+      "background": "#ffffff",
+      "text": "#000000",
+      "border": "#e5e5e5"
+    },
+    "border": {
+      "width": "1px",
+      "style": "solid",
+      "color": "current_color"
+    },
+    "spacing": {
+      "padding": {
+        "top": "16px",
+        "right": "20px",
+        "bottom": "16px",
+        "left": "20px"
+      },
+      "margin": {
+        "top": "0px",
+        "right": "0px",
+        "bottom": "0px",
+        "left": "0px"
+      },
+      "gap": "24px"
+    },
+    "size": {
+      "width": "100%",
+      "height": "auto"
+    },
+    "layout": {
+      "display": "flex",
+      "justify_content": "space-between",
+      "align_items": "center"
+    },
+    "effects": {
+      "shadow": "0 2px 4px rgba(0,0,0,0.05)"
+    },
+    "media": {
+      "logo_url": ""
+    },
+    "interaction": {
+      "enabled": true
+    },
+    "linking": {
+      "status": "NA",
+      "reason": "Use content.links"
+    },
+    "data_binding": {
+      "status": "ENABLED"
+    },
+    "tracking": {
+      "status": "NA",
+      "reason": "Nav"
+    },
+    "accessibility": {
+      "role": "navigation",
+      "label": "Main Menu"
+    },
+    "constraints": {
+      "allowed_edits": [
+        "content",
+        "color",
+        "typography"
+      ]
+    },
+    "id": "nav_bar",
+    "kind": "nav_bar"
+  },
+  {
+    "meta": {
+      "atom_kind": "quote_block",
+      "version": "1.0.0"
+    },
+    "content": {
+      "quote": "The best way to predict the future is to create it.",
+      "author": "Peter Drucker"
+    },
+    "typography": {
+      "quote": {
+        "size": "24px",
+        "weight": 400,
+        "letter_spacing": "0px",
+        "width": 100,
+        "slant": 0,
+        "animation": {
+          "animation_mode": "OFF",
+          "animation_style": "BREATHE_IN"
+        },
+        "style": "italic"
+      },
+      "author": {
+        "size": "16px",
+        "weight": 600,
+        "letter_spacing": "0px",
+        "width": 100,
+        "slant": 0,
+        "animation": {
+          "animation_mode": "OFF",
+          "animation_style": "BREATHE_IN"
+        },
+        "color": "#666"
+      }
+    },
+    "color": {
+      "border_left": "#000000",
+      "background": "#transparent",
+      "text": "#222222"
+    },
+    "border": {
+      "width": "4px"
+    },
+    "spacing": {
+      "padding": {
+        "top": "10px",
+        "right": "0",
+        "bottom": "10px",
+        "left": "20px"
+      },
+      "margin": {
+        "top": "20px",
+        "bottom": "20px"
+      }
+    },
+    "size": {
+      "width": "100%"
+    },
+    "layout": {
+      "status": "NA"
+    },
+    "effects": {
+      "status": "NA"
+    },
+    "media": {
+      "status": "NA"
+    },
+    "interaction": {
+      "status": "NA"
+    },
+    "linking": {
+      "status": "NA"
+    },
+    "data_binding": {
+      "status": "ENABLED"
+    },
+    "tracking": {
+      "status": "NA"
+    },
+    "accessibility": {
+      "role": "blockquote"
+    },
+    "constraints": {
+      "status": "NA"
+    },
+    "id": "quote_block",
+    "kind": "quote_block"
+  },
+  {
+    "meta": {
+      "atom_kind": "rich_text_block",
+      "version": "1.0.0"
+    },
+    "content": {
+      "html": "<p>Start typing...</p>"
+    },
+    "typography": {
+      "base": {
+        "family_preset": "roboto_flex",
+        "size": "16px",
+        "weight": 400,
+        "slant": 0,
+        "width": 100,
+        "letter_spacing": "0px",
+        "animation": {
+          "animation_mode": "OFF",
+          "animation_style": "BREATHE_IN"
+        },
+        "line_height": "1.6",
+        "color": "#333"
+      }
+    },
+    "color": {
+      "status": "NA",
+      "reason": "Handled in typography"
+    },
+    "border": {
+      "status": "NA",
+      "reason": "Text"
+    },
+    "spacing": {
+      "padding": {
+        "top": "0",
+        "right": "0",
+        "bottom": "0",
+        "left": "0"
+      },
+      "margin": {
+        "top": "0",
+        "right": "0",
+        "bottom": "16px",
+        "left": "0"
+      },
+      "gap": "0"
+    },
+    "size": {
+      "width": "100%",
+      "height": "auto"
+    },
+    "layout": {
+      "display": "block"
+    },
+    "effects": {
+      "status": "NA",
+      "reason": "Text"
+    },
+    "media": {
+      "status": "NA",
+      "reason": "Text"
+    },
+    "interaction": {
+      "enabled": false
+    },
+    "linking": {
+      "status": "NA",
+      "reason": "Inline links"
+    },
+    "data_binding": {
+      "status": "ENABLED"
+    },
+    "tracking": {
+      "status": "NA",
+      "reason": "Text"
+    },
+    "accessibility": {
+      "role": "article"
+    },
+    "constraints": {
+      "allowed_edits": [
+        "content",
+        "typography"
+      ]
+    },
+    "id": "rich_text_block",
+    "kind": "rich_text_block"
+  },
+  {
+    "meta": {
+      "atom_kind": "section_container",
+      "version": "1.0.0"
+    },
+    "content": {
+      "status": "NA",
+      "reason": "Layout only"
+    },
+    "typography": {
+      "status": "NA",
+      "reason": "Layout only"
+    },
+    "color": {
+      "background": "transparent",
+      "text": "inherit",
+      "border": "transparent"
+    },
+    "border": {
+      "width": "0px",
+      "radius": "0px",
+      "style": "none",
+      "color": "transparent"
+    },
+    "spacing": {
+      "padding": {
+        "top": "40px",
+        "right": "20px",
+        "bottom": "40px",
+        "left": "20px"
+      },
+      "margin": {
+        "top": "0px",
+        "right": "0px",
+        "bottom": "0px",
+        "left": "0px"
+      },
+      "gap": "20px"
+    },
+    "size": {
+      "width": "100%",
+      "height": "auto",
+      "max_width": "1200px"
+    },
+    "layout": {
+      "display": "flex",
+      "flex_direction": "column",
+      "align_items": "stretch",
+      "justify_content": "flex-start"
+    },
+    "effects": {
+      "opacity": 1,
+      "shadow": "none"
+    },
+    "media": {
+      "status": "NA",
+      "reason": "Layout only"
+    },
+    "interaction": {
+      "enabled": false
+    },
+    "linking": {
+      "status": "NA",
+      "reason": "Container"
+    },
+    "data_binding": {
+      "status": "ENABLED"
+    },
+    "tracking": {
+      "status": "NA",
+      "reason": "Container"
+    },
+    "accessibility": {
+      "role": "region",
+      "label": "Section"
+    },
+    "constraints": {
+      "allowed_children": [
+        "columns_grid",
+        "rich_text_block",
+        "hero_image_banner",
+        "image_with_text"
+      ],
+      "allowed_edits": [
+        "spacing",
+        "color"
+      ]
+    },
+    "id": "section_container",
+    "kind": "section_container"
+  },
+  {
+    "meta": {
+      "atom_kind": "section_hero_banner",
+      "version": "1.0.0"
+    },
+    "content": {
+      "heading": "Big Spring Sale",
+      "subheading": "Up to 50% off everything.",
+      "cta_text": "Shop Now",
+      "background_image": "https://via.placeholder.com/1600x900"
+    },
+    "typography": {
+      "heading": {
+        "size": "48px",
+        "weight": 800,
+        "color": "#ffffff",
+        "slant": 0,
+        "width": 100,
+        "letter_spacing": "0px",
+        "animation": {
+          "animation_mode": "OFF",
+          "animation_style": "BREATHE_IN"
+        }
+      },
+      "subheading": {
+        "size": "20px",
+        "weight": 400,
+        "color": "#f0f0f0",
+        "slant": 0,
+        "width": 100,
+        "letter_spacing": "0px",
+        "animation": {
+          "animation_mode": "OFF",
+          "animation_style": "BREATHE_IN"
+        }
+      }
+    },
+    "color": {
+      "overlay": "rgba(0,0,0,0.4)",
+      "button_bg": "#ffffff",
+      "button_text": "#000000"
+    },
+    "border": {
+      "status": "NA",
+      "reason": "Full width section"
+    },
+    "spacing": {
+      "padding": {
+        "top": "100px",
+        "right": "20px",
+        "bottom": "100px",
+        "left": "20px"
+      },
+      "margin": {
+        "status": "NA",
+        "reason": "Section"
+      },
+      "gap": "24px"
+    },
+    "size": {
+      "height": "600px",
+      "width": "100%"
+    },
+    "layout": {
+      "align": "center",
+      "justify": "center"
+    },
+    "effects": {
+      "status": "NA",
+      "reason": "Section"
+    },
+    "media": {
+      "status": "NA",
+      "reason": "In content"
+    },
+    "interaction": {
+      "enabled": true
+    },
+    "linking": {
+      "cta_url": "#"
+    },
+    "data_binding": {
+      "status": "ENABLED"
+    },
+    "tracking": {
+      "analytics_event_name": "hero_click"
+    },
+    "accessibility": {
+      "role": "banner"
+    },
+    "constraints": {
+      "allowed_blocks": []
+    },
+    "id": "section_hero_banner",
+    "kind": "section_hero_banner"
+  },
+  {
+    "meta": {
+      "atom_kind": "spacer",
+      "version": "1.0.0"
+    },
+    "content": {
+      "status": "NA",
+      "reason": "Spacer"
+    },
+    "typography": {
+      "status": "NA",
+      "reason": "Spacer"
+    },
+    "color": {
+      "status": "NA",
+      "reason": "Spacer is invisible usually, or handled by size"
+    },
+    "border": {
+      "status": "NA",
+      "reason": "Spacer"
+    },
+    "spacing": {
+      "status": "NA",
+      "reason": "Spacer defined by size"
+    },
+    "size": {
+      "height": "20px",
+      "width": "100%"
+    },
+    "layout": {
+      "display": "block"
+    },
+    "effects": {
+      "status": "NA",
+      "reason": "Spacer"
+    },
+    "media": {
+      "status": "NA",
+      "reason": "Spacer"
+    },
+    "interaction": {
+      "enabled": false
+    },
+    "linking": {
+      "status": "NA",
+      "reason": "Spacer"
+    },
+    "data_binding": {
+      "status": "NA",
+      "reason": "Spacer"
+    },
+    "tracking": {
+      "status": "NA",
+      "reason": "Spacer"
+    },
+    "accessibility": {
+      "role": "presentation"
+    },
+    "constraints": {
+      "allowed_edits": [
+        "size"
+      ]
+    },
+    "id": "spacer",
+    "kind": "spacer"
+  },
+  {
+    "meta": {
+      "atom_kind": "video_block",
+      "version": "1.0.0"
+    },
+    "content": {
+      "status": "NA",
+      "reason": "Using media group"
+    },
+    "typography": {
+      "status": "NA",
+      "reason": "Video"
+    },
+    "color": {
+      "status": "NA",
+      "reason": "Video"
+    },
+    "border": {
+      "width": "0px",
+      "radius": "8px"
+    },
+    "spacing": {
+      "padding": {
+        "top": "0",
+        "right": "0",
+        "bottom": "0",
+        "left": "0"
+      },
+      "margin": {
+        "top": "0",
+        "right": "0",
+        "bottom": "20px",
+        "left": "0"
+      },
+      "gap": "0"
+    },
+    "size": {
+      "width": "100%",
+      "aspect_ratio": "16/9"
+    },
+    "layout": {
+      "display": "block"
+    },
+    "effects": {
+      "shadow": "0 4px 12px rgba(0,0,0,0.1)"
+    },
+    "media": {
+      "kind": "video",
+      "src": "https://www.w3schools.com/html/mov_bbb.mp4",
+      "poster": "",
+      "controls": true,
+      "autoplay": false,
+      "loop": false
+    },
+    "interaction": {
+      "enabled": true
+    },
+    "linking": {
+      "status": "NA",
+      "reason": "Video controls"
+    },
+    "data_binding": {
+      "status": "ENABLED"
+    },
+    "tracking": {
+      "analytics_event_name": "video_play"
+    },
+    "accessibility": {
+      "role": "application",
+      "label": "Video Player"
+    },
+    "constraints": {
+      "allowed_edits": [
+        "media",
+        "size",
+        "border"
+      ]
+    },
+    "id": "video_block",
+    "kind": "video_block"
+  }
+]

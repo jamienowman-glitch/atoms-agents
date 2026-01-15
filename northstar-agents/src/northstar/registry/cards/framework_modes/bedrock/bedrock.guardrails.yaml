@@ -1,0 +1,18 @@
+card_type: mode
+id: bedrock.guardrails
+framework: bedrock
+official_name: Guardrails
+invoke_primitive: converse or converse_stream
+entrypoint: northstar.runtime.modes.bedrock.bedrock_guardrails.run
+params:
+  official_name: Guardrails Configuration (in Converse)
+  official_options: guardrailConfig (rules, roleArn)
+  minimal_snippet: 'client = boto3.client("bedrock-runtime"); client.converse(modelId="model-id",
+    messages=[...], guardrailConfig={''rules'': [...], ''roleArn'': role_arn})'
+streaming_support: true
+docs_urls:
+- https://docs.aws.amazon.com/bedrock/latest/userguide/apply-guardrails.html
+pinned_version: boto3>=1.34.0
+confidence: med
+notes: "AWS Bedrock \u201CGuardrails\u201D use guardrailConfig in Converse API calls\
+  \ (sets rules for LLM output)"

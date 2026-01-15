@@ -1,0 +1,1554 @@
+[
+  {
+    "atom": "chat_rail_header_bar",
+    "dimension": "icons",
+    "log_file": "icons_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_rail_header_bar/icons/header_icons.md",
+        "description": "mapping for minimise/expand/tools/settings and order tokens."
+      }
+    ],
+    "notes": "- Use global registry icons; tokens for size, padding, stroke/fill, hover/active/disabled states; order tokenized."
+  },
+  {
+    "atom": "chat_message_list",
+    "dimension": "icons",
+    "log_file": "icons_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_message_list/icons/notes.md",
+        "description": "note [NO ICONS] at list level."
+      }
+    ],
+    "notes": "- Icons live in message blocks; document none at list container."
+  },
+  {
+    "atom": "chat_message_block",
+    "dimension": "icons",
+    "log_file": "icons_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_message_block/icons/avatar.md",
+        "description": "avatar slot mapping and sizing."
+      }
+    ],
+    "notes": "- Optional avatar icon per role; tokens for size, alignment, spacing; uses global registry."
+  },
+  {
+    "atom": "chat_message_action_bar",
+    "dimension": "icons",
+    "log_file": "icons_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_message_action_bar/icons/actions.md",
+        "description": "icon refs for save/alert/review/delete/todo with states."
+      }
+    ],
+    "notes": "- Five required icons from registry; tokens for size, stroke, spacing, hover/pressed/disabled colour references."
+  },
+  {
+    "atom": "chat_safety_controls_bar",
+    "dimension": "icons",
+    "log_file": "icons_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_safety_controls_bar/icons/controls.md",
+        "description": "icon refs for slider/scales/fire etc. with active state styling."
+      }
+    ],
+    "notes": "- Map control_id to icon_id; tokens for size, padding, active indicator; monochrome on dark base."
+  },
+  {
+    "atom": "bottom_chat_input_bar",
+    "dimension": "icons",
+    "log_file": "icons_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/bottom_chat_input_bar/icons/upload.md",
+        "description": "upload/agent icon ref and states."
+      },
+      {
+        "path": "aitom_family/bottom_chat_input_bar/icons/shortcut.md",
+        "description": "inline shortcut arrow icon ref."
+      },
+      {
+        "path": "aitom_family/bottom_chat_input_bar/icons/send.md",
+        "description": "send icon ref and states."
+      }
+    ],
+    "notes": "- Icons come from registry; tokens for size, padding, hover/pressed/disabled; ensure contrast on light pill."
+  },
+  {
+    "atom": "chat_shortcuts_popover",
+    "dimension": "icons",
+    "log_file": "icons_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_shortcuts_popover/icons/notes.md",
+        "description": "[NO ICONS] beyond text tokens."
+      }
+    ],
+    "notes": "- Tokens rendered as text; document no additional icons unless future glyphs added."
+  },
+  {
+    "atom": "chat_upload_source_picker",
+    "dimension": "icons",
+    "log_file": "icons_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_upload_source_picker/icons/sources.md",
+        "description": "optional icons per source/destination type."
+      }
+    ],
+    "notes": "- Map source_id to icon_id (cloud/device/etc.); tokens for size, spacing; subdued on dark base."
+  },
+  {
+    "atom": "chat_icon_band_popover",
+    "dimension": "icons",
+    "log_file": "icons_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_icon_band_popover/icons/band_icons.md",
+        "description": "icon refs for tools/settings entries and active state styling."
+      }
+    ],
+    "notes": "- Icons from registry; tokens for large size, padding, active underline/filled disc; horizontal scroll alignment."
+  },
+  {
+    "atom": "chat_rail_shell",
+    "dimension": "icons",
+    "log_file": "icons_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_rail_shell/icons/header_controls.md",
+        "description": "minimise/expand/tools/settings icon mapping and states."
+      },
+      {
+        "path": "aitom_family/chat_rail_shell/icons/preview.md",
+        "description": "optional nano preview icon/avatar slot."
+      }
+    ],
+    "notes": "- Reference global icons: icon_minimize, icon_expand, icon_settings, icon_tools; tokens for size, padding, hover/active states.\n- Optional preview/avatar icon in nano state uses registry ref; ensure monochrome alignment with header height."
+  },
+  {
+    "atom": "chat_rail_header_bar",
+    "dimension": "views",
+    "log_file": "views_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_rail_header_bar/views/default.md",
+        "description": "header layout with label and icons on dark base."
+      },
+      {
+        "path": "aitom_family/chat_rail_header_bar/views/active_states.md",
+        "description": "active tools/settings state, disabled min/expand."
+      }
+    ],
+    "notes": "- Show label truncation, focus/hover/pressed for icons, active band underline/fill; mobile narrow vs desktop."
+  },
+  {
+    "atom": "chat_message_list",
+    "dimension": "views",
+    "log_file": "views_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_message_list/views/states.md",
+        "description": "loading, empty, populated views with scroll indicator."
+      }
+    ],
+    "notes": "- Illustrate auto-scroll indicator, empty placeholder, loading skeleton; show alignment to rail stack."
+  },
+  {
+    "atom": "chat_message_block",
+    "dimension": "views",
+    "log_file": "views_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_message_block/views/agent_user.md",
+        "description": "agent (left) and human (right) variants with avatar."
+      },
+      {
+        "path": "aitom_family/chat_message_block/views/highlight.md",
+        "description": "highlighted/new message example."
+      }
+    ],
+    "notes": "- Show name/body/role tag stacking; action bar placement; highlight overlay; wrap handling without bubbles."
+  },
+  {
+    "atom": "chat_message_action_bar",
+    "dimension": "views",
+    "log_file": "views_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_message_action_bar/views/default.md",
+        "description": "row of five icons with hover/pressed/disabled samples."
+      }
+    ],
+    "notes": "- Show spacing and tap area; demonstrate disabled icons; attach under message."
+  },
+  {
+    "atom": "chat_safety_controls_bar",
+    "dimension": "views",
+    "log_file": "views_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_safety_controls_bar/views/default.md",
+        "description": "control row with off/on states."
+      },
+      {
+        "path": "aitom_family/chat_safety_controls_bar/views/overflow.md",
+        "description": "handling when controls exceed width (wrap/scroll)."
+      }
+    ],
+    "notes": "- Show active indicator; compact height; mobile overflow handling."
+  },
+  {
+    "atom": "bottom_chat_input_bar",
+    "dimension": "views",
+    "log_file": "views_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/bottom_chat_input_bar/views/default.md",
+        "description": "pill with upload, shortcuts, input, send."
+      },
+      {
+        "path": "aitom_family/bottom_chat_input_bar/views/mobile_keyboard.md",
+        "description": "mobile view with keyboard showing and input pinned."
+      }
+    ],
+    "notes": "- Show multiline input capped; send visible; shortcut popover trigger; keyboard-safe layout on mobile."
+  },
+  {
+    "atom": "chat_shortcuts_popover",
+    "dimension": "views",
+    "log_file": "views_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_shortcuts_popover/views/open.md",
+        "description": "open popover with tokens displayed."
+      }
+    ],
+    "notes": "- Show token row, focus/hover example, anchor to input arrow; reduced-motion variant optional."
+  },
+  {
+    "atom": "chat_upload_source_picker",
+    "dimension": "views",
+    "log_file": "views_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_upload_source_picker/views/options.md",
+        "description": "source list/grid with hover/selected."
+      }
+    ],
+    "notes": "- Show Nexus/Maiybes/Device options; selected row highlight; attachment to input; mobile-safe width."
+  },
+  {
+    "atom": "chat_icon_band_popover",
+    "dimension": "views",
+    "log_file": "views_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_icon_band_popover/views/tools.md",
+        "description": "tools band example with scroll on mobile."
+      },
+      {
+        "path": "aitom_family/chat_icon_band_popover/views/settings.md",
+        "description": "settings band example with active icon."
+      }
+    ],
+    "notes": "- Illustrate single-band visibility, active icon styling, horizontal scroll handling, placement between header and list."
+  },
+  {
+    "atom": "chat_rail_shell",
+    "dimension": "views",
+    "log_file": "views_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_rail_shell/views/states.md",
+        "description": "visuals for nano/micro/standard/full on mobile/desktop."
+      },
+      {
+        "path": "aitom_family/chat_rail_shell/views/docking.md",
+        "description": "docked vs undocked positions and drag handles."
+      },
+      {
+        "path": "aitom_family/chat_rail_shell/views/bands.md",
+        "description": "tools/settings band examples and mutual exclusivity."
+      }
+    ],
+    "notes": "- Show bottom anchoring on mobile with keyboard-safe input; desktop centered dock and floating undocked.\n- Illustrate state transitions, header controls, and single open band; show message list scrolling and auto-scroll indicator.\n- Include collision-free widths ensuring send button remains visible (no horizontal scroll)."
+  },
+  {
+    "atom": "chat_rail_header_bar",
+    "dimension": "data_schema",
+    "log_file": "data_schema_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_rail_header_bar/data_schema/schema.md",
+        "description": "header fields and control visibility."
+      },
+      {
+        "path": "aitom_family/chat_rail_header_bar/data_schema/state_derivations.md",
+        "description": "derived active states for bands and disable conditions."
+      }
+    ],
+    "notes": "- Fields: chat_id, app_label, current_state (nano/micro/standard/full), active_band (none/tools/settings), show_minimize, show_expand, tracking/view ids.\n- Derived: can_minimise/can_expand booleans; active states for tools/settings icons; label truncation not stored as data.\n- No PII; label is display string only."
+  },
+  {
+    "atom": "chat_message_list",
+    "dimension": "data_schema",
+    "log_file": "data_schema_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_message_list/data_schema/schema.md",
+        "description": "list fields including messages refs and history flags."
+      },
+      {
+        "path": "aitom_family/chat_message_list/data_schema/scroll_state.md",
+        "description": "scroll position/auto-scroll flags (optional)."
+      }
+    ],
+    "notes": "- Fields: chat_id, messages (array refs), has_more_history, unread_count (optional), auto_scroll_enabled flag; no message bodies.\n- Scroll state optional: last_visible_message_id, is_user_scrolling flag; keep PII-free."
+  },
+  {
+    "atom": "chat_message_block",
+    "dimension": "data_schema",
+    "log_file": "data_schema_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_message_block/data_schema/schema.md",
+        "description": "message fields and optional role_tag/avatar."
+      },
+      {
+        "path": "aitom_family/chat_message_block/data_schema/derived_flags.md",
+        "description": "is_new/highlight derived state."
+      }
+    ],
+    "notes": "- Fields: message_id, chat_id, author_role, author_label, body_text_ref, role_tag, timestamp, avatar_id, is_new; tracking/view ids.\n- Derived highlight state driven by is_new/search; alignment determined by role/token; no body text stored here beyond ref."
+  },
+  {
+    "atom": "chat_message_action_bar",
+    "dimension": "data_schema",
+    "log_file": "data_schema_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_message_action_bar/data_schema/schema.md",
+        "description": "action availability flags."
+      }
+    ],
+    "notes": "- Fields: message_id, chat_id, can_save, can_alert, can_review, can_delete, can_create_todo (booleans), tracking/view ids.\n- Action ids/event names not hardcoded; no message text or PII."
+  },
+  {
+    "atom": "chat_safety_controls_bar",
+    "dimension": "data_schema",
+    "log_file": "data_schema_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_safety_controls_bar/data_schema/schema.md",
+        "description": "controls array and states."
+      }
+    ],
+    "notes": "- Fields: chat_id, controls [{control_id, state}], safety_profile_id optional, tracking/view ids.\n- States simple enums; no user content; control definitions referenced by ids."
+  },
+  {
+    "atom": "bottom_chat_input_bar",
+    "dimension": "data_schema",
+    "log_file": "data_schema_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/bottom_chat_input_bar/data_schema/schema.md",
+        "description": "input state fields."
+      },
+      {
+        "path": "aitom_family/bottom_chat_input_bar/data_schema/behaviour_flags.md",
+        "description": "enter/shift-enter config, disabled flags."
+      }
+    ],
+    "notes": "- Fields: chat_id, current_input_text_ref, placeholder_text_ref, is_disabled, shortcuts_enabled, tracking/view ids.\n- Behaviour flags: send_on_enter (bool), multiline_cap, input_max_chars optional; no raw message text in analytics."
+  },
+  {
+    "atom": "chat_shortcuts_popover",
+    "dimension": "data_schema",
+    "log_file": "data_schema_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_shortcuts_popover/data_schema/schema.md",
+        "description": "tokens array and default order."
+      }
+    ],
+    "notes": "- Fields: chat_id, tokens [{id, display}], default_token_order optional, tracking/view ids.\n- No PII; display strings limited to provided tokens (e.g., \u00b2, \u00b3)."
+  },
+  {
+    "atom": "chat_upload_source_picker",
+    "dimension": "data_schema",
+    "log_file": "data_schema_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_upload_source_picker/data_schema/schema.md",
+        "description": "sources/destinations arrays and defaults."
+      },
+      {
+        "path": "aitom_family/chat_upload_source_picker/data_schema/state.md",
+        "description": "selection state and routing notes."
+      }
+    ],
+    "notes": "- Fields: chat_id, available_sources, available_destinations (optional), default_source, default_destination, tracking/view ids.\n- State: selected_source_id, selected_destination_id optional; no filenames/contents; treat uploads as primary ingestion path."
+  },
+  {
+    "atom": "chat_icon_band_popover",
+    "dimension": "data_schema",
+    "log_file": "data_schema_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_icon_band_popover/data_schema/schema.md",
+        "description": "band_type, icons array, active icon."
+      }
+    ],
+    "notes": "- Fields: chat_id, band_type (tools/settings), icons [{icon_id, action_type}], active_icon_id optional, tracking/view ids.\n- No PII; icon actions referenced by ids only."
+  },
+  {
+    "atom": "chat_rail_shell",
+    "dimension": "data_schema",
+    "log_file": "data_schema_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_rail_shell/data_schema/schema.md",
+        "description": "chat rail fields and state enum."
+      },
+      {
+        "path": "aitom_family/chat_rail_shell/data_schema/positioning.md",
+        "description": "dock/undock position data and safe-area insets."
+      },
+      {
+        "path": "aitom_family/chat_rail_shell/data_schema/state_derivations.md",
+        "description": "derived flags (is_docked, has_band_open, unread/badge)."
+      }
+    ],
+    "notes": "- Fields: chat_id (required), state (nano/micro/standard/full), messages (array refs), active_band (none/tools/settings), app_label, is_docked (bool), position {x,y}, unread_count, tenant_id, view_id, safe_area_insets, tracking_key.\n- Derived: next_state availability, has_band_open, has_history_loaded; ensure no message bodies stored here, only refs/ids.\n- Store nano preview text as ref to latest message, not content; keep schema PII-free."
+  },
+  {
+    "atom": "chat_rail_header_bar",
+    "dimension": "accessibility",
+    "log_file": "accessibility_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_rail_header_bar/accessibility/roles_labels.md",
+        "description": "toolbar semantics and icon ARIA labels."
+      },
+      {
+        "path": "aitom_family/chat_rail_header_bar/accessibility/keyboard.md",
+        "description": "keyboard activation and focus order."
+      }
+    ],
+    "notes": "- Header remains focusable in all states; icon labels: minimise/expand/tools/settings; Enter/Space activates; focus ring visible on dark base; label contributes to region label."
+  },
+  {
+    "atom": "chat_message_list",
+    "dimension": "accessibility",
+    "log_file": "accessibility_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_message_list/accessibility/live_region.md",
+        "description": "live region settings for new messages."
+      },
+      {
+        "path": "aitom_family/chat_message_list/accessibility/keyboard.md",
+        "description": "scroll/focus guidance."
+      }
+    ],
+    "notes": "- Polite live region; avoid forcing focus on new messages; keyboard scroll via container; no horizontal scroll; announce new messages through message blocks."
+  },
+  {
+    "atom": "chat_message_block",
+    "dimension": "accessibility",
+    "log_file": "accessibility_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_message_block/accessibility/semantics.md",
+        "description": "labeling of author and body, role tags."
+      },
+      {
+        "path": "aitom_family/chat_message_block/accessibility/focus.md",
+        "description": "focus behaviour when action bar present."
+      }
+    ],
+    "notes": "- Announce author + body; role tag included; focus not required unless action bar interaction; if focusable, ensure tab order before action bar."
+  },
+  {
+    "atom": "chat_message_action_bar",
+    "dimension": "accessibility",
+    "log_file": "accessibility_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_message_action_bar/accessibility/aria.md",
+        "description": "labels for each action."
+      },
+      {
+        "path": "aitom_family/chat_message_action_bar/accessibility/keyboard.md",
+        "description": "focus and activation rules."
+      }
+    ],
+    "notes": "- Toolbar role; buttons labelled (\u201cSave message\u201d, etc.); Enter/Space activates; focus ring visible; maintain tab order left-to-right."
+  },
+  {
+    "atom": "chat_safety_controls_bar",
+    "dimension": "accessibility",
+    "log_file": "accessibility_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_safety_controls_bar/accessibility/aria.md",
+        "description": "control labels and states."
+      },
+      {
+        "path": "aitom_family/chat_safety_controls_bar/accessibility/keyboard.md",
+        "description": "navigation and activation."
+      }
+    ],
+    "notes": "- Toolbar role with labelled buttons (\u201cSafety review mode\u201d etc.); arrow key navigation; Enter/Space toggles; focus ring tokens."
+  },
+  {
+    "atom": "bottom_chat_input_bar",
+    "dimension": "accessibility",
+    "log_file": "accessibility_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/bottom_chat_input_bar/accessibility/labels.md",
+        "description": "aria labels for input, upload, send, shortcuts."
+      },
+      {
+        "path": "aitom_family/bottom_chat_input_bar/accessibility/keyboard.md",
+        "description": "tab order and Enter vs Shift+Enter behaviour."
+      }
+    ],
+    "notes": "- Tab order upload \u2192 text \u2192 send; input labeled (\u201cChat message input\u201d); upload/send/shortcut buttons labelled; Enter sends unless Shift held; focus ring visible; maintain accessibility when keyboard open."
+  },
+  {
+    "atom": "chat_shortcuts_popover",
+    "dimension": "accessibility",
+    "log_file": "accessibility_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_shortcuts_popover/accessibility/roles.md",
+        "description": "menu semantics and focus return."
+      },
+      {
+        "path": "aitom_family/chat_shortcuts_popover/accessibility/keyboard.md",
+        "description": "navigation between tokens and insertion."
+      }
+    ],
+    "notes": "- Role menu with menuitems; arrow navigation; Enter inserts; escape/outside click closes; returns focus to input; announce opening/closing politely."
+  },
+  {
+    "atom": "chat_upload_source_picker",
+    "dimension": "accessibility",
+    "log_file": "accessibility_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_upload_source_picker/accessibility/roles.md",
+        "description": "popover labelling and option semantics."
+      },
+      {
+        "path": "aitom_family/chat_upload_source_picker/accessibility/keyboard.md",
+        "description": "option navigation and selection."
+      }
+    ],
+    "notes": "- Role listbox/menu with options; labelled (\u201cChoose upload source\u201d); arrow navigation; Enter selects; focus returns to trigger; ensure focus ring visible."
+  },
+  {
+    "atom": "chat_icon_band_popover",
+    "dimension": "accessibility",
+    "log_file": "accessibility_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_icon_band_popover/accessibility/toolbar.md",
+        "description": "toolbar semantics and labels."
+      },
+      {
+        "path": "aitom_family/chat_icon_band_popover/accessibility/keyboard.md",
+        "description": "horizontal navigation and activation."
+      }
+    ],
+    "notes": "- Role toolbar; buttons labelled per tool/setting; arrow navigation; Enter/Space activates; focus ring visible; band announce when shown/hidden."
+  },
+  {
+    "atom": "chat_rail_shell",
+    "dimension": "accessibility",
+    "log_file": "accessibility_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_rail_shell/accessibility/semantics.md",
+        "description": "landmark/region roles and labels per state."
+      },
+      {
+        "path": "aitom_family/chat_rail_shell/accessibility/keyboard.md",
+        "description": "tab order, keyboard controls for minimise/expand/bands, undocked move."
+      },
+      {
+        "path": "aitom_family/chat_rail_shell/accessibility/motion.md",
+        "description": "reduced-motion behaviour for state changes and scrolling."
+      }
+    ],
+    "notes": "- Treat rail as labelled region/landmark; announce state changes (\u201cChat expanded to full\u201d); nano preview exposes latest message snippet.\n- Tab order: minimise \u2192 tools \u2192 settings \u2192 expand; ensure focusable in all states; header persists.\n- Keyboard move for undocked state (arrow keys) respects bounds; ensure input and send remain reachable; reduce motion removes animated transitions but keeps functionality."
+  },
+  {
+    "atom": "chat_rail_header_bar",
+    "dimension": "layout",
+    "log_file": "layout_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_rail_header_bar/layout/structure.md",
+        "description": "three-zone layout, padding, label centering."
+      },
+      {
+        "path": "aitom_family/chat_rail_header_bar/layout/spacing.md",
+        "description": "icon spacing/order tokens, min widths, truncation rules."
+      }
+    ],
+    "notes": "- Define header height token aligning with rail; symmetric padding; icon order/gap tokens; label center alignment with ellipsis when constrained; maintain alignment in nano/micro."
+  },
+  {
+    "atom": "chat_message_list",
+    "dimension": "layout",
+    "log_file": "layout_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_message_list/layout/structure.md",
+        "description": "scroll container sizing within rail stack."
+      },
+      {
+        "path": "aitom_family/chat_message_list/layout/spacing.md",
+        "description": "padding and vertical spacing tokens."
+      }
+    ],
+    "notes": "- Occupies remaining height between header/band/safety/input; min/max heights per state; padding tokenized; no horizontal scroll; supports loading/empty placeholder alignment."
+  },
+  {
+    "atom": "chat_message_block",
+    "dimension": "layout",
+    "log_file": "layout_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_message_block/layout/structure.md",
+        "description": "stacking of name/body/action bar, avatar alignment."
+      },
+      {
+        "path": "aitom_family/chat_message_block/layout/spacing.md",
+        "description": "gaps between elements, max width, highlight area."
+      }
+    ],
+    "notes": "- Define max text width within rail; gaps between name/body/action bar; avatar offset for agent/human; optional role tag alignment; highlight overlay non-shifting."
+  },
+  {
+    "atom": "chat_message_action_bar",
+    "dimension": "layout",
+    "log_file": "layout_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_message_action_bar/layout/row.md",
+        "description": "icon row spacing, padding, alignment under message body."
+      }
+    ],
+    "notes": "- Single row; equal spacing tokens; padding left/right aligned with message text; ensure tap target sizing and no wrap."
+  },
+  {
+    "atom": "chat_safety_controls_bar",
+    "dimension": "layout",
+    "log_file": "layout_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_safety_controls_bar/layout/row.md",
+        "description": "icon row spacing, padding, alignment above input."
+      },
+      {
+        "path": "aitom_family/chat_safety_controls_bar/layout/overflow.md",
+        "description": "behaviour when controls exceed width (wrap/scroll)."
+      }
+    ],
+    "notes": "- Compact height token; center/right alignment; spacing tokens; define overflow strategy without horizontal scroll on input area."
+  },
+  {
+    "atom": "bottom_chat_input_bar",
+    "dimension": "layout",
+    "log_file": "layout_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/bottom_chat_input_bar/layout/structure.md",
+        "description": "pill layout for upload/shortcut/input/send."
+      },
+      {
+        "path": "aitom_family/bottom_chat_input_bar/layout/padding.md",
+        "description": "internal padding and spacing to prevent overflow."
+      }
+    ],
+    "notes": "- Rounded pill height token; layout ensures send button always visible; input grows with cap and internal scroll; respects safe-area insets; horizontal padding tokens for icons and text."
+  },
+  {
+    "atom": "chat_shortcuts_popover",
+    "dimension": "layout",
+    "log_file": "layout_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_shortcuts_popover/layout/structure.md",
+        "description": "popover sizing, token arrangement, anchor positioning."
+      }
+    ],
+    "notes": "- Compact pill/rect; token row with spacing; anchor relative to input arrow; avoid covering input; radius tokenized."
+  },
+  {
+    "atom": "chat_upload_source_picker",
+    "dimension": "layout",
+    "log_file": "layout_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_upload_source_picker/layout/structure.md",
+        "description": "popover width/height, list/grid option layout, anchor."
+      },
+      {
+        "path": "aitom_family/chat_upload_source_picker/layout/overflow.md",
+        "description": "scrolling behaviour when options exceed max."
+      }
+    ],
+    "notes": "- Tokenize width and row height; attach to input; ensure it doesn\u2019t cover input send area; handle max visible options with scroll; radius/padding tokens."
+  },
+  {
+    "atom": "chat_icon_band_popover",
+    "dimension": "layout",
+    "log_file": "layout_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_icon_band_popover/layout/structure.md",
+        "description": "band height, padding, icon spacing, attachment to rail."
+      },
+      {
+        "path": "aitom_family/chat_icon_band_popover/layout/scroll.md",
+        "description": "horizontal scroll behaviour on mobile."
+      }
+    ],
+    "notes": "- Band spans rail width; attaches between header and messages; icons centered vertically; spacing tokens; define scroll snapping; ensure it doesn\u2019t push input off-screen."
+  },
+  {
+    "atom": "chat_rail_shell",
+    "dimension": "layout",
+    "log_file": "layout_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_rail_shell/layout/structure.md",
+        "description": "vertical stack (header, band, list, safety, input), radius, padding."
+      },
+      {
+        "path": "aitom_family/chat_rail_shell/layout/responsive.md",
+        "description": "mobile anchoring, desktop docked/undocked sizing, max width."
+      },
+      {
+        "path": "aitom_family/chat_rail_shell/layout/state_sizes.md",
+        "description": "height/width tokens per state (nano/micro/standard/full) and safe-area offsets."
+      }
+    ],
+    "notes": "- Define corner radius, padding, header height, band height, message list min/max heights, safety bar and input bar spacing.\n- Mobile: full-width minus safe-area, bottom anchored; ensure input/send never overflow horizontally; keyboard shrinks list area, not input.\n- Desktop: center docked max width; undocked position tokens; clamp within viewport; provide state height ranges with smooth transitions."
+  },
+  {
+    "atom": "chat_rail_header_bar",
+    "dimension": "behaviour",
+    "log_file": "behaviour_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_rail_header_bar/behaviour/toggles.md",
+        "description": "minimise/expand/tools/settings toggle rules and band exclusivity."
+      },
+      {
+        "path": "aitom_family/chat_rail_header_bar/behaviour/states.md",
+        "description": "default/hover/pressed/active/disabled states for icons and label truncation."
+      }
+    ],
+    "notes": "- Minimise steps rail state down; expand steps up; disable when at bounds.\n- Tools/settings toggles mutually exclusive; opening one closes the other; header persists in all rail states.\n- Outside click closes bands via shell callback; label truncation does not trigger layout shifts."
+  },
+  {
+    "atom": "chat_message_list",
+    "dimension": "behaviour",
+    "log_file": "behaviour_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_message_list/behaviour/scrolling.md",
+        "description": "auto-scroll to bottom rules and user override."
+      },
+      {
+        "path": "aitom_family/chat_message_list/behaviour/state_rules.md",
+        "description": "loading/empty/visible states and message alignment inheritance."
+      }
+    ],
+    "notes": "- Auto-scroll on load and when user is near bottom; pause auto-scroll when user scrolls up; provide resume threshold token.\n- Works as independent scroll area; respects rail state visibility (hidden in nano, minimal in micro optional).\n- No horizontal scroll; messages wrap within width tokens."
+  },
+  {
+    "atom": "chat_message_block",
+    "dimension": "behaviour",
+    "log_file": "behaviour_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_message_block/behaviour/alignment.md",
+        "description": "agent vs human alignment rules and optional role tag placement."
+      },
+      {
+        "path": "aitom_family/chat_message_block/behaviour/highlight.md",
+        "description": "new/search highlight duration and reduced-motion handling."
+      }
+    ],
+    "notes": "- Agent messages left-aligned; human may right-align via token; optional avatar placement follows alignment.\n- Highlight state uses tokenized overlay duration; reduced motion disables animations.\n- Text wraps within max width; no interactive elements unless action bar attached."
+  },
+  {
+    "atom": "chat_message_action_bar",
+    "dimension": "behaviour",
+    "log_file": "behaviour_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_message_action_bar/behaviour/actions.md",
+        "description": "per-icon activation rules and availability flags."
+      },
+      {
+        "path": "aitom_family/chat_message_action_bar/behaviour/states.md",
+        "description": "hover/pressed/disabled focus handling and tap targets."
+      }
+    ],
+    "notes": "- Each icon triggers its action; disable if corresponding can_* flag false; debounce rapid clicks.\n- Tap area meets minimum size regardless of icon art; focusable buttons; Enter/Space activates.\n- Order configurable via tokens; no long-press variants."
+  },
+  {
+    "atom": "chat_safety_controls_bar",
+    "dimension": "behaviour",
+    "log_file": "behaviour_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_safety_controls_bar/behaviour/toggles.md",
+        "description": "control activation/toggle rules and state propagation."
+      },
+      {
+        "path": "aitom_family/chat_safety_controls_bar/behaviour/focus.md",
+        "description": "keyboard navigation and focus order."
+      }
+    ],
+    "notes": "- Controls toggle between OFF/ON (or multi-state if provided); emit state changes to shell; single row only.\n- Arrow keys navigate; Enter/Space activates; ensure only appears in micro/standard/full.\n- No horizontal overflow; convert to scroll or wrap per tokens if needed."
+  },
+  {
+    "atom": "bottom_chat_input_bar",
+    "dimension": "behaviour",
+    "log_file": "behaviour_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/bottom_chat_input_bar/behaviour/input_handling.md",
+        "description": "enter/send vs shift+enter, multiline cap, focus/blur rules."
+      },
+      {
+        "path": "aitom_family/bottom_chat_input_bar/behaviour/triggers.md",
+        "description": "upload picker trigger, shortcuts popover trigger, send button behaviour."
+      },
+      {
+        "path": "aitom_family/bottom_chat_input_bar/behaviour/keyboard_safe.md",
+        "description": "mobile keyboard handling to keep controls visible."
+      }
+    ],
+    "notes": "- Enter sends, Shift+Enter newline (tokenized); input height capped with internal scroll; disabled state blocks send.\n- Upload/agent button opens source picker; shortcut arrow opens popover; send button always visible\u2014no horizontal scroll.\n- Keyboard open on mobile shrinks message list not input; keep rail pinned above browser chrome; ensure focus ring and tab order upload\u2192text\u2192send."
+  },
+  {
+    "atom": "chat_shortcuts_popover",
+    "dimension": "behaviour",
+    "log_file": "behaviour_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_shortcuts_popover/behaviour/open_close.md",
+        "description": "trigger, outside click/escape close, return focus to input."
+      },
+      {
+        "path": "aitom_family/chat_shortcuts_popover/behaviour/navigation.md",
+        "description": "keyboard navigation between tokens and insertion action."
+      }
+    ],
+    "notes": "- Opens from shortcut arrow; closes on selection, outside click, or escape; re-focus input after insertion.\n- Arrow keys move focus; Enter inserts token at cursor; reduced motion removes pop animations."
+  },
+  {
+    "atom": "chat_upload_source_picker",
+    "dimension": "behaviour",
+    "log_file": "behaviour_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_upload_source_picker/behaviour/selection.md",
+        "description": "source selection rules, device picker invocation, future destination selection hook."
+      },
+      {
+        "path": "aitom_family/chat_upload_source_picker/behaviour/open_close.md",
+        "description": "trigger, outside click/escape, focus return to upload button."
+      }
+    ],
+    "notes": "- Selecting DEVICE invokes OS picker; proprietary sources return id; future destination selection stubbed via token.\n- Only one view visible; highlight selection; close after selection; keyboard arrows move through options.\n- No filenames/content stored; treat upload as primary ingestion path."
+  },
+  {
+    "atom": "chat_icon_band_popover",
+    "dimension": "behaviour",
+    "log_file": "behaviour_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_icon_band_popover/behaviour/band_switching.md",
+        "description": "tools vs settings exclusivity and interaction with shell."
+      },
+      {
+        "path": "aitom_family/chat_icon_band_popover/behaviour/icon_actions.md",
+        "description": "icon activation, active state, horizontal scroll behaviour."
+      }
+    ],
+    "notes": "- Only one band visible; opening closes the other; integrates with shell active_band state.\n- Icons activate tool/setting actions; active_icon_id tracked; horizontal scroll on overflow with snap/free token; focusable buttons with arrow navigation."
+  },
+  {
+    "atom": "chat_rail_shell",
+    "dimension": "behaviour",
+    "log_file": "behaviour_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_rail_shell/behaviour/states.md",
+        "description": "nano/micro/standard/full state machine, transitions, and button mapping."
+      },
+      {
+        "path": "aitom_family/chat_rail_shell/behaviour/docking.md",
+        "description": "dock/undock rules, drag constraints, persistence of position."
+      },
+      {
+        "path": "aitom_family/chat_rail_shell/behaviour/mobile_anchoring.md",
+        "description": "bottom anchoring, keyboard-safe behaviour, chat rail exclusion of OS chrome."
+      },
+      {
+        "path": "aitom_family/chat_rail_shell/behaviour/bands.md",
+        "description": "tools/settings band mutual exclusivity, toggle rules."
+      },
+      {
+        "path": "aitom_family/chat_rail_shell/behaviour/scrolling.md",
+        "description": "message list auto-scroll rules, scroll-to-bottom behaviour, state-based visibility."
+      }
+    ],
+    "notes": "- Define state transitions: minimise cycles down (full\u2192standard\u2192micro\u2192nano\u2192optional hide), expand cycles up; clicking nano preview jumps to standard.\n- Mobile: rail pinned above browser chrome; input and controls stay visible with keyboard; no horizontal overflow allowed.\n- Desktop: docked centered by default; undocked can be dragged (Photoshop-style) and stored per session; clamp to viewport bounds.\n- Only one band open at a time; toggling tools/settings closes the other; header controls remain accessible in all states.\n- Scroll behaviour snaps to bottom on load and when user near bottom; avoid forced scroll when user is reviewing history."
+  },
+  {
+    "atom": "chat_rail_header_bar",
+    "dimension": "colours",
+    "log_file": "colours_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_rail_header_bar/colours/palette.md",
+        "description": "background, label text, icon colours."
+      },
+      {
+        "path": "aitom_family/chat_rail_header_bar/colours/state_map.md",
+        "description": "hover/pressed/active/disabled for header icons and label."
+      }
+    ],
+    "notes": "- Define rail header background (inherits rail), primary text/icon, active underline/fill for tools/settings, focus ring tokens; no gradients."
+  },
+  {
+    "atom": "chat_message_list",
+    "dimension": "colours",
+    "log_file": "colours_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_message_list/colours/notes.md",
+        "description": "inherit rail colours; [NO UNIQUE COLOURS]."
+      }
+    ],
+    "notes": "- Use rail background/text; highlight handled in message block; note no unique tokens."
+  },
+  {
+    "atom": "chat_message_block",
+    "dimension": "colours",
+    "log_file": "colours_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_message_block/colours/palette.md",
+        "description": "name/body/role_tag text, optional divider, highlight overlay."
+      },
+      {
+        "path": "aitom_family/chat_message_block/colours/state_map.md",
+        "description": "highlight/selected states."
+      }
+    ],
+    "notes": "- High-contrast text; secondary tone for meta; highlight overlay token for new/search; avatar inherits global background; no bubbles."
+  },
+  {
+    "atom": "chat_message_action_bar",
+    "dimension": "colours",
+    "log_file": "colours_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_message_action_bar/colours/palette.md",
+        "description": "icon base colour on dark background."
+      },
+      {
+        "path": "aitom_family/chat_message_action_bar/colours/state_map.md",
+        "description": "hover/pressed/disabled/focus."
+      }
+    ],
+    "notes": "- Icons match primary text; hover/pressed use subtle brightness/overlay; disabled dimmed; focus ring tokenized."
+  },
+  {
+    "atom": "chat_safety_controls_bar",
+    "dimension": "colours",
+    "log_file": "colours_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_safety_controls_bar/colours/palette.md",
+        "description": "icon base colour, active indicator."
+      },
+      {
+        "path": "aitom_family/chat_safety_controls_bar/colours/state_map.md",
+        "description": "hover/pressed/active."
+      }
+    ],
+    "notes": "- Monochrome icons; active uses filled disc/underline token; ensure contrast on dark base."
+  },
+  {
+    "atom": "bottom_chat_input_bar",
+    "dimension": "colours",
+    "log_file": "colours_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/bottom_chat_input_bar/colours/palette.md",
+        "description": "pill background, text, placeholder, icons."
+      },
+      {
+        "path": "aitom_family/bottom_chat_input_bar/colours/state_map.md",
+        "description": "focus/hover/pressed/disabled/error states."
+      }
+    ],
+    "notes": "- Light pill on dark rail; placeholder lower contrast token; focus outline token; error subtle border token; icon colours invert appropriately."
+  },
+  {
+    "atom": "chat_shortcuts_popover",
+    "dimension": "colours",
+    "log_file": "colours_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_shortcuts_popover/colours/palette.md",
+        "description": "popover background, token text."
+      },
+      {
+        "path": "aitom_family/chat_shortcuts_popover/colours/state_map.md",
+        "description": "hover/pressed/focus."
+      }
+    ],
+    "notes": "- Dark panel with light text; hover/pressed slight brightness; focus ring token; no shadows."
+  },
+  {
+    "atom": "chat_upload_source_picker",
+    "dimension": "colours",
+    "log_file": "colours_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_upload_source_picker/colours/palette.md",
+        "description": "background, text, icon colours."
+      },
+      {
+        "path": "aitom_family/chat_upload_source_picker/colours/state_map.md",
+        "description": "hover/selected row and focus."
+      }
+    ],
+    "notes": "- Dark panel, light text/icons; selected row token; focus ring visible; no gradients."
+  },
+  {
+    "atom": "chat_icon_band_popover",
+    "dimension": "colours",
+    "log_file": "colours_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_icon_band_popover/colours/palette.md",
+        "description": "band background, icon colours, label colours."
+      },
+      {
+        "path": "aitom_family/chat_icon_band_popover/colours/state_map.md",
+        "description": "hover/pressed/active icons."
+      }
+    ],
+    "notes": "- Inherits rail background; icons light; active underline/filled disc token; ensure contrast with labels if shown."
+  },
+  {
+    "atom": "chat_rail_shell",
+    "dimension": "colours",
+    "log_file": "colours_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_rail_shell/colours/palette.md",
+        "description": "background, text roles (primary/secondary), icon colours, dividers."
+      },
+      {
+        "path": "aitom_family/chat_rail_shell/colours/state_map.md",
+        "description": "state colours for header controls, bands, nano preview, focus/hover/pressed."
+      }
+    ],
+    "notes": "- Define semantic tokens: rail_background, header_text_primary, text_secondary, icon_default/hover/active, divider, focus_ring.\n- Ensure input bar colours come from its atom; avoid hardcoded hex; maintain contrast on dark base; state overlays tokenized."
+  },
+  {
+    "atom": "chat_rail_header_bar",
+    "dimension": "typography",
+    "log_file": "typography_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_rail_header_bar/typography/app_label.md",
+        "description": "preset for app/surface label with truncation guidance."
+      },
+      {
+        "path": "aitom_family/chat_rail_header_bar/typography/axis_tokens.md",
+        "description": "axis tokens for label and optional nano preview alignment."
+      }
+    ],
+    "notes": "- Roboto Flex preset heavier than body; single-line with ellipsis; center aligned; density adjustments minimal.\n- Axis tokens for wght/wdth/opsz/line_height/tracking; colours external."
+  },
+  {
+    "atom": "chat_message_list",
+    "dimension": "typography",
+    "log_file": "typography_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_message_list/typography/notes.md",
+        "description": "references chat_message_block presets; no unique presets."
+      }
+    ],
+    "notes": "- List inherits body presets from message blocks; note no additional typography defined here."
+  },
+  {
+    "atom": "chat_message_block",
+    "dimension": "typography",
+    "log_file": "typography_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_message_block/typography/name_body.md",
+        "description": "presets for author name and body."
+      },
+      {
+        "path": "aitom_family/chat_message_block/typography/role_tag.md",
+        "description": "preset for optional role tag."
+      }
+    ],
+    "notes": "- Name preset slightly heavier than body; body uses standard chat body; role tag bold/uppercase optional.\n- Include line-height and tracking tokens; ensure single-line truncation on name/role tag."
+  },
+  {
+    "atom": "chat_message_action_bar",
+    "dimension": "typography",
+    "log_file": "typography_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_message_action_bar/typography/tooltips.md",
+        "description": "tooltip preset if surfaced."
+      }
+    ],
+    "notes": "- Icon-only base; document [NO TEXT] unless tooltips shown; tooltips reuse meta preset from theme if enabled."
+  },
+  {
+    "atom": "chat_safety_controls_bar",
+    "dimension": "typography",
+    "log_file": "typography_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_safety_controls_bar/typography/labels.md",
+        "description": "optional labels/numeric indicators preset."
+      }
+    ],
+    "notes": "- Small/meta preset for labels or numeric values; single-line; spacing handled in layout."
+  },
+  {
+    "atom": "bottom_chat_input_bar",
+    "dimension": "typography",
+    "log_file": "typography_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/bottom_chat_input_bar/typography/input.md",
+        "description": "preset for typed text and placeholder variant."
+      },
+      {
+        "path": "aitom_family/bottom_chat_input_bar/typography/shortcuts.md",
+        "description": "preset for inline shortcut arrow label if text-based."
+      }
+    ],
+    "notes": "- Input uses Roboto Flex regular; placeholder variant with lower contrast token; line-height tokens for multiline cap.\n- Shortcut arrow is icon by default; if text rendered, use meta preset; keep alignment within pill."
+  },
+  {
+    "atom": "chat_shortcuts_popover",
+    "dimension": "typography",
+    "log_file": "typography_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_shortcuts_popover/typography/tokens.md",
+        "description": "preset for shortcut tokens (\u00b2, \u00b3 etc.)."
+      }
+    ],
+    "notes": "- Slightly larger than body for tap target; single-line; tracking/line-height tokens included; colours external."
+  },
+  {
+    "atom": "chat_upload_source_picker",
+    "dimension": "typography",
+    "log_file": "typography_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_upload_source_picker/typography/options.md",
+        "description": "preset for option labels."
+      }
+    ],
+    "notes": "- Single-line labels; mid-weight; ellipsis if needed; active/hover colours handled elsewhere."
+  },
+  {
+    "atom": "chat_icon_band_popover",
+    "dimension": "typography",
+    "log_file": "typography_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_icon_band_popover/typography/labels.md",
+        "description": "optional tiny labels under icons."
+      }
+    ],
+    "notes": "- Labels use small/meta preset; may be hidden via token; align center under icons; colours external."
+  },
+  {
+    "atom": "chat_rail_shell",
+    "dimension": "typography",
+    "log_file": "typography_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_rail_shell/typography/label_presets.md",
+        "description": "presets for header label and nano preview text."
+      },
+      {
+        "path": "aitom_family/chat_rail_shell/typography/body.md",
+        "description": "base body preset reference for message list text."
+      }
+    ],
+    "notes": "- Use Roboto Flex presets: header label heavier than message body; nano preview shares body weight with single-line ellipsis.\n- Provide compact vs standard line-height tokens; keep colours external; ensure consistency with downstream chat_message_block presets."
+  },
+  {
+    "atom": "chat_rail_header_bar",
+    "dimension": "tracking",
+    "log_file": "tracking_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_rail_header_bar/tracking/events.md",
+        "description": ""
+      },
+      {
+        "path": "aitom_family/chat_rail_header_bar/tracking/spec_examples.md",
+        "description": ""
+      },
+      {
+        "path": "aitom_family/chat_rail_header_bar/tracking/guardrails.md",
+        "description": ""
+      }
+    ],
+    "notes": "- Events: click_chat_minimize, click_chat_expand, click_chat_tools, click_chat_settings.\n- Payload: chat_id, view_id, tenant_id, current_state, active_band, tracking_key, context (UTMs), consent flag. No labels or message content."
+  },
+  {
+    "atom": "chat_message_list",
+    "dimension": "tracking",
+    "log_file": "tracking_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_message_list/tracking/events.md",
+        "description": "chat_scroll event definition."
+      },
+      {
+        "path": "aitom_family/chat_message_list/tracking/guardrails.md",
+        "description": "disallow message bodies."
+      }
+    ],
+    "notes": "- Event: chat_scroll (throttled) with chat_id, last_visible_message_id, scroll_position bucket, view_id, tracking_key, context; no message text.\n- Optional load_more triggers handled upstream."
+  },
+  {
+    "atom": "chat_message_block",
+    "dimension": "tracking",
+    "log_file": "tracking_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_message_block/tracking/events.md",
+        "description": "message_view event."
+      },
+      {
+        "path": "aitom_family/chat_message_block/tracking/guardrails.md",
+        "description": "PII/message body exclusions."
+      }
+    ],
+    "notes": "- Event: chat_message_view with message_id, chat_id, view_id, tracking_key, context; never log body text.\n- Highlight state not tracked unless proxied elsewhere."
+  },
+  {
+    "atom": "chat_message_action_bar",
+    "dimension": "tracking",
+    "log_file": "tracking_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_message_action_bar/tracking/events.md",
+        "description": ""
+      },
+      {
+        "path": "aitom_family/chat_message_action_bar/tracking/spec_examples.md",
+        "description": ""
+      },
+      {
+        "path": "aitom_family/chat_message_action_bar/tracking/guardrails.md",
+        "description": ""
+      }
+    ],
+    "notes": "- Events: chat_message_save, chat_message_set_alert, chat_message_safety_review, chat_message_delete, chat_message_create_todo.\n- Payload: message_id, chat_id, tenant_id, view_id, tracking_key, control_id (for mapping), context; no message content."
+  },
+  {
+    "atom": "chat_safety_controls_bar",
+    "dimension": "tracking",
+    "log_file": "tracking_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_safety_controls_bar/tracking/events.md",
+        "description": "chat_safety_control_toggle."
+      },
+      {
+        "path": "aitom_family/chat_safety_controls_bar/tracking/guardrails.md.",
+        "description": ""
+      }
+    ],
+    "notes": "- Payload: chat_id, control_id, previous_state, new_state, view_id, tracking_key, context, consent flag; no message text.\n- Throttle to toggles only."
+  },
+  {
+    "atom": "bottom_chat_input_bar",
+    "dimension": "tracking",
+    "log_file": "tracking_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/bottom_chat_input_bar/tracking/events.md",
+        "description": "upload_open, shortcuts_open, send_attempt."
+      },
+      {
+        "path": "aitom_family/bottom_chat_input_bar/tracking/spec_examples.md",
+        "description": ""
+      },
+      {
+        "path": "aitom_family/bottom_chat_input_bar/tracking/guardrails.md",
+        "description": ""
+      }
+    ],
+    "notes": "- Payload fields: chat_id, view_id, tenant_id, input_length, success flag (for send), tracking_key, context; never log message text or filenames.\n- Send attempts logged once per press; upload open from agent button; shortcuts open from arrow."
+  },
+  {
+    "atom": "chat_shortcuts_popover",
+    "dimension": "tracking",
+    "log_file": "tracking_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_shortcuts_popover/tracking/events.md",
+        "description": "chat_shortcut_token_insert."
+      },
+      {
+        "path": "aitom_family/chat_shortcuts_popover/tracking/guardrails.md.",
+        "description": ""
+      }
+    ],
+    "notes": "- Payload: chat_id, token_id, view_id, tracking_key, context; no input text.\n- Event fires on insert only."
+  },
+  {
+    "atom": "chat_upload_source_picker",
+    "dimension": "tracking",
+    "log_file": "tracking_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_upload_source_picker/tracking/events.md",
+        "description": "upload_source_opened, upload_source_selected, future destination_selected."
+      },
+      {
+        "path": "aitom_family/chat_upload_source_picker/tracking/guardrails.md.",
+        "description": ""
+      }
+    ],
+    "notes": "- Payload: chat_id, source_id, destination_id (optional), view_id, tenant_id, tracking_key, context; never filenames or file contents.\n- Treat upload as primary ingestion path; respect consent for non-essential analytics."
+  },
+  {
+    "atom": "chat_icon_band_popover",
+    "dimension": "tracking",
+    "log_file": "tracking_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_icon_band_popover/tracking/events.md",
+        "description": "chat_band_icon_click."
+      },
+      {
+        "path": "aitom_family/chat_icon_band_popover/tracking/guardrails.md.",
+        "description": ""
+      }
+    ],
+    "notes": "- Payload: chat_id, band_type, icon_id, view_id, tenant_id, tracking_key, context; no message content.\n- Fire on activation only; do not stream hover."
+  },
+  {
+    "atom": "chat_rail_shell",
+    "dimension": "tracking",
+    "log_file": "tracking_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_rail_shell/tracking/events.md",
+        "description": "event definitions and payload fields."
+      },
+      {
+        "path": "aitom_family/chat_rail_shell/tracking/spec_examples.md",
+        "description": "sample payloads."
+      },
+      {
+        "path": "aitom_family/chat_rail_shell/tracking/guardrails.md",
+        "description": "consent and PII rules."
+      }
+    ],
+    "notes": "- Events: `chat_state_change`, `chat_open_from_nano_preview`, `chat_band_toggle`, optional `chat_dock_state_change`.\n- Payload: chat_id, from_state/to_state, band_type, is_docked, position (grid/px), view_id, tenant_id, tracking_key, context (UTMs/ref/click_id), consent flag.\n- No message bodies or text snippets; nano preview not logged; throttle to state changes only (no drag streams)."
+  },
+  {
+    "atom": "chat_rail_header_bar",
+    "dimension": "exposed_tokens",
+    "log_file": "exposed_tokens_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_rail_header_bar/exposed_tokens/token_index.md",
+        "description": ""
+      },
+      {
+        "path": "aitom_family/chat_rail_header_bar/exposed_tokens/defaults.md",
+        "description": ""
+      }
+    ],
+    "notes": "- Expose: header_height, padding, icon order/spacing, icon size, label typography ref, active underline/fill tokens, focus ring, label visibility toggle for narrow widths, tracking_key override.\n- Provide defaults and safe ranges; keep colour refs semantic."
+  },
+  {
+    "atom": "chat_message_list",
+    "dimension": "exposed_tokens",
+    "log_file": "exposed_tokens_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_message_list/exposed_tokens/token_index.md",
+        "description": ""
+      },
+      {
+        "path": "aitom_family/chat_message_list/exposed_tokens/defaults.md",
+        "description": ""
+      }
+    ],
+    "notes": "- Expose: list_padding, message_spacing, max_line_width, auto_scroll_threshold, loading/empty placeholder toggles; inherit typography/colours from child atoms.\n- Defaults keep no horizontal scroll and snap-to-bottom enabled when near bottom."
+  },
+  {
+    "atom": "chat_message_block",
+    "dimension": "exposed_tokens",
+    "log_file": "exposed_tokens_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_message_block/exposed_tokens/token_index.md",
+        "description": ""
+      },
+      {
+        "path": "aitom_family/chat_message_block/exposed_tokens/defaults.md",
+        "description": ""
+      }
+    ],
+    "notes": "- Expose: name/body/role_tag typography refs, alignment toggle (agent/user), avatar size/spacing, max_width, spacing name\u2192body\u2192action_bar, highlight overlay colour/duration.\n- Defaults keep wrap within rail and high-contrast text."
+  },
+  {
+    "atom": "chat_message_action_bar",
+    "dimension": "exposed_tokens",
+    "log_file": "exposed_tokens_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_message_action_bar/exposed_tokens/token_index.md",
+        "description": ""
+      },
+      {
+        "path": "aitom_family/chat_message_action_bar/exposed_tokens/defaults.md",
+        "description": ""
+      }
+    ],
+    "notes": "- Expose: icon size, spacing, padding, hover/pressed/disabled overlays, tooltip typography ref, tracking overrides per action.\n- Defaults enforce tap targets and consistent spacing."
+  },
+  {
+    "atom": "chat_safety_controls_bar",
+    "dimension": "exposed_tokens",
+    "log_file": "exposed_tokens_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_safety_controls_bar/exposed_tokens/token_index.md",
+        "description": ""
+      },
+      {
+        "path": "aitom_family/chat_safety_controls_bar/exposed_tokens/defaults.md",
+        "description": ""
+      }
+    ],
+    "notes": "- Expose: control icon size, spacing, active indicator style, overflow behaviour (wrap/scroll), max_visible_controls.\n- Provide defaults keeping bar compact and aligned above input."
+  },
+  {
+    "atom": "bottom_chat_input_bar",
+    "dimension": "exposed_tokens",
+    "log_file": "exposed_tokens_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/bottom_chat_input_bar/exposed_tokens/token_index.md",
+        "description": ""
+      },
+      {
+        "path": "aitom_family/bottom_chat_input_bar/exposed_tokens/defaults.md",
+        "description": ""
+      }
+    ],
+    "notes": "- Expose: pill_height, corner_radius, padding, upload/shortcut/send icon sizes, input typography ref, placeholder style, enter_vs_shift_enter behaviour token, max_lines, tracking override.\n- Defaults ensure no horizontal overflow and send always visible."
+  },
+  {
+    "atom": "chat_shortcuts_popover",
+    "dimension": "exposed_tokens",
+    "log_file": "exposed_tokens_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_shortcuts_popover/exposed_tokens/token_index.md",
+        "description": ""
+      },
+      {
+        "path": "aitom_family/chat_shortcuts_popover/exposed_tokens/defaults.md",
+        "description": ""
+      }
+    ],
+    "notes": "- Expose: token font size, spacing, popover width/height, corner_radius, animation duration/ease, max_tokens_before_wrap.\n- Defaults favour compact pill with reduced-motion fallback."
+  },
+  {
+    "atom": "chat_upload_source_picker",
+    "dimension": "exposed_tokens",
+    "log_file": "exposed_tokens_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_upload_source_picker/exposed_tokens/token_index.md",
+        "description": ""
+      },
+      {
+        "path": "aitom_family/chat_upload_source_picker/exposed_tokens/defaults.md",
+        "description": ""
+      }
+    ],
+    "notes": "- Expose: picker_width, row_height, padding, corner_radius, icon size, max_visible_options, selection highlight tokens, tracking overrides.\n- Defaults keep popover compact and anchored to input without covering controls."
+  },
+  {
+    "atom": "chat_icon_band_popover",
+    "dimension": "exposed_tokens",
+    "log_file": "exposed_tokens_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_icon_band_popover/exposed_tokens/token_index.md",
+        "description": ""
+      },
+      {
+        "path": "aitom_family/chat_icon_band_popover/exposed_tokens/defaults.md",
+        "description": ""
+      }
+    ],
+    "notes": "- Expose: band_height, icon size, spacing, padding, scroll behaviour (snap/free), active state styling, label typography ref (optional), tracking override.\n- Defaults maintain single-band visibility and mobile horizontal scroll without breaking layout."
+  },
+  {
+    "atom": "chat_rail_shell",
+    "dimension": "exposed_tokens",
+    "log_file": "exposed_tokens_plans_log.md",
+    "required_files": [
+      {
+        "path": "aitom_family/chat_rail_shell/exposed_tokens/token_index.md",
+        "description": ""
+      },
+      {
+        "path": "aitom_family/chat_rail_shell/exposed_tokens/defaults.md",
+        "description": ""
+      }
+    ],
+    "notes": "- Expose: chat_rail_corner_radius, chat_rail_max_width, chat_rail_padding, chat_header_height, state heights (nano/micro/standard/full), safe-area offsets, docked/undocked positions, band_height, message_list_min/max_height, state transition duration/ease, tracking_key override.\n- Behaviour tokens: state transition map, nano preview click behaviour, band toggle policy (exclusive), auto-scroll threshold, dock snap grid.\n- Provide defaults and safe ranges; ensure horizontal overflow prevention (send button always visible) encoded in spacing tokens."
+  }
+]

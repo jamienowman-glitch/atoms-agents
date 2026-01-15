@@ -1,0 +1,169 @@
+--- Testing CrewAI LLM Injection ---
+Custom LLM Type: <class 'runtime.crewai.agnostic_llm.AgnosticCrewAILLM'>
+Is instance of BaseChatModel? True
+Agent created successfully.
+Agent LLM: <crewai.llms.providers.openai.completion.OpenAICompletion object at 0x1126ba2d0>
+╭─────────────────────────── Crew Execution Started ───────────────────────────╮
+│                                                                              │
+│  Crew Execution Started                                                      │
+│  Name: crew                                                                  │
+│  ID: 0be0b859-0f5a-4598-8d90-523beb802eec                                    │
+│  Tool Args:                                                                  │
+│                                                                              │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+🚀 Crew: crew
+└── 📋 Task: e644829c-ea45-4cbf-a6b5-388af3e6fde8
+    Status: Executing Task...╭────────────────────────────── 🤖 Agent Started ──────────────────────────────╮
+│                                                                              │
+│  Agent: Test                                                                 │
+│                                                                              │
+│  Task: Say hi                                                                │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+
+ERROR:root:OpenAI API call failed: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-fake-*****-key. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}
+ERROR:root:OpenAI API call failed: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-fake-*****-key. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}
+[91mAn unknown error occurred. Please check the details below.[0m
+[91mError details: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-fake-*****-key. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}[0m
+[91mAn unknown error occurred. Please check the details below.[0m
+[91mError details: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-fake-*****-key. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}[0m
+🚀 Crew: crew
+└── 📋 Task: e644829c-ea45-4cbf-a6b5-388af3e6fde8
+    Status: Executing Task...
+    └── ❌ LLM Failed╭───────────────────────────────── LLM Error ──────────────────────────────────╮
+│                                                                              │
+│  ❌ LLM Call Failed                                                          │
+│  Error: OpenAI API call failed: Error code: 401 - {'error': {'message':      │
+│  'Incorrect API key provided: sk-fake-*****-key. You can find your API key   │
+│  at https://platform.openai.com/account/api-keys.', 'type':                  │
+│  'invalid_request_error', 'code': 'invalid_api_key', 'param': None},         │
+│  'status': 401}                                                              │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+╭───────────────────────────────── LLM Error ──────────────────────────────────╮
+│                                                                              │
+│  ❌ LLM Call Failed                                                          │
+│  Error: OpenAI API call failed: Error code: 401 - {'error': {'message':      │
+│  'Incorrect API key provided: sk-fake-*****-key. You can find your API key   │
+│  at https://platform.openai.com/account/api-keys.', 'type':                  │
+│  'invalid_request_error', 'code': 'invalid_api_key', 'param': None},         │
+│  'status': 401}                                                              │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+╭────────────────────────────── 🤖 Agent Started ──────────────────────────────╮
+│                                                                              │
+│  Agent: Test                                                                 │
+│                                                                              │
+│  Task: Say hi                                                                │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+ERROR:root:OpenAI API call failed: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-fake-*****-key. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}
+ERROR:root:OpenAI API call failed: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-fake-*****-key. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}
+🚀 Crew: crew
+└── 📋 Task: e644829c-ea45-4cbf-a6b5-388af3e6fde8
+    Status: Executing Task...
+    ├── ❌ LLM Failed
+    └── ❌ LLM Failed[91mAn unknown error occurred. Please check the details below.[0m
+[91mError details: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-fake-*****-key. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}[0m
+[91mAn unknown error occurred. Please check the details below.[0m
+[91mError details: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-fake-*****-key. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}[0m
+╭───────────────────────────────── LLM Error ──────────────────────────────────╮
+│                                                                              │
+│  ❌ LLM Call Failed                                                          │
+│  Error: OpenAI API call failed: Error code: 401 - {'error': {'message':      │
+│  'Incorrect API key provided: sk-fake-*****-key. You can find your API key   │
+│  at https://platform.openai.com/account/api-keys.', 'type':                  │
+│  'invalid_request_error', 'code': 'invalid_api_key', 'param': None},         │
+│  'status': 401}                                                              │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+╭───────────────────────────────── LLM Error ──────────────────────────────────╮
+│                                                                              │
+│  ❌ LLM Call Failed                                                          │
+│  Error: OpenAI API call failed: Error code: 401 - {'error': {'message':      │
+│  'Incorrect API key provided: sk-fake-*****-key. You can find your API key   │
+│  at https://platform.openai.com/account/api-keys.', 'type':                  │
+│  'invalid_request_error', 'code': 'invalid_api_key', 'param': None},         │
+│  'status': 401}                                                              │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+╭────────────────────────────── 🤖 Agent Started ──────────────────────────────╮
+│                                                                              │
+│  Agent: Test                                                                 │
+│                                                                              │
+│  Task: Say hi                                                                │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+ERROR:root:OpenAI API call failed: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-fake-*****-key. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}
+ERROR:root:OpenAI API call failed: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-fake-*****-key. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}
+[91mAn unknown error occurred. Please check the details below.[0m
+[91mError details: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-fake-*****-key. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}[0m
+[91mAn unknown error occurred. Please check the details below.[0m
+[91mError details: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-fake-*****-key. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}[0m
+🚀 Crew: crew
+└── 📋 Task: e644829c-ea45-4cbf-a6b5-388af3e6fde8
+    Status: Executing Task...
+    ├── ❌ LLM Failed
+    ├── ❌ LLM Failed
+    └── ❌ LLM Failed╭───────────────────────────────── LLM Error ──────────────────────────────────╮
+│                                                                              │
+│  ❌ LLM Call Failed                                                          │
+│  Error: OpenAI API call failed: Error code: 401 - {'error': {'message':      │
+│  'Incorrect API key provided: sk-fake-*****-key. You can find your API key   │
+│  at https://platform.openai.com/account/api-keys.', 'type':                  │
+│  'invalid_request_error', 'code': 'invalid_api_key', 'param': None},         │
+│  'status': 401}                                                              │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+Kickoff failed: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-fake-*****-key. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}
+╭──────────────────────────────── Task Failure ────────────────────────────────╮
+│                                                                              │
+│  Task Failed                                                                 │
+│  Name: e644829c-ea45-4cbf-a6b5-388af3e6fde8                                  │
+│  Agent: Test                                                                 │
+│  Tool Args:                                                                  │
+│                                                                              │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+╭──────────────────────────────── Crew Failure ────────────────────────────────╮
+│                                                                              │
+│  Crew Execution Failed                                                       │
+│  Name: crew                                                                  │
+│  ID: 0be0b859-0f5a-4598-8d90-523beb802eec                                    │
+│  Tool Args:                                                                  │
+│  Final Output:                                                               │
+│                                                                              │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+╭───────────────────────────────── LLM Error ──────────────────────────────────╮
+│                                                                              │
+│  ❌ LLM Call Failed                                                          │
+│  Error: OpenAI API call failed: Error code: 401 - {'error': {'message':      │
+│  'Incorrect API key provided: sk-fake-*****-key. You can find your API key   │
+│  at https://platform.openai.com/account/api-keys.', 'type':                  │
+│  'invalid_request_error', 'code': 'invalid_api_key', 'param': None},         │
+│  'status': 401}                                                              │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+╭─────────────────────────────── Tracing Status ───────────────────────────────╮
+│                                                                              │
+│  Info: Tracing is disabled.                                                  │
+│                                                                              │
+│  To enable tracing, do any one of these:                                     │
+│  • Set tracing=True in your Crew/Flow code                                   │
+│  • Set CREWAI_TRACING_ENABLED=true in your project's .env file               │
+│  • Run: crewai traces enable                                                 │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯

@@ -1,0 +1,8 @@
+{
+  "framework": "langgraph",
+  "mode_id": "memory",
+  "status": "FAIL",
+  "model_id": "N/A",
+  "evidence_path": "docs/evidence/modes/20251221_072827/langgraph/memory",
+  "error": "not enough values to unpack (expected 2, got 1)"
+}

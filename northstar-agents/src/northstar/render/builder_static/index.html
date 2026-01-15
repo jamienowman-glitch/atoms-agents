@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Northstar Builder</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="app">
+        <header>
+            <div class="header-left">
+                <h1>Northstar Builder</h1>
+                <div class="separator"></div>
+                <label>Flow:</label>
+                <select id="flowSelect">
+                    <option value="" disabled selected>Select a Flow...</option>
+                </select>
+                <button id="newFlowBtn" class="icon-btn">+</button>
+            </div>
+            <div class="header-right">
+                <div class="status-bar" id="statusBar">Ready</div>
+            </div>
+        </header>
+
+        <main>
+            <div id="canvas-container">
+                <div id="canvas-toolbar">
+                    <button id="addNodeBtn">+ Add Node</button>
+                    <button id="connectModeBtn">Connect Nodes</button>
+                    <div class="spacer"></div>
+                    <button id="refreshBtn">Refresh</button>
+                </div>
+                <div id="canvas">
+                    <svg id="edges-layer"></svg>
+                    <div id="nodes-layer">
+                        <!-- Nodes rendered here -->
+                    </div>
+                </div>
+            </div>
+
+            <div id="inspector-container">
+                <h2>Inspector</h2>
+                <div id="inspector-content">
+                    <p class="placeholder">Select a node to edit.</p>
+                </div>
+                <div id="inspector-actions" class="hidden">
+                    <button id="saveBtn" class="primary">Save Changes</button>
+                    <button id="runBtn" class="accent">Run (Dry)</button>
+                    <div class="toggle-container">
+                        <input type="checkbox" id="liveToggle">
+                        <label for="liveToggle">Live Enabled</label>
+                    </div>
+                </div>
+                <div id="trace-output" class="hidden">
+                    <h3>Last Run</h3>
+                    <pre id="trace-log"></pre>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="nodePickerModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Node</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="nodeSearch" placeholder="Search registry nodes...">
+                <ul id="nodeList"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

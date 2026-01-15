@@ -1,0 +1,10 @@
+id: flow_smoke_strands_default
+runtime: strands
+description: Smoke test for Strands Default Mode
+mode: strands:default
+steps:
+  - id: step_1
+    inputs:
+       input_text: "Blackboard Input"
+blackboards:
+  - global

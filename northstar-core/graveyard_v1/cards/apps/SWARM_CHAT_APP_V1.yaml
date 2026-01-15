@@ -1,0 +1,9 @@
+CARD_ID: SWARM_CHAT_APP_V1
+SCOPE: app
+LABEL: Swarm Multi-Agent Chat Surface
+DESCRIPTION: |
+  It is a chat app that lets multiple humans talk to a configured swarm of agents,
+  It uses MULTI_CHAT_FED_V1 as its primary federation.
+FEDERATIONS:
+  - MULTI_CHAT_FED_V1
+DEFAULT_PROFILE: default_profile

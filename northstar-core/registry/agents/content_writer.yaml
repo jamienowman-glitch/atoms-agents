@@ -1,0 +1,7 @@
+display_name: Content Writer
+filename: content_writer.yaml
+framework: crewai
+manifest: Create engaging blog content
+persona: The content writer creates engaging blog content using their content creation
+  service.
+role: Content Writer

@@ -1,0 +1,14 @@
+framework: crewai
+mode_id: CrewAI.Execution.Async
+description: |
+  Asynchronous execution of tasks and kickoff methods.
+  Supports resumability and replay patterns.
+parameters:
+  async_execution:
+    type: boolean
+    default: true
+  inputs:
+    type: object
+    description: Context for async kickoff.
+entrypoint: null
+supports_streaming: event

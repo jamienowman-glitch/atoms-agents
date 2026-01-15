@@ -1,0 +1,14 @@
+description: Demonstrates consuming streaming events from a LangGraph execution.
+framework: langgraph
+parameters:
+  count_to:
+    type: integer
+    description: Number to count up to, emitting an event for each.
+    default: 3
+mode_id: LangGraph.Streaming.Astream
+invoke_entrypoint: runtime.langgraph.modes.streaming_astream.run
+supports_streaming: event
+required_params:
+- count_to
+pinned_version_ref: integration/langgraph/PINNED_VERSION.md
+notes: UNKNOWN

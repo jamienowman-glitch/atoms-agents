@@ -1,0 +1,31 @@
+CARD_ID: CANVAS_ORCH_FED_V1
+SCOPE: federation
+LABEL: Canvas Orchestration Federation (PoC)
+DESCRIPTION: |
+  It runs INTERPRETER_HUB_V1 over a shared canvas,
+  It handles movement/colour/CTA copy changes and emits atomic canvas events.
+PATTERN: INTERPRETER_HUB_V1
+ORCHESTRATOR_PROFILE:
+  allowed_backends:
+    - native_canvas_orch
+    - langgraph_canvas_orch
+  default_backend: native_canvas_orch
+  experiment_backends:
+    - langgraph_canvas_orch
+AGENT_ROLES:
+  hub: CanvasInterpreter_V1
+  movement: MoveAgent_V1
+  colour: ColourAgent_V1
+  cta_copy: CTACopyAgent_V1
+  guard: GuardAgent_V1
+OWNS_TOKENS:
+  - btn_*.label_token
+  - btn_*.bg_color_token
+  - btn_*.border_color_token
+EPISODE_TYPE: canvas_poc_v1
+SAFETY_PROFILE:
+  firearms_required:
+    - canvas_edit_basic
+  strategy_lock_required: false
+  three_wise_required: false
+NOTES: This is a PoC federation, kept simple and trace-friendly.

@@ -1,0 +1,9 @@
+id: flow_smoke_langgraph_map_reduce_stub
+runtime: langgraph
+description: Smoke test for LangGraph MapReduce Stub (Should Fail/Stub)
+mode: langgraph:map_reduce
+steps:
+  - id: step_map
+    template_id: map_step
+blackboards:
+  - global

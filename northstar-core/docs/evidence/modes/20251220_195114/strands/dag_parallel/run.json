@@ -1,0 +1,8 @@
+{
+  "framework": "strands",
+  "mode_id": "dag_parallel",
+  "status": "FAIL",
+  "model_id": "N/A",
+  "evidence_path": "docs/evidence/modes/20251220_195114/strands/dag_parallel",
+  "error": "not enough values to unpack (expected 2, got 1)"
+}

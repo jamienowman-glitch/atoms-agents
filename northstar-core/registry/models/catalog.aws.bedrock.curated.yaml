@@ -1,0 +1,2159 @@
+- id: nvidia.nemotron-nano-12b-v2
+  provider: nvidia
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: cheap
+  default_enabled: true
+- id: anthropic.claude-sonnet-4-20250514-v1:0
+  provider: anthropic
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - TEXT
+  family: claude
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: mid
+  default_enabled: true
+- id: anthropic.claude-haiku-4-5-20251001-v1:0
+  provider: anthropic
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - TEXT
+  family: claude
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: cheap
+  default_enabled: true
+- id: openai.gpt-oss-120b-1:0
+  provider: openai
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: stability.stable-creative-upscale-v1:0
+  provider: stability-ai
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - IMAGE
+  family: generic
+  capability_tags:
+  - vision
+  - orchestration
+  - generation
+  - chat
+  - image
+  price_tier: mid
+  default_enabled: true
+- id: qwen.qwen3-next-80b-a3b
+  provider: qwen
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: qwen
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: amazon.nova-2-multimodal-embeddings-v1:0
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    - AUDIO
+    - VIDEO
+    output:
+    - EMBEDDING
+  family: nova
+  capability_tags:
+  - video
+  - vision
+  - orchestration
+  - embedding
+  - chat
+  - multimodal
+  price_tier: mid
+  default_enabled: true
+- id: minimax.minimax-m2
+  provider: minimax
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: mistral.voxtral-mini-3b-2507
+  provider: mistral-ai
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - AUDIO
+    - TEXT
+    output:
+    - TEXT
+  family: mistral
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: amazon.nova-pro-v1:0
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    - VIDEO
+    output:
+    - TEXT
+  family: nova
+  capability_tags:
+  - orchestration
+  - chat
+  - video
+  - vision
+  price_tier: premium
+  default_enabled: false
+- id: stability.stable-image-remove-background-v1:0
+  provider: stability-ai
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - IMAGE
+  family: generic
+  capability_tags:
+  - vision
+  - orchestration
+  - generation
+  - chat
+  - image
+  price_tier: mid
+  default_enabled: true
+- id: stability.stable-image-control-sketch-v1:0
+  provider: stability-ai
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - IMAGE
+  family: generic
+  capability_tags:
+  - vision
+  - orchestration
+  - generation
+  - chat
+  - image
+  price_tier: mid
+  default_enabled: true
+- id: amazon.nova-2-lite-v1:0
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    - VIDEO
+    output:
+    - TEXT
+  family: nova
+  capability_tags:
+  - orchestration
+  - chat
+  - video
+  - vision
+  price_tier: cheap
+  default_enabled: true
+- id: amazon.nova-2-lite-v1:0:256k
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    - VIDEO
+    output:
+    - TEXT
+  family: nova
+  capability_tags:
+  - orchestration
+  - chat
+  - video
+  - vision
+  price_tier: cheap
+  default_enabled: true
+- id: stability.stable-conservative-upscale-v1:0
+  provider: stability-ai
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - IMAGE
+  family: generic
+  capability_tags:
+  - vision
+  - orchestration
+  - generation
+  - chat
+  - image
+  price_tier: mid
+  default_enabled: true
+- id: google.gemma-3-12b-it
+  provider: google
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: mid
+  default_enabled: true
+- id: stability.stable-image-search-recolor-v1:0
+  provider: stability-ai
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - IMAGE
+  family: generic
+  capability_tags:
+  - vision
+  - orchestration
+  - generation
+  - chat
+  - image
+  price_tier: mid
+  default_enabled: true
+- id: moonshot.kimi-k2-thinking
+  provider: moonshot-ai
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: mistral.mistral-large-3-675b-instruct
+  provider: mistral-ai
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - TEXT
+  family: mistral
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: premium
+  default_enabled: false
+- id: twelvelabs.pegasus-1-2-v1:0
+  provider: twelvelabs
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - VIDEO
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  - video
+  price_tier: mid
+  default_enabled: true
+- id: amazon.nova-2-sonic-v1:0
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - SPEECH
+    output:
+    - SPEECH
+    - TEXT
+  family: nova
+  capability_tags: []
+  price_tier: mid
+  default_enabled: true
+- id: qwen.qwen3-32b-v1:0
+  provider: qwen
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: qwen
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: mistral.ministral-3-14b-instruct
+  provider: mistral-ai
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: mistral
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: cheap
+  default_enabled: true
+- id: writer.palmyra-x5-v1:0
+  provider: writer
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: nvidia.nemotron-nano-9b-v2
+  provider: nvidia
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: cheap
+  default_enabled: true
+- id: mistral.ministral-3-8b-instruct
+  provider: mistral-ai
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: mistral
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: cheap
+  default_enabled: true
+- id: mistral.voxtral-small-24b-2507
+  provider: mistral-ai
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - AUDIO
+    - TEXT
+    output:
+    - TEXT
+  family: mistral
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: openai.gpt-oss-20b-1:0
+  provider: openai
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: google.gemma-3-4b-it
+  provider: google
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: mid
+  default_enabled: true
+- id: stability.stable-fast-upscale-v1:0
+  provider: stability-ai
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - IMAGE
+  family: generic
+  capability_tags:
+  - vision
+  - orchestration
+  - generation
+  - chat
+  - image
+  price_tier: mid
+  default_enabled: true
+- id: stability.stable-image-erase-object-v1:0
+  provider: stability-ai
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - IMAGE
+  family: generic
+  capability_tags:
+  - vision
+  - orchestration
+  - generation
+  - chat
+  - image
+  price_tier: mid
+  default_enabled: true
+- id: openai.gpt-oss-safeguard-120b
+  provider: openai
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: google.gemma-3-27b-it
+  provider: google
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: mid
+  default_enabled: true
+- id: stability.stable-image-control-structure-v1:0
+  provider: stability-ai
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - IMAGE
+  family: generic
+  capability_tags:
+  - vision
+  - orchestration
+  - generation
+  - chat
+  - image
+  price_tier: mid
+  default_enabled: true
+- id: twelvelabs.marengo-embed-3-0-v1:0
+  provider: twelvelabs
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    - SPEECH
+    - VIDEO
+    output:
+    - EMBEDDING
+  family: generic
+  capability_tags:
+  - video
+  - vision
+  - orchestration
+  - embedding
+  - chat
+  - multimodal
+  price_tier: mid
+  default_enabled: true
+- id: writer.palmyra-x4-v1:0
+  provider: writer
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: anthropic.claude-sonnet-4-5-20250929-v1:0
+  provider: anthropic
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - TEXT
+  family: claude
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: mid
+  default_enabled: true
+- id: twelvelabs.marengo-embed-2-7-v1:0
+  provider: twelvelabs
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    - SPEECH
+    - VIDEO
+    output:
+    - EMBEDDING
+  family: generic
+  capability_tags:
+  - video
+  - vision
+  - orchestration
+  - embedding
+  - chat
+  - multimodal
+  price_tier: mid
+  default_enabled: true
+- id: qwen.qwen3-vl-235b-a22b
+  provider: qwen
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - TEXT
+  family: qwen
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: mid
+  default_enabled: true
+- id: stability.stable-outpaint-v1:0
+  provider: stability-ai
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - IMAGE
+  family: generic
+  capability_tags:
+  - vision
+  - orchestration
+  - generation
+  - chat
+  - image
+  price_tier: mid
+  default_enabled: true
+- id: stability.stable-image-inpaint-v1:0
+  provider: stability-ai
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - IMAGE
+  family: generic
+  capability_tags:
+  - vision
+  - orchestration
+  - generation
+  - chat
+  - image
+  price_tier: mid
+  default_enabled: true
+- id: anthropic.claude-opus-4-1-20250805-v1:0
+  provider: anthropic
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - TEXT
+  family: claude
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: premium
+  default_enabled: false
+- id: stability.stable-image-style-guide-v1:0
+  provider: stability-ai
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - IMAGE
+  family: generic
+  capability_tags:
+  - vision
+  - orchestration
+  - generation
+  - chat
+  - image
+  price_tier: mid
+  default_enabled: true
+- id: mistral.magistral-small-2509
+  provider: mistral-ai
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - TEXT
+  family: mistral
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: mid
+  default_enabled: true
+- id: stability.stable-style-transfer-v1:0
+  provider: stability-ai
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - IMAGE
+  family: generic
+  capability_tags:
+  - vision
+  - orchestration
+  - generation
+  - chat
+  - image
+  price_tier: mid
+  default_enabled: true
+- id: cohere.embed-v4:0
+  provider: cohere
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - EMBEDDING
+  family: generic
+  capability_tags:
+  - vision
+  - orchestration
+  - embedding
+  - chat
+  - multimodal
+  price_tier: mid
+  default_enabled: true
+- id: mistral.ministral-3-3b-instruct
+  provider: mistral-ai
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: mistral
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: cheap
+  default_enabled: true
+- id: anthropic.claude-opus-4-5-20251101-v1:0
+  provider: anthropic
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - TEXT
+  family: claude
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: premium
+  default_enabled: false
+- id: stability.stable-image-search-replace-v1:0
+  provider: stability-ai
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - IMAGE
+  family: generic
+  capability_tags:
+  - vision
+  - orchestration
+  - generation
+  - chat
+  - image
+  price_tier: mid
+  default_enabled: true
+- id: qwen.qwen3-coder-30b-a3b-v1:0
+  provider: qwen
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: qwen
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: openai.gpt-oss-safeguard-20b
+  provider: openai
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: amazon.titan-tg1-large
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: amazon.titan-image-generator-v1:0
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - IMAGE
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: mid
+  default_enabled: true
+- id: amazon.titan-image-generator-v1
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - IMAGE
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: mid
+  default_enabled: true
+- id: amazon.titan-image-generator-v2:0
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - IMAGE
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: mid
+  default_enabled: true
+- id: amazon.nova-premier-v1:0:8k
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    - VIDEO
+    output:
+    - TEXT
+  family: nova
+  capability_tags:
+  - orchestration
+  - chat
+  - video
+  - vision
+  price_tier: mid
+  default_enabled: true
+- id: amazon.nova-premier-v1:0:20k
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    - VIDEO
+    output:
+    - TEXT
+  family: nova
+  capability_tags:
+  - orchestration
+  - chat
+  - video
+  - vision
+  price_tier: mid
+  default_enabled: true
+- id: amazon.nova-premier-v1:0:1000k
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    - VIDEO
+    output:
+    - TEXT
+  family: nova
+  capability_tags:
+  - orchestration
+  - chat
+  - video
+  - vision
+  price_tier: mid
+  default_enabled: true
+- id: amazon.nova-premier-v1:0:mm
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    - VIDEO
+    output:
+    - TEXT
+  family: nova
+  capability_tags:
+  - orchestration
+  - chat
+  - video
+  - vision
+  price_tier: mid
+  default_enabled: true
+- id: amazon.nova-premier-v1:0
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    - VIDEO
+    output:
+    - TEXT
+  family: nova
+  capability_tags:
+  - orchestration
+  - chat
+  - video
+  - vision
+  price_tier: mid
+  default_enabled: true
+- id: amazon.nova-pro-v1:0:24k
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    - VIDEO
+    output:
+    - TEXT
+  family: nova
+  capability_tags:
+  - orchestration
+  - chat
+  - video
+  - vision
+  price_tier: premium
+  default_enabled: false
+- id: amazon.nova-pro-v1:0:300k
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    - VIDEO
+    output:
+    - TEXT
+  family: nova
+  capability_tags:
+  - orchestration
+  - chat
+  - video
+  - vision
+  price_tier: premium
+  default_enabled: false
+- id: amazon.nova-lite-v1:0:24k
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    - VIDEO
+    output:
+    - TEXT
+  family: nova
+  capability_tags:
+  - orchestration
+  - chat
+  - video
+  - vision
+  price_tier: mid
+  default_enabled: true
+- id: amazon.nova-lite-v1:0:300k
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    - VIDEO
+    output:
+    - TEXT
+  family: nova
+  capability_tags:
+  - orchestration
+  - chat
+  - video
+  - vision
+  price_tier: mid
+  default_enabled: true
+- id: amazon.nova-lite-v1:0
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    - VIDEO
+    output:
+    - TEXT
+  family: nova
+  capability_tags:
+  - orchestration
+  - chat
+  - video
+  - vision
+  price_tier: mid
+  default_enabled: true
+- id: amazon.nova-canvas-v1:0
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - IMAGE
+  family: nova
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: mid
+  default_enabled: true
+- id: amazon.nova-reel-v1:0
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - VIDEO
+  family: nova
+  capability_tags:
+  - orchestration
+  - chat
+  - video
+  - vision
+  price_tier: mid
+  default_enabled: true
+- id: amazon.nova-reel-v1:1
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - VIDEO
+  family: nova
+  capability_tags:
+  - orchestration
+  - chat
+  - video
+  - vision
+  price_tier: mid
+  default_enabled: true
+- id: amazon.nova-micro-v1:0:24k
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: nova
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: cheap
+  default_enabled: true
+- id: amazon.nova-micro-v1:0:128k
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: nova
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: cheap
+  default_enabled: true
+- id: amazon.nova-micro-v1:0
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: nova
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: cheap
+  default_enabled: true
+- id: amazon.nova-sonic-v1:0
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - SPEECH
+    output:
+    - SPEECH
+    - TEXT
+  family: nova
+  capability_tags: []
+  price_tier: mid
+  default_enabled: true
+- id: amazon.titan-embed-g1-text-02
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - EMBEDDING
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  - embedding
+  price_tier: mid
+  default_enabled: true
+- id: amazon.titan-text-lite-v1:0:4k
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: amazon.titan-text-lite-v1
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: amazon.titan-text-express-v1:0:8k
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: amazon.titan-text-express-v1
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: amazon.titan-embed-text-v1:2:8k
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - EMBEDDING
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  - embedding
+  price_tier: mid
+  default_enabled: true
+- id: amazon.titan-embed-text-v1
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - EMBEDDING
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  - embedding
+  price_tier: mid
+  default_enabled: true
+- id: amazon.titan-embed-text-v2:0:8k
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - EMBEDDING
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  - embedding
+  price_tier: mid
+  default_enabled: true
+- id: amazon.titan-embed-text-v2:0
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - EMBEDDING
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  - embedding
+  price_tier: mid
+  default_enabled: true
+- id: amazon.titan-embed-image-v1:0
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - EMBEDDING
+  family: generic
+  capability_tags:
+  - vision
+  - orchestration
+  - embedding
+  - chat
+  - multimodal
+  price_tier: mid
+  default_enabled: true
+- id: amazon.titan-embed-image-v1
+  provider: amazon
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - EMBEDDING
+  family: generic
+  capability_tags:
+  - vision
+  - orchestration
+  - embedding
+  - chat
+  - multimodal
+  price_tier: mid
+  default_enabled: true
+- id: ai21.jamba-1-5-large-v1:0
+  provider: ai21-labs
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: ai21.jamba-1-5-mini-v1:0
+  provider: ai21-labs
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: anthropic.claude-instant-v1:2:100k
+  provider: anthropic
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: claude
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: anthropic.claude-v2:0:18k
+  provider: anthropic
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: claude
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: anthropic.claude-v2:0:100k
+  provider: anthropic
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: claude
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: anthropic.claude-v2:1:18k
+  provider: anthropic
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: claude
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: anthropic.claude-v2:1:200k
+  provider: anthropic
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: claude
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: anthropic.claude-3-sonnet-20240229-v1:0:28k
+  provider: anthropic
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - TEXT
+  family: claude
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: mid
+  default_enabled: true
+- id: anthropic.claude-3-sonnet-20240229-v1:0:200k
+  provider: anthropic
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - TEXT
+  family: claude
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: mid
+  default_enabled: true
+- id: anthropic.claude-3-sonnet-20240229-v1:0
+  provider: anthropic
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - TEXT
+  family: claude
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: mid
+  default_enabled: true
+- id: anthropic.claude-3-haiku-20240307-v1:0:48k
+  provider: anthropic
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - TEXT
+  family: claude
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: cheap
+  default_enabled: true
+- id: anthropic.claude-3-haiku-20240307-v1:0:200k
+  provider: anthropic
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - TEXT
+  family: claude
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: cheap
+  default_enabled: true
+- id: anthropic.claude-3-haiku-20240307-v1:0
+  provider: anthropic
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - TEXT
+  family: claude
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: cheap
+  default_enabled: true
+- id: anthropic.claude-3-opus-20240229-v1:0:12k
+  provider: anthropic
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - TEXT
+  family: claude
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: premium
+  default_enabled: false
+- id: anthropic.claude-3-opus-20240229-v1:0:28k
+  provider: anthropic
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - TEXT
+  family: claude
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: premium
+  default_enabled: false
+- id: anthropic.claude-3-opus-20240229-v1:0:200k
+  provider: anthropic
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - TEXT
+  family: claude
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: premium
+  default_enabled: false
+- id: anthropic.claude-3-opus-20240229-v1:0
+  provider: anthropic
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - TEXT
+  family: claude
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: premium
+  default_enabled: false
+- id: anthropic.claude-3-5-sonnet-20240620-v1:0
+  provider: anthropic
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - TEXT
+  family: claude
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: mid
+  default_enabled: true
+- id: anthropic.claude-3-5-sonnet-20241022-v2:0
+  provider: anthropic
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - TEXT
+  family: claude
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: mid
+  default_enabled: true
+- id: anthropic.claude-3-7-sonnet-20250219-v1:0
+  provider: anthropic
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - TEXT
+  family: claude
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: mid
+  default_enabled: true
+- id: anthropic.claude-3-5-haiku-20241022-v1:0
+  provider: anthropic
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: claude
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: cheap
+  default_enabled: true
+- id: anthropic.claude-opus-4-20250514-v1:0
+  provider: anthropic
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - TEXT
+  family: claude
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: premium
+  default_enabled: false
+- id: cohere.command-r-v1:0
+  provider: cohere
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: cohere.command-r-plus-v1:0
+  provider: cohere
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: cohere.embed-english-v3:0:512
+  provider: cohere
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - EMBEDDING
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  - embedding
+  price_tier: mid
+  default_enabled: true
+- id: cohere.embed-english-v3
+  provider: cohere
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - EMBEDDING
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  - embedding
+  price_tier: mid
+  default_enabled: true
+- id: cohere.embed-multilingual-v3:0:512
+  provider: cohere
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - EMBEDDING
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  - embedding
+  price_tier: mid
+  default_enabled: true
+- id: cohere.embed-multilingual-v3
+  provider: cohere
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - EMBEDDING
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  - embedding
+  price_tier: mid
+  default_enabled: true
+- id: cohere.rerank-v3-5:0
+  provider: cohere
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: deepseek.r1-v1:0
+  provider: deepseek
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: meta.llama3-8b-instruct-v1:0
+  provider: meta
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: meta.llama3-70b-instruct-v1:0
+  provider: meta
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: meta.llama3-1-8b-instruct-v1:0
+  provider: meta
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: meta.llama3-1-70b-instruct-v1:0
+  provider: meta
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: meta.llama3-2-11b-instruct-v1:0
+  provider: meta
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: mid
+  default_enabled: true
+- id: meta.llama3-2-90b-instruct-v1:0
+  provider: meta
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: mid
+  default_enabled: true
+- id: meta.llama3-2-1b-instruct-v1:0
+  provider: meta
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: meta.llama3-2-3b-instruct-v1:0
+  provider: meta
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: meta.llama3-3-70b-instruct-v1:0
+  provider: meta
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: meta.llama4-scout-17b-instruct-v1:0
+  provider: meta
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: mid
+  default_enabled: true
+- id: meta.llama4-maverick-17b-instruct-v1:0
+  provider: meta
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - TEXT
+  family: generic
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: mid
+  default_enabled: true
+- id: mistral.mistral-7b-instruct-v0:2
+  provider: mistral-ai
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: mistral
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: mistral.mixtral-8x7b-instruct-v0:1
+  provider: mistral-ai
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: mistral
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: mistral.mistral-large-2402-v1:0
+  provider: mistral-ai
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: mistral
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: premium
+  default_enabled: false
+- id: mistral.mistral-small-2402-v1:0
+  provider: mistral-ai
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    output:
+    - TEXT
+  family: mistral
+  capability_tags:
+  - orchestration
+  - chat
+  price_tier: mid
+  default_enabled: true
+- id: mistral.pixtral-large-2502-v1:0
+  provider: mistral-ai
+  backend: aws_bedrock
+  region: us-east-1
+  modalities:
+    input:
+    - TEXT
+    - IMAGE
+    output:
+    - TEXT
+  family: mistral
+  capability_tags:
+  - orchestration
+  - chat
+  - vision
+  price_tier: mid
+  default_enabled: true

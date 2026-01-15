@@ -1,0 +1,11 @@
+framework: autogen
+mode_id: AutoGen.NestedChat
+description: |
+  Treats a chat sequence or group as a single node within a larger graph.
+  Used for "Team as a Node" patterns.
+parameters:
+  chat_queue:
+    type: list
+    description: List of chat definitions to execute internally.
+invoke_entrypoint: runtime.autogen.modes.nested_chat:run
+supports_streaming: token

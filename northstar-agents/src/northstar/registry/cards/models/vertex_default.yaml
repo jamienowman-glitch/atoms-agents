@@ -1,0 +1,5 @@
+card_type: model
+model_id: vertex_default
+provider_id: vertex
+official_id_or_deployment: gemini-1.5-flash
+notes: Standard Gemini Flash

@@ -1,0 +1,8 @@
+framework: langgraph
+mode_id: human_approval
+pinned_version_ref: integration/langgraph/PINNED_VERSION.md
+invoke_entrypoint: runtime.langgraph.modes.human_approval:run
+required_params:
+  - approval_question
+supports_streaming: token
+notes: "Demonstrates interrupt() for human-in-the-loop approval. Requires resumption with same thread_id."

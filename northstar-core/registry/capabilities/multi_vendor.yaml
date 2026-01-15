@@ -1,0 +1,44 @@
+capability_id: AWS.Capabilities.Video
+framework: AWS.Bedrock
+description: Amazon Nova Reel Video Generation.
+parameters:
+  duration_seconds: {type: integer, default: 6}
+entrypoint: src.capabilities.bedrock.media.BedrockVideoCapability.get_config
+---
+capability_id: AWS.Capabilities.Image
+framework: AWS.Bedrock
+description: Amazon Titan Image Generator V2.
+parameters:
+  width: {type: integer, default: 1024}
+  height: {type: integer, default: 1024}
+entrypoint: src.capabilities.bedrock.media.BedrockImageCapability.get_config
+---
+capability_id: OpenAI.Capabilities.Image
+framework: OpenAI
+description: DALL-E 3 Image Generation.
+parameters:
+  size: {type: string, default: "1024x1024"}
+  style: {type: string, default: "vivid"}
+entrypoint: src.capabilities.openai.media.OpenAIImageCapability.get_config
+---
+capability_id: OpenAI.Capabilities.TTS
+framework: OpenAI
+description: OpenAI TTS-1.
+parameters:
+  voice: {type: string, default: "alloy"}
+entrypoint: src.capabilities.openai.media.OpenAITTSCapability.get_config
+---
+capability_id: Anthropic.Capabilities.ComputerUse
+framework: Anthropic
+description: Claude Computer Use (Beta).
+parameters:
+  screen_width: {type: integer, default: 1024}
+  screen_height: {type: integer, default: 768}
+entrypoint: src.capabilities.anthropic.computer_use.AnthropicComputerUseCapability.get_config
+---
+capability_id: ElevenLabs.Capabilities.TTS
+framework: ElevenLabs
+description: ElevenLabs Speech Synthesis.
+parameters:
+  voice_id: {type: string, default: "21m00Tcm4TlvDq8ikWAM"}
+entrypoint: src.capabilities.elevenlabs.tts.ElevenLabsTTSCapability.get_config

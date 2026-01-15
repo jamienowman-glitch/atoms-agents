@@ -1,0 +1,20 @@
+node_id: node.write_landing_page
+name: Write Landing Page
+kind: agent
+persona_ref: persona.brand_writer_v1
+task_ref: task.write_landing_page_v1
+artifact_outputs:
+- artifact_spec.landing_page_markdown_v1
+blackboard_writes:
+- landing_page_draft
+blackboard_reads: []
+model_ref: ''
+provider_ref: ''
+capability_ids: []
+tool_refs: []
+framework_mode_ref: null
+subflow_ref: null
+timeouts: {}
+notes: Generates the initial draft.
+card_type: node
+id: node.write_landing_page

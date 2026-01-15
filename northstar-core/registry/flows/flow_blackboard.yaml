@@ -1,0 +1,44 @@
+id: "flow_blackboard"
+display_name: "Blackboard Flow"
+agents:
+  - "agent_shiritori_a"
+  - "agent_shiritori_b"
+  - "agent_shiritori_c"
+goal: "Execute sequential updates to a shared blackboard state."
+inputs:
+  topic: "Context for the task (e.g. Shiritori)"
+outputs:
+  final_state: "Final list of words"
+stop_conditions:
+  max_steps: 9
+  timeout_seconds: 60
+steps:
+  # Blackboard Flow relies on adapters looping or following a cycle. 
+  # Here we define the A->B->C sequence explicitly for one 'round', 
+  # or adapt the adapters to loop.
+  # Given the user wants "Agnostic", we define the repeating sequence.
+  # But adapter needs to handle 'max_steps'.
+  
+  - id: "step_a"
+    agent_id: "agent_shiritori_a"
+    action_type: "write"
+    input_keys: ["blackboard_state"]
+    output_key: "blackboard_state" # In-place update concept
+    instruction_template: "{manifest}" # Pure manifest execution
+    next: "step_b"
+
+  - id: "step_b"
+    agent_id: "agent_shiritori_b"
+    action_type: "write"
+    input_keys: ["blackboard_state"]
+    output_key: "blackboard_state"
+    instruction_template: "{manifest}"
+    next: "step_c"
+
+  - id: "step_c"
+    agent_id: "agent_shiritori_c"
+    action_type: "write"
+    input_keys: ["blackboard_state"]
+    output_key: "blackboard_state"
+    instruction_template: "{manifest}"
+    next: "step_a" # Cycle

@@ -1,0 +1,18 @@
+capability_id: Google.Capabilities.Video
+framework: Google.Gemini
+description: >
+  Swaps the underlying engine to Veo (High-End Video).
+  Returns the Veo Model ID.
+
+parameters:
+  fps:
+    type: integer
+    default: 24
+  duration_seconds:
+    type: integer
+    default: 6
+
+entrypoint: src.capabilities.google.video.GeminiVideoCapability.get_config
+
+supported_models:
+  - veo-3.1-generate-001

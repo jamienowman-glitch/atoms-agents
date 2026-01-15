@@ -1,0 +1,11 @@
+framework: autogen
+mode_id: AutoGen.SequentialChat
+description: |
+  Pipeline-style chat where outputs of one agent feed into the next.
+  Distinct from group chat or nested chat.
+parameters:
+  sequence:
+    type: list
+    description: Ordered list of agents/tasks.
+entrypoint: null
+supports_streaming: token

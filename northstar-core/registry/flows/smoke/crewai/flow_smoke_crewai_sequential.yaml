@@ -1,0 +1,15 @@
+id: flow_smoke_crewai_sequential
+runtime: crewai
+description: Smoke test for CrewAI Sequential Mode
+mode: crewai:sequential
+steps:
+  - agent_id: registry/agents/smoke/agent_smoke_writer.yaml
+    template_id: default_step
+    expected_output: "Confirmation string"
+    inputs:
+       input_text: "Blackboard Input"
+participants:
+  - id: smoke_writer
+    agent_id: registry/agents/smoke/agent_smoke_writer.yaml
+blackboards:
+  - global

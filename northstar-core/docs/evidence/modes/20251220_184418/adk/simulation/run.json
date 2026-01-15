@@ -1,0 +1,8 @@
+{
+  "framework": "adk",
+  "mode_id": "simulation",
+  "status": "FAIL",
+  "model_id": "N/A",
+  "evidence_path": "docs/evidence/modes/20251220_184418/adk/simulation",
+  "error": "not enough values to unpack (expected 2, got 1)"
+}

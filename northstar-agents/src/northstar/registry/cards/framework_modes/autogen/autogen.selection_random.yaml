@@ -1,0 +1,21 @@
+card_type: mode
+id: autogen.selection_random
+framework: autogen
+official_name: Random Selection
+invoke_primitive: ''
+entrypoint: northstar.runtime.modes.autogen.autogen_selection_random.run
+params:
+  official_name: UNKNOWN
+  official_options: ''
+  minimal_snippet: ''
+streaming_support: false
+docs_urls:
+- (migrated
+- to
+- unknown,
+- not
+- in
+- docs)
+pinned_version: AutoGen v0.4.0
+confidence: low
+notes: "No official \u201CRandomSelectionGroupChat\u201D documented (likely stub)"

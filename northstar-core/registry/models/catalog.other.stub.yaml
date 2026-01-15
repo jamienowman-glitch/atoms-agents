@@ -1,0 +1,3 @@
+# Placeholder for other model providers (OpenAI, Mistral API, etc).
+# Use this for non-Bedrock / non-Vertex direct integrations if needed.
+# Shape must match catalog.aws.bedrock.curated.yaml.

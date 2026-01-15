@@ -1,0 +1,16 @@
+card_type: mode
+id: crewai.flow_persistence
+framework: crewai
+official_name: Flow Persistence
+invoke_primitive: self.state (persisted)
+entrypoint: northstar.runtime.modes.crewai.crewai_flow_persistence.run
+params:
+  official_name: State Persistence
+  official_options: "\u2013"
+  minimal_snippet: 'self.state["counter"] = 1  # persists across flow executions'
+streaming_support: false
+docs_urls:
+- https://docs.crewai.com/en/concepts/flows#state-persistence
+pinned_version: crewai 0.30.0
+confidence: high
+notes: CrewAI Flows automatically persist self.state between runs

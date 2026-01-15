@@ -1,0 +1,18 @@
+id: agent_spanish_translator
+display_name: "Spanish Translator (EU)"
+version: "1.1.0"
+manifest: "Translates text into European Spanish."
+persona: "You are a professional translator specializing in European Spanish."
+constraints:
+  min_words: 80
+  max_words: 140
+default_model_id: "gemini-2.5-flash"
+instruction_templates:
+  translate_list: |
+    Translate the following list of YouTube video ideas into European Spanish.
+    Keep the meaning intact but ensure they sound natural to a native speaker from Spain.
+    
+    Ideas:
+    {input_text}
+    
+    Return ONLY the list of translated titles.

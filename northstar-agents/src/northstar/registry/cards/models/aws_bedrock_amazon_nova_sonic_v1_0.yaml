@@ -1,0 +1,15 @@
+card_type: model
+model_id: aws_bedrock_amazon_nova_sonic_v1_0
+provider_id: aws_bedrock
+model_or_deployment_id: amazon.nova-sonic-v1:0
+platform_api_surface: Bedrock Runtime
+invocation_primitive: bedrock-runtime.converse_stream
+request_shape_minimal: (Bidirectional Stream JSON)
+streaming_support: bidirectional
+credential_discovery: Boto3 default chain
+region_or_project_discovery: Env(AWS_REGION)
+default_creds_ok: true
+docs_url: ''
+last_updated_or_version: Dec 2025
+confidence: high
+notes: Audio/Speech Native.

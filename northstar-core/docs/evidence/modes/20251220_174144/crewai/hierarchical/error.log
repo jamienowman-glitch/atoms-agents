@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/jaynowman/dev/northstar-core/scripts/verify_framework_modes_live.py", line 164, in run_mode
+    output = asyncio.run(invoker(input_data, context))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: run() missing 3 required positional arguments: 'inputs', 'blackboard', and 'emit'

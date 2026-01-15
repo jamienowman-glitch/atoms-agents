@@ -1,0 +1,6 @@
+repo	area	task_id	priority	title	description	dependencies	files_or_modules	tests	acceptance_criteria	status
+northstar-agents	contracts	NA-CON-001	P0	Sync Engines Boundary	Ensure docs/contracts/ENGINES_BOUNDARY_CONTRACT.md matches engines implementation	-	docs/contracts/ENGINES_BOUNDARY_CONTRACT.md	-	File matches user input exactly	DONE
+northstar-agents	clients	NA-CLI-001	P0	Tokens Client	Implement TokensClient for Catalog & Set Token ops	NA-CON-001	src/northstar/clients/tokens.py	tests/clients/test_clients.py	Can fetch catalog and post set_token	DONE
+northstar-agents	clients	NA-CLI-002	P0	Feeds Client	Implement FeedsClient for Feed ops	NA-CON-001	src/northstar/clients/feeds.py	tests/clients/test_clients.py	Can list feeds and get items	DONE
+northstar-agents	clients	NA-CLI-003	P0	Canvas ClientStub	Stub Canvas Client for snapshot/replay	-	src/northstar/clients/tokens.py	-	Included in TokensClient for now	DONE
+northstar-agents	test	NA-TEST-001	P1	E2E Mock Scenario	Simulate Agent flow with mocked engines	NA-CLI-001, NA-CLI-002	tests/clients/test_clients.py	-	Tests pass in CI	DONE

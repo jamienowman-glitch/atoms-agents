@@ -1,0 +1,13 @@
+flow_name: smoke_autogen_generic
+description: Minimal smoke test for AutoGen modes
+steps:
+  - id: step_1
+    action: agent_chat
+    participant_id: "agent_smoke"
+    template_id: "step_1"
+    prompt: "Hello, confirm you are alive."
+    expected_keyword: "alive"
+
+participants:
+  - id: "agent_smoke"
+    agent_id: "registry/agents/smoke_agent.yaml"

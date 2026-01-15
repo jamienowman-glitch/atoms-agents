@@ -1,0 +1,123 @@
+{
+  "project": {
+    "created_at": "2025-12-31T12:46:50.028265Z",
+    "updated_at": "2025-12-31T12:46:50.029066Z",
+    "id": "d485e048c6ac468985b9c123560619d8",
+    "tenant_id": "demo-tenant",
+    "env": "dev",
+    "user_id": "demo-user",
+    "title": "Demo Project 136ae4e1",
+    "description": null,
+    "tags": [],
+    "render_profile": "social_4_3_h264",
+    "sequence_ids": [
+      "8abb3e26438643d0aebce18b7c2a7492"
+    ],
+    "meta": {}
+  },
+  "sequences": [
+    {
+      "created_at": "2025-12-31T12:46:50.034533Z",
+      "updated_at": "2025-12-31T12:46:50.034547Z",
+      "id": "8abb3e26438643d0aebce18b7c2a7492",
+      "tenant_id": "demo-tenant",
+      "env": "dev",
+      "user_id": null,
+      "project_id": "d485e048c6ac468985b9c123560619d8",
+      "name": "Main Sequence",
+      "duration_ms": null,
+      "timebase_fps": null,
+      "track_ids": [
+        "fd77ffb08a0643faace2e47963eaa335",
+        "be1fa5e422aa4913bffd35dff13e88af"
+      ],
+      "meta": {}
+    }
+  ],
+  "tracks": [
+    {
+      "created_at": "2025-12-31T12:46:50.038439Z",
+      "updated_at": "2025-12-31T12:46:50.038447Z",
+      "id": "fd77ffb08a0643faace2e47963eaa335",
+      "tenant_id": "demo-tenant",
+      "env": "dev",
+      "user_id": null,
+      "sequence_id": "8abb3e26438643d0aebce18b7c2a7492",
+      "kind": "video",
+      "order": 0,
+      "muted": false,
+      "hidden": false,
+      "audio_role": "generic",
+      "video_role": "main",
+      "meta": {}
+    },
+    {
+      "created_at": "2025-12-31T12:46:50.039767Z",
+      "updated_at": "2025-12-31T12:46:50.039770Z",
+      "id": "be1fa5e422aa4913bffd35dff13e88af",
+      "tenant_id": "demo-tenant",
+      "env": "dev",
+      "user_id": null,
+      "sequence_id": "8abb3e26438643d0aebce18b7c2a7492",
+      "kind": "video",
+      "order": 1,
+      "muted": false,
+      "hidden": false,
+      "audio_role": "generic",
+      "video_role": "overlay",
+      "meta": {}
+    }
+  ],
+  "clips": [
+    {
+      "created_at": "2025-12-31T12:46:50.040222Z",
+      "updated_at": "2025-12-31T12:46:50.040224Z",
+      "id": "dddd0f524891446ba48427816d180ffc",
+      "tenant_id": "demo-tenant",
+      "env": "dev",
+      "user_id": null,
+      "track_id": "fd77ffb08a0643faace2e47963eaa335",
+      "asset_id": "53cfd762f65d43c68bed7714e096a803",
+      "artifact_id": null,
+      "mask_artifact_id": null,
+      "in_ms": 0.0,
+      "out_ms": 5000.0,
+      "start_ms_on_timeline": 0.0,
+      "speed": 1.0,
+      "volume_db": 0.0,
+      "opacity": 0.1,
+      "blend_mode": "normal",
+      "scale_mode": null,
+      "position": null,
+      "crop": null,
+      "stabilise": false,
+      "optical_flow": false,
+      "alignment_applied": false,
+      "meta": {}
+    }
+  ],
+  "transitions": [],
+  "filter_stacks": [
+    {
+      "created_at": "2025-12-31T12:46:50.040852Z",
+      "updated_at": "2025-12-31T12:46:50.040853Z",
+      "id": "14162e469da044f3b7eb1f29283d123a",
+      "tenant_id": "demo-tenant",
+      "env": "dev",
+      "user_id": null,
+      "target_type": "clip",
+      "target_id": "dddd0f524891446ba48427816d180ffc",
+      "filters": [
+        {
+          "type": "color_grade",
+          "params": {
+            "saturation": 0
+          },
+          "enabled": true,
+          "mask_artifact_id": null
+        }
+      ]
+    }
+  ],
+  "automation": []
+}

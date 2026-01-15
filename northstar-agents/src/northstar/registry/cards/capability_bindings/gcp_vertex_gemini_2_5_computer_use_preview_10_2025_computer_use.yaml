@@ -1,0 +1,13 @@
+card_type: capability_binding
+binding_id: gcp_vertex_gemini_2_5_computer_use_preview_10_2025_computer_use
+provider_id: gcp_vertex
+model_or_deployment_id: gemini-2.5-computer-use-preview-10-2025
+capability_id: computer_use
+toggle_mechanism: Use specialized model + computer_use tool
+minimal_toggle_snippet: '{"tools": [{"computer_use": {...}}]}'
+streaming_support: none
+prereqs_or_allowlist: GCP IAM + Allowlist
+docs_url: Oct 2025
+last_updated_or_version: High
+confidence: requires agent loop.
+notes: null

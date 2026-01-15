@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="/auth/config.js"></script>
+</head>
+
+<body>
+    <script>
+        const { COGNITO_DOMAIN, CLIENT_ID } = window.NS_AUTH;
+
+        // Clear local session
+        sessionStorage.removeItem('ns_tokens');
+        sessionStorage.removeItem('ns_code_verifier');
+
+        // Construct logout URL
+        // logout_uri must be exactly what is registered in Cognito
+        const logoutUri = window.location.origin + '/';
+        const params = new URLSearchParams({
+            client_id: CLIENT_ID,
+            logout_uri: logoutUri
+        });
+
+        // Redirect to Cognito logout
+        window.location.href = `${COGNITO_DOMAIN}/logout?${params.toString()}`;
+    </script>
+</body>
+
+</html>

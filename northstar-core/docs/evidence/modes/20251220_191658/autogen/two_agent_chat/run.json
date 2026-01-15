@@ -1,0 +1,8 @@
+{
+  "framework": "autogen",
+  "mode_id": "two_agent_chat",
+  "status": "FAIL",
+  "model_id": "N/A",
+  "evidence_path": "docs/evidence/modes/20251220_191658/autogen/two_agent_chat",
+  "error": "name 'BedrockGateway' is not defined"
+}

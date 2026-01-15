@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Northstar Test Runner</title>
+    <style>
+        body { font-family: monospace; background: #111; color: #eee; padding: 20px; }
+        .container { display: flex; gap: 20px; }
+        .controls { width: 300px; background: #222; padding: 20px; border: 1px solid #444; }
+        .logs { flex-grow: 1; background: #000; border: 1px solid #444; height: 90vh; overflow-y: auto; padding: 10px; font-size: 14px; }
+        .log-entry { margin-bottom: 5px; border-bottom: 1px solid #222; padding-bottom: 2px; display: flex; }
+        .meta { width: 180px; color: #888; font-size: 12px; flex-shrink: 0; }
+        .content { color: #ccc; white-space: pre-wrap; word-break: break-all; }
+        button { background: #333; color: #fff; padding: 10px; border: 1px solid #555; cursor: pointer; width: 100%; margin-top: 10px; }
+        button:hover { background: #444; }
+        input, select { width: 100%; margin-bottom: 10px; background: #333; color: #fff; border: 1px solid #555; padding: 5px; }
+        h3 { margin-top: 0; }
+        a { color: #4af; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="controls">
+            <h3>Test Runner</h3>
+            <form id="runForm">
+                <label>Input File (.txt)</label>
+                <input type="file" id="inputFile" accept=".txt">
+                
+                <label>Flow Card</label>
+                <select id="flowSelect">
+                    <option value="registry/flows/langgraph/flow_youtube_orchestrator.yaml">YouTube Orchestrator</option>
+                </select>
+
+                <button type="submit" id="runBtn">RUN TEST</button>
+            </form>
+            <div id="status" style="margin-top:20px; color: #888;">Ready</div>
+            
+            <h4>Artifacts</h4>
+            <div id="artifacts"></div>
+        </div>
+        <div class="logs" id="logContainer">
+            <div>Waiting for start...</div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('runForm');
+        const logCont = document.getElementById('logContainer');
+        const statusDiv = document.getElementById('status');
+        const artifactsDiv = document.getElementById('artifacts');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const fileInput = document.getElementById('inputFile');
+            const flow = document.getElementById('flowSelect').value;
+
+            if (!fileInput.files[0]) {
+                alert("Please select a file");
+                return;
+            }
+
+            // Upload
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            formData.append('flow_path', flow);
+
+            statusDiv.textContent = "Uploading & Starting...";
+            logCont.innerHTML = "";
+            artifactsDiv.innerHTML = "";
+
+            try {
+                // Upload first
+                // Actually we can do it via a single POST that returns a stream ID or starts stream
+                // Simpler: POST returns {run_id}, then we Connect SSE
+                
+                const resp = await fetch('/start_run', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await resp.json();
+                if (data.error) {
+                    statusDiv.textContent = "Error: " + data.error;
+                    return;
+                }
+
+                statusDiv.textContent = "Running: " + data.run_id;
+                
+                // Connect SSE
+                const evtSource = new EventSource(`/stream_logs/${data.run_id}`);
+                
+                evtSource.onmessage = (e) => {
+                    if (e.data === 'DONE') {
+                        evtSource.close();
+                        statusDiv.textContent = "Completed.";
+                        loadArtifacts(data.run_id);
+                        return;
+                    }
+                    const msg = JSON.parse(e.data);
+                    appendLog(msg);
+                };
+                
+                evtSource.onerror = (e) => {
+                    // console.error(e);
+                    // evtSource.close();
+                };
+                
+            } catch (err) {
+                statusDiv.textContent = "Error: " + err;
+            }
+        });
+
+        function appendLog(msg) {
+            const div = document.createElement('div');
+            div.className = 'log-entry';
+            
+            const meta = document.createElement('div');
+            meta.className = 'meta';
+            meta.textContent = `[${msg.agent_id || 'SYSTEM'}] ${msg.action_type || 'INFO'} (${msg.elapsed}s)`;
+            
+            const content = document.createElement('div');
+            content.className = 'content';
+            content.textContent = msg.text;
+            
+            div.appendChild(meta);
+            div.appendChild(content);
+            logCont.appendChild(div);
+            logCont.scrollTop = logCont.scrollHeight;
+        }
+
+        async function loadArtifacts(runId) {
+            const resp = await fetch(`/artifacts/${runId}`);
+            const files = await resp.json();
+            artifactsDiv.innerHTML = "<ul>" + files.map(f => `<li><a href="/download/${runId}/${f}" target="_blank">${f}</a></li>`).join('') + "</ul>";
+        }
+    </script>
+</body>
+</html>

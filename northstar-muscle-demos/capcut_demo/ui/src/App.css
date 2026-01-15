@@ -1,0 +1,430 @@
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: var(--bg-dark);
+}
+
+.header {
+    height: 48px;
+    background-color: var(--bg-panel);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+}
+
+.logo {
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: -0.5px;
+}
+
+.status {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.main-area {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 280px;
+    background-color: var(--bg-panel);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Inspector */
+.inspector {
+    width: 250px;
+    background-color: var(--bg-panel);
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+}
+
+.control-group {
+    padding: 0 16px 20px 16px;
+}
+
+.control-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.8rem;
+    color: #888;
+}
+
+input[type=range] {
+    width: 100%;
+    accent-color: var(--accent);
+}
+
+.filter-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.filter-buttons button {
+    background: #333;
+    border: 1px solid transparent;
+    color: #ccc;
+    padding: 6px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.filter-buttons button:hover {
+    background: #444;
+}
+
+.filter-buttons button.active {
+    background: rgba(43, 124, 255, 0.2);
+    border-color: var(--accent);
+    color: #fff;
+}
+
+
+.section {
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+.section h3 {
+    margin: 0 0 12px 0;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.upload-btn {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 0.9rem;
+}
+
+.upload-btn:hover {
+    background-color: #444;
+}
+
+.hidden {
+    display: none;
+}
+
+.asset-list {
+    margin-top: 12px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.asset-item {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    cursor: pointer;
+    background: transparent;
+}
+
+.asset-item:hover {
+    background-color: var(--bg-panel-hover);
+}
+
+.asset-item.active {
+    background-color: rgba(43, 124, 255, 0.2);
+    border: 1px solid var(--accent);
+}
+
+.asset-icon {
+    width: 32px;
+    height: 32px;
+    background-color: #222;
+    font-size: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2px;
+    margin-right: 10px;
+    color: #666;
+}
+
+.asset-name {
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
+}
+
+select {
+    width: 100%;
+    padding: 8px;
+    background: var(--bg-dark);
+    color: #fff;
+    border: 1px solid #333;
+    border-radius: 4px;
+}
+
+/* Preview */
+.preview-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #000;
+    position: relative;
+}
+
+.player-frame {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    position: relative;
+}
+
+.video-player {
+    max-width: 100%;
+    max-height: 100%;
+    border: 1px solid #222;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.placeholder {
+    color: #444;
+    border: 1px dashed #333;
+    width: 320px;
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+}
+
+.spinner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    z-index: 10;
+}
+
+.spinner {
+    width: 30px;
+    height: 30px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+    margin-bottom: 10px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.actions {
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    background-color: var(--bg-panel);
+    border-top: 1px solid var(--border);
+}
+
+
+/* Timeline */
+.timeline-area {
+    height: 220px;
+    background-color: var(--bg-panel);
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+}
+
+.timeline-header {
+    height: 32px;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #1f1f25;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.track-container {
+    flex: 1;
+    padding: 20px 0;
+    overflow-x: auto;
+    position: relative;
+    background: #111;
+}
+
+
+/* Replaced Track Styles for Multi-Clip */
+.flex-track {
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+    gap: 0;
+}
+
+.clip-block {
+    background: var(--accent);
+    height: 40px;
+    padding: 0 12px;
+    border-radius: 4px;
+    color: white;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    min-width: 100px;
+    border: 1px solid transparent;
+}
+
+.clip-block.selected {
+    border: 1px solid #fff;
+    box-shadow: 0 0 0 2px rgba(45, 124, 255, 0.4);
+}
+
+.transition-slot {
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+}
+
+.trans-btn {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: none;
+    background: #444;
+    color: #aaa;
+    font-size: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.trans-btn:hover {
+    background: #666;
+    color: #fff;
+}
+
+.ruler {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 20px;
+    background: linear-gradient(90deg, #333 1px, transparent 1px);
+    background-size: 10% 100%;
+    /* 1s marks approx */
+    opacity: 0.3;
+}
+
+.track {
+    margin-top: 30px;
+    height: 60px;
+    background-color: #1a1a1a;
+    position: relative;
+    border-top: 1px solid #2a2a2a;
+    border-bottom: 1px solid #2a2a2a;
+}
+
+.clip-ghost {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.empty-track-msg {
+    color: #444;
+    text-align: center;
+    padding-top: 20px;
+    font-size: 0.8rem;
+}
+
+.clip {
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    background-color: #2b7cff;
+    border-radius: 4px;
+    cursor: grab;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.clip:active {
+    cursor: grabbing;
+}
+
+.clip .label {
+    padding-left: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    pointer-events: none;
+}
+
+.handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    cursor: col-resize;
+    transition: background 0.2s;
+}
+
+.handle:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.handle.left {
+    left: 0;
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+.handle.right {
+    right: 0;
+    border-left: 1px solid rgba(0, 0, 0, 0.2);
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}

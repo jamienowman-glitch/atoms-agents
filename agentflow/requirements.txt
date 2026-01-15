@@ -1,0 +1,18 @@
+# Agentflow / UI Factory – Requirements
+# Keep this file in sync with README.md and the Constitution.
+# This is NOT a full lockfile; it’s a high-level “what you need” list.
+
+# Runtime / tooling
+Node.js >= 20
+npm or pnpm
+Next.js (app router)
+TypeScript
+Tailwind CSS
+
+# Dev environment
+VS Code or compatible editor
+Antigravity / AI-friendly dev environment (optional but recommended)
+
+# Models / agents (conceptual)
+Gemini Architect (planner)
+ChatGPT / Codex MAX (implementer)

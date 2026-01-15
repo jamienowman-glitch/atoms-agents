@@ -1,0 +1,15 @@
+card_type: model
+model_id: gcp_vertex_gemini_3_pro_preview
+provider_id: gcp_vertex
+model_or_deployment_id: gemini-3-pro-preview
+platform_api_surface: Vertex AI API
+invocation_primitive: vertexai.GenerativeModel.generate_content
+request_shape_minimal: '{"contents": [{"parts": [{"text": "Hello"}]}]}'
+streaming_support: token
+credential_discovery: Google ADC (google.auth.default)
+region_or_project_discovery: Env(GCP_PROJECT_ID)
+default_creds_ok: true
+docs_url: ''
+last_updated_or_version: Dec 2025
+confidence: high
+notes: Deep Research Addition.

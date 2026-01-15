@@ -1,0 +1,19 @@
+description: Executes a simulation loop to evaluate Agent performance.
+framework: adk
+parameters:
+  prompt:
+    type: string
+    description: Scenario prompt for the simulation.
+    default: Simulate a user asking for a refund.
+  num_turns:
+    type: integer
+    description: Number of turns to simulate.
+    default: 3
+mode_id: ADK.Simulation
+invoke_entrypoint: runtime.adk.modes.simulation.run
+supports_streaming: none
+required_params:
+- prompt
+- num_turns
+pinned_version_ref: UNKNOWN
+notes: UNKNOWN

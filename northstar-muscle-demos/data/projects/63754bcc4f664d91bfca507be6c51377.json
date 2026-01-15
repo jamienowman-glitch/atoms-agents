@@ -1,0 +1,128 @@
+{
+  "project": {
+    "created_at": "2025-12-31T12:15:35.758492Z",
+    "updated_at": "2025-12-31T12:15:35.758497Z",
+    "id": "63754bcc4f664d91bfca507be6c51377",
+    "tenant_id": "demo-tenant",
+    "env": "dev",
+    "user_id": "demo-user",
+    "title": "Demo Project 48b64c3b",
+    "description": null,
+    "tags": [],
+    "render_profile": "social_4_3_h264",
+    "sequence_ids": [
+      "5cc0dbd2d69a4a3e9183e88906cb5992"
+    ],
+    "meta": {}
+  },
+  "sequences": [
+    {
+      "created_at": "2025-12-31T12:15:35.758728Z",
+      "updated_at": "2025-12-31T12:15:35.758729Z",
+      "id": "5cc0dbd2d69a4a3e9183e88906cb5992",
+      "tenant_id": "demo-tenant",
+      "env": "dev",
+      "user_id": null,
+      "project_id": "63754bcc4f664d91bfca507be6c51377",
+      "name": "Main Sequence",
+      "duration_ms": null,
+      "timebase_fps": null,
+      "track_ids": [
+        "d23e0cb1feaf46cf9c07e82970628831",
+        "a59f6cbd0fa04d73af73e0a19a2dedb8"
+      ],
+      "meta": {}
+    }
+  ],
+  "tracks": [
+    {
+      "created_at": "2025-12-31T12:15:35.758953Z",
+      "updated_at": "2025-12-31T12:15:35.758953Z",
+      "id": "d23e0cb1feaf46cf9c07e82970628831",
+      "tenant_id": "demo-tenant",
+      "env": "dev",
+      "user_id": null,
+      "sequence_id": "5cc0dbd2d69a4a3e9183e88906cb5992",
+      "kind": "video",
+      "order": 0,
+      "muted": false,
+      "hidden": false,
+      "audio_role": "generic",
+      "video_role": "main",
+      "meta": {}
+    },
+    {
+      "created_at": "2025-12-31T12:15:35.759363Z",
+      "updated_at": "2025-12-31T12:15:35.759364Z",
+      "id": "a59f6cbd0fa04d73af73e0a19a2dedb8",
+      "tenant_id": "demo-tenant",
+      "env": "dev",
+      "user_id": null,
+      "sequence_id": "5cc0dbd2d69a4a3e9183e88906cb5992",
+      "kind": "video",
+      "order": 1,
+      "muted": false,
+      "hidden": false,
+      "audio_role": "generic",
+      "video_role": "overlay",
+      "meta": {}
+    }
+  ],
+  "clips": [
+    {
+      "created_at": "2025-12-31T12:15:35.759584Z",
+      "updated_at": "2025-12-31T12:15:35.759585Z",
+      "id": "156ee805c73c4bd3aa48b7b3fe4ee413",
+      "tenant_id": "demo-tenant",
+      "env": "dev",
+      "user_id": null,
+      "track_id": "d23e0cb1feaf46cf9c07e82970628831",
+      "asset_id": "5ec8a544041048c7a53077925fc10ebe",
+      "artifact_id": null,
+      "mask_artifact_id": null,
+      "in_ms": 0.0,
+      "out_ms": 2000.0,
+      "start_ms_on_timeline": 0.0,
+      "speed": 1.0,
+      "volume_db": 0.0,
+      "opacity": 1.0,
+      "blend_mode": "normal",
+      "scale_mode": null,
+      "position": null,
+      "crop": null,
+      "stabilise": false,
+      "optical_flow": false,
+      "alignment_applied": false,
+      "meta": {}
+    },
+    {
+      "created_at": "2025-12-31T12:15:35.759870Z",
+      "updated_at": "2025-12-31T12:15:35.759871Z",
+      "id": "ae4598b3933c40d3a2542223eac57891",
+      "tenant_id": "demo-tenant",
+      "env": "dev",
+      "user_id": null,
+      "track_id": "d23e0cb1feaf46cf9c07e82970628831",
+      "asset_id": "5ec8a544041048c7a53077925fc10ebe",
+      "artifact_id": null,
+      "mask_artifact_id": null,
+      "in_ms": 2000.0,
+      "out_ms": 4000.0,
+      "start_ms_on_timeline": 2000.0,
+      "speed": 1.0,
+      "volume_db": 0.0,
+      "opacity": 1.0,
+      "blend_mode": "normal",
+      "scale_mode": null,
+      "position": null,
+      "crop": null,
+      "stabilise": false,
+      "optical_flow": false,
+      "alignment_applied": false,
+      "meta": {}
+    }
+  ],
+  "transitions": [],
+  "filter_stacks": [],
+  "automation": []
+}

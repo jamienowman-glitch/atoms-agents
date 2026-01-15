@@ -1,0 +1,14 @@
+description: Demonstrates defining and using custom tools (functions) in ADK.
+framework: adk
+parameters:
+  action:
+    type: string
+    description: Action triggering the tool.
+    default: Get weather for NYC
+mode_id: ADK.Tools.Custom
+invoke_entrypoint: runtime.adk.modes.tools_custom.run
+supports_streaming: none
+required_params:
+- action
+pinned_version_ref: UNKNOWN
+notes: UNKNOWN

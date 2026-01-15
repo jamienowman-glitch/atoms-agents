@@ -1,0 +1,222 @@
+[
+  {"atom_root":"./aitom_family/accordion_item","buckets":{
+    "behaviour":{"present":true,"file_count":1}
+,
+    "layout":{"present":true,"file_count":1}
+,
+    "views":{"present":true,"file_count":1}
+,
+    "typography":{"present":true,"file_count":1}
+,
+    "colours":{"present":true,"file_count":1}
+,
+    "icons":{"present":true,"file_count":1}
+,
+    "data_schema":{"present":true,"file_count":1}
+,
+    "tracking":{"present":true,"file_count":1}
+,
+    "accessibility":{"present":true,"file_count":0}
+,
+    "exposed_tokens":{"present":true,"file_count":1}
+  }}
+,
+  {"atom_root":"./aitom_family/app_header_appname_dropdown","buckets":{
+    "behaviour":{"present":true,"file_count":3}
+,
+    "layout":{"present":true,"file_count":1}
+,
+    "views":{"present":true,"file_count":1}
+,
+    "typography":{"present":true,"file_count":2}
+,
+    "colours":{"present":true,"file_count":1}
+,
+    "icons":{"present":true,"file_count":1}
+,
+    "data_schema":{"present":true,"file_count":1}
+,
+    "tracking":{"present":true,"file_count":1}
+,
+    "accessibility":{"present":true,"file_count":1}
+,
+    "exposed_tokens":{"present":true,"file_count":1}
+  }}
+,
+  {"atom_root":"./aitom_family/blackboard","buckets":{
+    "behaviour":{"present":true,"file_count":1}
+,
+    "layout":{"present":true,"file_count":1}
+,
+    "views":{"present":true,"file_count":0}
+,
+    "typography":{"present":true,"file_count":1}
+,
+    "colours":{"present":true,"file_count":1}
+,
+    "icons":{"present":true,"file_count":1}
+,
+    "data_schema":{"present":true,"file_count":1}
+,
+    "tracking":{"present":true,"file_count":0}
+,
+    "accessibility":{"present":true,"file_count":0}
+,
+    "exposed_tokens":{"present":true,"file_count":0}
+  }}
+,
+  {"atom_root":"./aitom_family/borderless_big_chat","buckets":{
+    "behaviour":{"present":true,"file_count":0}
+,
+    "layout":{"present":true,"file_count":0}
+,
+    "views":{"present":true,"file_count":0}
+,
+    "typography":{"present":true,"file_count":0}
+,
+    "colours":{"present":true,"file_count":0}
+,
+    "icons":{"present":true,"file_count":0}
+,
+    "data_schema":{"present":true,"file_count":0}
+,
+    "tracking":{"present":true,"file_count":0}
+,
+    "accessibility":{"present":true,"file_count":0}
+,
+    "exposed_tokens":{"present":true,"file_count":0}
+  }}
+,
+  {"atom_root":"./aitom_family/bottom_chat_input_bar","buckets":{
+    "behaviour":{"present":true,"file_count":3}
+,
+    "layout":{"present":true,"file_count":2}
+,
+    "views":{"present":true,"file_count":2}
+,
+    "typography":{"present":true,"file_count":2}
+,
+    "colours":{"present":true,"file_count":3}
+,
+    "icons":{"present":true,"file_count":4}
+,
+    "data_schema":{"present":true,"file_count":2}
+,
+    "tracking":{"present":true,"file_count":3}
+,
+    "accessibility":{"present":true,"file_count":2}
+,
+    "exposed_tokens":{"present":true,"file_count":2}
+  }}
+,
+  {"atom_root":"./aitom_family/button_group","buckets":{
+    "behaviour":{"present":true,"file_count":0}
+,
+    "layout":{"present":true,"file_count":0}
+,
+    "views":{"present":true,"file_count":0}
+,
+    "typography":{"present":true,"file_count":0}
+,
+    "colours":{"present":true,"file_count":0}
+,
+    "icons":{"present":true,"file_count":0}
+,
+    "data_schema":{"present":true,"file_count":0}
+,
+    "tracking":{"present":true,"file_count":0}
+,
+    "accessibility":{"present":true,"file_count":0}
+,
+    "exposed_tokens":{"present":true,"file_count":0}
+  }}
+,
+  {"atom_root":"./aitom_family/button_single","buckets":{
+    "behaviour":{"present":true,"file_count":0}
+,
+    "layout":{"present":true,"file_count":0}
+,
+    "views":{"present":true,"file_count":0}
+,
+    "typography":{"present":true,"file_count":0}
+,
+    "colours":{"present":true,"file_count":0}
+,
+    "icons":{"present":true,"file_count":0}
+,
+    "data_schema":{"present":true,"file_count":0}
+,
+    "tracking":{"present":true,"file_count":0}
+,
+    "accessibility":{"present":true,"file_count":0}
+,
+    "exposed_tokens":{"present":true,"file_count":0}
+  }}
+,
+  {"atom_root":"./aitom_family/calendar","buckets":{
+    "behaviour":{"present":true,"file_count":0}
+,
+    "layout":{"present":true,"file_count":0}
+,
+    "views":{"present":true,"file_count":0}
+,
+    "typography":{"present":true,"file_count":0}
+,
+    "colours":{"present":true,"file_count":0}
+,
+    "icons":{"present":true,"file_count":0}
+,
+    "data_schema":{"present":true,"file_count":0}
+,
+    "tracking":{"present":true,"file_count":0}
+,
+    "accessibility":{"present":true,"file_count":0}
+,
+    "exposed_tokens":{"present":true,"file_count":0}
+  }}
+,
+  {"atom_root":"./aitom_family/carousel","buckets":{
+    "behaviour":{"present":true,"file_count":1}
+,
+    "layout":{"present":true,"file_count":1}
+,
+    "views":{"present":true,"file_count":1}
+,
+    "typography":{"present":true,"file_count":1}
+,
+    "colours":{"present":true,"file_count":1}
+,
+    "icons":{"present":true,"file_count":1}
+,
+    "data_schema":{"present":true,"file_count":1}
+,
+    "tracking":{"present":true,"file_count":1}
+,
+    "accessibility":{"present":true,"file_count":1}
+,
+    "exposed_tokens":{"present":true,"file_count":1}
+  }}
+,
+  {"atom_root":"./aitom_family/chat_card_v1","buckets":{
+    "behaviour":{"present":true,"file_count":3}
+,
+    "layout":{"present":true,"file_count":4}
+,
+    "views":{"present":true,"file_count":3}
+,
+    "typography":{"present":true,"file_count":3}
+,
+    "colours":{"present":true,"file_count":3}
+,
+    "icons":{"present":true,"file_count":3}
+,
+    "data_schema":{"present":true,"file_count":3}
+,
+    "tracking":{"present":true,"file_count":3}
+,
+    "accessibility":{"present":true,"file_count":3}
+,
+    "exposed_tokens":{"present":true,"file_count":3}
+  }}
+
+]

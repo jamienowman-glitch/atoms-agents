@@ -1,0 +1,9 @@
+card_type: profile
+profile_id: infra_stub
+name: Infrastructure Stub
+persistence_backend: infra
+blackboard_backend: infra
+pii_strategy: infra
+nexus_strategy: infra
+allow_local_fallback: false
+notes: "Strict infrastructure profile. Requires injected infra components or fails."

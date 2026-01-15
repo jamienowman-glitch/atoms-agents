@@ -1,0 +1,50 @@
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "useDefineForClassFields": true,
+        "lib": [
+            "ES2022",
+            "DOM",
+            "DOM.Iterable"
+        ],
+        "module": "ESNext",
+        "skipLibCheck": true,
+        "moduleResolution": "bundler",
+        "allowImportingTsExtensions": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true,
+        "jsx": "react-jsx",
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true,
+        "composite": true,
+        "baseUrl": ".",
+        "paths": {
+            "@northstar/contracts": [
+                "packages/contracts/src/index.ts"
+            ],
+            "@northstar/canvas-kernel": [
+                "packages/canvas-kernel/src/index.ts"
+            ],
+            "@northstar/transport": [
+                "packages/transport/src/index.ts"
+            ],
+            "@northstar/ui-atoms": [
+                "packages/ui-atoms/src/index.ts"
+            ],
+            "@northstar/projections": [
+                "packages/projections/src/index.ts"
+            ]
+        }
+    },
+    "include": [
+        "packages",
+        "apps"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
+}

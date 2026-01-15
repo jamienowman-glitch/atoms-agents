@@ -1,0 +1,11 @@
+error: null
+metrics:
+  chunk_count: 4
+  has_token_chunks: true
+  total_ms: 1504.74
+  ttfc_ms: 1485.38
+model: us.amazon.nova-2-lite-v1:0
+runtime: bedrock
+status: PASS
+test_name: stream_canary
+timestamp: '2025-12-16T18:53:57.795961Z'

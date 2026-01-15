@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/Users/jaynowman/dev/northstar-core/scripts/verify_framework_modes_live.py", line 84, in run_mode
+    spec.loader.exec_module(mod)
+  File "<frozen importlib._bootstrap_external>", line 995, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 1133, in get_code
+  File "<frozen importlib._bootstrap_external>", line 1063, in source_to_code
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/Users/jaynowman/dev/northstar-core/runtime/crewai/modes/sequential.py", line 14
+    inputs: Dict[str, Any],
+    ^^^^^^^^^^^^^^^^^^^^^^
+SyntaxError: duplicate argument 'inputs' in function definition

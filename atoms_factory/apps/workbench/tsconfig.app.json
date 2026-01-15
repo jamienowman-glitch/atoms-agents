@@ -1,0 +1,44 @@
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "target": "ES2022",
+    "useDefineForClassFields": true,
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "module": "ESNext",
+    "types": [
+      "vite/client"
+    ],
+    "skipLibCheck": true,
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@atoms/*": [
+        "../../atoms/aitom_family/*"
+      ],
+      "@fonts/*": [
+        "../../fonts/*"
+      ]
+    },
+    /* Linting - Relaxed for migration */
+    "strict": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": false,
+    "verbatimModuleSyntax": false
+  },
+  "include": [
+    "src",
+    "../../atoms/aitom_family/**/*",
+    "../../atoms/aitom_family/_shared/**/*"
+  ]
+}

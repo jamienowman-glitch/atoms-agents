@@ -1,0 +1,166 @@
+.
+├── 3-dec-sitemap.txt
+├── _atom_snapshot
+│   ├── 00_repo_tree_L2.txt
+│   └── inventory_job.sh
+├── active_tasks.json
+├── aitom_family
+│   ├── accordion_item
+│   ├── app_header_appname_dropdown
+│   ├── blackboard
+│   ├── borderless_big_chat
+│   ├── bottom_chat_input_bar
+│   ├── button_group
+│   ├── button_single
+│   ├── calendar
+│   ├── carousel
+│   ├── chat_card_v1
+│   ├── chat_fullscreen_view
+│   ├── chat_icon_band_popover
+│   ├── chat_message_action_bar
+│   ├── chat_message_block
+│   ├── chat_message_list
+│   ├── chat_rail
+│   ├── chat_rail_header_bar
+│   ├── chat_rail_settings
+│   ├── chat_rail_shell
+│   ├── chat_rail_sliders
+│   ├── chat_rail_tools
+│   ├── chat_safety_controls_bar
+│   ├── chat_settings
+│   ├── chat_shortcuts_popover
+│   ├── chat_upload_source_picker
+│   ├── cluster_popup
+│   ├── cluster_rep
+│   ├── cta_button
+│   ├── deliverability_email_settings
+│   ├── desktop_floating_chat
+│   ├── divider
+│   ├── dropdown_header
+│   ├── element_aeo_settings
+│   ├── email_from
+│   ├── email_subject_line
+│   ├── fed_popup
+│   ├── fed_rep
+│   ├── floating_pill_toolbar
+│   ├── form_body_text
+│   ├── haze_fpv_canvas
+│   ├── haze_fpv_hud
+│   ├── haze_node_info
+│   ├── heading_block
+│   ├── hero_image
+│   ├── icon_divider
+│   ├── icon_grid
+│   ├── image_media_block
+│   ├── jumbo_header
+│   ├── lanes-viewer
+│   ├── lanes_calendar_grid_v1
+│   ├── layout_columns_grid
+│   ├── layout_divider_block
+│   ├── layout_group_container
+│   ├── layout_spacer_block
+│   ├── logo_insert
+│   ├── macro_temp_indicator
+│   ├── main_menu_icon_button
+│   ├── max_header
+│   ├── maybes_note
+│   ├── maybes_text_file_explorer
+│   ├── micro_public_chat
+│   ├── minimal_header
+│   ├── multi_feed_grids
+│   ├── multi_feed_tile
+│   ├── nexus
+│   ├── page_seo_settings
+│   ├── page_tracking_settings
+│   ├── product_buy_buttons_block
+│   ├── product_collapsible_section
+│   ├── product_description_block
+│   ├── product_info_stack
+│   ├── product_media_gallery
+│   ├── product_price_block
+│   ├── product_recommendations_section
+│   ├── product_title_block
+│   ├── product_variant_picker
+│   ├── quote_block
+│   ├── rich_text_block
+│   ├── section_blog_posts
+│   ├── section_collection_list
+│   ├── section_custom_markup
+│   ├── section_email_signup
+│   ├── section_featured_collection_grid
+│   ├── section_hero_banner
+│   ├── section_image_with_text
+│   ├── section_media_collage
+│   ├── section_multicolumn_features
+│   ├── section_rich_text
+│   ├── section_slideshow
+│   ├── signup
+│   ├── surface_header_nano
+│   ├── surface_header_shell_micro
+│   ├── surface_header_shell_standard
+│   ├── surface_logo_centerpiece
+│   ├── swarm_chat_bars
+│   ├── swarm_group_chat_bar
+│   ├── table_insert
+│   ├── theme_card_surface
+│   ├── theme_colour_schemes
+│   ├── theme_layout_settings
+│   ├── theme_typography_settings
+│   ├── video_media_block
+│   └── wireframe_canvas
+├── bossman
+│   ├── 24-grid.md
+│   ├── generic_atom_prompt.md
+│   ├── generic_plan_author_prompt.md
+│   ├── ingest_prompt.md
+│   ├── master_ingest_theme_prompt.md
+│   ├── prompts.md
+│   ├── specialist_prompts.md
+│   ├── toke_engine.md
+│   └── typograhpy.md
+├── docs
+│   ├── atoms_matrix.md
+│   ├── atoms_matrix.tsv
+│   ├── haze_vector_explorer_integration.md
+│   ├── logs
+│   ├── plans
+│   ├── qa
+│   ├── reference
+│   ├── registry
+│   └── run_reports
+├── find_active_tasks.py
+├── find_active_tasks_json.py
+├── fonts
+│   ├── RobotoFlex-VariableFont_GRAD,XOPQ,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght.ttf
+│   ├── dump_roboto_flex_instances.py
+│   └── roboto_flex_presets.tsv
+├── gen_plan.py
+├── generate_placeholders.sh
+├── generate_specs.py
+├── icons
+│   ├── 50A0748F-9088-4636-967C-DA124F0E16F7.PNG
+│   ├── 621327E0-6E7E-4E91-995B-A63842DE1B11.PNG
+│   ├── AGENT_LUXURY_BLACK.png
+│   ├── AGENT_LUXURY_WHITE.png
+│   ├── AGENT_PLAIN_BLACK.png
+│   ├── AGENT_PLAIN_WHITE.png
+│   ├── AGENT_STREETWEAR_BLACK.png
+│   ├── AGENT_STREETWEAR_WHITE.png
+│   ├── menu_black.png
+│   ├── menu_white.png
+│   └── squared-marketing-agents.png
+├── impl_plan_content.md
+├── imports
+│   ├── caidence2
+│   ├── calendar
+│   ├── chat
+│   ├── files
+│   ├── lanes
+│   ├── multi21
+│   └── ui
+├── ingest
+├── registry
+├── temp_specs.txt
+└── update_logs.py
+
+126 directories, 38 files

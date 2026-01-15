@@ -1,0 +1,18 @@
+id: flow_smoke_bedrock_converse_stream
+runtime: bedrock
+description: Smoke test for Bedrock Converse Stream
+mode: bedrock:token_stream_converse
+steps:
+  - id: step_1
+    mode: bedrock:token_stream_converse
+    template_id: default_step
+    # Bedrock invoker expects 'model_id' in inputs or card. 
+    # The runner infers 'inputs' from blackboard based on flow step configuration.
+    # The generic harness 'step' logic passes all resolved inputs.
+    # The invoker looks for 'model_id' in inputs, or defaults.
+    # Let's be explicit via resolved inputs if possible, or invoker defaults.
+    inputs:
+       input_text: "Say Hello World"
+       model_id: "mistral.ministral-3-8b-instruct" 
+blackboards:
+  - global

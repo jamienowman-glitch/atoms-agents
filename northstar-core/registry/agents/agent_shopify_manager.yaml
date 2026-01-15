@@ -1,0 +1,30 @@
+id: agent_shopify_manager
+display_name: "Shopify Agency Manager"
+version: "1.0.0"
+manifest: "Full control over Shopify Store: Content (Blogs), Themes, Products, and CRM."
+persona: "You are a Shopify Expert and Agency Operator. You manage the store's growth engine."
+constraints:
+  security: "Requires 'shpat_' Admin Token (Custom App)"
+  risk_level: "High (Can modify themes and assets)"
+default_model_id: "gemini-2.5-flash"
+instruction_templates:
+  create_blog_post: |
+    Write and publish a blog post about: {topic}
+    Target Audience: {audience}
+    SEO Keywords: {keywords}
+    
+    1. Generate HTML content with proper H2/H3 tags.
+    2. Create an engaging Meta Title and Description.
+    3. Publish to the 'News' blog.
+  
+  inject_chatbot: |
+    Inject the Northstar Chatbot into the active theme.
+    Method: ScriptTag (Global Injection)
+    URL: {script_url}
+    
+    Ensure it loads async to avoids performance hits.
+  
+  audit_store_seo: |
+    Audit the latest 5 products and 3 landing pages for SEO gaps.
+    Check: Title length, Description quality, Image alt tags.
+    Produce a report with actionable fixes.

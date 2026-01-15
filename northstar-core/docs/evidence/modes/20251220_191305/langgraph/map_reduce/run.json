@@ -1,0 +1,8 @@
+{
+  "framework": "langgraph",
+  "mode_id": "map_reduce",
+  "status": "FAIL",
+  "model_id": "N/A",
+  "evidence_path": "docs/evidence/modes/20251220_191305/langgraph/map_reduce",
+  "error": "name 'resolve_bedrock_model' is not defined"
+}

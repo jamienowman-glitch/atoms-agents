@@ -1,0 +1,7 @@
+flow_name: smoke_langgraph_generic
+description: Minimal smoke test for LangGraph modes
+steps:
+  - id: step_1
+    action: invoke_graph
+    input: "Hello"
+    expected_output_key: "messages"

@@ -1,0 +1,16 @@
+card_type: mode
+id: crewai.knowledge_string
+framework: crewai
+official_name: Knowledge String
+invoke_primitive: StringKnowledgeSource(content)
+entrypoint: northstar.runtime.modes.crewai.crewai_knowledge_string.run
+params:
+  official_name: StringKnowledgeSource
+  official_options: content
+  minimal_snippet: source = StringKnowledgeSource(content="...")
+streaming_support: false
+docs_urls:
+- https://docs.crewai.com/en/concepts/knowledge#string-knowledge-source
+pinned_version: crewai 0.30.0
+confidence: high
+notes: CrewAI provides StringKnowledgeSource for in-code string knowledge

@@ -1,0 +1,9 @@
+flow_name: smoke_crewai_generic
+description: Minimal smoke test for CrewAI modes
+steps:
+  - id: step_1
+    action: run_crew
+    agent_id: "registry/agents/smoke_agent.yaml"
+    template_id: "step_1"
+    inputs: ["user_message"]
+    expected_output: "Hello"

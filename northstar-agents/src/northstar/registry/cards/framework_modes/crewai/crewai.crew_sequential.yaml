@@ -1,0 +1,16 @@
+card_type: mode
+id: crewai.crew_sequential
+framework: crewai
+official_name: Crew Sequential
+invoke_primitive: Process.sequential
+entrypoint: northstar.runtime.modes.crewai.crewai_crew_sequential.run
+params:
+  official_name: Sequential Process
+  official_options: "\u2013"
+  minimal_snippet: crew = Crew(agents=[agent1, agent2], tasks=[task1, task2], process=Process.sequential)
+streaming_support: false
+docs_urls:
+- https://docs.crewai.com/en/concepts/tasks#task-execution-flow
+pinned_version: crewai 0.30.0
+confidence: high
+notes: CrewAI uses Process.sequential for sequential process

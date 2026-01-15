@@ -1,0 +1,24 @@
+description: Invokes an AWS Bedrock Agent to perform orchestrated tasks.
+framework: bedrock
+parameters:
+  agent_id:
+    type: string
+    description: The ID of the Bedrock Agent.
+    default: MOCK_AGENT_ID
+  agent_alias_id:
+    type: string
+    description: The Alias ID of the Bedrock Agent.
+    default: TSTALIASID
+  input_text:
+    type: string
+    description: Input text for the agent.
+    default: Schedule a meeting
+mode_id: Bedrock.Agent.Orchestration
+invoke_entrypoint: runtime.bedrock.modes.agent_orchestration.run
+supports_streaming: none
+required_params:
+- agent_id
+- agent_alias_id
+- input_text
+pinned_version_ref: integration/bedrock/PINNED_VERSION.md
+notes: UNKNOWN

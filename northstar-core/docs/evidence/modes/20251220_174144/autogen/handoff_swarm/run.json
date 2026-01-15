@@ -1,0 +1,8 @@
+{
+  "framework": "autogen",
+  "mode_id": "handoff_swarm",
+  "status": "FAIL",
+  "model_id": "N/A",
+  "evidence_path": "docs/evidence/modes/20251220_174144/autogen/handoff_swarm",
+  "error": "run() missing 3 required positional arguments: 'inputs', 'blackboard', and 'emit'"
+}

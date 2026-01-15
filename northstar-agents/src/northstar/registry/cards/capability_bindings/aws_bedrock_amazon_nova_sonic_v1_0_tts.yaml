@@ -1,0 +1,13 @@
+card_type: capability_binding
+binding_id: aws_bedrock_amazon_nova_sonic_v1_0_tts
+provider_id: aws_bedrock
+model_or_deployment_id: amazon.nova-sonic-v1:0
+capability_id: tts
+toggle_mechanism: ConverseStream
+minimal_toggle_snippet: (Bidirectional Stream Setup)
+streaming_support: bidirectional
+prereqs_or_allowlist: AWS SigV4
+docs_url: Dec 2025
+last_updated_or_version: High
+confidence: native speech-to-speech.
+notes: null

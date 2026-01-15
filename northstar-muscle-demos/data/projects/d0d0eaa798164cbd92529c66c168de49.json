@@ -1,0 +1,102 @@
+{
+  "project": {
+    "created_at": "2025-12-31T12:41:13.240850Z",
+    "updated_at": "2025-12-31T12:41:13.240861Z",
+    "id": "d0d0eaa798164cbd92529c66c168de49",
+    "tenant_id": "demo-tenant",
+    "env": "dev",
+    "user_id": "demo-user",
+    "title": "Demo Project 387b6008",
+    "description": null,
+    "tags": [],
+    "render_profile": "social_4_3_h264",
+    "sequence_ids": [
+      "6df5c8e734ed47ea91af19cd1087254c"
+    ],
+    "meta": {}
+  },
+  "sequences": [
+    {
+      "created_at": "2025-12-31T12:41:13.241624Z",
+      "updated_at": "2025-12-31T12:41:13.241628Z",
+      "id": "6df5c8e734ed47ea91af19cd1087254c",
+      "tenant_id": "demo-tenant",
+      "env": "dev",
+      "user_id": null,
+      "project_id": "d0d0eaa798164cbd92529c66c168de49",
+      "name": "Main Sequence",
+      "duration_ms": null,
+      "timebase_fps": null,
+      "track_ids": [
+        "694b9f570a3048a8923f74dcffc9c78a",
+        "e74bc6d7d7b942e9bfee7c8e2dc2c61d"
+      ],
+      "meta": {}
+    }
+  ],
+  "tracks": [
+    {
+      "created_at": "2025-12-31T12:41:13.242106Z",
+      "updated_at": "2025-12-31T12:41:13.242107Z",
+      "id": "694b9f570a3048a8923f74dcffc9c78a",
+      "tenant_id": "demo-tenant",
+      "env": "dev",
+      "user_id": null,
+      "sequence_id": "6df5c8e734ed47ea91af19cd1087254c",
+      "kind": "video",
+      "order": 0,
+      "muted": false,
+      "hidden": false,
+      "audio_role": "generic",
+      "video_role": "main",
+      "meta": {}
+    },
+    {
+      "created_at": "2025-12-31T12:41:13.243114Z",
+      "updated_at": "2025-12-31T12:41:13.243116Z",
+      "id": "e74bc6d7d7b942e9bfee7c8e2dc2c61d",
+      "tenant_id": "demo-tenant",
+      "env": "dev",
+      "user_id": null,
+      "sequence_id": "6df5c8e734ed47ea91af19cd1087254c",
+      "kind": "video",
+      "order": 1,
+      "muted": false,
+      "hidden": false,
+      "audio_role": "generic",
+      "video_role": "overlay",
+      "meta": {}
+    }
+  ],
+  "clips": [
+    {
+      "created_at": "2025-12-31T12:41:13.243787Z",
+      "updated_at": "2025-12-31T12:41:13.243790Z",
+      "id": "b93f25ac6b644c1e916abfe1d07d7f1d",
+      "tenant_id": "demo-tenant",
+      "env": "dev",
+      "user_id": null,
+      "track_id": "694b9f570a3048a8923f74dcffc9c78a",
+      "asset_id": "53cfd762f65d43c68bed7714e096a803",
+      "artifact_id": null,
+      "mask_artifact_id": null,
+      "in_ms": 0.0,
+      "out_ms": 5000.0,
+      "start_ms_on_timeline": 0.0,
+      "speed": 1.0,
+      "volume_db": 0.0,
+      "opacity": 1.0,
+      "blend_mode": "normal",
+      "scale_mode": null,
+      "position": null,
+      "crop": null,
+      "stabilise": false,
+      "optical_flow": false,
+      "alignment_applied": false,
+      "meta": {}
+    }
+  ],
+  "transitions": [],
+  "filter_stacks": [],
+  "automation": []
+}

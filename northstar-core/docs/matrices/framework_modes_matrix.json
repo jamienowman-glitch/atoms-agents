@@ -1,0 +1,393 @@
+[
+  {
+    "framework": "langgraph",
+    "mode_id": "streaming_astream",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/langgraph/streaming_astream",
+    "error": "not enough values to unpack (expected 2, got 1)"
+  },
+  {
+    "framework": "langgraph",
+    "mode_id": "memory",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/langgraph/memory",
+    "error": "not enough values to unpack (expected 2, got 1)"
+  },
+  {
+    "framework": "langgraph",
+    "mode_id": "conditional_router",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/langgraph/conditional_router",
+    "error": "not enough values to unpack (expected 2, got 1)"
+  },
+  {
+    "framework": "langgraph",
+    "mode_id": "human_approval",
+    "status": "FAIL",
+    "model_id": "global.amazon.nova-2-lite-v1:0",
+    "evidence_path": "docs/evidence/modes/20251221_072827/langgraph/human_approval",
+    "error": "Expected 'messages' not found in output."
+  },
+  {
+    "framework": "langgraph",
+    "mode_id": "sequential_chain",
+    "status": "FAIL",
+    "model_id": "global.amazon.nova-2-lite-v1:0",
+    "evidence_path": "docs/evidence/modes/20251221_072827/langgraph/sequential_chain",
+    "error": "Expected 'messages' not found in output."
+  },
+  {
+    "framework": "langgraph",
+    "mode_id": "map_reduce",
+    "status": "FAIL",
+    "model_id": "global.amazon.nova-2-lite-v1:0",
+    "evidence_path": "docs/evidence/modes/20251221_072827/langgraph/map_reduce",
+    "error": "Expected 'messages' not found in output."
+  },
+  {
+    "framework": "crewai",
+    "mode_id": "hitl",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/crewai/hitl",
+    "error": "No invoke_entrypoint defined"
+  },
+  {
+    "framework": "crewai",
+    "mode_id": "planning_demo",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/crewai/planning_demo",
+    "error": "not enough values to unpack (expected 2, got 1)"
+  },
+  {
+    "framework": "crewai",
+    "mode_id": "hierarchical",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/crewai/hierarchical",
+    "error": "keyword argument repeated: backstory (adapter.py, line 180)"
+  },
+  {
+    "framework": "crewai",
+    "mode_id": "memory_demo",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/crewai/memory_demo",
+    "error": "not enough values to unpack (expected 2, got 1)"
+  },
+  {
+    "framework": "crewai",
+    "mode_id": "knowledge_file",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/crewai/knowledge_file",
+    "error": "not enough values to unpack (expected 2, got 1)"
+  },
+  {
+    "framework": "crewai",
+    "mode_id": "sequential",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/crewai/sequential",
+    "error": "duplicate argument 'inputs' in function definition (sequential.py, line 14)"
+  },
+  {
+    "framework": "crewai",
+    "mode_id": "knowledge_string",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/crewai/knowledge_string",
+    "error": "not enough values to unpack (expected 2, got 1)"
+  },
+  {
+    "framework": "crewai",
+    "mode_id": "manager_custom",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/crewai/manager_custom",
+    "error": "No invoke_entrypoint defined"
+  },
+  {
+    "framework": "crewai",
+    "mode_id": "flow_router",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/crewai/flow_router",
+    "error": "not enough values to unpack (expected 2, got 1)"
+  },
+  {
+    "framework": "crewai",
+    "mode_id": "crew_sequential",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/crewai/crew_sequential",
+    "error": "not enough values to unpack (expected 2, got 1)"
+  },
+  {
+    "framework": "crewai",
+    "mode_id": "crew_hierarchical",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/crewai/crew_hierarchical",
+    "error": "not enough values to unpack (expected 2, got 1)"
+  },
+  {
+    "framework": "crewai",
+    "mode_id": "tools_custom",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/crewai/tools_custom",
+    "error": "not enough values to unpack (expected 2, got 1)"
+  },
+  {
+    "framework": "crewai",
+    "mode_id": "flow_hybrid",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/crewai/flow_hybrid",
+    "error": "not enough values to unpack (expected 2, got 1)"
+  },
+  {
+    "framework": "crewai",
+    "mode_id": "knowledge_web",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/crewai/knowledge_web",
+    "error": "not enough values to unpack (expected 2, got 1)"
+  },
+  {
+    "framework": "crewai",
+    "mode_id": "flow_persistence",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/crewai/flow_persistence",
+    "error": "not enough values to unpack (expected 2, got 1)"
+  },
+  {
+    "framework": "crewai",
+    "mode_id": "flow_control",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/crewai/flow_control",
+    "error": "No invoke_entrypoint defined"
+  },
+  {
+    "framework": "crewai",
+    "mode_id": "execution_async",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/crewai/execution_async",
+    "error": "No invoke_entrypoint defined"
+  },
+  {
+    "framework": "crewai",
+    "mode_id": "flow_basic",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/crewai/flow_basic",
+    "error": "not enough values to unpack (expected 2, got 1)"
+  },
+  {
+    "framework": "bedrock",
+    "mode_id": "agent_orchestration",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/bedrock/agent_orchestration",
+    "error": "not enough values to unpack (expected 2, got 1)"
+  },
+  {
+    "framework": "bedrock",
+    "mode_id": "token_stream_converse",
+    "status": "SKIP",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/bedrock/token_stream_converse",
+    "reason": "No generic/specific smoke flow found."
+  },
+  {
+    "framework": "bedrock",
+    "mode_id": "knowledge_bases",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/bedrock/knowledge_bases",
+    "error": "not enough values to unpack (expected 2, got 1)"
+  },
+  {
+    "framework": "bedrock",
+    "mode_id": "guardrails",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/bedrock/guardrails",
+    "error": "not enough values to unpack (expected 2, got 1)"
+  },
+  {
+    "framework": "bedrock",
+    "mode_id": "action_groups",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/bedrock/action_groups",
+    "error": "not enough values to unpack (expected 2, got 1)"
+  },
+  {
+    "framework": "adk",
+    "mode_id": "sessions_memory",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/adk/sessions_memory",
+    "error": "not enough values to unpack (expected 2, got 1)"
+  },
+  {
+    "framework": "adk",
+    "mode_id": "tools_custom",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/adk/tools_custom",
+    "error": "not enough values to unpack (expected 2, got 1)"
+  },
+  {
+    "framework": "adk",
+    "mode_id": "simulation",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/adk/simulation",
+    "error": "not enough values to unpack (expected 2, got 1)"
+  },
+  {
+    "framework": "strands",
+    "mode_id": "linear_sequence",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/strands/linear_sequence",
+    "error": "not enough values to unpack (expected 2, got 1)"
+  },
+  {
+    "framework": "strands",
+    "mode_id": "dag_parallel",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/strands/dag_parallel",
+    "error": "not enough values to unpack (expected 2, got 1)"
+  },
+  {
+    "framework": "strands",
+    "mode_id": "default",
+    "status": "SKIP",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/strands/default",
+    "reason": "No generic/specific smoke flow found."
+  },
+  {
+    "framework": "autogen",
+    "mode_id": "selection_random",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/autogen/selection_random",
+    "error": "No invoke_entrypoint defined"
+  },
+  {
+    "framework": "autogen",
+    "mode_id": "selector_groupchat",
+    "status": "FAIL",
+    "model_id": "global.amazon.nova-2-lite-v1:0",
+    "evidence_path": "docs/evidence/modes/20251221_072827/autogen/selector_groupchat",
+    "error": "Expected 'alive' not found in output."
+  },
+  {
+    "framework": "autogen",
+    "mode_id": "termination",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/autogen/termination",
+    "error": "No invoke_entrypoint defined"
+  },
+  {
+    "framework": "autogen",
+    "mode_id": "human_input",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/autogen/human_input",
+    "error": "No invoke_entrypoint defined"
+  },
+  {
+    "framework": "autogen",
+    "mode_id": "code_execution",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/autogen/code_execution",
+    "error": "not enough values to unpack (expected 2, got 1)"
+  },
+  {
+    "framework": "autogen",
+    "mode_id": "teachable_agent",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/autogen/teachable_agent",
+    "error": "not enough values to unpack (expected 2, got 1)"
+  },
+  {
+    "framework": "autogen",
+    "mode_id": "stub_control",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/autogen/stub_control",
+    "error": "This is a control stub designed to fail."
+  },
+  {
+    "framework": "autogen",
+    "mode_id": "nested_chat",
+    "status": "FAIL",
+    "model_id": "global.amazon.nova-2-lite-v1:0",
+    "evidence_path": "docs/evidence/modes/20251221_072827/autogen/nested_chat",
+    "error": "Expected 'alive' not found in output."
+  },
+  {
+    "framework": "autogen",
+    "mode_id": "rag_retrieval",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/autogen/rag_retrieval",
+    "error": "not enough values to unpack (expected 2, got 1)"
+  },
+  {
+    "framework": "autogen",
+    "mode_id": "two_agent_chat",
+    "status": "FAIL",
+    "model_id": "global.amazon.nova-2-lite-v1:0",
+    "evidence_path": "docs/evidence/modes/20251221_072827/autogen/two_agent_chat",
+    "error": "Expected 'alive' not found in output."
+  },
+  {
+    "framework": "autogen",
+    "mode_id": "round_robin_groupchat",
+    "status": "PASS",
+    "model_id": "global.amazon.nova-2-lite-v1:0",
+    "evidence_path": "docs/evidence/modes/20251221_072827/autogen/round_robin_groupchat"
+  },
+  {
+    "framework": "autogen",
+    "mode_id": "handoff_swarm",
+    "status": "FAIL",
+    "model_id": "global.amazon.nova-2-lite-v1:0",
+    "evidence_path": "docs/evidence/modes/20251221_072827/autogen/handoff_swarm",
+    "error": "Expected 'alive' not found in output."
+  },
+  {
+    "framework": "autogen",
+    "mode_id": "sequential_chat",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/autogen/sequential_chat",
+    "error": "No invoke_entrypoint defined"
+  },
+  {
+    "framework": "autogen",
+    "mode_id": "tools_function",
+    "status": "FAIL",
+    "model_id": "N/A",
+    "evidence_path": "docs/evidence/modes/20251221_072827/autogen/tools_function",
+    "error": "not enough values to unpack (expected 2, got 1)"
+  }
+]

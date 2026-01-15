@@ -1,0 +1,15 @@
+
+card_type: artifact_spec
+artifact_spec_id: artifact_spec.flow_audit_report_json_v1
+name: Flow Audit Report JSON
+artifact_kind: json
+mime_type: application/json
+required_fields:
+  - error_count
+  - warnings
+  - passed
+max_bytes: 50000
+viewer_hints:
+  panel: data_view
+  renderer: json_tree
+notes: Structured audit output.

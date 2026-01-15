@@ -1,0 +1,8 @@
+{
+  "node_id": "node.test.audit",
+  "status": "FAIL",
+  "result": {
+    "artifacts": [],
+    "writes": {}
+  }
+}

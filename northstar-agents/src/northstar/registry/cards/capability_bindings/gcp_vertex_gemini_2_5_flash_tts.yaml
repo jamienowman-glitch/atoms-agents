@@ -1,0 +1,13 @@
+card_type: capability_binding
+binding_id: gcp_vertex_gemini_2_5_flash_tts
+provider_id: gcp_vertex
+model_or_deployment_id: gemini-2.5-flash
+capability_id: tts
+toggle_mechanism: Live API WebSocket
+minimal_toggle_snippet: (Bidirectional Stream Setup)
+streaming_support: bidirectional
+prereqs_or_allowlist: GCP IAM
+docs_url: Dec 2025
+last_updated_or_version: High
+confidence: gemini live api.
+notes: null

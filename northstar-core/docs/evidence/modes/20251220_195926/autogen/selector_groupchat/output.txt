@@ -1,0 +1,1 @@
+{'status': 'PASS', 'final_output': "ACK. Confirmed, I'm here and ready to assist.", 'steps': [{'source': 'agent_smoke', 'content': "ACK. Confirmed, I'm here and ready to assist."}, {'source': 'agent_smoke', 'content': "ACK. Confirmed, I'm here and ready to assist."}, {'source': 'agent_smoke', 'content': "ACK. Confirmed, I'm here and ready to assist."}]}

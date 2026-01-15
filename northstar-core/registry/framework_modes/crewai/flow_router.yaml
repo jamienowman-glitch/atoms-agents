@@ -1,0 +1,14 @@
+description: A demonstration of conditional routing and control flow in CrewAI Flows.
+framework: crewai
+parameters:
+  outcome:
+    type: string
+    description: 'Determines the route: ''success'' or ''fail''.'
+    default: success
+mode_id: CrewAI.Flow.Router
+invoke_entrypoint: runtime.crewai.modes.flow_router.run
+supports_streaming: none
+required_params:
+- outcome
+pinned_version_ref: integration/crewai/PINNED_VERSION.md
+notes: UNKNOWN

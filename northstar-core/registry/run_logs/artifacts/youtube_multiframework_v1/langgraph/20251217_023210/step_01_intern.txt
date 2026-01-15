@@ -1,0 +1,23 @@
+Here are **5 YouTube video ideas** based on the report for a **Junior Marketing Intern**.perspective:
+
+- **"The Strange Rise of ‘Dumb Phones’ – Is Detoxing Your Life the Next Trend?"**
+  *(Explores slow-tech movement with interviews/statistics, humor, or a "switching to a flip phone" challenge.)*
+
+- **"AI is Taking Over Your To-Do List – Here’s How to Outsmart It"** *(Creative breakdown of AI assistants like Jarvis/Teddy Bondo, comparing it to human job displacement.)*
+
+- **"Hydroponics on a Budget: Can YOU Grow Food in Your Apartment?"** *(Tutorial-style video with DIY projects for urban farmers, includes fail-success stories.)*
+
+- **"N64 Thrift Store Revelation: What’s Hidden in Consoles Worth $10?"** *(Collaborative "thrift haul" with retro console collectors, restore tips, or emulator hacks for nostalgic game lovers.)*
+
+- **"Python for Kids? Make a Game in 20 Minutes (Easy Tutorial!)"** *(Simplified coding demo for parents/grandparents teaching gaming—Sketchy Games-inspired footsteps or drag-and-drop interface.)*
+
+**Key for BB (copy to Blackboard master key):**
+```
+youtube_ideas [
+   "The Strange Rise of 'Dumb Phones' – Is Detoxing Your Life the Next Trend?", #Trending, Topical, Controversial
+   "AI is Taking Over Your To-Do List – Here’s How to Outsmart It", #AI Humanization, Comedy/Informative
+   "Hydroponics on a Budget: Can YOU Grow Food in Your Apartment?", #DIY Tutorial, Community Engagement
+   "N64 Thrift Store Revelation: What’s Hidden in Consoles Worth $10?", #Nostalgia, Thrift Haul Trends
+   "Python for Kids? Make a Game in 20 Minutes (Easy Tutorial!)" #Gamification, Family Appeal
+]
+```

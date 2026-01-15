@@ -1,0 +1,168 @@
+DEBUG: Script Loaded
+Starting LangGraph Orchestration...
+--> Running Step 1: Intern (Vertex)
+/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/vertexai/generative_models/_generative_models.py:433: UserWarning: This feature is deprecated as of June 24, 2025 and will be removed on June 24, 2026. For details, see https://cloud.google.com/vertex-ai/generative-ai/docs/deprecations/genai-vertexai-sdk.
+  warning_logs.show_deprecation_warning()
+--> Running Fork B: English Debate (AutoGen)
+--> Running Fork A: Spanish Team (CrewAI)
+/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/vertexai/generative_models/_generative_models.py:433: UserWarning: This feature is deprecated as of June 24, 2025 and will be removed on June 24, 2026. For details, see https://cloud.google.com/vertex-ai/generative-ai/docs/deprecations/genai-vertexai-sdk.
+  warning_logs.show_deprecation_warning()
+ERROR:root:OpenAI API call failed: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-fake-************************tion. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}
+ERROR:root:OpenAI API call failed: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-fake-************************tion. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}
+[91mAn unknown error occurred. Please check the details below.[0m
+[91mError details: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-fake-************************tion. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}[0m
+[91mAn unknown error occurred. Please check the details below.[0m
+[91mError details: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-fake-************************tion. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}[0m
+ERROR:root:OpenAI API call failed: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-fake-************************tion. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}
+ERROR:root:OpenAI API call failed: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-fake-************************tion. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}
+[91mAn unknown error occurred. Please check the details below.[0m
+[91mError details: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-fake-************************tion. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}[0m
+[91mAn unknown error occurred. Please check the details below.[0m
+[91mError details: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-fake-************************tion. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}[0m
+ERROR:root:OpenAI API call failed: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-fake-************************tion. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}
+ERROR:root:OpenAI API call failed: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-fake-************************tion. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}
+[91mAn unknown error occurred. Please check the details below.[0m
+[91mError details: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-fake-************************tion. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}[0m
+[91mAn unknown error occurred. Please check the details below.[0m
+[91mError details: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-fake-************************tion. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}[0m
+Traceback (most recent call last):
+  File "/Users/jaynowman/dev/northstar-core/runtime/crewai/adapter.py", line 245, in _run_generic_flow
+    result = crew.kickoff()
+             ^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/crewai/crew.py", line 714, in kickoff
+    result = self._run_sequential_process()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/crewai/crew.py", line 1057, in _run_sequential_process
+    return self._execute_tasks(self.tasks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/crewai/crew.py", line 1143, in _execute_tasks
+    task_output = task.execute_sync(
+                  ^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/crewai/task.py", line 458, in execute_sync
+    return self._execute_core(agent, context, tools)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/crewai/task.py", line 692, in _execute_core
+    raise e  # Re-raise the exception after emitting the event
+    ^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/crewai/task.py", line 623, in _execute_core
+    result = agent.execute_task(
+             ^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/crewai/agent/core.py", line 423, in execute_task
+    result = self.execute_task(task, context, tools)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/crewai/agent/core.py", line 423, in execute_task
+    result = self.execute_task(task, context, tools)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/crewai/agent/core.py", line 422, in execute_task
+    raise e
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/crewai/agent/core.py", line 389, in execute_task
+    result = self._execute_without_timeout(task_prompt, task)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/crewai/agent/core.py", line 485, in _execute_without_timeout
+    return self.agent_executor.invoke(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/crewai/agents/crew_agent_executor.py", line 192, in invoke
+    formatted_answer = self._invoke_loop()
+                       ^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/crewai/agents/crew_agent_executor.py", line 303, in _invoke_loop
+    raise e
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/crewai/agents/crew_agent_executor.py", line 233, in _invoke_loop
+    answer = get_llm_response(
+             ^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/crewai/utilities/agent_utils.py", line 276, in get_llm_response
+    raise e
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/crewai/utilities/agent_utils.py", line 268, in get_llm_response
+    answer = llm.call(
+             ^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/crewai/llms/providers/openai/completion.py", line 209, in call
+    return self._handle_completion(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/crewai/llms/providers/openai/completion.py", line 509, in _handle_completion
+    raise e from e
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/crewai/llms/providers/openai/completion.py", line 421, in _handle_completion
+    response: ChatCompletion = self.client.chat.completions.create(**params)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/openai/_utils/_utils.py", line 287, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/openai/resources/chat/completions/completions.py", line 925, in create
+    return self._post(
+           ^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/openai/_base_client.py", line 1242, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/openai/_base_client.py", line 1037, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.AuthenticationError: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-fake-************************tion. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}
+DEBUG: Adapter Result: {'status': 'FAIL', 'reason': "Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-fake-************************tion. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}"}
+FAIL: CrewAI Runtime Error: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-fake-************************tion. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/langgraph/pregel/main.py", line 2643, in stream
+    for _ in runner.tick(
+             ^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/langgraph/pregel/_runner.py", line 258, in tick
+    _panic_or_proceed(
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/langgraph/pregel/_runner.py", line 520, in _panic_or_proceed
+    raise exc
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/langgraph/pregel/_executor.py", line 80, in done
+    task.result()
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/langgraph/pregel/_retry.py", line 42, in run_with_retry
+    return task.proc.invoke(task.input, config)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/langgraph/_internal/_runnable.py", line 656, in invoke
+    input = context.run(step.invoke, input, config, **kwargs)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/langgraph/_internal/_runnable.py", line 400, in invoke
+    ret = self.func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jaynowman/dev/northstar-core/scripts/run_youtube_multiframework_test.py", line 307, in node_spanish_team
+    raise e
+  File "/Users/jaynowman/dev/northstar-core/scripts/run_youtube_multiframework_test.py", line 279, in node_spanish_team
+    raise Exception(result.get("reason"))
+Exception: Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-fake-************************tion. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}
+During task with name 'spanish_team' and id '2d98ff82-de38-83b4-a8c1-fef290c61f72'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/jaynowman/dev/northstar-core/scripts/run_youtube_multiframework_test.py", line 459, in <module>
+    run_test(args.input)
+  File "/Users/jaynowman/dev/northstar-core/scripts/run_youtube_multiframework_test.py", line 429, in run_test
+    final_state = app.invoke({"youtube_ideas": []})
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/langgraph/pregel/main.py", line 3068, in invoke
+    for chunk in self.stream(
+                 ^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/langgraph/pregel/main.py", line 2579, in stream
+    with SyncPregelLoop(
+         ^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/langgraph/pregel/_loop.py", line 1138, in __exit__
+    return self.stack.__exit__(exc_type, exc_value, traceback)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/contextlib.py", line 610, in __exit__
+    raise exc_details[1]
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/contextlib.py", line 595, in __exit__
+    if cb(*exc_details):
+       ^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/langgraph/pregel/_executor.py", line 107, in __exit__
+    concurrent.futures.wait(pending)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/concurrent/futures/_base.py", line 305, in wait
+    waiter.event.wait(timeout)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/threading.py", line 655, in wait
+    signaled = self._cond.wait(timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/threading.py", line 355, in wait
+    waiter.acquire()
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/crewai/telemetry/telemetry.py", line 206, in handler
+    original_handler(signum, frame)
+KeyboardInterrupt
+/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/vertexai/generative_models/_generative_models.py:433: UserWarning: This feature is deprecated as of June 24, 2025 and will be removed on June 24, 2026. For details, see https://cloud.google.com/vertex-ai/generative-ai/docs/deprecations/genai-vertexai-sdk.
+  warning_logs.show_deprecation_warning()

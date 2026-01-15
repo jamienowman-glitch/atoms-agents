@@ -1,0 +1,6 @@
+task_id	priority	atom_id	area	description	acceptance_criteria	files_touched	depends_on	notes
+AT-001	P0	meta	schema	Standardize version field	Ensure all 5 core nodes have `meta.version` in schema.ts.	grep "version" returns 5 hits.	atoms/aitom_family/*/exposed_tokens/schema.ts		Quick fix.
+AT-002	P1	connector_node	assets	Migrate Platform Badges to Registry	Move any inline platform SVGs/Images to AssetRegistry.	`AssetRegistry.ts` contains youtube/tiktok keys.	apps/workbench/src/logic/AssetRegistry.ts, atoms/aitom_family/connector_node/		
+AT-003	P2	framework_node	render	Implement Dynamic Nested Count	Visual indicator for `nested_agents_count` in View.	View renders "X Agents" badge if count > 0.	atoms/aitom_family/framework_node/views/View.tsx		
+AT-004	P2	blackboard_node	props	Expose 'Persistence' Badge	Add a prop/token to toggle a "Disk" icon on the node.	Schema has `is_persistent` boolean.	atoms/aitom_family/blackboard_node/		Visual feedback for state.
+AT-005	P0	meta	workbench	Decouple Node Registry	Refactor `LensGraphView` to use a mapping object instead of hardcoded imports.	`nodeTypes` map exists in `LensRegistry` or similar.	apps/workbench/src/components/LensGraphView.tsx	AT-001	Critical for preventing switch-case explosion.

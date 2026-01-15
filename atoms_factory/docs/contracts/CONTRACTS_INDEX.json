@@ -1,0 +1,23 @@
+[
+    {
+        "id": "LC-001",
+        "title": "Lens Graph Node Pack Contract",
+        "path": "atoms_factory/LENS_GRAPH_NODE_PACK_CONTRACT_v1.md",
+        "version": "1.0.0",
+        "status": "ACTIVE"
+    },
+    {
+        "id": "LC-002",
+        "title": "Icon Asset Policy",
+        "path": "atoms_factory/ICON_ASSET_POLICY.md",
+        "version": "1.0.0",
+        "status": "ACTIVE"
+    },
+    {
+        "id": "RM-001",
+        "title": "Atoms Factory Reality Map",
+        "path": "atoms_factory/ATOMS_FACTORY_REALITY_MAP.md",
+        "version": "1.0.0",
+        "status": "SNAPSHOT"
+    }
+]

@@ -1,0 +1,8 @@
+{
+  "framework": "bedrock",
+  "mode_id": "guardrails",
+  "status": "FAIL",
+  "model_id": "N/A",
+  "evidence_path": "docs/evidence/modes/20251220_195002/bedrock/guardrails",
+  "error": "not enough values to unpack (expected 2, got 1)"
+}

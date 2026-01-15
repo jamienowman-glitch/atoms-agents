@@ -1,0 +1,13 @@
+card_type: capability_binding
+binding_id: gcp_vertex_gemini_3_pro_preview_code_exec
+provider_id: gcp_vertex
+model_or_deployment_id: gemini-3-pro-preview
+capability_id: code_exec
+toggle_mechanism: Add codeExecution tool
+minimal_toggle_snippet: '{"tools": [{"codeExecution": {}}]}'
+streaming_support: token
+prereqs_or_allowlist: GCP IAM
+docs_url: Dec 2025
+last_updated_or_version: High
+confidence: returns executablecode.
+notes: null

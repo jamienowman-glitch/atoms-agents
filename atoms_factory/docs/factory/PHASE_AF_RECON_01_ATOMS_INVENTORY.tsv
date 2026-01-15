@@ -1,0 +1,50 @@
+atom_id	path	type	buckets_present	missing_buckets	exposed_tokens_status	notes
+cta_button	atoms/aitom_family/cta_button	Complete	All 10	None	Present (_index.ts)	Uses data_schema for props? exposed_tokens has subfolders.
+section_hero_banner	atoms/aitom_family/section_hero_banner	Partial	All 10	None	Placeholder	Contains many placeholder.md files.
+chat_message_block	atoms/aitom_family/chat_message_block	Partial	All 10	None	Placeholder	Contains many placeholder.md files.
+multi_feed_grids	atoms/aitom_family/multi_feed_grids	Partial	All 10	None	Placeholder	
+accordion_item	atoms/aitom_family/accordion_item	Unknown	Unknown	Unknown	Unknown	Scan required
+app_header_appname_dropdown	atoms/aitom_family/app_header_appname_dropdown	Unknown	Unknown	Unknown	Unknown	Scan required
+blackboard	atoms/aitom_family/blackboard	Unknown	Unknown	Unknown	Unknown	Scan required
+bottom_chat_input_bar	atoms/aitom_family/bottom_chat_input_bar	Unknown	Unknown	Unknown	Unknown	Scan required
+carousel	atoms/aitom_family/carousel	Unknown	Unknown	Unknown	Unknown	Scan required
+chat_card_v1	atoms/aitom_family/chat_card_v1	Unknown	Unknown	Unknown	Unknown	Scan required
+chat_icon_band_popover	atoms/aitom_family/chat_icon_band_popover	Unknown	Unknown	Unknown	Unknown	Scan required
+chat_message_action_bar	atoms/aitom_family/chat_message_action_bar	Unknown	Unknown	Unknown	Unknown	Scan required
+chat_message_list	atoms/aitom_family/chat_message_list	Unknown	Unknown	Unknown	Unknown	Scan required
+chat_rail_header_bar	atoms/aitom_family/chat_rail_header_bar	Unknown	Unknown	Unknown	Unknown	Scan required
+chat_rail_shell	atoms/aitom_family/chat_rail_shell	Unknown	Unknown	Unknown	Unknown	Scan required
+chat_safety_controls_bar	atoms/aitom_family/chat_safety_controls_bar	Unknown	Unknown	Unknown	Unknown	Scan required
+chat_shortcuts_popover	atoms/aitom_family/chat_shortcuts_popover	Unknown	Unknown	Unknown	Unknown	Scan required
+chat_upload_source_picker	atoms/aitom_family/chat_upload_source_picker	Unknown	Unknown	Unknown	Unknown	Scan required
+divider	atoms/aitom_family/divider	Unknown	Unknown	Unknown	Unknown	Scan required
+dropdown_header	atoms/aitom_family/dropdown_header	Unknown	Unknown	Unknown	Unknown	Scan required
+floating_pill_toolbar	atoms/aitom_family/floating_pill_toolbar	Unknown	Unknown	Unknown	Unknown	Scan required
+heading_block	atoms/aitom_family/heading_block	Unknown	Unknown	Unknown	Unknown	Scan required
+hero_image	atoms/aitom_family/hero_image	Unknown	Unknown	Unknown	Unknown	Scan required
+icon_divider	atoms/aitom_family/icon_divider	Unknown	Unknown	Unknown	Unknown	Scan required
+icon_grid	atoms/aitom_family/icon_grid	Unknown	Unknown	Unknown	Unknown	Scan required
+image_media_block	atoms/aitom_family/image_media_block	Unknown	Unknown	Unknown	Unknown	Scan required
+lanes_calendar_grid_v1	atoms/aitom_family/lanes_calendar_grid_v1	Unknown	Unknown	Unknown	Unknown	Scan required
+macro_temp_indicator	atoms/aitom_family/macro_temp_indicator	Unknown	Unknown	Unknown	Unknown	Scan required
+main_menu_icon_button	atoms/aitom_family/main_menu_icon_button	Unknown	Unknown	Unknown	Unknown	Scan required
+maybes_note	atoms/aitom_family/maybes_note	Unknown	Unknown	Unknown	Unknown	Scan required
+multi_feed_tile	atoms/aitom_family/multi_feed_tile	Unknown	Unknown	Unknown	Unknown	Scan required
+quote_block	atoms/aitom_family/quote_block	Unknown	Unknown	Unknown	Unknown	Scan required
+rich_text_block	atoms/aitom_family/rich_text_block	Unknown	Unknown	Unknown	Unknown	Scan required
+section_blog_posts	atoms/aitom_family/section_blog_posts	Unknown	Unknown	Unknown	Unknown	Scan required
+section_collection_list	atoms/aitom_family/section_collection_list	Unknown	Unknown	Unknown	Unknown	Scan required
+section_custom_markup	atoms/aitom_family/section_custom_markup	Unknown	Unknown	Unknown	Unknown	Scan required
+section_email_signup	atoms/aitom_family/section_email_signup	Unknown	Unknown	Unknown	Unknown	Scan required
+section_featured_collection_grid	atoms/aitom_family/section_featured_collection_grid	Unknown	Unknown	Unknown	Unknown	Scan required
+section_image_with_text	atoms/aitom_family/section_image_with_text	Unknown	Unknown	Unknown	Unknown	Scan required
+section_media_collage	atoms/aitom_family/section_media_collage	Unknown	Unknown	Unknown	Unknown	Scan required
+section_multicolumn_features	atoms/aitom_family/section_multicolumn_features	Unknown	Unknown	Unknown	Unknown	Scan required
+section_rich_text	atoms/aitom_family/section_rich_text	Unknown	Unknown	Unknown	Unknown	Scan required
+section_slideshow	atoms/aitom_family/section_slideshow	Unknown	Unknown	Unknown	Unknown	Scan required
+theme_card_surface	atoms/aitom_family/theme_card_surface	Unknown	Unknown	Unknown	Unknown	Scan required
+theme_colour_schemes	atoms/aitom_family/theme_colour_schemes	Unknown	Unknown	Unknown	Unknown	Scan required
+theme_layout_settings	atoms/aitom_family/theme_layout_settings	Unknown	Unknown	Unknown	Unknown	Scan required
+theme_typography_settings	atoms/aitom_family/theme_typography_settings	Unknown	Unknown	Unknown	Unknown	Scan required
+video_media_block	atoms/aitom_family/video_media_block	Unknown	Unknown	Unknown	Unknown	Scan required
+wireframe_canvas	atoms/aitom_family/wireframe_canvas	Unknown	Unknown	Unknown	Unknown	Scan required

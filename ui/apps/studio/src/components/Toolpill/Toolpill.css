@@ -1,0 +1,112 @@
+.Toolpill {
+    position: fixed;
+    z-index: 10000;
+    /* Above ChatRail */
+    background: #000;
+    color: #fff;
+    border-radius: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    cursor: grab;
+    user-select: none;
+    touch-action: none;
+    /* Important for drag */
+}
+
+.Toolpill:active {
+    cursor: grabbing;
+}
+
+/* Collapsed State */
+.Toolpill.collapsed {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translate(-50%, -50%);
+    /* Centered on coord */
+}
+
+.Toolpill.expanded {
+    width: 320px;
+    max-width: 90vw;
+    height: auto;
+    max-height: 250px;
+    border-radius: 12px;
+    transform: translate(-50%, -20px);
+    /* Anchor adjustments per spec */
+    display: flex;
+    flex-direction: column;
+}
+
+.Toolpill-collapsed-icon {
+    font-size: 24px;
+    font-weight: 300;
+}
+
+.Toolpill-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.Toolpill-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid #333;
+    cursor: grab;
+    /* Header is drag handle */
+}
+
+.Toolpill-title {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.Toolpill-close-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 4px;
+}
+
+.Toolpill-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    padding: 12px;
+    background: #111;
+    overflow-y: auto;
+}
+
+.Toolpill-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 8px;
+    border-radius: 8px;
+    background: #222;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.Toolpill-item:hover {
+    background: #333;
+}
+
+.Toolpill-item-icon {
+    font-size: 18px;
+    margin-bottom: 2px;
+}
+
+.Toolpill-item-label {
+    font-size: 11px;
+    text-align: center;
+    color: #ccc;
+}

@@ -1,0 +1,13 @@
+card_type: capability_binding
+binding_id: gcp_vertex_gemini_3_pro_preview_tool_use
+provider_id: gcp_vertex
+model_or_deployment_id: gemini-3-pro-preview
+capability_id: tool_use
+toggle_mechanism: Define tools array
+minimal_toggle_snippet: '{"tools": [{"functionDeclarations": [...]}]}'
+streaming_support: token
+prereqs_or_allowlist: GCP IAM
+docs_url: Dec 2025
+last_updated_or_version: High
+confidence: stricter thought signature.
+notes: null

@@ -1,0 +1,19 @@
+description: Demonstrates AutoGen's Retrieval Augmented Generation (RAG) capabilities.
+framework: autogen
+parameters:
+  docs_path:
+    type: string
+    description: Path to documents for retrieval.
+    default: docs/
+  query:
+    type: string
+    description: Question to ask based on documents.
+    default: What is in the docs?
+mode_id: AutoGen.RAG
+invoke_entrypoint: runtime.autogen.modes.rag_retrieval.run
+supports_streaming: none
+required_params:
+- docs_path
+- query
+pinned_version_ref: integration/autogen/PINNED_VERSION.md
+notes: UNKNOWN

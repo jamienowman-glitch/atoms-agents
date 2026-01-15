@@ -1,0 +1,8 @@
+framework: langgraph
+mode_id: sequential_chain
+pinned_version_ref: integration/langgraph/PINNED_VERSION.md
+invoke_entrypoint: runtime.langgraph.modes.sequential:run
+required_params:
+  - nodes
+supports_streaming: event
+notes: "Simple linear chain of nodes."

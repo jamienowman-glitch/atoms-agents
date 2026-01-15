@@ -1,0 +1,8 @@
+{
+  "framework": "autogen",
+  "mode_id": "stub_control",
+  "status": "FAIL",
+  "model_id": "N/A",
+  "evidence_path": "docs/evidence/modes/20251220_191305/autogen/stub_control",
+  "error": "name 'resolve_bedrock_model' is not defined"
+}

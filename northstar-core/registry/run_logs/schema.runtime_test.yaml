@@ -1,0 +1,35 @@
+type: object
+description: "Schema for Runtime Test Run Reports"
+properties:
+  start_timestamp:
+    type: string
+    format: date-time
+  end_timestamp:
+    type: string
+    format: date-time
+  total_latency_ms:
+    type: number
+  summary:
+    type: string
+  steps:
+    type: array
+    items:
+      type: object
+      properties:
+        step_index:
+          type: integer
+        agent_id:
+          type: string
+        action_type:
+          type: string
+          enum: ["think", "write", "review", "final"]
+        emitted_text:
+          type: string
+        target_location:
+          type: string
+          description: "Where it wrote (if any)"
+        step_latency_ms:
+          type: number
+        model_provider:
+          type: string
+          description: "Model ID or Provider used"

@@ -1,0 +1,286 @@
+{
+  "engines": [
+    {
+      "engine_id": "AUDIO.PREPROCESS.BASIC_CLEAN_V1",
+      "id": "AUDIO.PREPROCESS.BASIC_CLEAN_V1",
+      "kind": "atomic",
+      "domain": "audio",
+      "label": "Basic audio cleaner",
+      "category": "audio",
+      "source_pipeline": [],
+      "primary_script": "",
+      "entry_points": [],
+      "inputs": [
+        "raw audio files"
+      ],
+      "outputs": [
+        "cleaned audio ready for segmentation/ASR"
+      ],
+      "oss_dependencies": [
+        "ffmpeg",
+        "sox"
+      ],
+      "description": "Lightweight denoise/normalize pass to improve downstream ASR quality.",
+      "notes": "Spec-only entry; implement as reusable preprocessing step."
+    },
+    {
+      "engine_id": "VIDEO.INGEST.FRAME_GRAB_V1",
+      "id": "VIDEO.INGEST.FRAME_GRAB_V1",
+      "kind": "atomic",
+      "domain": "video",
+      "label": "Frame grabber",
+      "category": "video",
+      "source_pipeline": [],
+      "primary_script": "",
+      "entry_points": [],
+      "inputs": [
+        "video files",
+        "mode",
+        "frame_every_n_seconds",
+        "max_frames",
+        "timestamps_ms"
+      ],
+      "outputs": [
+        "still frames (jpg/png)",
+        "frame index listing {timestamp_ms, frame_uri}",
+        "basic video metadata"
+      ],
+      "oss_dependencies": [
+        "ffmpeg"
+      ],
+      "description": "Extracts frames from video in either auto interval mode or manual timeline-driven mode.",
+      "notes": "Spec-only entry; useful for multimodal dataset prep. Manual mode is deterministic and only returns requested timestamps.",
+      "modes": {
+        "auto": {
+          "inputs": [
+            "video_uri",
+            "frame_every_n_seconds",
+            "max_frames"
+          ],
+          "outputs": [
+            "list of {timestamp_ms, frame_uri}",
+            "basic meta"
+          ],
+          "behavior": "Fixed-interval grabs for thumbnails/dataset sampling."
+        },
+        "manual": {
+          "inputs": [
+            "video_uri",
+            "timestamps_ms[]"
+          ],
+          "outputs": [
+            "list of {timestamp_ms, frame_uri}",
+            "basic meta"
+          ],
+          "behavior": "Frame-accurate grabs exactly at provided timestamps; no heuristic selection."
+        }
+      }
+    },
+    {
+      "engine_id": "TEXT.CLEAN.ASR_PUNCT_CASE_V1",
+      "id": "TEXT.CLEAN.ASR_PUNCT_CASE_V1",
+      "kind": "atomic",
+      "domain": "text",
+      "label": "ASR punctuation + casing cleaner",
+      "category": "text",
+      "source_pipeline": [],
+      "primary_script": "",
+      "entry_points": [],
+      "inputs": [
+        "raw ASR transcript text/JSON"
+      ],
+      "outputs": [
+        "punctuated and cased transcript text/JSON"
+      ],
+      "oss_dependencies": [
+        "python"
+      ],
+      "description": "Restores punctuation and casing to ASR outputs for readability and downstream NLP.",
+      "notes": "Spec-only entry; can wrap lightweight NLP/regex or model-based punctuators."
+    },
+    {
+      "engine_id": "AUDIO.INGEST.LOCAL_FILE_V1",
+      "id": "AUDIO.INGEST.LOCAL_FILE_V1",
+      "kind": "atomic",
+      "domain": "audio",
+      "label": "Local file ingestor",
+      "category": "ingest",
+      "source_pipeline": [],
+      "primary_script": "",
+      "entry_points": [],
+      "inputs": [
+        "local audio/video file paths"
+      ],
+      "outputs": [
+        "staged media in working directory structure"
+      ],
+      "oss_dependencies": [
+        "python"
+      ],
+      "description": "Stages user-provided local media into a predictable inbox for pipelines.",
+      "notes": "Spec-only entry; complements remote pull ingest."
+    },
+    {
+      "engine_id": "AUDIO.INGEST.REMOTE_PULL_V1",
+      "id": "AUDIO.INGEST.REMOTE_PULL_V1",
+      "kind": "atomic",
+      "domain": "audio",
+      "label": "Remote media puller",
+      "category": "ingest",
+      "source_pipeline": [],
+      "primary_script": "",
+      "entry_points": [],
+      "inputs": [
+        "remote URLs or bucket/object references"
+      ],
+      "outputs": [
+        "downloaded/staged media files"
+      ],
+      "oss_dependencies": [
+        "curl",
+        "wget",
+        "gsutil"
+      ],
+      "description": "Fetches remote audio/video into local staging for processing.",
+      "notes": "Spec-only entry; decouples acquisition from processing."
+    },
+    {
+      "engine_id": "TRAIN.LORA.PEFT_HF_V1",
+      "id": "TRAIN.LORA.PEFT_HF_V1",
+      "kind": "atomic",
+      "domain": "training",
+      "label": "LoRA trainer (PEFT/HF)",
+      "category": "training",
+      "source_pipeline": [],
+      "primary_script": "",
+      "entry_points": [],
+      "inputs": [
+        "train.jsonl",
+        "val.jsonl",
+        "base model reference",
+        "training config"
+      ],
+      "outputs": [
+        "LoRA adapter weights",
+        "training metrics/logs"
+      ],
+      "oss_dependencies": [
+        "pytorch",
+        "transformers",
+        "peft"
+      ],
+      "description": "Runs LoRA fine-tuning using HuggingFace PEFT for downstream adapters.",
+      "notes": "Spec-only entry; replaces metadata-only trainer with real training once implemented."
+    },
+    {
+      "engine_id": "SCENE.GRID.NORMALISE_V1",
+      "id": "SCENE.GRID.NORMALISE_V1",
+      "kind": "atomic",
+      "domain": "scene",
+      "label": "Scene grid normaliser",
+      "category": "scene",
+      "source_pipeline": [
+        "scene-engine"
+      ],
+      "primary_script": "engines/scene_engine/core/grid_normaliser.py",
+      "entry_points": [
+        "normalise"
+      ],
+      "inputs": [
+        "Grid definition",
+        "Boxes list"
+      ],
+      "outputs": [
+        "Normalised grid",
+        "Normalised boxes"
+      ],
+      "oss_dependencies": [
+        "python"
+      ],
+      "description": "Validates and fills defaults for grid/box data prior to mapping.",
+      "notes": "Pure function; used by Scene Engine recipes."
+    },
+    {
+      "engine_id": "SCENE.GRID.MAP_TO_WORLD_V1",
+      "id": "SCENE.GRID.MAP_TO_WORLD_V1",
+      "kind": "atomic",
+      "domain": "scene",
+      "label": "Grid to world mapper",
+      "category": "scene",
+      "source_pipeline": [
+        "scene-engine"
+      ],
+      "primary_script": "engines/scene_engine/core/mapping.py",
+      "entry_points": [
+        "map_boxes"
+      ],
+      "inputs": [
+        "Normalised grid",
+        "Normalised boxes",
+        "Recipe id"
+      ],
+      "outputs": [
+        "Scene nodes with world positions"
+      ],
+      "oss_dependencies": [
+        "python"
+      ],
+      "description": "Dispatches to recipes and converts grid boxes into world-space nodes.",
+      "notes": "Uses grid normaliser + recipe functions."
+    },
+    {
+      "engine_id": "SCENE.RECIPE.WALL_V1",
+      "id": "SCENE.RECIPE.WALL_V1",
+      "kind": "atomic",
+      "domain": "scene",
+      "label": "Scene recipe: wall",
+      "category": "scene",
+      "source_pipeline": [
+        "scene-engine"
+      ],
+      "primary_script": "engines/scene_engine/core/recipes/wall.py",
+      "entry_points": [
+        "render_wall"
+      ],
+      "inputs": [
+        "Normalised grid",
+        "Normalised boxes"
+      ],
+      "outputs": [
+        "Scene nodes positioned on flat wall"
+      ],
+      "oss_dependencies": [
+        "python"
+      ],
+      "description": "Places boxes on a flat wall at z=0 with centered origin.",
+      "notes": "Used via mapper; pure layout function."
+    },
+    {
+      "engine_id": "SCENE.RECIPE.VECTOR_EXPLORER_V1",
+      "id": "SCENE.RECIPE.VECTOR_EXPLORER_V1",
+      "kind": "atomic",
+      "domain": "scene",
+      "label": "Scene recipe: vector explorer",
+      "category": "scene",
+      "source_pipeline": [
+        "scene-engine"
+      ],
+      "primary_script": "engines/scene_engine/core/recipes/vector_explorer.py",
+      "entry_points": [
+        "render_vector_explorer"
+      ],
+      "inputs": [
+        "Normalised grid",
+        "Normalised boxes with vector metadata"
+      ],
+      "outputs": [
+        "Scene nodes positioned by vector embeddings or grid fallback"
+      ],
+      "oss_dependencies": [
+        "python"
+      ],
+      "description": "Maps boxes using embedded vectors when available, otherwise grid-based placement.",
+      "notes": "Used via mapper; pure layout function."
+    }
+  ]
+}

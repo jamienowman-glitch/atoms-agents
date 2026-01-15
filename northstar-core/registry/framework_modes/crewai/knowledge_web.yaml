@@ -1,0 +1,22 @@
+description: Demonstrates using CrewDoclingSource to provide knowledge from web URLs.
+framework: crewai
+parameters:
+  question:
+    type: string
+    description: Question to ask.
+    default: Summarize the content.
+  urls:
+    type: array
+    items:
+      type: string
+    description: List of URLs to ingest.
+    default:
+    - https://example.com
+mode_id: CrewAI.Knowledge.Web
+invoke_entrypoint: runtime.crewai.modes.knowledge_web.run
+supports_streaming: none
+required_params:
+- question
+- urls
+pinned_version_ref: integration/crewai/PINNED_VERSION.md
+notes: UNKNOWN

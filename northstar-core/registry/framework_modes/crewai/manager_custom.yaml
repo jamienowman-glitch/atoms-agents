@@ -1,0 +1,11 @@
+framework: crewai
+mode_id: CrewAI.Manager.Custom
+description: |
+  Hierarchical process using a specific, user-defined agent as the manager,
+  rather than a generic LLM. This allows for specialized manager personas.
+parameters:
+  manager_agent_id:
+    type: string
+    description: ID of the agent to appoint as manager.
+entrypoint: null
+supports_streaming: event

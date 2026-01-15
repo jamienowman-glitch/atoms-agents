@@ -1,0 +1,20 @@
+id: flow_smoke_autogen_round_robin
+runtime: autogen
+description: Smoke test for AutoGen Round Robin Mode
+mode: autogen:round_robin_groupchat
+steps:
+  - participant_id: smoke_debater_a
+    template_id: debate_step
+    inputs:
+        input_text: "Blackboard Input"
+  - participant_id: smoke_debater_b
+    template_id: debate_step
+    inputs:
+        input_text: "Blackboard Input"
+participants:
+  - id: smoke_debater_a
+    agent_id: registry/agents/smoke/agent_smoke_debater_a.yaml
+  - id: smoke_debater_b
+    agent_id: registry/agents/smoke/agent_smoke_debater_b.yaml
+blackboards:
+  - global

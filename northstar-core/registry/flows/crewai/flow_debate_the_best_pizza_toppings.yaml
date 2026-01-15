@@ -1,0 +1,47 @@
+---
+name: Debate the Best Pizza Toppings
+title: A Crew AI Flow to Debate the Best Pizza Toppings
+description: A flow that utilizes a combination of Topping Titan and Gourmet Guru Agents to rank and compare pizza toppings.
+flow:
+  version: '1.0'
+  type: hierarchical
+  orchestrator: Sequential
+  steps:
+    - step_id: ToppingTitan
+      title: Recommend Pizza Toppings
+      description: Get topping recommendations from Topping Titan.
+      agents:
+        - id: ToppingTitan
+          type: crewai.topping_titan
+          inputs:
+            pizza_size: 'Extra Large'
+          outputs:
+            - type: pizza_toppings
+    - step_id: GourmetGuru
+      title: Verify and Rank Toppings
+      description: Verify the recommended pizza toppings through Gourmet Guru.
+      agents:
+        - id: GourmetGuru
+          type: crewai.gourmet_guru
+          inputs:
+            pizza_toppings: '{{ steps.ToppingTitan.outputs.pizza_toppings }}'
+          outputs:
+            - type: topping_ranking
+    - step_id: ShiritoriC
+      title: Generate Creative Pizza Combinations
+      description: Create and rank pizza combinations using Shiritori C.
+      agents:
+        - id: ShiritoriC
+          type: crewai.shiritori_c
+          inputs:
+            topping_ranking: '{{ steps.GourmetGuru.outputs.topping_ranking }}'
+          outputs:
+            - type: creative_combinations
+
+links:
+  - source: '{{ steps.ToppingTitan.outputs.pizza_toppings }}'
+    target: '{{ steps.GourmetGuru.inputs.pizza_toppings }}'
+  - source: '{{ steps.GourmetGuru.outputs.topping_ranking }}'
+    target: '{{ steps.ShiritoriC.inputs.topping_ranking }}'
+
+parameters:

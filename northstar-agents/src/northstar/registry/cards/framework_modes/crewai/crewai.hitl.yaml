@@ -1,0 +1,16 @@
+card_type: mode
+id: crewai.hitl
+framework: crewai
+official_name: HITL
+invoke_primitive: humanInputWebhook
+entrypoint: northstar.runtime.modes.crewai.crewai_hitl.run
+params:
+  official_name: Human Input Webhook
+  official_options: url, authentication
+  minimal_snippet: (see docs)
+streaming_support: false
+docs_urls:
+- https://docs.crewai.com/en/learn/human-in-the-loop#setting-up-hitl
+pinned_version: crewai 0.30.0
+confidence: high
+notes: CrewAI uses a humanInputWebhook field when kicking off a crew for HITL

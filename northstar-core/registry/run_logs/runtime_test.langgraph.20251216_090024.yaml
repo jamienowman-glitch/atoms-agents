@@ -1,0 +1,61 @@
+start_timestamp: '2025-12-16T09:00:15.877647'
+end_timestamp: '2025-12-16T09:00:24.301229'
+total_latency_ms: 8419.601917266846
+summary: langgraph strict sequencing execution
+steps:
+- step_index: 1
+  agent_id: agent_ghostwriter_a
+  action_type: write
+  emitted_text: "### Draft_v1: Chorus  \n(Yo, listen up, dis one go hard in the cloud,\
+    \ bruv)  \n\n**Chorus (Draft_v1):**  \nPeng code in the cloud, no normal lag,\
+    \ skeen,  \nPeng servers pumpin' that secure scene, safe,  \nPeng logic flow,\
+    \ like a river, safe, clean, skeen."
+  target_location: draft_v1
+  step_latency_ms: 2499.319076538086
+  model_provider: us.amazon.nova-2-lite-v1:0
+- step_index: 2
+  agent_id: agent_ghostwriter_b
+  action_type: write
+  emitted_text: "### **Draft_v2: Chorus**  \n*(Yo, listen up, dis one go hard in the\
+    \ cloud, bruv \u2014 straight Nu Town Clan vibes, ya feel me?)*  \n\n**Chorus\
+    \ (Draft_v2):**  \nYo, we writin\u2019 Peng code in the cloud, no crashin\u2019\
+    , no beef,  \nPeng servers hummin\u2019 like a beatbox, secure and chief,  \n\
+    Peng logic flow? Smooth like a Brooklyn breeze,  \nNu Town Clan in the digital,\
+    \ we the O.G.\u2019s of the keys!  \n\n---\n\n**Breakdown (for vibes):**  \n-\
+    \ **\u201CNo crashin\u2019, no beef\u201D** \u2014 We kept it peaceful, like our\
+    \ two-day gang truce.  \n- **\u201CBeatbox\u201D** \u2014 Because every real NYer\
+    \ knows servers should *hum* like a sidewalk poet\u2019s rhythm.  \n- **\u201C\
+    Brooklyn breeze\u201D** \u2014 Smooth, clean, no static. Just like our clan never\
+    \ had a real weapon \u2014 just a stick drawn on a notebook and big dreams.  \n\
+    - **\u201CO.G.\u2019s of the keys\u201D** \u2014 We may\u2019ve only typed \u201C\
+    Hello World\u201D and a love note to Tina from 5B, but we were *legends* in our\
+    \ own minds.  \n\nStill rep the Nu Town Clan, bruv. Still tight, still light.\
+    \ Cloud or concrete, we remain upright. \U0001F4BB\U0001F451"
+  target_location: draft_v2
+  step_latency_ms: 2719.9108600616455
+  model_provider: us.amazon.nova-2-lite-v1:0
+- step_index: 3
+  agent_id: agent_ghostwriter_c
+  action_type: final
+  emitted_text: "### **Final Chorus**  \n\n**Chorus (Final):**  \nWe write clean code\
+    \ in the cloud, no crash, no strife,  \nPeng servers hum with precision, secure\
+    \ by design,  \nLogic flows smooth, a steady rhythm and rhyme,  \nNu Town Clan,\
+    \ we\u2019re the architects of the digital climb.  \n\n---\n\n### **Constraints\
+    \ Checklist**  \n\n**Goal Met:**  \n- **Length:** Concise, four lines with a consistent\
+    \ rhythm.  \n- **Clarity:** Message is direct \u2014 coding in the cloud, teamwork,\
+    \ precision, and legacy.  \n- **Safety:** No aggressive, drug-related, or weapon\
+    \ innuendo.  \n- **Tone:** Calm, decisive, and professional \u2014 final studio\
+    \ take.  \n- **Preservation:** Nu Town Clan identity is intact, but refined for\
+    \ universal appeal.  \n\n**Key Adjustments from Draft_v2:**  \n- Removed \u201C\
+    Yo,\u201D \u201Cbruv,\u201D and conversational filler for professionalism.  \n\
+    - Replaced \u201Cno beef\u201D with \u201Cno strife\u201D \u2014 avoids gang connotations.\
+    \  \n- Swapped \u201Cbeatbox\u201D for \u201Cprecision\u201D \u2014 maintains\
+    \ rhythm imagery without informal slang.  \n- \u201CBrooklyn breeze\u201D \u2192\
+    \ \u201Csteady rhythm and rhyme\u201D \u2014 keeps flow metaphor, loses location-specific\
+    \ reference.  \n- \u201CO.G.\u2019s of the keys\u201D \u2192 \u201Carchitects\
+    \ of the digital climb\u201D \u2014 asserts legacy without juvenile or weapon-related\
+    \ tone.  \n\n**Result:**  \nA tight, polished chorus that captures coding in the\
+    \ cloud with confidence and clarity \u2014 studio-ready. \U0001F4BB\U0001F451"
+  target_location: final_chorus
+  step_latency_ms: 2527.3211002349854
+  model_provider: us.amazon.nova-2-lite-v1:0

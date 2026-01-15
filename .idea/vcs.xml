@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$/agentflow" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/northstar-agents" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/northstar-connectors" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/northstar-engines" vcs="Git" />
+  </component>
+</project>

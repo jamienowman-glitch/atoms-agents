@@ -1,0 +1,10 @@
+{
+  "timestamp": "2025-12-20T17:43:38.447959",
+  "modelId": "global.amazon.nova-2-lite-v1:0",
+  "input": "Count to 3.",
+  "first_chunks": [
+    "1",
+    ",",
+    " 2, 3."
+  ]
+}

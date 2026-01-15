@@ -1,0 +1,7 @@
+{
+  "framework": "autogen",
+  "mode_id": "round_robin_groupchat",
+  "status": "PASS",
+  "model_id": "global.amazon.nova-2-lite-v1:0",
+  "evidence_path": "docs/evidence/modes/20251220_195926/autogen/round_robin_groupchat"
+}

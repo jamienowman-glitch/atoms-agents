@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/Users/jaynowman/dev/northstar-core/scripts/verify_framework_modes_live.py", line 197, in run_mode
+    output = asyncio.run(invoker(config, smoke_flow, lg_inputs, bb, mock_emit))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/base_events.py", line 686, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/Users/jaynowman/dev/northstar-core/runtime/autogen/modes/stub_control.py", line 13, in run
+    raise NotImplementedError("This is a control stub designed to fail.")
+NotImplementedError: This is a control stub designed to fail.

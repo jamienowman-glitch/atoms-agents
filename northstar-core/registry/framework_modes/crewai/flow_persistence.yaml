@@ -1,0 +1,14 @@
+description: A demonstration of CrewAI Flows using @persist for durable state.
+framework: crewai
+parameters:
+  reset:
+    type: boolean
+    description: If true, resets the state before running.
+    default: false
+mode_id: CrewAI.Flow.Persistence
+invoke_entrypoint: runtime.crewai.modes.flow_persistence.run
+supports_streaming: none
+required_params:
+- reset
+pinned_version_ref: integration/crewai/PINNED_VERSION.md
+notes: UNKNOWN

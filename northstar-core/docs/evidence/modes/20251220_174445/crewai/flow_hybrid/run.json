@@ -1,0 +1,8 @@
+{
+  "framework": "crewai",
+  "mode_id": "flow_hybrid",
+  "status": "FAIL",
+  "model_id": "N/A",
+  "evidence_path": "docs/evidence/modes/20251220_174445/crewai/flow_hybrid",
+  "error": "not enough values to unpack (expected 2, got 1)"
+}

@@ -1,0 +1,41 @@
+[
+  {
+    "status": "PASS",
+    "provider": "bedrock",
+    "capability_id": "bedrock.converse_stream_token",
+    "model_id": "global.amazon.nova-2-lite-v1:0",
+    "evidence": "Received 6+ chunks. Text: Hello! How can I help you today?..."
+  },
+  {
+    "status": "PASS",
+    "provider": "bedrock",
+    "capability_id": "bedrock.vision",
+    "model_id": "global.amazon.nova-2-lite-v1:0",
+    "evidence": "Output: The image shows a close-up view of a"
+  },
+  {
+    "status": "PASS",
+    "provider": "adk",
+    "capability_id": "adk.vision",
+    "model_id": "gemini-2.5-flash",
+    "evidence": "Response: The image is completely black. It is a solid, uniform color with no discernible features, objects, or patterns visible within the frame."
+  },
+  {
+    "status": "FAIL",
+    "provider": "adk",
+    "capability_id": "adk.text_generation",
+    "error": "Cannot get the response text.\nCannot get the Candidate text.\nResponse candidate content has no parts (and thus no text). The candidate is likely blocked by the safety filters.\nContent:\n{\n  \"role\": \"model\"\n}\nCandidate:\n{\n  \"content\": {\n    \"role\": \"model\"\n  },\n  \"finish_reason\": \"MAX_TOKENS\"\n}\nResponse:\n{\n  \"candidates\": [\n    {\n      \"content\": {\n        \"role\": \"model\"\n      },\n      \"finish_reason\": \"MAX_TOKENS\"\n    }\n  ],\n  \"usage_metadata\": {\n    \"prompt_token_count\": 1,\n    \"total_token_count\": 3,\n    \"prompt_tokens_details\": [\n      {\n        \"modality\": \"TEXT\",\n        \"token_count\": 1\n      }\n    ],\n    \"thoughts_token_count\": 2\n  },\n  \"model_version\": \"gemini-2.5-flash\",\n  \"create_time\": \"2025-12-20T16:27:25.695111Z\",\n  \"response_id\": \"bc5Gace2Komfm9IP483buA0\"\n}"
+  },
+  {
+    "status": "FAIL",
+    "provider": "aws",
+    "capability_id": "aws.polly_tts",
+    "error": "An error occurred (AccessDeniedException) when calling the SynthesizeSpeech operation: User: arn:aws:iam::521176575081:user/northstar-dev is not authorized to perform: polly:SynthesizeSpeech because no identity-based policy allows the polly:SynthesizeSpeech action"
+  },
+  {
+    "status": "FAIL",
+    "provider": "aws",
+    "capability_id": "aws.transcribe",
+    "error": "An error occurred (AccessDeniedException) when calling the ListTranscriptionJobs operation: User: arn:aws:iam::521176575081:user/northstar-dev is not authorized to perform: transcribe:ListTranscriptionJobs because no identity-based policy allows the transcribe:ListTranscriptionJobs action"
+  }
+]

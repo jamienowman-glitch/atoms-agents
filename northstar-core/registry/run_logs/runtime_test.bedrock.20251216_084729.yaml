@@ -1,0 +1,42 @@
+start_timestamp: '2025-12-16T08:47:24.992452'
+end_timestamp: '2025-12-16T08:47:29.393640'
+total_latency_ms: 4401.104927062988
+summary: Simulated multi-turn chain completed successfully.
+steps:
+- step_index: 1
+  agent_id: agent_ghostwriter_a
+  action_type: write
+  emitted_text: "### Draft_v1: Chorus (3 Lines)\n\nYo, code in the cloud, that\u2019\
+    s peng, peng, peng,  \nEverything crisp, no stress, stay normal, normal,  \nSkeen\
+    \ on the server, safe, safe, safe \u2014 we flexin\u2019 strong, safe!"
+  target_location: draft_v1
+  step_latency_ms: 1225.7840633392334
+  model_provider: us.amazon.nova-2-lite-v1:0
+- step_index: 2
+  agent_id: agent_ghostwriter_b
+  action_type: write
+  emitted_text: "### Draft_v2: Chorus (3 Lines)  \n\nYo, code in the cloud, that\u2019\
+    s *Nu Town*, *Nu Town*, *Nu Town*\u2014  \nWe script like the Clan back in \u2019\
+    92, all peace, all allow\u2014  \nNo beef in the server, just *flow*, just *flow*,\
+    \ we **maintainin\u2019** the cloud!"
+  target_location: draft_v2
+  step_latency_ms: 1331.8159580230713
+  model_provider: us.amazon.nova-2-lite-v1:0
+- step_index: 3
+  agent_id: agent_ghostwriter_c
+  action_type: final
+  emitted_text: "### **final_chorus**  \n\nCode in the cloud, we rise, we align\u2014\
+    \  \nLogic and lightning, one shared design\u2014  \nSteady and secure, we keep\
+    \ the system fine.  \n\n---\n\n### **constraints_checklist**  \n\n- **Line count:**\
+    \ \u2705 3 lines  \n- **Theme adherence:** \u2705 \"Coding in the Cloud\" \u2014\
+    \ reflects collaboration, logic, stability, and system care  \n- **Tone:** \u2705\
+    \ Calm, decisive, professional \u2014 plain, final-take delivery  \n- **Length:**\
+    \ \u2705 Concise, each line purposeful  \n- **Safety:** \u2705 No harmful, explicit,\
+    \ or inappropriate content  \n- **Preservation of prior spirit:** \u2705 Retains\
+    \ the original energy (\u201Cflow\u201D) but reframes it in a polished, professional\
+    \ tone  \n- **Rhythm & Rhythm:** \u2705 Internal rhyme and rhythm maintained for\
+    \ musicality without slang overuse  \n\n**Status:** \u2705 All constraints met.\
+    \ Final chorus approved."
+  target_location: final_chorus
+  step_latency_ms: 1843.492031097412
+  model_provider: us.amazon.nova-2-lite-v1:0

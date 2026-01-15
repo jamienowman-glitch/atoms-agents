@@ -1,0 +1,8 @@
+{
+  "framework": "crewai",
+  "mode_id": "hierarchical",
+  "status": "FAIL",
+  "model_id": "N/A",
+  "evidence_path": "docs/evidence/modes/20251221_072827/crewai/hierarchical",
+  "error": "keyword argument repeated: backstory (adapter.py, line 180)"
+}

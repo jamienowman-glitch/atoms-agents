@@ -1,0 +1,53 @@
+# Workbench Readiness Summary
+
+- **Ready (YES):** 2
+- **Not Ready (NO):** 47
+
+## Remaining Issues
+- accordion_item: Variable font axes missing
+- blackboard: Variable font axes missing
+- bottom_chat_input_bar: Variable font axes missing
+- carousel: Variable font axes missing
+- chat_card_v1: Variable font axes missing
+- chat_icon_band_popover: Variable font axes missing
+- chat_message_action_bar: Variable font axes missing
+- chat_message_block: Variable font axes missing
+- chat_message_list: Variable font axes missing
+- chat_rail_header_bar: Variable font axes missing
+- chat_rail_shell: Variable font axes missing
+- chat_safety_controls_bar: Variable font axes missing
+- chat_shortcuts_popover: Variable font axes missing
+- chat_upload_source_picker: Variable font axes missing
+- divider: Variable font axes missing
+- dropdown_header: Variable font axes missing
+- floating_pill_toolbar: Variable font axes missing
+- heading_block: Variable font axes missing
+- hero_image: Variable font axes missing
+- icon_divider: Variable font axes missing
+- icon_grid: Variable font axes missing
+- image_media_block: Variable font axes missing
+- lanes_calendar_grid_v1: Variable font axes missing
+- macro_temp_indicator: Variable font axes missing
+- main_menu_icon_button: Variable font axes missing
+- maybes_note: Variable font axes missing
+- multi_feed_grids: Variable font axes missing
+- multi_feed_tile: Variable font axes missing
+- quote_block: Variable font axes missing
+- rich_text_block: Variable font axes missing
+- section_blog_posts: Variable font axes missing
+- section_collection_list: Variable font axes missing
+- section_custom_markup: Variable font axes missing
+- section_email_signup: Variable font axes missing
+- section_featured_collection_grid: Variable font axes missing
+- section_hero_banner: Variable font axes missing
+- section_image_with_text: Variable font axes missing
+- section_media_collage: Variable font axes missing
+- section_multicolumn_features: Variable font axes missing
+- section_rich_text: Variable font axes missing
+- section_slideshow: Variable font axes missing
+- theme_card_surface: Variable font axes missing
+- theme_colour_schemes: Variable font axes missing
+- theme_layout_settings: Variable font axes missing
+- theme_typography_settings: Variable font axes missing
+- video_media_block: Variable font axes missing
+- wireframe_canvas: Variable font axes missing

@@ -1,0 +1,66 @@
+start_timestamp: '2025-12-16T08:47:00.357387'
+end_timestamp: '2025-12-16T08:47:08.364873'
+total_latency_ms: 8002.127170562744
+summary: langgraph strict sequencing execution
+steps:
+- step_index: 1
+  agent_id: agent_ghostwriter_a
+  action_type: write
+  emitted_text: "### Draft_v1: Chorus  \n(Yo, listen up, dis chorus poppin\u2019 like\
+    \ a cloud burst, bruv\u2026)  \n\n**Chorus (Draft_v1):**  \nSkeen, skeen, cloud\
+    \ my mind, code in the peng,  \nNormal flow, but the logic? Safe, safe, peng.\
+    \  \nPeng lines in the sky, secure, safe, skeen again."
+  target_location: draft_v1
+  step_latency_ms: 1579.4439315795898
+  model_provider: us.amazon.nova-2-lite-v1:0
+- step_index: 2
+  agent_id: agent_ghostwriter_b
+  action_type: write
+  emitted_text: "### **Draft_v2: Chorus**  \n*(Yo, yo, yo \u2014 let me take y\u2019\
+    all back to \u201895, right? Picture this: me and my homie K-Dog, still wearin\u2019\
+    \ our Nu Town Clan bandanas under our puffy jackets, tryin\u2019 to \u201Chack\u201D\
+    \ a Payphone with a paperclip. But that\u2019s later. Right now? We talkin\u2019\
+    \ \u2018bout codin\u2019 in the cloud like we codin\u2019 in the projects. Let\u2019\
+    s go\u2026)*  \n\n**Chorus (Draft_v2):**  \n*Skeen, skeen \u2014 cloud in my mind,\
+    \ code like a Nu Town King,*  \n*Logic tight, no bugs, just pure Nu Town swing.*\
+    \  \n*Secure the sky like we held the block,*  \n*Peng lines in the cloud \u2014\
+    \ yo, we rockin\u2019 what we got!*  \n\n---\n\n**Breakdown (for the vibe):**\
+    \  \n- **\u201CNu Town King\u201D:** Because even in \u201899, we knew we was\
+    \ royalty in our imaginary crew.  \n- **\u201CLogic tight, no bugs\u201D:** We\
+    \ applied the same rigor we used to patrol our imaginary turf. If there was a\
+    \ bug, it got \u201Chandled\u201D \u2014 with a high-five and a juice box.  \n\
+    - **\u201CSecure the sky like we held the block\u201D:** We took cloud security\
+    \ *personal*. If someone tried to hack our digital spot, we\u2019d \u201Ccall\
+    \ a meeting\u201D \u2014 with a Game Boy and a lot of attitude.  \n- **\u201C\
+    Peng lines in the cloud\u201D:** Our code was *clean*, like the fresh new kicks\
+    \ we wore to the bodega every Sunday.  \n\n*Mic drop\u2026 but we still couldn\u2019\
+    t get past the \u201CEnter\u201D key on the keyboard without laughing.* \U0001F510\
+    \U0001F451\u2601\uFE0F"
+  target_location: draft_v2
+  step_latency_ms: 3377.9451847076416
+  model_provider: us.amazon.nova-2-lite-v1:0
+- step_index: 3
+  agent_id: agent_ghostwriter_c
+  action_type: final
+  emitted_text: "### **Final Chorus**\n\n**Chorus (Final):**  \n*Skeen, skeen \u2014\
+    \ cloud in my mind, code like a Nu Town King,*  \n*Logic tight, no bugs, just\
+    \ pure Nu Town swing.*  \n*Secure the sky like we held the block,*  \n*Peng lines\
+    \ in the cloud \u2014 yo, we rockin\u2019 what we got!*  \n\n---\n\n### **Constraints\
+    \ Checklist**\n\n| **Constraint**                | **Status** | **Notes** |\n\
+    |-------------------------------|------------|-----------|\n| **Length**     \
+    \               | \u2705 Met     | 4 lines, consistent with draft. |\n| **Clarity**\
+    \                   | \u2705 Met     | Message is clear: coding in the cloud =\
+    \ confident, clean, secure. |\n| **Tone / Vibe**               | \u2705 Met  \
+    \   | Retains Nu Town crew energy \u2014 confident, casual, slightly humorous.\
+    \ |\n| **Safety**                    | \u2705 Met     | No harmful language, slang\
+    \ is period-appropriate and non-offensive. |\n| **Preservation of A & B Input**\
+    \ | \u2705 Met | All key phrases (\u201CNu Town King,\u201D \u201CLogic tight,\
+    \ no bugs,\u201D etc.) preserved. |\n| **Rhyme & Rhythm**           | \u2705 Met\
+    \     | Consistent AABB rhyme scheme; rhythm matches hip-hop flow. |\n| **Audience\
+    \ Appropriateness** | \u2705 Met     | Slang is period-accurate (late \u201890s)\
+    \ and audience-appropriate. |\n| **Final Polish**              | \u2705 Met  \
+    \   | Concise, confident, studio-ready. |\n\n**Verdict:** Ready for final take.\
+    \ \U0001F3A7\U0001F510\U0001F451\u2601\uFE0F"
+  target_location: final_chorus
+  step_latency_ms: 2421.868085861206
+  model_provider: us.amazon.nova-2-lite-v1:0

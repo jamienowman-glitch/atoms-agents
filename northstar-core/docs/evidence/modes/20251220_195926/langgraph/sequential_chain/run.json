@@ -1,0 +1,8 @@
+{
+  "framework": "langgraph",
+  "mode_id": "sequential_chain",
+  "status": "FAIL",
+  "model_id": "global.amazon.nova-2-lite-v1:0",
+  "evidence_path": "docs/evidence/modes/20251220_195926/langgraph/sequential_chain",
+  "error": "Expected 'messages' not found in output."
+}

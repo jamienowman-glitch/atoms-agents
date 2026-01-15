@@ -1,0 +1,10 @@
+error: '''str'' object has no attribute ''get'''
+metrics:
+  chunk_count: 0
+  total_ms: 612.48
+  ttfc_ms: 0.0
+model: us.amazon.nova-2-lite-v1:0
+runtime: bedrock
+status: FAIL
+test_name: stream_canary
+timestamp: '2025-12-16T18:42:42.567848Z'

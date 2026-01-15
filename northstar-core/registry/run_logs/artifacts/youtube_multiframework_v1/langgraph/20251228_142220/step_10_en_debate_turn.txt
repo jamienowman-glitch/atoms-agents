@@ -1,0 +1,1 @@
+Please provide the `{input_text}` containing the 5 ideas. I need the options to evaluate their viral potential and propose my favorite.

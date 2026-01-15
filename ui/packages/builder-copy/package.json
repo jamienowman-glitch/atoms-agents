@@ -1,0 +1,15 @@
+{
+    "name": "@northstar/builder-copy",
+    "version": "0.0.1",
+    "main": "src/index.tsx",
+    "types": "src/index.tsx",
+    "dependencies": {
+        "react": "^18.2.0",
+        "framer-motion": "^10.16.4",
+        "@northstar/ui-atoms": "*"
+    },
+    "devDependencies": {
+        "typescript": "^5.3.0",
+        "@types/react": "^18.2.0"
+    }
+}

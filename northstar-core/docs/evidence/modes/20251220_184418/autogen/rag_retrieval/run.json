@@ -1,0 +1,8 @@
+{
+  "framework": "autogen",
+  "mode_id": "rag_retrieval",
+  "status": "FAIL",
+  "model_id": "N/A",
+  "evidence_path": "docs/evidence/modes/20251220_184418/autogen/rag_retrieval",
+  "error": "not enough values to unpack (expected 2, got 1)"
+}

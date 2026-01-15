@@ -1,0 +1,14 @@
+description: Demonstrates Bedrock Agents using Action Groups (Tools) to perform operations.
+framework: bedrock
+parameters:
+  action:
+    type: string
+    description: The intended action for the agent.
+    default: Check order status for ID 123
+mode_id: Bedrock.ActionGroups
+invoke_entrypoint: runtime.bedrock.modes.action_groups.run
+supports_streaming: none
+required_params:
+- action
+pinned_version_ref: integration/bedrock/PINNED_VERSION.md
+notes: UNKNOWN

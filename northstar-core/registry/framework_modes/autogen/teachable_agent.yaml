@@ -1,0 +1,14 @@
+description: Demonstrates AutoGen's Teachable Agent (Memory) capabilities.
+framework: autogen
+parameters:
+  fact:
+    type: string
+    description: Fact to teach the agent.
+    default: The sky is green in this world.
+mode_id: AutoGen.Teachable
+invoke_entrypoint: runtime.autogen.modes.teachable_agent.run
+supports_streaming: none
+required_params:
+- fact
+pinned_version_ref: integration/autogen/PINNED_VERSION.md
+notes: UNKNOWN

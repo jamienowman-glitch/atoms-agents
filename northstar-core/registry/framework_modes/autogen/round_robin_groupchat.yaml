@@ -1,0 +1,9 @@
+framework: autogen
+mode_id: round_robin_groupchat
+pinned_version_ref: integration/autogen/PINNED_VERSION.md
+invoke_entrypoint: runtime.autogen.modes.round_robin:run
+required_params:
+  - agents
+  - max_turns
+supports_streaming: token
+notes: "Cycles through agents in fixed order."

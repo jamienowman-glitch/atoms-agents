@@ -1,0 +1,31 @@
+# UI Entrypoints Map
+
+- packages/transport/src/index.ts  
+  - Exports: CanvasTransport, SafetyResponseError, SafetyDecisionSummary, buildIdentityHeaders, RequestContext, Mode.  
+  - Responsibilities: HTTP/SSE/WS plumbing for canvas commands/events; cursor persistence; safety summary cache.
+- packages/transport/src/identity_headers.ts  
+  - Exports: buildIdentityHeaders, RequestContext, Mode. Builds Authorization + X-* headers from context.
+- packages/canvas-kernel/src/index.ts  
+  - Exports: CanvasKernel, reducer utilities, initialState, applyOp; orchestrates optimistic vs committed canvas state.
+- packages/builder-core/src/index.ts  
+  - Exports: ENGINE_NETWORK_CONFIG, ENGINE_CONTEXT, useBuilder hook. Wires CanvasTransport + CanvasKernel + RegistryService; handles conflicts and optimistic ops.
+- packages/builder-registry/src/index.ts  
+  - Exports: ComponentSchema types, SCHEMAS, SECTION_TEMPLATES, RegistryService. Service hits /registry/components.
+- packages/ui-atoms/src/index.tsx  
+  - Exports: AtomRegistry plus HeroSection, TextSection, HeadlineBlock, TextBlock, ButtonBlock, ImageBlock components.
+- packages/projections/src/index.tsx  
+  - Exports: CanvasView (scene renderer) with AtomRenderer recursion and safety overlay.
+- packages/builder-layout/src/index.ts  
+  - Exports: Sidebar, HeroSection, TextSection (builder chrome + layout atoms).
+- packages/builder-copy/src/index.tsx  
+  - Exports: HeadlineBlock, TextBlock, ButtonBlock (copy atoms).
+- packages/builder-inspector/src/index.tsx  
+  - Exports: Inspector component (prop editor, upload + agent simulation hooks).
+- packages/analytics/src/index.ts  
+  - Exports: AnalyticsClient (pageview/cta emitters).
+- packages/agent-driver/src/index.ts  
+  - Exports: runScriptedAgent, AgentPlan utilities used by Inspector for simulated typing.
+- apps/studio/src/App.tsx  
+  - Exports: App component composing builder shell (CanvasView + Sidebar + Inspector + Analytics + SEO).
+- apps/studio/src/main.tsx  
+  - Entrypoint mounting <App/> with RequestContext injection.

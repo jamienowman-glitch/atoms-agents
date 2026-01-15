@@ -1,0 +1,11 @@
+atom_root	missing
+./aitom_family/blackboard	 views exposed_tokens accessibility tracking
+./aitom_family/dropdown_header	 views exposed_tokens tracking
+./aitom_family/floating_pill_toolbar	 views data_schema exposed_tokens tracking
+./aitom_family/jumbo_header	 views data_schema exposed_tokens tracking
+./aitom_family/logo_insert	 views data_schema exposed_tokens tracking
+./aitom_family/max_header	 views data_schema exposed_tokens tracking
+./aitom_family/maybes_note	 data_schema exposed_tokens accessibility tracking
+./aitom_family/minimal_header	 views data_schema exposed_tokens tracking
+./aitom_family/surface_header_nano	 views data_schema exposed_tokens tracking
+./aitom_family/wireframe_canvas	 exposed_tokens accessibility tracking

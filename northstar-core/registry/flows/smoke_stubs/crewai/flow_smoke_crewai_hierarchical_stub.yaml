@@ -1,0 +1,12 @@
+id: flow_smoke_crewai_hierarchical_stub
+runtime: crewai
+description: Smoke test for CrewAI Hierarchical Stub (Should Fail/Stub)
+mode: crewai:hierarchical
+steps:
+  - agent_id: registry/agents/smoke/agent_smoke_writer.yaml
+    template_id: default_step
+participants:
+  - id: smoke_writer
+    agent_id: registry/agents/smoke/agent_smoke_writer.yaml
+blackboards:
+  - global

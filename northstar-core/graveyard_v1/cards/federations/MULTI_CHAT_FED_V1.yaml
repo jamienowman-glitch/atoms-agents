@@ -1,0 +1,35 @@
+CARD_ID: MULTI_CHAT_FED_V1
+SCOPE: federation
+LABEL: Multi-Agent Round Table Chat Federation
+DESCRIPTION: |
+  It implements the ROUND_TABLE_V1 pattern,
+  Humans can speak anytime,
+  A Host selects up to N specialists per round,
+  Specialists talk to Host, not to each other.
+PATTERN: ROUND_TABLE_V1
+ORCHESTRATOR_PROFILE:
+  allowed_backends:
+    - autogen_multi_chat
+    - langgraph_multi_chat
+  default_backend: autogen_multi_chat
+  experiment_backends:
+    - langgraph_multi_chat
+AGENT_ROLES:
+  host: HostAgent_V1
+  specialists:
+    - PlannerAgent_V1
+    - ExplainerAgent_V1
+    - EmailAgent_V1
+    - CalendarAgent_V1
+  summariser: SummaryAgent_V1
+LIMITS:
+  max_agents_per_round: 2
+  allow_cross_agent_chat: false
+OWNS_TOKENS:
+  - chat_episodes.*
+EPISODE_TYPE: multi_chat_v1
+SAFETY_PROFILE:
+  firearms_required:
+    - basic_chat
+  strategy_lock_required: false
+  three_wise_required: false

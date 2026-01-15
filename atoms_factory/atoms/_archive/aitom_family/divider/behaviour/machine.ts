@@ -1,0 +1,1 @@
+// Minimal state machine placeholder

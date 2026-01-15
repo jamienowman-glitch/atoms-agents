@@ -1,0 +1,47 @@
+# Multi²¹ / Repo Log
+> **CANONICAL LOG**: This is the canonical log for the agentflow / Multi²¹ repo. All new work MUST be recorded here. Other dev logs are legacy.
+
+- 2025-12-01 – M21-19 Phase T1 (Horizontal Toolbar UI) – completed by Max
+  - Created `components/multi21/mobile/HorizontalToolbar.tsx` with scrollable pill, corner-aware positioning, and entry/exit animation hooks.
+- 2025-12-01 – M21-19 Phase T2 (Positioning Logic) – completed by Max
+  - Updated `HorizontalToolbar` to anchor based on corner with max-width clamping and inward expansion.
+- 2025-12-01 – M21-19 Phase T3 (Tools Integration) – completed by Max
+  - Wired Tools icon to render horizontal toolbar via `MobileFloatingManager` using new `toolbarType` and tool list; default persistence updated.
+- 2025-12-01 – M21-19 Phase T4 (Integration) – completed by Max
+  - Ensured mobile view renders `MobileFloatingManager` with Settings (vertical) and Tools (horizontal) toolbars coexisting; desktop remains unchanged.
+- 2025-12-02 – M21-20 Activation – Max
+  - Promoted M21-20 (Floating Launchers & Stacks) to Active Task in plan; work not started yet.
+- 2025-12-02 – M21-20 Phase F1 (Model & Zones) – Max
+  - Added launcher types, default layout, and snap target calculation utilities for edge snapping.
+- 2025-12-02 – M21-20 Phase F2 (Draggable Launcher) – Max
+  - Built `FloatingLauncher` with drag handling and snap-to-edge behaviour using calculated targets.
+- 2025-12-02 – M21-20 Phase F3 (Stacking Logic) – Max
+  - Implemented `LauncherStack` to render stacked launchers per edge with ordered positions.
+- 2025-12-02 – M21-20 Phase F4 (Surface Wiring) – Max
+  - Created `LauncherManager` to render launchers and placeholder surfaces based on edge orientation.
+- 2025-12-02 – M21-20 Phase F5 (Agent Addressing & Persistence) – Max
+  - Added `LauncherContext` for layout state/persistence (`multi21_launchers_layout`) and placeholder tool update hook.
+- 2025-12-02 – M21-21 Activation – Max
+  - Set M21-21 (Tool Options & Pop-outs) as Active Task in plan; work not started yet.
+- 2025-12-02 – M21-21 Phase O1 (Model Definition) – Max
+  - Added tool config types and previewMode tool scaffold in `types/multi21-tools.ts` for upcoming wiring.
+- 2025-12-02 – M21-21 Phase O2 (Central Pop-out) – Max
+  - Implemented `ToolOptionsPopup` overlay component for selectable tool options.
+- 2025-12-02 – M21-21 Phase O3 (Cycle Behavior) – Max
+  - Added `ToolButton` with long-press/right-click cycling and popup trigger support.
+- 2025-12-02 – M21-21 Phase O4 (Application) – Max
+  - Prepared tool configs (previewMode/aspectRatio/tileVariant) via shared types for forthcoming wiring into UI surfaces.
+- 2025-12-02 – M21-21 Phase O5 (Refinement) – Max
+  - Baseline polish with hover/selection styles in tool components; ready for later animation tweaks.
+- 2025-12-02 – M21-22 Phase T1 (Registry Definition) – Max
+  - Created canonical tool registry with definitions for designer, block, tile, and launcher tools.
+- 2025-12-02 – M21-22 Phase T2 (SSE Bridge) – Max
+  - Added SSE validation handler for tool updates and batch updates against the registry.
+- 2025-12-02 – M21-22 Phase T3 (State Integration) – Max
+  - Implemented ToolControlContext with centralized tool state and update API.
+- 2025-12-02 – M21-22 Phase T4 (UI Wiring Global) – Max
+  - Wired bottom controls and designer UI to ToolControl state (sliders, toggles, layout/tool variants).
+- 2025-12-02 – M21-22 Phase T5 (UI Wiring Scoped) – Max
+  - Added tile/block scoped components using tool state (TilePopup, Multi21Block) for tile-level and block-level tools.
+- 2025-12-01 – M21-19 Phase T2 (Positioning Logic) – completed by Max
+  - Updated `HorizontalToolbar` to anchor based on corner with max-width clamping and maintained inward expansion.

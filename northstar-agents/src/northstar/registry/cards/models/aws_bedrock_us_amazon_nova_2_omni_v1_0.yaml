@@ -1,0 +1,15 @@
+card_type: model
+model_id: aws_bedrock_us_amazon_nova_2_omni_v1_0
+provider_id: aws_bedrock
+model_or_deployment_id: us.amazon.nova-2-omni-v1:0
+platform_api_surface: Bedrock Runtime
+invocation_primitive: bedrock-runtime.converse
+request_shape_minimal: '{"messages": [{"role": "user", "content": [{"text": "Hi"}]}]}'
+streaming_support: bidirectional
+credential_discovery: Boto3 default chain
+region_or_project_discovery: Env(AWS_REGION)
+default_creds_ok: true
+docs_url: ''
+last_updated_or_version: Dec 2025
+confidence: high
+notes: Deep Research Addition. Multimodal Native.

@@ -1,0 +1,272 @@
+[SYSTEM] Loading Comet API Key from /Users/jaynowman/northstar-keys/comet_key.txt
+INFO:     Started server process [11554]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:51044 - "GET /builder HTTP/1.1" 200 OK
+[DEBUG] 404 CATCH: GET favicon.ico
+INFO:     127.0.0.1:51044 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51049 - "GET /builder HTTP/1.1" 200 OK
+[DEBUG] 404 CATCH: GET favicon.ico
+INFO:     127.0.0.1:51049 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51055 - "GET /builder HTTP/1.1" 200 OK
+[DEBUG] 404 CATCH: GET favicon.ico
+INFO:     127.0.0.1:51055 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51190 - "GET /builder HTTP/1.1" 200 OK
+[DEBUG] 404 CATCH: GET favicon.ico
+INFO:     127.0.0.1:51190 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51197 - "GET /builder HTTP/1.1" 200 OK
+[DEBUG] 404 CATCH: GET favicon.ico
+INFO:     127.0.0.1:51197 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51290 - "GET /builder HTTP/1.1" 200 OK
+[DEBUG] 404 CATCH: GET favicon.ico
+INFO:     127.0.0.1:51290 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51431 - "GET /builder HTTP/1.1" 200 OK
+[DEBUG] 404 CATCH: GET favicon.ico
+INFO:     127.0.0.1:51431 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51495 - "GET /builder HTTP/1.1" 200 OK
+[DEBUG] 404 CATCH: GET favicon.ico
+INFO:     127.0.0.1:51495 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51680 - "GET /builder HTTP/1.1" 200 OK
+[DEBUG] 404 CATCH: GET favicon.ico
+INFO:     127.0.0.1:51680 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51680 - "GET /builder HTTP/1.1" 200 OK
+[DEBUG] 404 CATCH: GET favicon.ico
+INFO:     127.0.0.1:51680 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51716 - "GET /builder HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51716 - "GET /builder HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51768 - "GET /builder HTTP/1.1" 200 OK
+[DEBUG] 404 CATCH: GET favicon.ico
+INFO:     127.0.0.1:51768 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51841 - "GET /builder HTTP/1.1" 200 OK
+[DEBUG] 404 CATCH: GET favicon.ico
+INFO:     127.0.0.1:51841 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51959 - "GET /builder HTTP/1.1" 200 OK
+[DEBUG] 404 CATCH: GET favicon.ico
+INFO:     127.0.0.1:51959 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52109 - "GET /builder HTTP/1.1" 200 OK
+[DEBUG] 404 CATCH: GET favicon.ico
+INFO:     127.0.0.1:52109 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52109 - "GET /builder HTTP/1.1" 200 OK
+[DEBUG] 404 CATCH: GET favicon.ico
+INFO:     127.0.0.1:52109 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52162 - "GET /builder HTTP/1.1" 200 OK
+[DEBUG] 404 CATCH: GET favicon.ico
+INFO:     127.0.0.1:52162 - "GET /favicon.ico HTTP/1.1" 200 OK
+Error loading new_agent_suggested_landing_page.yaml: 'NoneType' object has no attribute 'get'
+Error loading new_agent_discount_offer_a.yaml: 'NoneType' object has no attribute 'get'
+Error loading new_agent_social_media_a.yaml: 'NoneType' object has no attribute 'get'
+Error loading agent_converter_a.yaml: 'NoneType' object has no attribute 'get'
+Error loading new_agent_inventory_a.yaml: 'NoneType' object has no attribute 'get'
+INFO:     127.0.0.1:52163 - "GET /api/registry/agents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52238 - "GET /builder HTTP/1.1" 200 OK
+[DEBUG] 404 CATCH: GET favicon.ico
+INFO:     127.0.0.1:52238 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52286 - "GET /builder HTTP/1.1" 200 OK
+[DEBUG] 404 CATCH: GET favicon.ico
+INFO:     127.0.0.1:52286 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52441 - "GET /builder HTTP/1.1" 200 OK
+[DEBUG] 404 CATCH: GET favicon.ico
+INFO:     127.0.0.1:52441 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52442 - "GET /builder HTTP/1.1" 200 OK
+[DEBUG] 404 CATCH: GET favicon.ico
+INFO:     127.0.0.1:52442 - "GET /favicon.ico HTTP/1.1" 200 OK
+[DEBUG] 404 CATCH: GET api/agents
+INFO:     127.0.0.1:52548 - "GET /api/agents HTTP/1.1" 200 OK
+Error loading new_agent_suggested_landing_page.yaml: 'NoneType' object has no attribute 'get'
+Error loading new_agent_discount_offer_a.yaml: 'NoneType' object has no attribute 'get'
+Error loading new_agent_social_media_a.yaml: 'NoneType' object has no attribute 'get'
+Error loading agent_converter_a.yaml: 'NoneType' object has no attribute 'get'
+Error loading new_agent_inventory_a.yaml: 'NoneType' object has no attribute 'get'
+INFO:     127.0.0.1:52587 - "GET /api/registry/agents HTTP/1.1" 200 OK
+Error loading new_agent_suggested_landing_page.yaml: 'NoneType' object has no attribute 'get'
+Error loading new_agent_discount_offer_a.yaml: 'NoneType' object has no attribute 'get'
+Error loading new_agent_social_media_a.yaml: 'NoneType' object has no attribute 'get'
+Error loading agent_converter_a.yaml: 'NoneType' object has no attribute 'get'
+Error loading new_agent_inventory_a.yaml: 'NoneType' object has no attribute 'get'
+INFO:     127.0.0.1:52625 - "GET /api/registry/agents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52632 - "POST /api/builder/chat HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/uvicorn/protocols/http/httptools_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/fastapi/applications.py", line 1133, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/fastapi/routing.py", line 123, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/fastapi/routing.py", line 109, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/fastapi/routing.py", line 387, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/fastapi/routing.py", line 288, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jaynowman/dev/northstar-core/apps/test_harness_ui/main.py", line 879, in builder_chat
+    ChatMessage(role="system", content=sys_prompt + "\n\n" + context_str),
+    ^^^^^^^^^^^
+NameError: name 'ChatMessage' is not defined
+INFO:     127.0.0.1:52692 - "GET /builder HTTP/1.1" 200 OK
+[DEBUG] 404 CATCH: GET favicon.ico
+INFO:     127.0.0.1:52692 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52701 - "GET /builder HTTP/1.1" 200 OK
+[DEBUG] 404 CATCH: GET favicon.ico
+INFO:     127.0.0.1:52701 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52712 - "GET /builder HTTP/1.1" 200 OK
+[DEBUG] 404 CATCH: GET favicon.ico
+INFO:     127.0.0.1:52712 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52850 - "GET /builder HTTP/1.1" 200 OK
+[DEBUG] 404 CATCH: GET favicon.ico
+INFO:     127.0.0.1:52850 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52867 - "GET /builder HTTP/1.1" 200 OK
+[DEBUG] 404 CATCH: GET favicon.ico
+INFO:     127.0.0.1:52867 - "GET /favicon.ico HTTP/1.1" 200 OK
+Error loading new_agent_suggested_landing_page.yaml: 'NoneType' object has no attribute 'get'
+Error loading new_agent_discount_offer_a.yaml: 'NoneType' object has no attribute 'get'
+Error loading new_agent_social_media_a.yaml: 'NoneType' object has no attribute 'get'
+Error loading agent_converter_a.yaml: 'NoneType' object has no attribute 'get'
+Error loading new_agent_inventory_a.yaml: 'NoneType' object has no attribute 'get'
+INFO:     127.0.0.1:52979 - "GET /api/registry/agents HTTP/1.1" 200 OK
+[DEBUG] 404 CATCH: GET favicon.ico
+INFO:     127.0.0.1:52979 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52982 - "GET /builder HTTP/1.1" 200 OK
+[DEBUG] 404 CATCH: GET favicon.ico
+INFO:     127.0.0.1:52982 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53188 - "GET /builder HTTP/1.1" 200 OK
+[DEBUG] 404 CATCH: GET favicon.ico
+INFO:     127.0.0.1:53188 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53216 - "GET /builder HTTP/1.1" 200 OK
+[DEBUG] 404 CATCH: GET favicon.ico
+INFO:     127.0.0.1:53216 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53288 - "POST /api/builder/chat HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/uvicorn/protocols/http/httptools_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/fastapi/applications.py", line 1133, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/fastapi/routing.py", line 123, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/fastapi/routing.py", line 109, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/fastapi/routing.py", line 387, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/fastapi/routing.py", line 288, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jaynowman/dev/northstar-core/apps/test_harness_ui/main.py", line 879, in builder_chat
+    ChatMessage(role="system", content=sys_prompt + "\n\n" + context_str),
+    ^^^^^^^^^^^
+NameError: name 'ChatMessage' is not defined
+INFO:     127.0.0.1:54220 - "GET /builder HTTP/1.1" 200 OK
+[DEBUG] 404 CATCH: GET favicon.ico
+INFO:     127.0.0.1:54220 - "GET /favicon.ico HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54256 - "POST /api/builder/chat HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/uvicorn/protocols/http/httptools_impl.py", line 409, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/fastapi/applications.py", line 1133, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/fastapi/routing.py", line 123, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/fastapi/routing.py", line 109, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/fastapi/routing.py", line 387, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/fastapi/routing.py", line 288, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jaynowman/dev/northstar-core/apps/test_harness_ui/main.py", line 879, in builder_chat
+    for step in steps:
+    ^^^^^^^^^^^
+NameError: name 'ChatMessage' is not defined

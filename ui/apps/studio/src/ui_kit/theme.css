@@ -1,0 +1,17 @@
+/* Shared Theme Tokens matching Agentflow */
+
+:root {
+    --radius-sm: 4px;
+    --radius-md: 6px;
+    --radius-lg: 8px;
+    --radius-xl: 12px;
+
+    --font-xs: 12px;
+    --font-sm: 14px;
+
+    --gap-xs: 4px;
+    --gap-sm: 8px;
+
+    /* Animation */
+    --ease-standard: cubic-bezier(0.4, 0.0, 0.2, 1);
+}

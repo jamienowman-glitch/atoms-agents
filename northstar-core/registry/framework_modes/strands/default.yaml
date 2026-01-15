@@ -1,0 +1,8 @@
+framework: strands
+mode_id: default
+pinned_version_ref: integration/strands/PINNED_VERSION.md
+invoke_entrypoint: runtime.strands.modes.default_sequence:run
+required_params:
+  - strand_definition
+supports_streaming: event
+notes: "Standard Strands agent sequence execution."

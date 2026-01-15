@@ -1,0 +1,8 @@
+{
+  "framework": "strands",
+  "mode_id": "default",
+  "status": "FAIL",
+  "model_id": "N/A",
+  "evidence_path": "docs/evidence/modes/20251220_191658/strands/default",
+  "error": "name 'BedrockGateway' is not defined"
+}

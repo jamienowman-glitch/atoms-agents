@@ -1,0 +1,14 @@
+description: Demonstrates a basic 1:1 conversation between two agents.
+framework: autogen
+parameters:
+  message:
+    type: string
+    description: Initial message to start the chat.
+    default: Hello
+mode_id: AutoGen.TwoAgent
+invoke_entrypoint: runtime.autogen.modes.two_agent_chat:run
+supports_streaming: none
+required_params:
+- message
+pinned_version_ref: integration/autogen/PINNED_VERSION.md
+notes: UNKNOWN
