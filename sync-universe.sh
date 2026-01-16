@@ -1,0 +1,84 @@
+#!/bin/bash
+
+# Configuration
+# Directories to iterate through. 
+# Make sure these are relative paths from where the script is run (the root).
+TARGET_DIRS=("agentflow" "northstar-engines" "ui" "northstar-agents")
+
+# Colors for output
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+
+# Message handling
+DEFAULT_MSG="Auto-Sync: Phase Update"
+COMMIT_MSG="${1:-$DEFAULT_MSG}"
+
+echo -e "${BLUE}🌌 Starting Galaxy Sync Protocol...${NC}"
+echo -e "${BLUE}📝 Commit Message: \"$COMMIT_MSG\"${NC}"
+echo "---------------------------------------------------"
+
+# Function to handle git operations for a directory
+sync_repo() {
+    local dir=$1
+    local name=$2
+
+    if [ -d "$dir/.git" ]; then
+        echo -e "${YELLOW}🚀 Syncing $name...${NC}"
+        
+        # Navigate to directory
+        pushd "$dir" > /dev/null
+        
+        # Git operations
+        git add .
+        
+        # Check if there are changes to commit
+        if git diff-index --quiet HEAD --; then
+            echo -e "   No changes to commit in $name."
+        else
+            git commit -m "$COMMIT_MSG"
+            # Capture push output to check for success/failure
+            if git push origin main; then
+                echo -e "${GREEN}✅ $name pushed${NC}"
+            else
+                echo -e "${RED}❌ Failed to push $name${NC}"
+            fi
+        fi
+        
+        # Return to root
+        popd > /dev/null
+    else
+        echo -e "${RED}⚠️  Skipping $name: No .git folder found in $dir${NC}"
+    fi
+}
+
+# 1. Loop through target directories
+for target in "${TARGET_DIRS[@]}"; do
+    if [ -d "$target" ]; then
+        sync_repo "$target" "$target"
+    else
+        echo -e "${RED}⚠️  Directory not found: $target${NC}"
+    fi
+done
+
+# 2. Root Sync
+echo "---------------------------------------------------"
+echo -e "${YELLOW}🚀 Syncing Root Mono-Repo...${NC}"
+
+# Root is current directory
+git add .
+if git diff-index --quiet HEAD --; then
+    echo -e "   No changes to commit in Root."
+else
+    git commit -m "$COMMIT_MSG"
+    if git push origin main; then
+        echo -e "${GREEN}✅ Root pushed${NC}"
+    else
+        echo -e "${RED}❌ Failed to push Root${NC}"
+    fi
+fi
+
+echo "---------------------------------------------------"
+echo -e "${BLUE}✨ Galaxy Sync Complete!${NC}"

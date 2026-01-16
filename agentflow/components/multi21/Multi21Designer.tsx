@@ -1,147 +1,280 @@
 "use client";
 
-import React, { useEffect, useMemo } from 'react';
-import { Multi21, Multi21Item } from './Multi21';
+import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react';
+import {
+    DndContext,
+    DragEndEvent,
+    DragOverEvent,
+    DragStartEvent,
+    KeyboardSensor,
+    PointerSensor,
+    TouchSensor,
+    useSensor,
+    useSensors,
+    closestCenter,
+    rectIntersection,
+    getFirstCollision,
+    CollisionDetection,
+} from '@dnd-kit/core';
+import {
+    SortableContext,
+    sortableKeyboardCoordinates,
+    verticalListSortingStrategy,
+    arrayMove
+} from '@dnd-kit/sortable';
+
+import { ConnectedBlock } from './ConnectedBlock';
 import { BottomControlsPanel } from './BottomControlsPanel';
 import { DesktopPanelSystem } from './DesktopPanelSystem';
+import { FloatingAction } from '../ui/FloatingAction';
+import { useToolControl } from '../../context/ToolControlContext';
+import { SortableBlockWrapper } from './SortableBlockWrapper';
+import { Multi21_PopupWrapper } from './Multi21_PopupWrapper';
+import { HiddenAttributionFields } from './HiddenAttributionFields';
 
-import { ToolControlProvider, useToolControl } from '../../context/ToolControlContext';
-
-// Mock Data Generator
-const generateItems = (count: number, variant: 'generic' | 'product' | 'kpi' | 'text' | 'video' | 'youtube'): Multi21Item[] => {
-    const isVideo = variant === 'video';
-    const isYoutube = variant === 'youtube';
-
-    return Array.from({ length: count }).map((_, i) => {
-        if (isVideo) {
-            return {
-                id: `video-${i}`,
-                title: `Video Title ${i + 1}`,
-                meta: '12:34 • 4K',
-                videoUrl: 'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_1MB.mp4',
-                badge: i % 2 === 0 ? 'HD' : undefined,
-            };
-        }
-        if (isYoutube) {
-            return {
-                id: `yt-${i}`,
-                title: `YouTube Video ${i + 1}`,
-                meta: 'Channel Name • 2.1M views',
-                videoUrl: 'dQw4w9WgXcQ', // Default Rick Roll for safety/reliability
-                badge: 'LIVE',
-            };
-        }
-        if (variant === 'product') {
-            return {
-                id: `product-${i}`,
-                title: `Board Pro ${900 + i}`,
-                meta: `£${(49 + i * 5).toFixed(2)}`,
-                imageUrl: `https://picsum.photos/seed/product-${i}/600/400`,
-                href: '#',
-                badge: i % 3 === 0 ? 'SALE' : undefined,
-                secondaryLink: { href: '#', label: 'View' },
-            };
-        }
-        if (variant === 'kpi') {
-            const base = (12.3 + i * 0.5).toFixed(1);
-            const trendUp = i % 2 === 0;
-            return {
-                id: `kpi-${i}`,
-                title: `${base}%`,
-                meta: trendUp ? 'CTR' : 'Bounce rate',
-                badge: trendUp ? '▲ 3.1%' : '▼ 1.2%',
-            };
-        }
-        if (variant === 'text') {
-            return {
-                id: `text-${i}`,
-                title: `Note ${i + 1}`,
-                meta: 'Sample body copy for quick reading.',
-                secondaryLink: i % 2 === 0 ? { href: '#', label: 'Open' } : undefined,
-            };
-        }
-        return {
-            id: `item-${i}`,
-            title: `Item Title ${i + 1} - A generic card title that might wrap`,
-            meta: `Meta info • ${10 + i}k views • 2 days ago`,
-            imageUrl: `https://picsum.photos/seed/${i + 100}/600/400`, // Random placeholder
-            href: '#',
-            badge: i % 3 === 0 ? 'New' : undefined,
-            secondaryLink: i % 2 === 0 ? { href: '#', label: 'Watch now' } : undefined,
-        };
-    });
+// --- Types ---
+export type Block = {
+    id: string;
+    type: 'media' | 'text' | 'cta' | 'row' | 'header';
+    // For Rows
+    columns?: number;
+    children?: Block[][]; // Array of arrays. children[0] = Col 1 items.
 };
 
-const initialToolState = {
-    'multi21.designer:global:global:grid.cols_desktop': 6,
-    'multi21.designer:global:global:grid.cols_mobile': 2,
-    'multi21.designer:global:global:grid.gap_x': 16,
-    'multi21.designer:global:global:grid.tile_radius': 8,
-    'multi21.designer:global:global:feed.query.limit': 12,
-    'multi21.designer:global:global:align': 'center',
-    'multi21.designer:global:global:tile.variant': 'generic',
-    'multi21.designer:global:global:grid.aspect_ratio': '16:9',
-    'multi21.designer:global:global:previewMode': 'desktop',
-    'multi21.designer:global:global:tile.show_title': true,
-    'multi21.designer:global:global:tile.show_meta': true,
-    'multi21.designer:global:global:tile.show_badge': true,
-    'multi21.designer:global:global:tile.show_cta_label': true,
-    'multi21.designer:global:global:tile.show_cta_arrow': true,
+// --- Helpers ---
+
+// Find which container (root or column-array-id) an item is in.
+const findContainer = (id: string, items: Block[]): string | undefined => {
+    // Check root
+    if (items.find(i => i.id === id)) return 'root';
+
+    // Check nested rows
+    for (const item of items) {
+        if (item.type === 'row' && item.children) {
+            for (let col = 0; col < (item.columns || 1); col++) {
+                const colItems = item.children[col] || [];
+                if (colItems.find(i => i.id === id)) {
+                    return `${item.id}-col-${col}`;
+                }
+            }
+        }
+    }
+    return undefined;
 };
 
 export function Multi21Designer() {
-    return (
-        <ToolControlProvider initialState={initialToolState}>
-            <Multi21DesignerInner />
-        </ToolControlProvider>
-    );
-}
-
-function Multi21DesignerInner() {
     // Controls State
     const { useToolState } = useToolControl();
-    const [colsDesktop, setColsDesktop] = useToolState<number>({ target: { surfaceId: 'multi21.designer', toolId: 'grid.cols_desktop' }, defaultValue: 6 });
-    const [colsMobile, setColsMobile] = useToolState<number>({ target: { surfaceId: 'multi21.designer', toolId: 'grid.cols_mobile' }, defaultValue: 2 });
 
-    // Split Gap State
-    const [gapXDesktop, setGapXDesktop] = useToolState<number>({ target: { surfaceId: 'multi21.designer', toolId: 'grid.gap_x_desktop' }, defaultValue: 16 });
-    const [gapXMobile, setGapXMobile] = useToolState<number>({ target: { surfaceId: 'multi21.designer', toolId: 'grid.gap_x_mobile' }, defaultValue: 16 });
-
-    // Split Radius State
-    const [radiusDesktop, setRadiusDesktop] = useToolState<number>({ target: { surfaceId: 'multi21.designer', toolId: 'grid.tile_radius_desktop' }, defaultValue: 8 });
-    const [radiusMobile, setRadiusMobile] = useToolState<number>({ target: { surfaceId: 'multi21.designer', toolId: 'grid.tile_radius_mobile' }, defaultValue: 8 });
-
-    // Split Items State
-    const [itemsDesktop, setItemsDesktop] = useToolState<number>({ target: { surfaceId: 'multi21.designer', toolId: 'feed.query.limit_desktop' }, defaultValue: 12 });
-    const [itemsMobile, setItemsMobile] = useToolState<number>({ target: { surfaceId: 'multi21.designer', toolId: 'feed.query.limit_mobile' }, defaultValue: 6 });
-
-    const [align, setAlign] = useToolState<'left' | 'center' | 'right'>({ target: { surfaceId: 'multi21.designer', toolId: 'align' }, defaultValue: 'center' });
-    const [tileVariant, setTileVariant] = useToolState<'generic' | 'product' | 'kpi' | 'text' | 'video' | 'youtube'>({ target: { surfaceId: 'multi21.designer', toolId: 'tile.variant' }, defaultValue: 'generic' });
-    const [aspectRatio, setAspectRatio] = useToolState<'1:1' | '16:9' | '9:16'>({ target: { surfaceId: 'multi21.designer', toolId: 'grid.aspect_ratio' }, defaultValue: '16:9' });
+    // -- Global State (View) --
     const [previewMode, setPreviewMode] = useToolState<'desktop' | 'mobile'>({ target: { surfaceId: 'multi21.designer', toolId: 'previewMode' }, defaultValue: 'desktop' });
 
-    const [showTitle, setShowTitle] = useToolState<boolean>({ target: { surfaceId: 'multi21.designer', toolId: 'tile.show_title' }, defaultValue: true });
-    const [showMeta, setShowMeta] = useToolState<boolean>({ target: { surfaceId: 'multi21.designer', toolId: 'tile.show_meta' }, defaultValue: true });
-    const [showBadge, setShowBadge] = useToolState<boolean>({ target: { surfaceId: 'multi21.designer', toolId: 'tile.show_badge' }, defaultValue: true });
-    const [showCtaLabel, setShowCtaLabel] = useToolState<boolean>({ target: { surfaceId: 'multi21.designer', toolId: 'tile.show_cta_label' }, defaultValue: true });
-    const [showCtaArrow, setShowCtaArrow] = useToolState<boolean>({ target: { surfaceId: 'multi21.designer', toolId: 'tile.show_cta_arrow' }, defaultValue: true });
+    // -- Layer State (Phase 19) --
+    const [viewLayer, setViewLayer] = useState<'page' | 'popup'>('page');
 
-    // Generate max items needed to satisfy both views
-    const maxItems = Math.max(itemsDesktop, itemsMobile);
-    const items = useMemo(() => generateItems(maxItems, tileVariant), [maxItems, tileVariant]);
-    const [isDesktop, setIsDesktop] = React.useState(false);
+    // -- Stack State (Recursive) --
+    const [pageBlocks, setPageBlocks] = useState<Block[]>([
+        { id: 'block-1', type: 'media' },
+        { id: 'block-2', type: 'header' }
+    ]);
+    const [popupBlocks, setPopupBlocks] = useState<Block[]>([
+        // Default empty or simple text
+        { id: 'popup-text-1', type: 'text' }
+    ]);
 
-    useEffect(() => {
-        const handleResize = () => {
-            setIsDesktop(window.innerWidth >= 1024);
+    const blocks = viewLayer === 'page' ? pageBlocks : popupBlocks;
+    const setBlocks = (action: React.SetStateAction<Block[]>) => {
+        if (viewLayer === 'page') setPageBlocks(action);
+        else setPopupBlocks(action);
+    };
+
+    const [activeBlockId, setActiveBlockId] = useState<string | null>('block-1');
+    const [activeId, setActiveId] = useState<string | null>(null); // For Drag Overlay (if used later)
+
+    // Add Menu State
+    const [isAddMenuOpen, setIsAddMenuOpen] = useState(false);
+
+    // --- DnD Sensors ---
+    const sensors = useSensors(
+        useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+        useSensor(TouchSensor, { activationConstraint: { delay: 100, tolerance: 5 } }),
+        useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+    );
+
+    // --- DnD Logic (Recursive) ---
+    const handleDragStart = (event: DragStartEvent) => {
+        setActiveId(event.active.id as string);
+        setActiveBlockId(event.active.id as string);
+    };
+
+    const handleDragOver = (event: DragOverEvent) => {
+        const { active, over } = event;
+        const overId = over?.id;
+
+        if (!overId || active.id === overId) return;
+
+        setBlocks((prev) => {
+            const activeContainer = findContainer(active.id as string, prev);
+            const overContainer = (overId as string).includes('-col-') && !findContainer(overId as string, prev)
+                ? overId as string
+                : findContainer(overId as string, prev);
+
+            if (!activeContainer || !overContainer || activeContainer === overContainer) {
+                return prev;
+            }
+
+            const newBlocks = JSON.parse(JSON.stringify(prev));
+
+            const removeFromContainer = (containerId: string, itemId: string) => {
+                if (containerId === 'root') {
+                    const idx = newBlocks.findIndex((i: Block) => i.id === itemId);
+                    if (idx !== -1) return newBlocks.splice(idx, 1)[0];
+                } else {
+                    const match = containerId.match(/(.*)-col-(\d+)$/);
+                    if (match) {
+                        const row = newBlocks.find((i: Block) => i.id === match[1]);
+                        const colIdx = parseInt(match[2], 10);
+                        if (row && row.children) {
+                            const idx = row.children[colIdx].findIndex((i: Block) => i.id === itemId);
+                            if (idx !== -1) return row.children[colIdx].splice(idx, 1)[0];
+                        }
+                    }
+                }
+                return null;
+            };
+
+            const addToContainer = (containerId: string, item: Block, targetId: string) => {
+                if (containerId === 'root') {
+                    const idx = newBlocks.findIndex((i: Block) => i.id === targetId);
+                    const newIndex = idx !== -1 ? idx : newBlocks.length;
+                    newBlocks.splice(newIndex, 0, item);
+                } else {
+                    const match = containerId.match(/(.*)-col-(\d+)$/);
+                    if (match) {
+                        const row = newBlocks.find((i: Block) => i.id === match[1]);
+                        const colIdx = parseInt(match[2], 10);
+                        if (row) {
+                            if (!row.children) {
+                                row.children = Array.from({ length: row.columns || 1 }).map(() => []) as any;
+                            }
+                            if (targetId === containerId) {
+                                row.children[colIdx].push(item);
+                            } else {
+                                const idx = row.children[colIdx].findIndex((i: Block) => i.id === targetId);
+                                const newIndex = idx !== -1 ? idx : row.children[colIdx].length;
+                                row.children[colIdx].splice(newIndex, 0, item);
+                            }
+                        }
+                    }
+                }
+            };
+
+            const item = removeFromContainer(activeContainer, active.id as string);
+            if (item) {
+                addToContainer(overContainer, item, overId as string);
+            }
+
+            return newBlocks;
+        });
+    };
+
+    const handleDragEnd = (event: DragEndEvent) => {
+        const { active, over } = event;
+        const activeContainer = findContainer(active.id as string, blocks);
+        const overContainer = over ? (
+            (over.id as string).includes('-col-') && !findContainer(over.id as string, blocks)
+                ? over.id as string
+                : findContainer(over.id as string, blocks)
+        ) : null;
+
+        if (
+            activeContainer &&
+            overContainer &&
+            activeContainer === overContainer
+        ) {
+            if (activeContainer === 'root') {
+                const oldIndex = blocks.findIndex((x) => x.id === active.id);
+                const newIndex = blocks.findIndex((x) => x.id === over?.id);
+                if (oldIndex !== newIndex) {
+                    setBlocks(arrayMove(blocks, oldIndex, newIndex));
+                }
+            } else {
+                const match = activeContainer.match(/(.*)-col-(\d+)$/);
+                if (match) {
+                    const [_, rowId, colIndexStr] = match;
+                    const colIdx = parseInt(colIndexStr, 10);
+                    setBlocks((prev) => {
+                        const newBlocks = [...prev];
+                        const rowIdx = newBlocks.findIndex(b => b.id === rowId);
+                        if (rowIdx === -1) return prev;
+                        const row = { ...newBlocks[rowIdx] };
+                        if (!row.children) return prev;
+                        const colItems = [...row.children[colIdx]];
+                        const oldIndex = colItems.findIndex(x => x.id === active.id);
+                        const newIndex = colItems.findIndex(x => x.id === over?.id);
+                        if (oldIndex !== -1 && newIndex !== -1 && oldIndex !== newIndex) {
+                            row.children = [...row.children];
+                            row.children[colIdx] = arrayMove(colItems, oldIndex, newIndex);
+                            newBlocks[rowIdx] = row;
+                            return newBlocks;
+                        }
+                        return prev;
+                    });
+                }
+            }
+        }
+        setActiveId(null);
+    };
+
+    // --- Deletion Logic (Recursive) ---
+    const handleDeleteBlock = (id: string) => {
+        if (!window.confirm("Are you sure?")) return;
+
+        setBlocks((prev) => {
+            if (prev.find(b => b.id === id)) {
+                return prev.filter(b => b.id !== id);
+            }
+            const filterRecursive = (items: Block[]): Block[] => {
+                return items.map(item => {
+                    if (item.type === 'row' && item.children) {
+                        return {
+                            ...item,
+                            children: item.children.map(col => filterRecursive(col))
+                        };
+                    }
+                    return item;
+                }).filter(b => b.id !== id);
+            };
+            return filterRecursive(prev);
+        });
+        setActiveBlockId(null);
+    };
+
+    // Add Block Logic
+    const handleAddBlock = (type: 'media' | 'text' | 'cta' | 'row' | 'header', columns?: number) => {
+        const newBlock: Block = {
+            id: crypto.randomUUID(),
+            type,
+            columns: columns,
+            children: type === 'row' ? Array.from({ length: columns || 1 }).map(() => []) : undefined
         };
+        setBlocks([...blocks, newBlock]);
+        toggleAddMenu();
+    };
+
+    const toggleAddMenu = () => setIsAddMenuOpen(prev => !prev);
+    const [isDesktop, setIsDesktop] = React.useState(false);
+    useEffect(() => {
+        const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
         handleResize();
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    // --- Panels ---
     const settingsContent = (
         <div className="flex flex-col gap-4">
+            <span className="text-sm">Config...</span>
             <div className="flex flex-col gap-2">
                 <span className="font-semibold text-xs uppercase tracking-wider text-neutral-500">View</span>
                 <div className="flex rounded-md bg-neutral-100 dark:bg-neutral-800 p-0.5">
@@ -156,136 +289,159 @@ function Multi21DesignerInner() {
                     ))}
                 </div>
             </div>
-
-            <div className="flex flex-col gap-2">
-                <span className="font-semibold text-xs uppercase tracking-wider text-neutral-500">Layout</span>
-                <div className="flex rounded-md bg-neutral-100 dark:bg-neutral-800 p-0.5">
-                    {(['left', 'center', 'right'] as const).map(opt => (
-                        <button
-                            key={opt}
-                            onClick={() => setAlign(opt)}
-                            className={`px-2 py-1 rounded text-xs capitalize ${align === opt ? 'bg-white dark:bg-neutral-700 shadow-sm' : 'text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300'}`}
-                        >
-                            {opt}
-                        </button>
-                    ))}
-                </div>
-                <div className="flex rounded-md bg-neutral-100 dark:bg-neutral-800 p-0.5">
-                    {(['1:1', '9:16', '16:9'] as const).map(opt => (
-                        <button
-                            key={opt}
-                            onClick={() => setAspectRatio(opt)}
-                            className={`px-2 py-1 rounded text-xs capitalize ${aspectRatio === opt ? 'bg-white dark:bg-neutral-700 shadow-sm' : 'text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300'}`}
-                        >
-                            {opt}
-                        </button>
-                    ))}
-                </div>
-            </div>
-
-            <div className="flex flex-col gap-2">
-                <span className="font-semibold text-xs uppercase tracking-wider text-neutral-500">Content</span>
-                <div className="flex flex-wrap gap-1 rounded-md bg-neutral-100 dark:bg-neutral-800 p-0.5">
-                    {(['generic', 'product', 'kpi', 'text', 'video', 'youtube'] as const).map(opt => (
-                        <button
-                            key={opt}
-                            onClick={() => setTileVariant(opt)}
-                            className={`px-2 py-1 rounded text-xs capitalize ${tileVariant === opt ? 'bg-white dark:bg-neutral-700 shadow-sm' : 'text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300'}`}
-                        >
-                            {opt}
-                        </button>
-                    ))}
-                </div>
-            </div>
-
-            <div className="flex flex-col gap-2">
-                <span className="font-semibold text-xs uppercase tracking-wider text-neutral-500">Visibility</span>
-                <div className="flex flex-col gap-2">
-                    <label className="flex items-center gap-2 cursor-pointer select-none">
-                        <input type="checkbox" checked={showTitle} onChange={e => setShowTitle(e.target.checked)} className="rounded border-gray-300" />
-                        <span className="text-sm">Title</span>
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer select-none">
-                        <input type="checkbox" checked={showMeta} onChange={e => setShowMeta(e.target.checked)} className="rounded border-gray-300" />
-                        <span className="text-sm">Meta</span>
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer select-none">
-                        <input type="checkbox" checked={showBadge} onChange={e => setShowBadge(e.target.checked)} className="rounded border-gray-300" />
-                        <span className="text-sm">Badge</span>
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer select-none">
-                        <input type="checkbox" checked={showCtaLabel} onChange={e => setShowCtaLabel(e.target.checked)} className="rounded border-gray-300" />
-                        <span className="text-sm">CTA Label</span>
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer select-none">
-                        <input type="checkbox" checked={showCtaArrow} onChange={e => setShowCtaArrow(e.target.checked)} className="rounded border-gray-300" />
-                        <span className="text-sm">CTA Arrow</span>
-                    </label>
-                </div>
+            {/* Debug Info */}
+            <div className="text-xs text-neutral-400 mt-4">
+                Active Layer: {viewLayer}<br />
+                Blocks: {blocks.length}
             </div>
         </div>
     );
 
-    const toolsContent = (
-        <div className="flex flex-col gap-3">
-            <div className="flex flex-col gap-1">
-                <label className="text-xs text-neutral-600 dark:text-neutral-300">Desktop Columns: {colsDesktop}</label>
-                <input type="range" min={1} max={12} step={1} value={colsDesktop} onChange={e => setColsDesktop(Number(e.target.value))} className="accent-black dark:accent-white" />
-            </div>
-            <div className="flex flex-col gap-1">
-                <label className="text-xs text-neutral-600 dark:text-neutral-300">Mobile Columns: {colsMobile}</label>
-                <input type="range" min={1} max={6} step={1} value={colsMobile} onChange={e => setColsMobile(Number(e.target.value))} className="accent-black dark:accent-white" />
-            </div>
+    const toolsContent = (<div>Tools</div>);
 
-            <div className="flex flex-col gap-1">
-                <label className="text-xs text-neutral-600 dark:text-neutral-300">Desktop Gap: {gapXDesktop}px</label>
-                <input type="range" min={0} max={48} step={4} value={gapXDesktop} onChange={e => setGapXDesktop(Number(e.target.value))} className="accent-black dark:accent-white" />
-            </div>
-            <div className="flex flex-col gap-1">
-                <label className="text-xs text-neutral-600 dark:text-neutral-300">Mobile Gap: {gapXMobile}px</label>
-                <input type="range" min={0} max={24} step={4} value={gapXMobile} onChange={e => setGapXMobile(Number(e.target.value))} className="accent-black dark:accent-white" />
-            </div>
+    const navigatorContent = (
+        <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
+                <span className="font-semibold text-xs uppercase tracking-wider text-neutral-500">Layers</span>
+                <div className="flex flex-col gap-1 p-2 bg-neutral-100 dark:bg-neutral-900 rounded-xl">
+                    <button
+                        onClick={() => { setViewLayer('page'); setActiveBlockId(null); }}
+                        className={`text-left px-3 py-2 rounded-lg text-sm font-medium transition-all ${viewLayer === 'page'
+                            ? 'bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 shadow-sm'
+                            : 'text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300'
+                            }`}
+                    >
+                        <div className="flex items-center gap-2">
+                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 9h18" /></svg>
+                            Page
+                        </div>
+                    </button>
 
-            <div className="flex flex-col gap-1">
-                <label className="text-xs text-neutral-600 dark:text-neutral-300">Desktop Radius: {radiusDesktop}px</label>
-                <input type="range" min={0} max={32} step={4} value={radiusDesktop} onChange={e => setRadiusDesktop(Number(e.target.value))} className="accent-black dark:accent-white" />
-            </div>
-            <div className="flex flex-col gap-1">
-                <label className="text-xs text-neutral-600 dark:text-neutral-300">Mobile Radius: {radiusMobile}px</label>
-                <input type="range" min={0} max={24} step={4} value={radiusMobile} onChange={e => setRadiusMobile(Number(e.target.value))} className="accent-black dark:accent-white" />
-            </div>
-
-            <div className="flex flex-col gap-1">
-                <label className="text-xs text-neutral-600 dark:text-neutral-300">Desktop Items: {itemsDesktop}</label>
-                <input type="range" min={1} max={48} step={1} value={itemsDesktop} onChange={e => setItemsDesktop(Number(e.target.value))} className="accent-black dark:accent-white" />
-            </div>
-            <div className="flex flex-col gap-1">
-                <label className="text-xs text-neutral-600 dark:text-neutral-300">Mobile Items: {itemsMobile}</label>
-                <input type="range" min={1} max={48} step={1} value={itemsMobile} onChange={e => setItemsMobile(Number(e.target.value))} className="accent-black dark:accent-white" />
+                    <button
+                        onClick={() => { setViewLayer('popup'); setActiveBlockId(null); }}
+                        className={`text-left px-3 py-2 rounded-lg text-sm font-medium transition-all ${viewLayer === 'popup'
+                            ? 'bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 shadow-sm'
+                            : 'text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300'
+                            }`}
+                    >
+                        <div className="flex items-center gap-2">
+                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="4" y="6" width="16" height="12" rx="2" /><path d="M12 2v2" /><path d="M12 20v2" /></svg>
+                            Pop-up Overlay
+                        </div>
+                    </button>
+                </div>
             </div>
         </div>
     );
 
     const panels = useMemo(() => [
+        { id: 'navigator', title: 'Navigator', content: navigatorContent },
         { id: 'settings', title: 'Settings', content: settingsContent },
         { id: 'tools', title: 'Tools', content: toolsContent },
-    ], [settingsContent, toolsContent]);
+    ], [settingsContent, navigatorContent, activeBlockId, blocks]);
+
+    const [showTools] = useToolState<boolean>({ target: { surfaceId: 'multi21.shell', toolId: 'ui.show_tools' }, defaultValue: false });
+
+    // --- Block Rendering ---
+    const renderBlockList = (items: Block[], isActiveContext: boolean) => (
+        <div className="flex flex-col gap-8 pb-16">
+            {items.map((block) => (
+                isActiveContext ? (
+                    <SortableBlockWrapper
+                        key={block.id}
+                        id={block.id}
+                        isSelected={activeBlockId === block.id}
+                        onDelete={() => handleDeleteBlock(block.id)}
+                    >
+                        <ConnectedBlock
+                            id={block.id}
+                            type={block.type}
+                            isSelected={activeBlockId === block.id}
+                            onClick={() => setActiveBlockId(block.id)}
+                            previewMode={previewMode}
+                            data={block}
+                            setActiveBlockId={setActiveBlockId}
+                            onDeleteBlock={handleDeleteBlock}
+                            activeBlockId={activeBlockId || undefined}
+                        />
+                    </SortableBlockWrapper>
+                ) : (
+                    <ConnectedBlock
+                        key={block.id}
+                        id={block.id}
+                        type={block.type}
+                        // Non-interactive background
+                        isSelected={false}
+                        onClick={() => { }}
+                        previewMode={previewMode}
+                        data={block}
+                        setActiveBlockId={() => { }}
+                        onDeleteBlock={() => { }}
+                        activeBlockId={undefined}
+                    />
+                )
+            ))}
+        </div>
+    );
 
     return (
         <div className="min-h-screen bg-white dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 font-sans relative md:pr-[300px]">
-            {/* Control Panel */}
-            <BottomControlsPanel settingsContent={settingsContent} />
+            <HiddenAttributionFields />
 
-            {/* MobileFloatingManager removed per user request for fixed bottom panel */}
+            <BottomControlsPanel
+                settingsContent={settingsContent}
+                activeBlockId={activeBlockId}
+                activeBlockType={
+                    (() => {
+                        const findType = (items: Block[]): string | undefined => {
+                            if (!activeBlockId) return undefined;
+                            const match = items.find(b => b.id === activeBlockId);
+                            if (match) return match.type;
+                            for (const b of items) {
+                                if (b.children) {
+                                    for (const col of b.children) {
+                                        const nested = findType(col);
+                                        if (nested) return nested;
+                                    }
+                                }
+                            }
+                            return undefined;
+                        };
+                        const found = findType(blocks);
+                        if (found) return found as 'media' | 'text' | 'cta' | 'row' | 'header';
+                        if (viewLayer === 'popup' && !activeBlockId) return 'popup';
+                        return undefined;
+                    })()
+                }
+                isVisible={showTools}
+            />
 
-            {isDesktop && (
-                <DesktopPanelSystem panels={panels} />
+            {isAddMenuOpen && (
+                <div className="fixed bottom-44 right-4 bg-white dark:bg-neutral-900 shadow-xl rounded-full p-2 flex flex-col gap-3 border border-neutral-200 dark:border-neutral-800 z-[60] animate-in fade-in slide-in-from-bottom-4 items-center w-12">
+                    <button onClick={() => handleAddBlock('text')} className="w-8 h-8 rounded-full bg-orange-50 hover:bg-orange-100 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 flex items-center justify-center shadow-sm" title="Add Text"><span className="font-serif font-bold text-lg leading-none">T</span></button>
+                    <button onClick={() => handleAddBlock('media')} className="w-8 h-8 rounded-full bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 flex items-center justify-center shadow-sm" title="Add Media"><svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></svg></button>
+                    <button onClick={() => handleAddBlock('cta')} className="w-8 h-8 rounded-full bg-purple-50 hover:bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 flex items-center justify-center shadow-sm" title="Add Button"><svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="4" y="8" width="16" height="8" rx="2" /><path d="M10 8V8" /></svg></button>
+                    <button onClick={() => handleAddBlock('header')} className="w-8 h-8 rounded-full bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shadow-sm" title="Add Header"><svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="3" y="3" width="18" height="6" rx="1" /><path d="M3 9h18" /></svg></button>
+                    <div className="w-full h-px bg-neutral-100 dark:bg-neutral-800 my-1" />
+                    <button onClick={() => handleAddBlock('row', 1)} className="w-8 h-8 rounded-full bg-neutral-50 hover:bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 flex items-center justify-center shadow-sm font-mono text-xs" title="1 Column">[I]</button>
+                    <button onClick={() => handleAddBlock('row', 2)} className="w-8 h-8 rounded-full bg-neutral-50 hover:bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 flex items-center justify-center shadow-sm font-mono text-xs" title="2 Columns">[II]</button>
+                    <button onClick={() => handleAddBlock('row', 3)} className="w-8 h-8 rounded-full bg-neutral-50 hover:bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 flex items-center justify-center shadow-sm font-mono text-xs" title="3 Columns">[III]</button>
+                </div>
             )}
+            <FloatingAction onClick={toggleAddMenu} />
 
-            {/* Main Content Area */}
+            {isDesktop && <DesktopPanelSystem panels={panels} />}
+
             <main className="p-4 pb-32 max-w-[1600px] mx-auto flex flex-col items-center">
                 <div className="w-full mb-8 border-b border-neutral-200 dark:border-neutral-800 pb-4">
-                    <h2 className="text-2xl font-light tracking-tight">Collection Demo</h2>
+                    {/* Title reflects Layer */}
+                    <h2 className="text-2xl font-light tracking-tight flex items-center gap-2">
+                        {viewLayer === 'popup' ? (
+                            <><span className="text-neutral-400">Layer:</span> Pop-up</>
+                        ) : (
+                            'Collection Demo'
+                        )}
+                    </h2>
                 </div>
 
                 <div
@@ -294,30 +450,44 @@ function Multi21DesignerInner() {
                         : 'w-full'
                         }`}
                 >
-                    <div className={previewMode === 'mobile' ? 'p-4 h-[844px] overflow-y-auto' : ''}>
-                        <Multi21
-                            items={items}
-                            gridColsDesktop={previewMode === 'mobile' ? colsMobile : colsDesktop}
-                            gridColsMobile={colsMobile}
+                    <div className={previewMode === 'mobile' ? 'p-4 h-[844px] overflow-y-auto scrollbar-hide' : ''}>
+                        {/* 1. Page Background Blocks (Dimmed if popup active) */}
+                        <div className={`transition-opacity duration-300 ${viewLayer === 'popup' ? 'opacity-20 pointer-events-none filter blur-sm' : 'opacity-100'}`}>
+                            {/* If Page is Active, we use DnD for it. If Popup is active, we just render it statically here. */}
+                            {viewLayer === 'page' ? (
+                                <DndContext
+                                    sensors={sensors}
+                                    collisionDetection={closestCenter}
+                                    onDragStart={handleDragStart}
+                                    onDragOver={handleDragOver}
+                                    onDragEnd={handleDragEnd}
+                                >
+                                    <SortableContext items={pageBlocks.map(b => b.id)} strategy={verticalListSortingStrategy}>
+                                        {renderBlockList(pageBlocks, true)}
+                                    </SortableContext>
+                                </DndContext>
+                            ) : (
+                                renderBlockList(pageBlocks, false)
+                            )}
+                        </div>
 
-                            gridGapXDesktop={gapXDesktop}
-                            gridGapXMobile={gapXMobile}
-
-                            gridTileRadiusDesktop={radiusDesktop}
-                            gridTileRadiusMobile={radiusMobile}
-
-                            itemsDesktop={itemsDesktop}
-                            itemsMobile={itemsMobile}
-
-                            align={align}
-                            tileVariant={tileVariant}
-                            gridAspectRatio={aspectRatio}
-                            tileShowTitle={showTitle}
-                            tileShowMeta={showMeta}
-                            tileShowBadge={showBadge}
-                            tileShowCtaLabel={showCtaLabel}
-                            tileShowCtaArrow={showCtaArrow}
-                        />
+                        {/* 2. Popup Overlay */}
+                        <Multi21_PopupWrapper isOpen={viewLayer === 'popup'} onClose={() => setViewLayer('page')}>
+                            <div className="p-4 min-h-[200px]">
+                                {/* DnD Context for Popup */}
+                                <DndContext
+                                    sensors={sensors}
+                                    collisionDetection={closestCenter}
+                                    onDragStart={handleDragStart}
+                                    onDragOver={handleDragOver}
+                                    onDragEnd={handleDragEnd}
+                                >
+                                    <SortableContext items={popupBlocks.map(b => b.id)} strategy={verticalListSortingStrategy}>
+                                        {renderBlockList(popupBlocks, true)}
+                                    </SortableContext>
+                                </DndContext>
+                            </div>
+                        </Multi21_PopupWrapper>
                     </div>
                 </div>
             </main>

@@ -22,6 +22,7 @@ function createDefaultLayout(defs: PanelDefinition[]): DesktopLayoutConfig {
         let side: DockSide = 'float';
         if (def.id === 'settings') side = 'right';
         if (def.id === 'tools') side = 'bottom';
+        if (def.id === 'navigator') side = 'left';
         panels[def.id] = {
             id: def.id,
             side,
