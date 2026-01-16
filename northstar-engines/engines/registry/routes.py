@@ -19,9 +19,12 @@ from engines.registry.service import (
     RegistrySpec,
     RegistrySpecsPayload,
     SystemRegistryService,
+    RegistrySpecsPayload,
+    SystemRegistryService,
     get_component_registry_service,
     get_system_registry_service,
 )
+from engines.registry.schemas.atelier import AtelierManifest, SurfaceDefinition, UIAtom
 
 router = APIRouter(prefix="/registry", tags=["registry"])
 
@@ -183,6 +186,47 @@ def delete_registry_entry(
     auth: AuthContext = Depends(_resolve_auth_context),
     service: SystemRegistryService = Depends(get_system_registry_service),
 ) -> Response:
-    _require_membership(auth, context)
     service.delete_entry(context, namespace, key)
+    return Response(status_code=204)
+
+
+@router.post("/harvest/atoms", response_model=None)
+def harvest_atoms(
+    atoms: List[UIAtom],
+    request: Request,
+    context: RequestContext = Depends(get_request_context),
+    auth: AuthContext = Depends(_resolve_auth_context),
+    service: ComponentRegistryService = Depends(get_component_registry_service),
+) -> Response:
+    """Bulk upsert UI Atoms from the Harvester."""
+    _require_membership(auth, context)
+    service.upsert_atoms(context, atoms)
+    return Response(status_code=204)
+
+
+@router.post("/harvest/surfaces", response_model=None)
+def harvest_surfaces(
+    surfaces: List[SurfaceDefinition],
+    request: Request,
+    context: RequestContext = Depends(get_request_context),
+    auth: AuthContext = Depends(_resolve_auth_context),
+    service: ComponentRegistryService = Depends(get_component_registry_service),
+) -> Response:
+    """Register available Tool Surfaces from the Harvester."""
+    _require_membership(auth, context)
+    service.register_surfaces(context, surfaces)
+    return Response(status_code=204)
+
+
+@router.post("/harvest", response_model=None)
+def harvest_generic(
+    manifests: List[AtelierManifest],
+    request: Request,
+    context: RequestContext = Depends(get_request_context),
+    auth: AuthContext = Depends(_resolve_auth_context),
+    service: ComponentRegistryService = Depends(get_component_registry_service),
+) -> Response:
+    """Bulk harvest generic Atelier Manifests (Canvases, Atoms, etc)."""
+    _require_membership(auth, context)
+    service.register_manifests(context, manifests)
     return Response(status_code=204)

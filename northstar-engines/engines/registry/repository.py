@@ -13,6 +13,7 @@ class ComponentRegistryRepository:
     COMPONENTS_TABLE = "component_registry_components"
     ATOMS_TABLE = "component_registry_atoms"
     SPECS_TABLE = "component_registry_specs"
+    SURFACES_TABLE = "component_registry_surfaces"
 
     def _tabular(self, ctx: RequestContext) -> TabularStoreService:
         try:
@@ -60,6 +61,13 @@ class ComponentRegistryRepository:
         if not spec_id:
             raise ValueError("spec data must include id")
         self._tabular(ctx).upsert(self.SPECS_TABLE, spec_id, spec, ctx)
+
+    def save_surface(self, ctx: RequestContext, surface: Dict[str, Any]) -> None:
+        """Persist a surface record."""
+        surface_id = surface.get("id")
+        if not surface_id:
+            raise ValueError("surface data must include id")
+        self._tabular(ctx).upsert(self.SURFACES_TABLE, surface_id, surface, ctx)
 
 
 class SystemRegistryRepository:

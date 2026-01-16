@@ -217,6 +217,61 @@ class ComponentRegistryService:
         """Helper for tests or admin tooling to persist specs."""
         self.repo.save_spec(ctx, spec)
 
+    def register_surfaces(self, ctx: RequestContext, surfaces: List[Any]) -> None:
+        """Register a list of ToolSurfaces (Atelier Standard)."""
+        for s in surfaces:
+            # Check if it's a model or dict, handle appropriately
+            payload = s.model_dump() if hasattr(s, "model_dump") else s
+            self.repo.save_surface(ctx, payload)
+
+    def upsert_atoms(self, ctx: RequestContext, atoms: List[Any]) -> None:
+        """Bulk upsert UI Atoms (Atelier Standard)."""
+        for a in atoms:
+            payload = a.model_dump() if hasattr(a, "model_dump") else a
+            self.repo.save_atom(ctx, payload)
+
+    def register_manifests(self, ctx: RequestContext, manifests: List[Any]) -> None:
+        """Register generic Atelier Manifests."""
+        for m in manifests:
+            # Determine appropriate sub-store based on type
+            # We assume 'm' is an AtelierManifest object (or dict)
+            kind = getattr(m, "type", m.get("type") if isinstance(m, dict) else None)
+            payload = m.model_dump() if hasattr(m, "model_dump") else m
+
+            if kind == "atom":
+                # Save to Atoms table
+                self.repo.save_atom(ctx, payload)
+            elif kind == "canvas":
+                # Save to Specs table as generic spec (or specialized logic if we had it)
+                # Map to Spec format:
+                spec = {
+                    "id": payload["id"],
+                    "kind": "canvas",
+                    "version": 1,
+                    "schema": {},
+                    "defaults": {},
+                    "controls": {},
+                    "token_surface": payload.get("acceptedTokens", []),
+                    "metadata": payload
+                }
+                self.repo.save_spec(ctx, spec)
+            elif kind == "surface":
+                # Map to Surface table
+                 self.repo.save_surface(ctx, payload)
+            # Add handling for token_set etc.
+            elif kind == "token_set":
+                 spec = {
+                    "id": payload["id"],
+                    "kind": "token",
+                    "version": 1,
+                    "schema": {},
+                    "defaults": {},
+                    "controls": {},
+                    "token_surface": [],
+                    "metadata": payload
+                }
+                 self.repo.save_spec(ctx, spec)
+
     @staticmethod
     def _encode_cursor(offset: int) -> str:
         token = str(offset).encode("ascii")
