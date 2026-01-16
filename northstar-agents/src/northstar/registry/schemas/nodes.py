@@ -13,6 +13,9 @@ class NodeCard:
     blackboard_reads: List[str] = field(default_factory=list)
     model_ref: Optional[str] = None
     provider_ref: Optional[str] = None
+    routing_ref: Optional[str] = None
+    manifest_ref: Optional[str] = None
+    strength_ref: Optional[str] = None
     capability_ids: List[str] = field(default_factory=list)
     tool_refs: List[str] = field(default_factory=list)
     framework_mode_ref: Optional[str] = None
