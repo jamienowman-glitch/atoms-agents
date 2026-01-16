@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { RegistryCard } from './ui/RegistryCard';
 import { RegistryHeader } from './ui/RegistryHeader';
 import { AddButton } from './ui/AddButton';
+import { useRegistry, RegistryItem, ConnectorConfig } from '@/lib/registry/useRegistry';
+import { ConnectorConfigModal } from './ConnectorConfigModal';
 
 type Category = 'connectors' | 'muscle' | 'safety' | 'firearms' | 'utm';
 
@@ -13,35 +15,67 @@ const CATEGORIES: { id: Category; label: string }[] = [
     { id: 'utm', label: 'UTM' },
 ];
 
-const MOCK_CONNECTORS = [
-    { id: '1', title: 'Shopify', subtitle: 'E-commerce platform integration', status: 'Active' },
-    { id: '2', title: 'YouTube', subtitle: 'Video content publishing', status: 'Active' },
-    { id: '3', title: 'Instagram', subtitle: 'Social media feed & posting', status: 'Paused' },
-    { id: '4', title: 'Stripe', subtitle: 'Payment processing', status: 'Draft' },
-];
-
 export const RegistryManager: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
     const [activeCategory, setActiveCategory] = useState<Category>('connectors');
+    const { data: items, isLoading, mutate } = useRegistry(activeCategory);
+
+    const [editingItem, setEditingItem] = useState<RegistryItem | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleEdit = (item: RegistryItem) => {
+        setEditingItem(item);
+        setIsModalOpen(true);
+    };
+
+    const handleAddNew = () => {
+        setEditingItem(null); // Blank modal for new registration
+        setIsModalOpen(true);
+    };
+
+    const handleSaveConfig = async (config: ConnectorConfig) => {
+        console.log('Saving config:', config);
+
+        try {
+            const response = await fetch('/api/v1/registry/connectors', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ config })
+            });
+
+            if (response.ok) {
+                // Ideally refresh the list to show updates if any status changed
+                mutate();
+            } else {
+                console.error('Failed to save config');
+            }
+        } catch (error) {
+            console.error('Error saving config:', error);
+        }
+    };
 
     const renderGrid = () => {
-        // For now, only Connectors has mock data, others will show just the Add button
-        const items = activeCategory === 'connectors' ? MOCK_CONNECTORS : [];
+        if (isLoading) {
+            return <div className="p-12 text-center text-zinc-500 font-mono text-xs">Loading registry data...</div>;
+        }
+
+        // If items are undefined/null, treat as empty array
+        const registryItems = items || [];
 
         return (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {items.map((item) => (
+                {registryItems.map((item) => (
                     <RegistryCard
                         key={item.id}
                         title={item.title}
                         subtitle={item.subtitle}
                         status={item.status}
-                        onEdit={() => console.log('Edit', item.id)}
+                        onEdit={() => handleEdit(item)}
                         onDelete={() => console.log('Delete', item.id)}
                     />
                 ))}
 
                 {/* Plus Button is always at the end */}
-                <AddButton onClick={() => console.log('Add New in', activeCategory)} />
+                <AddButton onClick={handleAddNew} />
             </div>
         );
     };
@@ -99,6 +133,15 @@ export const RegistryManager: React.FC<{ onClose?: () => void }> = ({ onClose })
                     {renderGrid()}
                 </div>
             </div>
+
+            {/* Modal */}
+            {isModalOpen && (
+                <ConnectorConfigModal
+                    connector={editingItem || undefined}
+                    onClose={() => setIsModalOpen(false)}
+                    onSave={handleSaveConfig}
+                />
+            )}
         </div>
     );
 };
