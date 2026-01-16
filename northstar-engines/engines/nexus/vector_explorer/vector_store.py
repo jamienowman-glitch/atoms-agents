@@ -14,7 +14,7 @@ except Exception:  # pragma: no cover
 from engines.common.identity import RequestContext
 from engines.common.selecta import SelectaResolver, get_selecta_resolver
 from engines.config import runtime_config
-from engines.cost.vertex_guard import ensure_billable_vertex_allowed
+from engines.cost.vertex_guard import ensure_billable_vertex_allowed, verify_vertex_budget
 
 
 class VectorStoreConfigError(RuntimeError):
@@ -124,6 +124,7 @@ class VertexExplorerVectorStore(ExplorerVectorStore):
         space: str,
         metadata: Optional[Dict[str, Any]] = None,
     ) -> None:
+        verify_vertex_budget(tenant_id, env)
         self._ensure_backend(RequestContext(request_id="selecta", tenant_id=tenant_id, env=env))
         # Vertex expect list of IndexDatapoint objects or dicts
         
@@ -155,6 +156,7 @@ class VertexExplorerVectorStore(ExplorerVectorStore):
         space: str,
         top_k: int = 10,
     ) -> List[ExplorerVectorHit]:
+        verify_vertex_budget(tenant_id, env)
         self._ensure_backend(RequestContext(request_id="selecta", tenant_id=tenant_id, env=env))
         # Refactor: Pass simple queries + separate filter to avoid Proto coercion bugs
         queries = [list(vector)]

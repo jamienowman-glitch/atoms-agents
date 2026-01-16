@@ -22,7 +22,9 @@ from engines.nexus.vector_explorer.schemas import (
     VectorExplorerResult,
 )
 from engines.nexus.vector_explorer.vector_store import ExplorerVectorStore, VertexExplorerVectorStore, VectorStoreConfigError
+from engines.nexus.vector_explorer.lance_store import LanceExplorerVectorStore
 from engines.scene_engine.core.types import Scene
+import os
 
 
 @dataclass
@@ -43,7 +45,13 @@ class VectorExplorerService:
         budget_service: Optional[BudgetService] = None,
     ) -> None:
         self._repo = repository or FirestoreVectorCorpusRepository()
-        self._vector_store = vector_store or VertexExplorerVectorStore()
+        if vector_store:
+            self._vector_store = vector_store
+        elif os.environ.get("ENABLE_VERTEX_LEGACY", "").lower() == "true":
+            self._vector_store = VertexExplorerVectorStore()
+        else:
+            self._vector_store = LanceExplorerVectorStore()
+
         self._embedder = embedder or VertexEmbeddingAdapter()
         resolved_logger = event_logger or log_dataset_event
         if compliance_run_enabled() and event_logger is None:

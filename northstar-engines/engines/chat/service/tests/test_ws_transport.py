@@ -46,7 +46,8 @@ def _hello_payload(ctx: RequestContext, last_event_id: str | None = None) -> dic
     }
 
 
-def test_ws_replays_messages_with_resume_cursor(jwt_issuer):
+@pytest.mark.asyncio
+async def test_ws_replays_messages_with_resume_cursor(jwt_issuer):
     thread_id = "thread-ws-1"
     register_thread_resource("t_alpha", thread_id)
     ctx = RequestContext(
@@ -59,8 +60,8 @@ def test_ws_replays_messages_with_resume_cursor(jwt_issuer):
         app_id="app-chat",
     )
     sender = Contact(id="user-alpha")
-    first = publish_message(thread_id, sender, "first", context=ctx)
-    second = publish_message(thread_id, sender, "second", context=ctx)
+    first = await publish_message(thread_id, sender, "first", context=ctx)
+    second = await publish_message(thread_id, sender, "second", context=ctx)
 
     token = jwt_issuer(tenant_id="t_alpha", user_id="user-alpha")
     headers = {"Authorization": f"Bearer {token}"}

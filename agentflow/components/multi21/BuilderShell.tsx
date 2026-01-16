@@ -32,11 +32,11 @@ const initialToolState = {
 // Types needed for coordination
 type ChatMode = 'nano' | 'micro' | 'standard' | 'full';
 
-export function BuilderShell({ children }: { children: React.ReactNode }) {
+export function BuilderShell({ children, showGraphControls }: { children: React.ReactNode, showGraphControls?: boolean }) {
     return (
         <ToolControlProvider initialState={initialToolState}>
             <PageControlProvider>
-                <BuilderShellInner>
+                <BuilderShellInner showGraphControls={showGraphControls}>
                     {children}
                 </BuilderShellInner>
             </PageControlProvider>
@@ -44,7 +44,7 @@ export function BuilderShell({ children }: { children: React.ReactNode }) {
     );
 }
 
-function BuilderShellInner({ children }: { children: React.ReactNode }) {
+function BuilderShellInner({ children, showGraphControls }: { children: React.ReactNode, showGraphControls?: boolean }) {
     const { useToolState } = useToolControl();
     const { design } = usePageControl();
 
@@ -66,7 +66,7 @@ function BuilderShellInner({ children }: { children: React.ReactNode }) {
     return (
         <React.Fragment>
             {/* 1. Global Controls (Command Center) */}
-            <TopControls />
+            <TopControls showGraphControls={showGraphControls} />
 
             {/* 2. Global Settings Drawer */}
             <PageSettingsPanel />

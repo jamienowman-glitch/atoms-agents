@@ -8,7 +8,8 @@ from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
 from engines.common.error_envelope import cursor_invalid_error, error_response
 from engines.common.identity import RequestContext
-from engines.registry.repository import ComponentRegistryRepository
+from engines.registry.models import RegistryEntry
+from engines.registry.repository import ComponentRegistryRepository, SystemRegistryRepository
 
 SpecKind = Literal["atom", "component", "lens", "graphlens", "canvas"]
 
@@ -235,7 +236,119 @@ class ComponentRegistryService:
         return offset
 
 
+class SystemRegistryService:
+    """Service for managing schema-agnostic system registry entries."""
+
+    def __init__(self, repo: Optional[SystemRegistryRepository] = None) -> None:
+        self.repo = repo or SystemRegistryRepository()
+
+    def get_namespaces(self, ctx: RequestContext) -> List[str]:
+        """Return list of known namespaces."""
+        # This list could be dynamic, but for now we list the expected ones
+        return ["connectors", "firearms", "kpis", "utms", "canvases"]
+
+    def list_entries(self, ctx: RequestContext, namespace: str) -> List[RegistryEntry]:
+        """List all entries for a namespace."""
+        entries = self.repo.list_entries(ctx, namespace)
+
+        # Lazy seeding for t_system if empty and known namespace
+        if not entries and ctx.tenant_id == "t_system" and namespace in ["connectors", "firearms"]:
+            self.seed_defaults(ctx)
+            entries = self.repo.list_entries(ctx, namespace)
+
+        results = []
+        for record in entries:
+            try:
+                results.append(RegistryEntry.model_validate(record))
+            except ValidationError:
+                # Log or skip invalid entries
+                pass
+        return results
+
+    def upsert_entry(self, ctx: RequestContext, namespace: str, payload: RegistryEntry) -> RegistryEntry:
+        """Create or update a registry entry."""
+        # Validation Logic (Task R4)
+        if namespace == "connectors":
+            if "auth_type" not in payload.config:
+                 error_response(
+                    code="registry.invalid_config",
+                    message="Connectors must have 'auth_type' in config",
+                    status_code=400,
+                    resource_kind="component_registry",
+                )
+        if namespace == "kpi" or namespace == "kpis":
+             if "unit" not in payload.config:
+                 error_response(
+                    code="registry.invalid_config",
+                    message="KPIs must have 'unit' in config",
+                    status_code=400,
+                    resource_kind="component_registry",
+                )
+
+        # Ensure consistency
+        payload.namespace = namespace
+        # We don't overwrite tenant_id strictly if it's already set, but the repo saves what is given.
+        # Ideally, we should enforce that the user cannot write to another tenant unless they are system.
+        # But TabularStoreService handles tenant isolation usually.
+        # However, for t_system, it might be different.
+        # Let's trust the payload but verify context?
+        # For this task, we assume the payload is correct or we overwrite it.
+        # Let's overwrite tenant_id with context's tenant_id to be safe and consistent with TabularStore.
+        payload.tenant_id = ctx.tenant_id
+
+        self.repo.upsert_entry(ctx, payload.model_dump())
+        return payload
+
+    def delete_entry(self, ctx: RequestContext, namespace: str, key: str) -> None:
+        self.repo.delete_entry(ctx, namespace, key)
+
+    def seed_defaults(self, ctx: RequestContext) -> None:
+        """Seed default data for t_system."""
+        if ctx.tenant_id != "t_system":
+            return
+
+        # Seed Connectors
+        connectors = [
+            {"key": "shopify", "name": "Shopify", "config": {"scopes": ["read_products", "write_orders"], "auth_type": "oauth2"}},
+            {"key": "youtube", "name": "YouTube", "config": {"scopes": ["upload", "analytics"], "auth_type": "oauth2"}},
+            {"key": "google_ads", "name": "Google Ads", "config": {"auth_type": "oauth2"}},
+            {"key": "meta_ads", "name": "Meta Ads", "config": {"auth_type": "oauth2"}},
+            {"key": "klaviyo", "name": "Klaviyo", "config": {"auth_type": "api_key"}},
+            {"key": "tiktok", "name": "TikTok", "config": {"auth_type": "oauth2"}},
+            {"key": "slack", "name": "Slack", "config": {"auth_type": "oauth2"}},
+        ]
+
+        for c in connectors:
+            entry = RegistryEntry(
+                id=f"connectors::{c['key']}",
+                namespace="connectors",
+                key=c['key'],
+                name=c['name'],
+                config=c['config'],
+                tenant_id="t_system"
+            )
+            self.repo.upsert_entry(ctx, entry.model_dump())
+
+        # Seed Firearms
+        firearms = [
+            {"key": "commercial_license", "name": "Commercial License", "config": {"requires_approval": True, "max_budget": 1000}},
+            {"key": "nuke_license", "name": "Nuke License", "config": {"requires_approval": True, "requires_admin": True}},
+        ]
+
+        for f in firearms:
+            entry = RegistryEntry(
+                id=f"firearms::{f['key']}",
+                namespace="firearms",
+                key=f['key'],
+                name=f['name'],
+                config=f['config'],
+                tenant_id="t_system"
+            )
+            self.repo.upsert_entry(ctx, entry.model_dump())
+
+
 _default_service: Optional[ComponentRegistryService] = None
+_default_system_registry_service: Optional[SystemRegistryService] = None
 
 
 def get_component_registry_service() -> ComponentRegistryService:
@@ -248,3 +361,15 @@ def get_component_registry_service() -> ComponentRegistryService:
 def set_component_registry_service(service: ComponentRegistryService) -> None:
     global _default_service
     _default_service = service
+
+
+def get_system_registry_service() -> SystemRegistryService:
+    global _default_system_registry_service
+    if _default_system_registry_service is None:
+        _default_system_registry_service = SystemRegistryService()
+    return _default_system_registry_service
+
+
+def set_system_registry_service(service: SystemRegistryService) -> None:
+    global _default_system_registry_service
+    _default_system_registry_service = service

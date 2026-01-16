@@ -17,6 +17,8 @@ from engines.blackboard_store.cloud_blackboard_store import (
     CosmosBlackboardStore,
     VersionConflictError,
 )
+from engines.blackboard_store.models import BlackboardState
+from engines.blackboard_store.distiller import BoardDistiller
 
 logger = logging.getLogger(__name__)
 
@@ -30,6 +32,7 @@ class BlackboardStoreService:
     def __init__(self, context: RequestContext) -> None:
         self._context = context
         self._adapter = self._resolve_adapter()
+        self.distiller = BoardDistiller()
     
     def _resolve_adapter(self):
         """Resolve blackboard_store backend via routing registry."""
@@ -124,3 +127,81 @@ class BlackboardStoreService:
         except Exception as exc:
             logger.error(f"Blackboard list_keys failed for run {run_id}: {exc}")
             return []
+
+    async def commit_turn(
+        self,
+        key: str,
+        data: Dict[str, Any],
+        run_id: str,
+        auto_distill: bool = True,
+        active_agents: Optional[List[str]] = None,
+    ) -> Dict[str, Any]:
+        """Commit a turn to the blackboard with optional distillation.
+
+        Args:
+            key: blackboard key
+            data: new raw data (replaces existing raw_data)
+            run_id: provenance identifier
+            auto_distill: whether to run LLM distillation
+            active_agents: list of active agents (updates existing if provided)
+
+        Returns: result of write operation
+        """
+        # 1. Load current state
+        current_entry = self.read(key, run_id)
+        old_state: Optional[BlackboardState] = None
+        expected_version: Optional[int] = None
+
+        if current_entry:
+            expected_version = current_entry.get("version")
+            val = current_entry.get("value")
+
+            # Check if it's already a BlackboardState
+            if isinstance(val, dict) and "distilled_context" in val:
+                try:
+                    old_state = BlackboardState(**val)
+                except Exception:
+                    # Failed to parse, treat as legacy
+                    old_state = None
+
+            if not old_state:
+                # Create synthetic old state from legacy data
+                raw_data = val if isinstance(val, dict) else {"legacy_value": val}
+                old_state = BlackboardState(
+                    version=expected_version or 0,
+                    raw_data=raw_data,
+                    distilled_context="",
+                    takeaways=[],
+                    active_agents=[]
+                )
+
+        # 2. Distill
+        distilled_context = ""
+        takeaways = []
+        if auto_distill:
+            distilled_context, takeaways = await self.distiller.distill(old_state, data)
+        else:
+            if old_state:
+                distilled_context = old_state.distilled_context
+                takeaways = old_state.takeaways
+
+        # 3. Update BlackboardState
+        # Determine active agents
+        agents = active_agents
+        if agents is None and old_state:
+            agents = old_state.active_agents
+        if agents is None:
+            agents = []
+
+        new_version = (expected_version or 0) + 1
+
+        new_state = BlackboardState(
+            version=new_version,
+            raw_data=data,
+            distilled_context=distilled_context,
+            takeaways=takeaways,
+            active_agents=agents
+        )
+
+        # 4. Save to store
+        return self.write(key, new_state, run_id, expected_version)

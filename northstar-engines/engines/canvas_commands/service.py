@@ -117,7 +117,7 @@ async def apply_command(
     }
 
     event_id_result = None
-    msg = publish_message(
+    msg = await publish_message(
         command.canvas_id,
         Contact(id=user_id),
         json.dumps(final_payload),

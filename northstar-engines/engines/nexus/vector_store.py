@@ -8,7 +8,7 @@ from typing import Any, Dict, List, Optional, Sequence
 from engines.common.identity import RequestContext
 from engines.common.selecta import SelectaResolver, get_selecta_resolver
 from engines.config import runtime_config
-from engines.cost.vertex_guard import ensure_billable_vertex_allowed
+from engines.cost.vertex_guard import ensure_billable_vertex_allowed, verify_vertex_budget
 from engines.nexus.schemas import NexusEmbedding, NexusKind
 
 try:  # pragma: no cover - optional dependency
@@ -78,6 +78,7 @@ class VertexVectorStore(NexusVectorStore):
         self.location = location
 
     def upsert(self, embedding: NexusEmbedding) -> None:
+        verify_vertex_budget(embedding.tenant_id, embedding.env)
         self._ensure_endpoint(embedding.tenant_id, embedding.env)
         datapoint = {
             "datapoint_id": embedding.doc_id,
@@ -102,6 +103,7 @@ class VertexVectorStore(NexusVectorStore):
     def bulk_upsert(self, embeddings: Sequence[NexusEmbedding]) -> None:
         if not embeddings:
             return
+        verify_vertex_budget(embeddings[0].tenant_id, embeddings[0].env)
         self._ensure_endpoint(embeddings[0].tenant_id, embeddings[0].env)
         datapoints = []
         for emb in embeddings:
@@ -133,6 +135,7 @@ class VertexVectorStore(NexusVectorStore):
         kind: NexusKind,
         top_k: int = 5,
     ) -> List[VectorHit]:
+        verify_vertex_budget(tenant_id, env)
         self._ensure_endpoint(tenant_id, env)
         if not self.index_id:
             raise VectorStoreError("Vertex index_id is required for queries")

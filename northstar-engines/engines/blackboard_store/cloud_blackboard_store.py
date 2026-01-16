@@ -13,6 +13,7 @@ from datetime import datetime, timezone
 from uuid import uuid4
 
 from engines.common.identity import RequestContext
+from engines.blackboard_store.models import BlackboardState
 
 logger = logging.getLogger(__name__)
 
@@ -105,6 +106,10 @@ class FirestoreBlackboardStore:
                 created_by = doc_dict.get("created_by", context.user_id)
                 created_at = doc_dict.get("created_at", now)
             
+            # Serialize BlackboardState if needed
+            if isinstance(value, BlackboardState):
+                value = value.model_dump()
+
             doc_data = {
                 "key": key,
                 "value": value,
@@ -275,6 +280,10 @@ class DynamoDBBlackboardStore:
             # Write new version
             new_version = current_version + 1
             now = _now_iso()
+            # Serialize BlackboardState if needed
+            if isinstance(value, BlackboardState):
+                value = value.model_dump()
+
             item = {
                 "pk": pk,
                 "sk": sk,
@@ -446,6 +455,11 @@ class CosmosBlackboardStore:
             # Write new version
             new_version = current_version + 1
             now = _now_iso()
+
+            # Serialize BlackboardState if needed
+            if isinstance(value, BlackboardState):
+                value = value.model_dump()
+
             doc_data = {
                 "id": doc_id,
                 "partition_key": run_id,

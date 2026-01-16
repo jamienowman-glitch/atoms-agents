@@ -3,8 +3,9 @@
 import React from 'react';
 import { useToolControl } from '../../context/ToolControlContext';
 import { usePageControl } from '../../context/PageControlContext';
+import { LensType } from '../../lib/LensRegistry';
 
-export function TopControls() {
+export function TopControls({ showGraphControls = false }: { showGraphControls?: boolean }) {
     const { useToolState } = useToolControl();
     const { setSettingsOpen } = usePageControl();
 
@@ -14,10 +15,22 @@ export function TopControls() {
         defaultValue: 'desktop'
     });
 
+    // Lens State (Global)
+    const [activeLens, setActiveLens] = useToolState<LensType>({
+        target: { surfaceId: 'multi21.designer', toolId: 'activeLens' },
+        defaultValue: 'graph_lens'
+    });
+
+    // Registry State (Global)
+    const [showRegistry, setShowRegistry] = useToolState<boolean>({
+        target: { surfaceId: 'multi21.designer', toolId: 'show_registry' },
+        defaultValue: false
+    });
+
     return (
         <div className="fixed top-6 left-1/2 -translate-x-1/2 h-12 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-xl rounded-full px-4 flex items-center gap-2 z-[60] transition-all duration-300">
 
-            {/* Left: View Toggles */}
+            {/* View Toggles (Mobile/Desktop) */}
             <div className="flex bg-neutral-100 dark:bg-neutral-800 rounded-full p-1">
                 <button
                     onClick={() => setPreviewMode('mobile')}
@@ -35,6 +48,29 @@ export function TopControls() {
                 </button>
             </div>
 
+            {showGraphControls && (
+                <>
+                    <div className="w-px h-4 bg-neutral-200 dark:bg-neutral-700 mx-1" />
+
+                    {/* Lens Toggles / Back Navigation */}
+                    <div className="flex bg-neutral-100 dark:bg-neutral-800 rounded-full p-1">
+                        {activeLens === 'graph_lens' ? (
+                            <div className="px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white dark:bg-neutral-700 shadow-sm text-black dark:text-white">
+                                Graph
+                            </div>
+                        ) : (
+                            <button
+                                onClick={() => setActiveLens('graph_lens')}
+                                className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-white dark:bg-neutral-700 shadow-sm text-black dark:text-white hover:bg-neutral-50 dark:hover:bg-neutral-600 transition-colors"
+                            >
+                                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                                Back to Graph
+                            </button>
+                        )}
+                    </div>
+                </>
+            )}
+
             <div className="w-px h-4 bg-neutral-200 dark:bg-neutral-700 mx-1" />
 
             {/* Center: Page Settings (The Director) */}
@@ -50,6 +86,14 @@ export function TopControls() {
             </button>
 
             <div className="w-px h-4 bg-neutral-200 dark:bg-neutral-700 mx-1" />
+
+            {/* Registry Button */}
+            <button
+                onClick={() => setShowRegistry(!showRegistry)}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-colors ${showRegistry ? 'bg-black text-white shadow-sm' : 'text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800'}`}
+            >
+                System
+            </button>
 
             {/* Right: Export/Publish */}
             <button className="flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 text-xs font-medium text-neutral-600 dark:text-neutral-300 transition-colors">

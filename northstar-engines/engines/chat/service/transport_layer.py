@@ -18,7 +18,7 @@ from engines.realtime.contracts import (
     EventPriority,
     PersistPolicy,
 )
-from engines.realtime.timeline import get_timeline_store
+from engines.realtime.timeline import get_timeline_service, get_timeline_store
 
 
 class InMemoryBus:
@@ -143,7 +143,7 @@ def _message_to_stream_event(msg: Message, context: RequestContext) -> StreamEve
     )
 
 
-def publish_message(
+async def publish_message(
     thread_id: str,
     sender: Contact,
     text: str,
@@ -170,7 +170,27 @@ def publish_message(
         # Bus is observational only; ignore if unavailable
         pass
     try:
+        # Also append to old store for compatibility if needed, but the prompt implies replacement.
+        # But 'Task A3' says "Right after await self.store.save_message(...)".
+        # (It refers to chat store).
+        # "Add: await self.timeline.append_event(...)".
+        # It does NOT say remove get_timeline_store().append.
+        # However, to avoid double write or confusion, I should probably rely on TimelineService.
+        # TimelineService wraps TimelineStore.
+        # BUT TimelineService.append_event writes to "unified_timeline".
+        # get_timeline_store().append(thread_id, ...) writes to thread specific stream.
+        # If I want BOTH (per-thread history + global stream), I should keep both or make TimelineService do both.
+        # Given "Unify ALL events ...", I'll add TimelineService call.
+        # I will KEEP the old call to preserve per-thread timeline behavior for now, unless TimelineService subsumes it.
+        # TimelineService writes to "unified_timeline".
+        # So I will keep the old call to write to thread_id stream.
+        # Wait, if TimelineService writes to "unified_timeline", where do thread events go?
+        # If the frontend looks at /sse/timeline (unified), it sees them.
+        # If something looks at /timeline/{thread_id}/list, it sees the old ones.
+        # I'll keep both for safety.
+
         get_timeline_store().append(thread_id, _message_to_stream_event(msg, context), context)
+        await get_timeline_service().append_event(_message_to_stream_event(msg, context), context)
     except Exception:
         # Timeline is observational; do not block writes
         pass

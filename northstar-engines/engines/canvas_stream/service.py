@@ -59,7 +59,7 @@ async def publish_gesture(
         # Wrap in Message contract
         payload = json.dumps({"type": "gesture", "data": gesture.dict(exclude_none=True)}, default=str)
         sender = Contact(id=gesture.actor_id)
-        publish_message(
+        await publish_message(
             canvas_id,
             sender,
             payload,
@@ -76,7 +76,7 @@ async def publish_gesture(
 
     return True
 
-def publish_canvas_event(canvas_id: str, event_type: str, data: dict, actor_id: str, context: RequestContext):
+async def publish_canvas_event(canvas_id: str, event_type: str, data: dict, actor_id: str, context: RequestContext):
     """
     Publish a canvas event (commit, gesture, etc).
     
@@ -108,7 +108,7 @@ def publish_canvas_event(canvas_id: str, event_type: str, data: dict, actor_id: 
     payload = json.dumps({"type": event_type, "data": data})
     
     sender = Contact(id=actor_id)
-    return publish_message(
+    return await publish_message(
         canvas_id,
         sender,
         payload,

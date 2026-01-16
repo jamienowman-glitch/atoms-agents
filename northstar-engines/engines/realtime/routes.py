@@ -8,7 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, Field
 
 from engines.common.identity import RequestContext, RequestContextBuilder
-from engines.realtime.contracts import StreamEvent, StreamEventRouting
+from engines.realtime.contracts import StreamEvent, RoutingKeys, ActorType
 from engines.realtime.timeline import _default_timeline_store
 from engines.routing.manager import ForbiddenBackendClass
 
@@ -57,6 +57,7 @@ async def append_event(
         timeline_store = _default_timeline_store()
         
         # Create event
+        actor_id = req.user_id or context.user_id or "system"
         event = StreamEvent(
             event_id=str(uuid4()),
             type=req.type,
@@ -64,11 +65,13 @@ async def append_event(
             content=req.content,
             user_id=req.user_id,
             metadata=req.metadata or {},
-            routing=StreamEventRouting(
+            routing=RoutingKeys(
                 tenant_id=context.tenant_id,
                 project_id=context.project_id,
                 env=context.env,
                 mode=context.mode,
+                actor_id=actor_id,
+                actor_type=ActorType.HUMAN if (req.user_id or context.user_id) else ActorType.SYSTEM,
             ),
         )
         
@@ -146,59 +149,33 @@ async def list_events(
         ) from e
 
 
-# ===== Feed Realtime Implementation (P0) =====
+# ===== Unified Timeline SSE (The Eye) =====
 from sse_starlette.sse import EventSourceResponse
-from engines.realtime.broadcaster import subscribe
+from engines.realtime.timeline import get_timeline_service
 from fastapi import WebSocket
+import json
 
-@router.get("/feeds/{kind}/{feed_id}", tags=["feeds", "realtime"])
-async def sse_feed_updates(
-    kind: str,
-    feed_id: str,
+@router.get("/sse/timeline", tags=["realtime"])
+async def sse_timeline(
+    cursor: Optional[str] = Query(None, description="Resume stream from this event ID"),
     context: RequestContext = Depends(RequestContextBuilder.from_request),
 ):
     """
-    SSE Stream for feed updates.
-    Target: GET /realtime/feeds/{kind}/{feed_id} (mapped from contract /sse/feeds...)
+    Unified Realtime Timeline Stream (User + System + Agent).
+    Target: GET /realtime/sse/timeline
     """
-    # Note: Contract says /sse/feeds/... implies a separate router or root mount.
-    # Current router prefix is /realtime. 
-    # Valid pattern: /realtime/feeds/sse/{kind}/{feed_id} or similar.
-    # If strictly adhering to contract /sse/feeds, we might need to mount this router differently.
-    # For P0, we expose it here as the functional endpoint.
-    
     async def event_generator():
-        # Yield connection event
         yield {
             "event": "connected",
             "data": "connected"
         }
-        # Subscribe to broadcaster
-        async for payload in subscribe(feed_id):
+
+        service = get_timeline_service()
+        async for event in service.stream_events(cursor):
             yield {
-                "event": payload["type"],
-                "data": json.dumps(payload)
+                "event": event.type,
+                "data": event.model_dump_json(),
+                "id": event.event_id
             }
 
     return EventSourceResponse(event_generator())
-
-@router.websocket("/ws/feeds/{kind}/{feed_id}")
-async def ws_feed_updates(
-    websocket: WebSocket,
-    kind: str,
-    feed_id: str,
-):
-    """
-    WebSocket Stub for feed updates.
-    """
-    await websocket.accept()
-    # Stub implementation
-    await websocket.send_json({"type": "connected", "msg": "WS Stub Active"})
-    try:
-        while True:
-            # Echo or simple heartbeats
-            data = await websocket.receive_text()
-            await websocket.send_json({"type": "ack", "recv": data})
-            # In real impl, we'd hook into 'subscribe' here too
-    except Exception:
-        pass

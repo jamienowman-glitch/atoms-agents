@@ -93,7 +93,7 @@ async def process_message(
     )
     log_event(event)
 
-    user_msg = publish_message(thread_id, sender, text, role="user", scope=scope, context=context)
+    user_msg = await publish_message(thread_id, sender, text, role="user", scope=scope, context=context)
 
     # Switch: Invoke Core Bridge (Async)
     from engines.chat.service import core_bridge
@@ -133,7 +133,7 @@ async def process_message(
             # Publish Envelope via Bus (serialized in text)
             # This allows UI to parse JSON and route events
             payload_str = json.dumps(envelope, default=str)
-            publish_message(thread_id, agent, payload_str, role="agent", scope=scope)
+            await publish_message(thread_id, agent, payload_str, role="agent", scope=scope)
             
         print(f"STREAM STATS: run_id={thread_id} ttfc_ms={ttfc_ms} in {int((time.time()-start_ts)*1000)}ms chunks={chunk_count}")
 
@@ -144,7 +144,7 @@ async def process_message(
             "type": "error", 
             "data": {"message": str(e)}
         })
-        publish_message(thread_id, agent, err_payload, role="agent", scope=scope)
+        await publish_message(thread_id, agent, err_payload, role="agent", scope=scope)
 
     agent_text = "".join(agent_text_parts) if agent_text_parts else "[no-response]"
     # Final 'clean' message persistence could happen here if we wanted a consolidated record

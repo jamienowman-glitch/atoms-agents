@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
-from typing import Optional
+from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
 from fastapi.responses import JSONResponse
@@ -11,13 +11,16 @@ from pydantic import BaseModel
 from engines.common.error_envelope import error_response
 from engines.common.identity import RequestContext, get_request_context
 from engines.identity.auth import AuthContext, get_auth_context, require_tenant_membership
+from engines.registry.models import RegistryEntry
 from engines.registry.service import (
     AtomsPayload,
     ComponentRegistryService,
     ComponentsPayload,
     RegistrySpec,
     RegistrySpecsPayload,
+    SystemRegistryService,
     get_component_registry_service,
+    get_system_registry_service,
 )
 
 router = APIRouter(prefix="/registry", tags=["registry"])
@@ -133,3 +136,53 @@ def get_registry_spec(
             details={"spec_id": spec_id},
         )
     return _respond_with_etag(spec, request)
+
+
+@router.get("/namespaces", response_model=List[str])
+def get_namespaces(
+    request: Request,
+    context: RequestContext = Depends(get_request_context),
+    auth: AuthContext = Depends(_resolve_auth_context),
+    service: SystemRegistryService = Depends(get_system_registry_service),
+) -> List[str]:
+    _require_membership(auth, context)
+    return service.get_namespaces(context)
+
+
+@router.get("/{namespace}", response_model=List[RegistryEntry])
+def get_registry_entries(
+    namespace: str,
+    request: Request,
+    context: RequestContext = Depends(get_request_context),
+    auth: AuthContext = Depends(_resolve_auth_context),
+    service: SystemRegistryService = Depends(get_system_registry_service),
+) -> List[RegistryEntry]:
+    _require_membership(auth, context)
+    return service.list_entries(context, namespace)
+
+
+@router.post("/{namespace}", response_model=RegistryEntry)
+def upsert_registry_entry(
+    namespace: str,
+    entry: RegistryEntry,
+    request: Request,
+    context: RequestContext = Depends(get_request_context),
+    auth: AuthContext = Depends(_resolve_auth_context),
+    service: SystemRegistryService = Depends(get_system_registry_service),
+) -> RegistryEntry:
+    _require_membership(auth, context)
+    return service.upsert_entry(context, namespace, entry)
+
+
+@router.delete("/{namespace}/{key}", response_model=None)
+def delete_registry_entry(
+    namespace: str,
+    key: str,
+    request: Request,
+    context: RequestContext = Depends(get_request_context),
+    auth: AuthContext = Depends(_resolve_auth_context),
+    service: SystemRegistryService = Depends(get_system_registry_service),
+) -> Response:
+    _require_membership(auth, context)
+    service.delete_entry(context, namespace, key)
+    return Response(status_code=204)

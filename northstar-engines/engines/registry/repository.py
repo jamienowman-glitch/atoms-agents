@@ -60,3 +60,45 @@ class ComponentRegistryRepository:
         if not spec_id:
             raise ValueError("spec data must include id")
         self._tabular(ctx).upsert(self.SPECS_TABLE, spec_id, spec, ctx)
+
+
+class SystemRegistryRepository:
+    """Persistence for schema-agnostic system registry entries."""
+
+    SYSTEM_REGISTRY_TABLE = "system_registry_entries"
+
+    def _tabular(self, ctx: RequestContext) -> TabularStoreService:
+        try:
+            return TabularStoreService(ctx, resource_kind="component_registry")
+        except RuntimeError as exc:
+            raise missing_route_error(
+                resource_kind="component_registry",
+                tenant_id=ctx.tenant_id,
+                env=ctx.env,
+            ) from exc
+
+    def list_entries(self, ctx: RequestContext, namespace: str) -> List[Dict[str, Any]]:
+        """List all entries for a given namespace."""
+        # Keys are stored as "{namespace}::{key}"
+        prefix = f"{namespace}::"
+        return self._tabular(ctx).list_by_prefix(self.SYSTEM_REGISTRY_TABLE, prefix, ctx)
+
+    def get_entry(self, ctx: RequestContext, namespace: str, key: str) -> Optional[Dict[str, Any]]:
+        """Retrieve a single entry."""
+        storage_key = f"{namespace}::{key}"
+        return self._tabular(ctx).get(self.SYSTEM_REGISTRY_TABLE, storage_key, ctx)
+
+    def upsert_entry(self, ctx: RequestContext, entry: Dict[str, Any]) -> None:
+        """Upsert a registry entry."""
+        namespace = entry.get("namespace")
+        key = entry.get("key")
+        if not namespace or not key:
+            raise ValueError("Entry must have namespace and key")
+
+        storage_key = f"{namespace}::{key}"
+        self._tabular(ctx).upsert(self.SYSTEM_REGISTRY_TABLE, storage_key, entry, ctx)
+
+    def delete_entry(self, ctx: RequestContext, namespace: str, key: str) -> None:
+        """Delete a registry entry."""
+        storage_key = f"{namespace}::{key}"
+        self._tabular(ctx).delete(self.SYSTEM_REGISTRY_TABLE, storage_key)

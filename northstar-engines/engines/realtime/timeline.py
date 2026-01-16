@@ -1,8 +1,9 @@
 """Durable timeline store for realtime stream events."""
 from __future__ import annotations
 
+import asyncio
 import logging
-from typing import Dict, List, Optional, Protocol
+from typing import Dict, List, Optional, Protocol, Set, Union
 
 from engines.common.identity import RequestContext
 from engines.config import runtime_config
@@ -152,3 +153,69 @@ def get_timeline_store() -> TimelineStore:
 def set_timeline_store(store: TimelineStore) -> None:
     global _timeline_store
     _timeline_store = store
+
+
+class TimelineService:
+    def __init__(self, store: TimelineStore) -> None:
+        self.store = store
+        self._subscribers: Set[asyncio.Queue] = set()
+
+    async def append_event(self, event: Union[StreamEvent, dict], context: Optional[RequestContext] = None) -> None:
+        """
+        Append an event to the unified timeline and broadcast it.
+        """
+        if isinstance(event, dict):
+            try:
+                event = StreamEvent(**event)
+            except Exception as e:
+                raise ValueError(f"Event must be a StreamEvent or compatible dict: {e}")
+
+        if context is None:
+            raise RuntimeError("RequestContext is required for timeline append")
+
+        # 1. Persist to unified timeline
+        # using "unified_timeline" as the stream_id for the global view.
+        self.store.append("unified_timeline", event, context)
+
+        # 2. Broadcast to live queues
+        for q in list(self._subscribers):
+            try:
+                q.put_nowait(event)
+            except Exception:
+                pass
+
+    async def stream_events(self, cursor: Optional[str] = None):
+        """
+        Stream events from the unified timeline (history + live).
+        """
+        # Register queue first to ensure no events are missed between list and listen
+        q = asyncio.Queue()
+        self._subscribers.add(q)
+
+        seen_ids = set()
+
+        try:
+            # Yield historical
+            events = self.store.list_after("unified_timeline", cursor)
+            for ev in events:
+                seen_ids.add(ev.event_id)
+                yield ev
+
+            # Yield live
+            while True:
+                ev = await q.get()
+                if ev.event_id not in seen_ids:
+                    seen_ids.add(ev.event_id)
+                    yield ev
+        finally:
+            self._subscribers.discard(q)
+
+
+_timeline_service: Optional[TimelineService] = None
+
+
+def get_timeline_service() -> TimelineService:
+    global _timeline_service
+    if _timeline_service is None:
+        _timeline_service = TimelineService(get_timeline_store())
+    return _timeline_service

@@ -17,6 +17,20 @@ class NexusKind(str, Enum):
     plan = "plan"
 
 
+class Scope(str, Enum):
+    TENANT = "tenant"
+    GLOBAL = "global"
+
+
+class SpaceKey(BaseModel):
+    scope: Scope
+    tenant_id: str = Field(..., pattern=r"^t_[a-z0-9_-]+$")
+    env: str
+    project_id: str
+    surface_id: str
+    space_id: str
+
+
 class NexusDocument(BaseModel):
     id: str
     text: str

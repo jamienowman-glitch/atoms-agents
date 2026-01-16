@@ -26,24 +26,27 @@ class LanceVectorStore:
     LanceDB-backed vector store with strict tenant isolation.
     """
 
-    def __init__(self, root_uri: str = "/tmp/nexus_data"):
+    def __init__(self, root_uri: Optional[str] = None):
+        if not root_uri:
+            # Task B4: Cloud Persistence Adapter
+            # Default to NEXUS_STORAGE_URI from env or local fallback
+            root_uri = os.getenv("NEXUS_STORAGE_URI") or "/tmp/nexus_data"
         self.root_uri = root_uri.rstrip("/")
 
     def _get_table_uri(self, space_key: SpaceKey) -> str:
         """
         Constructs the strict path for the table.
-        Format: {root}/{tenant_id}/{env}/{project_id}/{surface_id}/{space_id}.lance
+        Format: {root}/{tenant_id}/{corpus_name}.lance
         """
-        # Ensure we use 't_system' for global scope logic if passed explicitly,
-        # though SpaceKey should already carry the correct tenant_id.
-        return (
-            f"{self.root_uri}/"
-            f"{space_key.tenant_id}/"
-            f"{space_key.env}/"
-            f"{space_key.project_id}/"
-            f"{space_key.surface_id}/"
-            f"{space_key.space_id}.lance"
+        # Flatten corpus components into a single name to ensure strict hierarchy
+        # {root}/{tenant_id}/{env}_{project}_{surface}_{space}.lance
+        corpus_name = (
+            f"{space_key.env}_"
+            f"{space_key.project_id}_"
+            f"{space_key.surface_id}_"
+            f"{space_key.space_id}"
         )
+        return f"{self.root_uri}/{space_key.tenant_id}/{corpus_name}.lance"
 
     def _get_connection(self, uri: str):
         """Returns a LanceDB connection/table wrapper."""

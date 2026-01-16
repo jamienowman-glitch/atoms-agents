@@ -1,5 +1,0 @@
-./aitom_family/jumbo_header -> _atoms_inactive/aitom_family/jumbo_header
-./aitom_family/logo_insert -> _atoms_inactive/aitom_family/logo_insert
-./aitom_family/max_header -> _atoms_inactive/aitom_family/max_header
-./aitom_family/minimal_header -> _atoms_inactive/aitom_family/minimal_header
-./aitom_family/surface_header_nano -> _atoms_inactive/aitom_family/surface_header_nano

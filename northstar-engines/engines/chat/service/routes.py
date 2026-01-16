@@ -53,7 +53,7 @@ def _ensure_membership(auth: AuthContext, context: RequestContext, resource_kind
 
 
 @router.post("/threads/{thread_id}/messages", response_model=ChatMessageOut)
-def append_message(
+async def append_message(
     thread_id: str,
     payload: ChatAppendRequest,
     context: RequestContext = Depends(get_request_context),
@@ -76,7 +76,7 @@ def append_message(
     _ensure_membership(auth, context)
     sender = Contact(id=auth.user_id)
     try:
-        msg = publish_message(thread_id=thread_id, sender=sender, text=payload.text, role=payload.role, context=context)
+        msg = await publish_message(thread_id=thread_id, sender=sender, text=payload.text, role=payload.role, context=context)
         return ChatMessageOut(
             id=msg.id,
             text=msg.text,
