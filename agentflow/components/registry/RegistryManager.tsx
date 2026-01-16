@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { RegistryCard } from './ui/RegistryCard';
 import { RegistryHeader } from './ui/RegistryHeader';
-import { AddButton } from './ui/AddButton';
 import { useRegistry, RegistryItem, ConnectorConfig } from '@/lib/registry/useRegistry';
 import { ConnectorConfigModal } from './ConnectorConfigModal';
+import { MuscleConfigModal } from './MuscleConfigModal';
+import { GenericRegistryView } from './GenericRegistryView';
 
 type Category = 'connectors' | 'muscle' | 'safety' | 'firearms' | 'utm';
 
@@ -17,67 +17,34 @@ const CATEGORIES: { id: Category; label: string }[] = [
 
 export const RegistryManager: React.FC<{ onClose?: () => void }> = ({ onClose }) => {
     const [activeCategory, setActiveCategory] = useState<Category>('connectors');
-    const { data: items, isLoading, mutate } = useRegistry(activeCategory);
 
     const [editingItem, setEditingItem] = useState<RegistryItem | null>(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isConnectorModalOpen, setIsConnectorModalOpen] = useState(false);
+    const [isMuscleModalOpen, setIsMuscleModalOpen] = useState(false);
 
-    const handleEdit = (item: RegistryItem) => {
+    // Helpers to open correct modal
+    const handleConfigure = (item: RegistryItem) => {
         setEditingItem(item);
-        setIsModalOpen(true);
+        if (activeCategory === 'connectors') setIsConnectorModalOpen(true);
+        if (activeCategory === 'muscle') setIsMuscleModalOpen(true);
+        // Add more if needed for safety/utm generic config
     };
 
     const handleAddNew = () => {
-        setEditingItem(null); // Blank modal for new registration
-        setIsModalOpen(true);
+        setEditingItem(null);
+        if (activeCategory === 'connectors') setIsConnectorModalOpen(true);
+        if (activeCategory === 'muscle') setIsMuscleModalOpen(true);
     };
 
-    const handleSaveConfig = async (config: ConnectorConfig) => {
-        console.log('Saving config:', config);
-
-        try {
-            const response = await fetch('/api/v1/registry/connectors', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ config })
-            });
-
-            if (response.ok) {
-                // Ideally refresh the list to show updates if any status changed
-                mutate();
-            } else {
-                console.error('Failed to save config');
-            }
-        } catch (error) {
-            console.error('Error saving config:', error);
-        }
+    const handleSaveConnectorConfig = async (config: ConnectorConfig) => {
+        console.log('Saving Connector config:', config);
+        // In real impl, we'd POST to API
+        // await fetch('/api/v1/registry/connectors', ...)
     };
 
-    const renderGrid = () => {
-        if (isLoading) {
-            return <div className="p-12 text-center text-zinc-500 font-mono text-xs">Loading registry data...</div>;
-        }
-
-        // If items are undefined/null, treat as empty array
-        const registryItems = items || [];
-
-        return (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {registryItems.map((item) => (
-                    <RegistryCard
-                        key={item.id}
-                        title={item.title}
-                        subtitle={item.subtitle}
-                        status={item.status}
-                        onEdit={() => handleEdit(item)}
-                        onDelete={() => console.log('Delete', item.id)}
-                    />
-                ))}
-
-                {/* Plus Button is always at the end */}
-                <AddButton onClick={handleAddNew} />
-            </div>
-        );
+    const handleSaveMuscleConfig = async (config: any) => {
+        console.log('Saving Muscle config:', config);
+        // await fetch('/api/v1/registry/muscle', ...)
     };
 
     return (
@@ -130,16 +97,29 @@ export const RegistryManager: React.FC<{ onClose?: () => void }> = ({ onClose })
                 <div className="flex-1 overflow-y-auto p-8 md:p-12">
                     <RegistryHeader breadcrumbs={[activeCategory]} />
 
-                    {renderGrid()}
+                    {/* Generic View handles all categories now */}
+                    <GenericRegistryView
+                        namespace={activeCategory}
+                        onConfigure={handleConfigure}
+                        onAddNew={handleAddNew}
+                    />
                 </div>
             </div>
 
-            {/* Modal */}
-            {isModalOpen && (
+            {/* Modals */}
+            {isConnectorModalOpen && (
                 <ConnectorConfigModal
                     connector={editingItem || undefined}
-                    onClose={() => setIsModalOpen(false)}
-                    onSave={handleSaveConfig}
+                    onClose={() => setIsConnectorModalOpen(false)}
+                    onSave={handleSaveConnectorConfig}
+                />
+            )}
+
+            {isMuscleModalOpen && (
+                <MuscleConfigModal
+                    muscle={editingItem || undefined}
+                    onClose={() => setIsMuscleModalOpen(false)}
+                    onSave={handleSaveMuscleConfig}
                 />
             )}
         </div>
