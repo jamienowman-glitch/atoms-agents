@@ -181,6 +181,22 @@ export const VideoTools = () => {
             <ToolButton onClick={handleSplit}>Split</ToolButton>
             <ToolButton onClick={handleCaptions} disabled={!state.selection}>Captions</ToolButton>
             <ToolButton onClick={() => dispatch({ type: 'SET_ACTIVE_TOOL', tool: 'stabilize' })} disabled={!state.selection}>Stabilize</ToolButton>
+            <ToolButton
+                onClick={async () => {
+                    const clipId = state.selection?.clipId;
+                    if (!clipId) return;
+                    // Mock Engine Call
+                    const btn = document.getElementById('btn-voice-enhance');
+                    if (btn) btn.innerText = "⏳...";
+                    await new Promise(r => setTimeout(r, 1500)); // Sim processing
+                    dispatch({ type: 'TOGGLE_VOICE_ENHANCE', clipId });
+                    if (btn) btn.innerText = "Voice Enhance";
+                }}
+                disabled={!state.selection}
+                id="btn-voice-enhance"
+            >
+                Voice Enhance
+            </ToolButton>
 
             {/* Speed Context Menu (Simple) */}
             {state.selection && (

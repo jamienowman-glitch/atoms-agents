@@ -3,7 +3,7 @@
 # Configuration
 # Directories to iterate through. 
 # Make sure these are relative paths from where the script is run (the root).
-TARGET_DIRS=("agentflow" "northstar-engines" "ui" "northstar-agents")
+TARGET_DIRS=("agentflow" "northstar-engines" "ui" "northstar-agents" "atoms_factory")
 
 # Colors for output
 GREEN='\033[0;32m'
@@ -12,11 +12,37 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
+# Flag parsing
+PULL_ENABLED=false
+POSITIONAL_ARGS=()
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -p|--pull)
+      PULL_ENABLED=true
+      shift # past argument
+      ;;
+    -*|--*)
+      echo "Unknown option $1"
+      exit 1
+      ;;
+    *)
+      POSITIONAL_ARGS+=("$1") # save positional arg
+      shift # past argument
+      ;;
+  esac
+done
+
+set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
+
 # Message handling
 DEFAULT_MSG="Auto-Sync: Phase Update"
 COMMIT_MSG="${1:-$DEFAULT_MSG}"
 
 echo -e "${BLUE}🌌 Starting Galaxy Sync Protocol...${NC}"
+if [ "$PULL_ENABLED" = true ]; then
+    echo -e "${BLUE}⬇️  Pull Enabled: Will pull changes before pushing.${NC}"
+fi
 echo -e "${BLUE}📝 Commit Message: \"$COMMIT_MSG\"${NC}"
 echo "---------------------------------------------------"
 
@@ -30,6 +56,16 @@ sync_repo() {
         
         # Navigate to directory
         pushd "$dir" > /dev/null
+        
+        # Pull if enabled
+        if [ "$PULL_ENABLED" = true ]; then
+            echo -e "   ⬇️  Pulling latest changes..."
+            if git pull origin main; then
+                 echo -e "   ✅ Pull successful"
+            else
+                 echo -e "${RED}   ❌ Pull failed. Continuing with local changes...${NC}"
+            fi
+        fi
         
         # Git operations
         git add .
@@ -66,6 +102,16 @@ done
 # 2. Root Sync
 echo "---------------------------------------------------"
 echo -e "${YELLOW}🚀 Syncing Root Mono-Repo...${NC}"
+
+# Pull if enabled (Root)
+if [ "$PULL_ENABLED" = true ]; then
+    echo -e "   ⬇️  Pulling latest changes for Root..."
+    if git pull origin main; then
+         echo -e "   ✅ Pull successful"
+    else
+         echo -e "${RED}   ❌ Pull failed. Continuing with local changes...${NC}"
+    fi
+fi
 
 # Root is current directory
 git add .

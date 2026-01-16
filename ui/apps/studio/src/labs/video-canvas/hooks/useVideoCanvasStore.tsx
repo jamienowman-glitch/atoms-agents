@@ -18,7 +18,8 @@ type Action =
     | { type: 'SET_PLAYHEAD'; ms: number }
     | { type: 'TOGGLE_PLAYBACK' }
     | { type: 'SET_ACTIVE_TOOL'; tool: string | null }
-    | { type: 'DELETE_CLIP'; clipId: string };
+    | { type: 'DELETE_CLIP'; clipId: string }
+    | { type: 'TOGGLE_VOICE_ENHANCE'; clipId: string };
 
 // --- State ---
 interface VideoCanvasState {
@@ -146,6 +147,22 @@ function videoCanvasReducer(state: VideoCanvasState, action: Action): VideoCanva
             const newSelection = state.selection?.clipId === action.clipId ? null : state.selection;
 
             return { ...state, project: newProject, selection: newSelection };
+        }
+
+        case 'TOGGLE_VOICE_ENHANCE': {
+            const newProject = JSON.parse(JSON.stringify(state.project)) as VideoProjectToken;
+            const seq = newProject.sequences.find(s => s.sequenceId === newProject.activeSequenceId);
+            if (!seq) return state;
+
+            for (const track of seq.tracks) {
+                const clip = track.clips.find(c => c.clipId === action.clipId);
+                if (clip) {
+                    clip.voiceEnhanced = !clip.voiceEnhanced;
+                    // In a real app, we might also reset 'effects' or trigger processing status here
+                    break;
+                }
+            }
+            return { ...state, project: newProject };
         }
 
         default:

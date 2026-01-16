@@ -34,6 +34,7 @@ export interface VideoClipToken {
     trimOutMs: number;      // in-clip trim end (0 means end of asset)
     speed: number;          // 0.25–2.0
     trackId: string;        // redundancy helpful for selection context
+    voiceEnhanced?: boolean; // Tier 1 Muscle: Audio enhancement active
 
     effects?: VideoEffectToken[];
 }

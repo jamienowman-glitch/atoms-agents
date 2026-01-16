@@ -90,6 +90,7 @@ const Clip = ({ clip, trackId, variant = 'video' }: { clip: VideoClipToken; trac
             }}
         >
             {clip.assetId} ({(clip.speed || 1).toFixed(1)}x)
+            {clip.voiceEnhanced && <span style={{ marginLeft: '4px' }}>✨</span>}
         </div>
     );
 };
@@ -183,6 +184,9 @@ export const VideoTimeline = () => {
                     width: '2px',
                     background: 'red',
                     zIndex: 20,
+                    pointerEvents: 'none',
+                    boxShadow: '0 0 4px rgba(255, 0, 0, 0.5)'
+                }}>
                     pointerEvents: 'none',
                     boxShadow: '0 0 4px rgba(255, 0, 0, 0.5)'
                 }}>
