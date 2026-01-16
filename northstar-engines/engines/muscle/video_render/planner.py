@@ -15,6 +15,12 @@ _TRANSITION_CATALOG: Dict[str, Dict[str, str]] = {
     "push_right": {"xfade": "slideright", "audio": "acrossfade"},
     "slide_up": {"xfade": "slideup", "audio": "acrossfade"},
     "slide_down": {"xfade": "slidedown", "audio": "acrossfade"},
+    "circle_open": {"xfade": "circleopen", "audio": "acrossfade"},
+    "circle_close": {"xfade": "circleclose", "audio": "acrossfade"},
+    "pixelize": {"xfade": "pixelize", "audio": "acrossfade"},
+    "hblur": {"xfade": "hblur", "audio": "acrossfade"},
+    "whip_left": {"xfade": "smoothleft", "audio": "acrossfade"},
+    "whip_right": {"xfade": "smoothright", "audio": "acrossfade"},
 }
 
 
@@ -27,6 +33,12 @@ TRANSITION_PRESETS: Dict[str, Dict[str, object]] = {
     "wipes_left": {"type": "wipe_left", "duration_ms": 600},
     "wipes_right": {"type": "wipe_right", "duration_ms": 600},
     "slide_entry": {"type": "push_left", "duration_ms": 500},
+    "circle_open_slow": {"type": "circle_open", "duration_ms": 1000},
+    "circle_close_fast": {"type": "circle_close", "duration_ms": 400},
+    "whip_pan_left": {"type": "whip_left", "duration_ms": 400},
+    "whip_pan_right": {"type": "whip_right", "duration_ms": 400},
+    "pixel_dissolve": {"type": "pixelize", "duration_ms": 800},
+    "blur_out": {"type": "hblur", "duration_ms": 600},
 }
 
 

@@ -175,6 +175,35 @@ def _build_filter_expression(ftype: str, params: Dict[str, Any]) -> Optional[str
         amount = _float_param(params, "strength", 1.0, min_value=0.1, max_value=1.0)
         radius = min(50, int(amount * 60))
         return f"boxblur={radius}:1"
+    if ftype == "color_balance":
+        args = []
+        # shadows (lift)
+        rs = _float_param(params, "shadows_r", 0.0, min_value=-1.0, max_value=1.0)
+        gs = _float_param(params, "shadows_g", 0.0, min_value=-1.0, max_value=1.0)
+        bs = _float_param(params, "shadows_b", 0.0, min_value=-1.0, max_value=1.0)
+        if rs != 0: args.append(f"rs={rs}")
+        if gs != 0: args.append(f"gs={gs}")
+        if bs != 0: args.append(f"bs={bs}")
+
+        # midtones (gamma)
+        rm = _float_param(params, "midtones_r", 0.0, min_value=-1.0, max_value=1.0)
+        gm = _float_param(params, "midtones_g", 0.0, min_value=-1.0, max_value=1.0)
+        bm = _float_param(params, "midtones_b", 0.0, min_value=-1.0, max_value=1.0)
+        if rm != 0: args.append(f"rm={rm}")
+        if gm != 0: args.append(f"gm={gm}")
+        if bm != 0: args.append(f"bm={bm}")
+
+        # highlights (gain)
+        rh = _float_param(params, "highlights_r", 0.0, min_value=-1.0, max_value=1.0)
+        gh = _float_param(params, "highlights_g", 0.0, min_value=-1.0, max_value=1.0)
+        bh = _float_param(params, "highlights_b", 0.0, min_value=-1.0, max_value=1.0)
+        if rh != 0: args.append(f"rh={rh}")
+        if gh != 0: args.append(f"gh={gh}")
+        if bh != 0: args.append(f"bh={bh}")
+
+        if not args:
+            return "null"
+        return f"colorbalance={':'.join(args)}"
     return None
 
 
@@ -326,6 +355,10 @@ class RenderService:
         return self._filter_chain(stack)
 
 
+
+    def _sanitize_style_value(self, val: Any) -> str:
+        # Simple sanitization to prevent injection in ffmpeg filter string
+        return str(val).replace("'", "").replace(":", "").replace(",", "")
 
     def _ensure_local(self, uri: str) -> str:
         if uri.startswith("gs://") and self.gcs:
@@ -551,7 +584,7 @@ class RenderService:
         if req.ducking:
              for clip in sorted_clips:
                  track = track_map.get(clip.track_id)
-                 role = track.meta.get("audio_role", "generic") if track and track.meta else "generic"
+                 role = getattr(track, "audio_role", None) or (track.meta.get("audio_role") if track and track.meta else None) or "generic"
                  if role in {"dialogue", "speech", "voice"}:
                      # Future: check audio_semantic_timeline artifacts for granular VAD
                      c_speed = clip.speed if getattr(clip, "speed", 1.0) else 1.0
@@ -678,12 +711,26 @@ class RenderService:
                     # But simpler to just use path if simple.
                     escaped_path = srt_path.replace(":", "\\:").replace("'", "\\'")
                     
-                    # Style customization could be added here
-                    # style = req.burn_in_captions.get("style", "")
-                    # force_style = f":force_style='{style}'" if style else ""
-                    
+                    # Style customization
+                    style_cfg = req.burn_in_captions.get("style")
+                    style_str = ""
+                    if style_cfg and isinstance(style_cfg, dict):
+                         parts = []
+                         # Map friendly keys to ASS style parameters
+                         if "font_name" in style_cfg: parts.append(f"Fontname={self._sanitize_style_value(style_cfg['font_name'])}")
+                         if "font_size" in style_cfg: parts.append(f"Fontsize={self._sanitize_style_value(style_cfg['font_size'])}")
+                         if "color" in style_cfg: parts.append(f"PrimaryColour={self._sanitize_style_value(style_cfg['color'])}")
+                         if "outline_color" in style_cfg: parts.append(f"OutlineColour={self._sanitize_style_value(style_cfg['outline_color'])}")
+                         if "back_color" in style_cfg: parts.append(f"BackColour={self._sanitize_style_value(style_cfg['back_color'])}")
+                         if "alignment" in style_cfg: parts.append(f"Alignment={self._sanitize_style_value(style_cfg['alignment'])}")
+                         if "outline" in style_cfg: parts.append(f"Outline={self._sanitize_style_value(style_cfg['outline'])}")
+                         if "shadow" in style_cfg: parts.append(f"Shadow={self._sanitize_style_value(style_cfg['shadow'])}")
+
+                         if parts:
+                             style_str = f":force_style='{','.join(parts)}'"
+
                     # subtitles filter
-                    global_filters.append(f"subtitles=filename='{escaped_path}'")
+                    global_filters.append(f"subtitles=filename='{escaped_path}'{style_str}")
                 except Exception as e:
                     # Log warning but don't fail render?
                     # For now we let it fail or log
@@ -956,7 +1003,7 @@ class RenderService:
 
              # 3. Ducking
              track = track_map.get(clip.track_id)
-             role = track.meta.get("audio_role", "generic") if track and track.meta else "generic"
+             role = getattr(track, "audio_role", None) or (track.meta.get("audio_role") if track and track.meta else None) or "generic"
              if req.ducking and role in {"music", "background"}:
                  atten_db = req.ducking.get("atten_db", -6) if isinstance(req.ducking, dict) else -6
                  
@@ -970,23 +1017,32 @@ class RenderService:
                  # Speech Window (S, E) is in Absolute Timeline Time.
                  # So we check `between(t, S - window_start, E - window_start)`.
                  
-                 duck_parts = []
-                 valid_windows = False
+                 # Ducking with smooth fades (300ms)
+                 target_vol = 10 ** (atten_db / 20)
+                 fade_dur = 0.3
+                 duck_expr = "1"
                  for (s, e) in speech_windows:
-                     # Overlap logic with this clip?
-                     # Ducking applies only when speech overlaps this clip?
-                     # Yes, but simple `enable` works if t is correct.
-                     # Just add all windows. If t is outside clip duration, it affects silence (no-op).
                      w_start = (s - window_start) / 1000.0
                      w_end = (e - window_start) / 1000.0
-                     # Check reasonable bounds
-                     duck_parts.append(f"between(t,{w_start:.3f},{w_end:.3f})")
-                     valid_windows = True
+
+                     # Expression for smooth ducking:
+                     # if (t < start-fade) -> 1
+                     # if (t < start) -> fade out
+                     # if (t < end) -> target
+                     # if (t < end+fade) -> fade in
+                     # else -> 1
+
+                     win_expr = (
+                         f"if(between(t,{w_start-fade_dur:.3f},{w_start:.3f}),"
+                         f"1+({target_vol}-1)*(t-({w_start-fade_dur:.3f}))/{fade_dur},"
+                         f"if(between(t,{w_start:.3f},{w_end:.3f}),{target_vol},"
+                         f"if(between(t,{w_end:.3f},{w_end+fade_dur:.3f}),"
+                         f"{target_vol}+(1-{target_vol})*(t-{w_end:.3f})/{fade_dur},1)))"
+                     )
+                     duck_expr = f"min({duck_expr},{win_expr})"
                  
-                 if valid_windows:
-                     enable_expr = "+".join(duck_parts)
-                     # Apply attenuation when enabled
-                     chain_filters.append(f"volume=dB={atten_db}:enable='{enable_expr}'")
+                 if duck_expr != "1":
+                     chain_filters.append(f"volume='{duck_expr}':eval=frame")
             
              # Compile Chain
              out_label = f"[proc_a{idx}]"

@@ -97,6 +97,12 @@ class Transition(Timestamped):
         "wipe_right",
         "push_left",
         "push_right",
+        "circle_open",
+        "circle_close",
+        "pixelize",
+        "hblur",
+        "whip_left",
+        "whip_right",
         "none",
     ]
     duration_ms: float
