@@ -5,7 +5,7 @@ import path from 'path';
 // Helper to post data
 async function postManifests(manifests: AtelierManifest[]) {
     try {
-        const response = await fetch('http://localhost:8000/v1/registry/harvest', {
+        const response = await fetch('http://localhost:8000/v1/registries/atelier/harvest', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(manifests)

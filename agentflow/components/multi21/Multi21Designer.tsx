@@ -69,9 +69,6 @@ export interface Multi21DesignerProps {
 }
 
 export function Multi21Designer({ userRole = 'tenant' }: Multi21DesignerProps) {
-    // Controls State
-    const { useToolState } = useToolControl();
-
     // -- Role & Dev Mode Logic --
     const [devMode, setDevMode] = useState(false);
     const effectiveRole = devMode ? 'architect' : userRole;
@@ -88,6 +85,17 @@ export function Multi21Designer({ userRole = 'tenant' }: Multi21DesignerProps) {
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [devMode]);
+
+    return (
+        <BuilderShell showGraphControls={effectiveRole === 'architect'}>
+            <Multi21DesignerContent effectiveRole={effectiveRole} />
+        </BuilderShell>
+    );
+}
+
+function Multi21DesignerContent({ effectiveRole }: { effectiveRole: 'tenant' | 'architect' }) {
+    // Controls State
+    const { useToolState } = useToolControl();
 
     // -- Global State (View) --
     const [previewMode, setPreviewMode] = useToolState<'desktop' | 'mobile'>({ target: { surfaceId: 'multi21.designer', toolId: 'previewMode' }, defaultValue: 'desktop' });
@@ -373,6 +381,7 @@ export function Multi21Designer({ userRole = 'tenant' }: Multi21DesignerProps) {
         { id: 'tools', title: 'Tools', content: toolsContent },
     ], [settingsContent, navigatorContent, activeBlockId, blocks]);
 
+    // This is now properly inside the provider!
     const [showTools] = useToolState<boolean>({ target: { surfaceId: 'multi21.shell', toolId: 'ui.show_tools' }, defaultValue: false });
 
     // --- Block Rendering ---
@@ -418,7 +427,8 @@ export function Multi21Designer({ userRole = 'tenant' }: Multi21DesignerProps) {
     );
 
     return (
-        <BuilderShell showGraphControls={effectiveRole === 'architect'}>
+        // BuilderShell removed from here as we are now inside it
+        <>
             <HiddenAttributionFields />
 
             {activeLens === 'page' ? (
@@ -448,7 +458,7 @@ export function Multi21Designer({ userRole = 'tenant' }: Multi21DesignerProps) {
                                 return undefined;
                             })()
                         }
-                        isVisible={showTools}
+                    // Removed isVisible prop as BottomControlsPanel now consumes it directly
                     />
 
                     {isAddMenuOpen && (
@@ -534,6 +544,6 @@ export function Multi21Designer({ userRole = 'tenant' }: Multi21DesignerProps) {
                     onNodeSelect={(nodeId) => setActiveBlockId(nodeId)}
                 />
             )}
-        </BuilderShell>
+        </>
     );
 }

@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from 'react';
 import { useRegistry, RegistryItem } from '@/lib/registry/useRegistry';
 import { RegistryCard } from './ui/RegistryCard';

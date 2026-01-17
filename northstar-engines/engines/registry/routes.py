@@ -26,7 +26,7 @@ from engines.registry.service import (
 )
 from engines.registry.schemas.atelier import AtelierManifest, SurfaceDefinition, UIAtom
 
-router = APIRouter(prefix="/registry", tags=["registry"])
+router = APIRouter(prefix="/registries", tags=["registry"])
 
 def _require_membership(auth: AuthContext, context: RequestContext) -> None:
     try:
@@ -227,6 +227,20 @@ def harvest_generic(
     service: ComponentRegistryService = Depends(get_component_registry_service),
 ) -> Response:
     """Bulk harvest generic Atelier Manifests (Canvases, Atoms, etc)."""
+    _require_membership(auth, context)
+    service.register_manifests(context, manifests)
+    return Response(status_code=204)
+
+
+@router.post("/atelier/harvest", response_model=None)
+def harvest_atelier(
+    manifests: List[AtelierManifest],
+    request: Request,
+    context: RequestContext = Depends(get_request_context),
+    auth: AuthContext = Depends(_resolve_auth_context),
+    service: ComponentRegistryService = Depends(get_component_registry_service),
+) -> Response:
+    """Bulk harvest Atelier Manifests (Explicit Endpoint)."""
     _require_membership(auth, context)
     service.register_manifests(context, manifests)
     return Response(status_code=204)

@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from 'react';
 import { RegistryHeader } from './ui/RegistryHeader';
 import { useRegistry, RegistryItem, ConnectorConfig } from '@/lib/registry/useRegistry';

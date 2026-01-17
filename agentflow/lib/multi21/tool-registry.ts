@@ -120,6 +120,14 @@ export const TOOL_REGISTRY: Record<string, ToolDefinition> = {
         valueType: 'boolean',
         allowedOps: ['setValue', 'toggle'],
     },
+    'show_registry': {
+        toolId: 'show_registry',
+        label: 'Show Registry',
+        surfaceId: 'multi21.designer',
+        kind: 'toggle',
+        valueType: 'boolean',
+        allowedOps: ['setValue', 'toggle'],
+    },
     showMeta: {
         toolId: 'showMeta',
         label: 'Show Meta',

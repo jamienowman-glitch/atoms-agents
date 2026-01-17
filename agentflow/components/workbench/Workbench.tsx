@@ -2,6 +2,7 @@
 // Workbench.tsx
 // The new root orchestrator for the AgentFlow visual environment.
 // =============================================================================
+"use client";
 
 import React, { useEffect } from 'react';
 import { BuilderShell } from '../multi21/BuilderShell';

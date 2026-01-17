@@ -27,6 +27,7 @@ const initialToolState = {
     'multi21.designer:global:global:tile.show_cta_label': true,
     'multi21.designer:global:global:tile.show_cta_arrow': true,
     'multi21.shell:global:global:chat.mode': 'nano',
+    'multi21.designer:global:global:show_registry': false,
 };
 
 // Types needed for coordination

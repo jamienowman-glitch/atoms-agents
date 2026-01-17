@@ -6,6 +6,8 @@ export interface RegistryItem {
     subtitle: string;
     status: 'Active' | 'Paused' | 'Draft' | 'Inactive';
     scopes?: string[]; // List of available scopes for this connector
+    maturity?: 'concept' | 'demo' | 'production_lite' | 'production';
+    next_steps?: string[];
 }
 
 export interface ConnectorConfig {

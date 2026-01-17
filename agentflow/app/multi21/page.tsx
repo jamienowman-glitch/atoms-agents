@@ -9,8 +9,6 @@ export const metadata: Metadata = {
 
 export default function Multi21Page() {
     return (
-        <BuilderShell>
-            <Multi21Designer />
-        </BuilderShell>
+        <Multi21Designer />
     );
 }

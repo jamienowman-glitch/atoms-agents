@@ -152,8 +152,11 @@ interface BottomControlsPanelProps {
     isVisible?: boolean;
 }
 
-export function BottomControlsPanel({ settingsContent, activeBlockId, activeBlockType = 'media', isVisible = true }: BottomControlsPanelProps) {
+export function BottomControlsPanel({ settingsContent, activeBlockId, activeBlockType = 'media' }: BottomControlsPanelProps) {
     const { useToolState } = useToolControl();
+
+    // Consume visibility state directly
+    const [isVisible] = useToolState<boolean>({ target: { surfaceId: 'multi21.shell', toolId: 'ui.show_tools' }, defaultValue: false });
 
     // Fallback scope if no block selected (shouldn't happen in usage, but safe)
     const scope = { surfaceId: 'multi21.designer', entityId: activeBlockId || 'none' };
@@ -890,7 +893,7 @@ export function BottomControlsPanel({ settingsContent, activeBlockId, activeBloc
     };
 
     return (
-        <div className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2 transition-all duration-300 ease-out ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0 pointer-events-none'}`}>
+        <div className={`fixed bottom-[72px] left-1/2 -translate-x-1/2 z-[60] flex flex-col items-center gap-2 transition-all duration-300 ease-out ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0 pointer-events-none'}`}>
             <div className="w-[360px] bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xl border border-neutral-200/50 dark:border-neutral-800/50 rounded-2xl shadow-2xl overflow-hidden ring-1 ring-black/5">
                 {/* Header / Tabs */}
                 <div className="flex items-center justify-between px-2 py-2 border-b border-neutral-100 dark:border-neutral-800 bg-white/50 dark:bg-neutral-900/50">
