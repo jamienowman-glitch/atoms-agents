@@ -1,15 +1,17 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useToolControl } from '../../context/ToolControlContext';
 import { ColorRibbon } from '../ui/ColorRibbon';
-import { ROBOTO_PRESETS } from '../../lib/fonts/roboto-presets';
-import { ContentConfigurationPanel } from './ContentConfigurationPanel';
+import { DualMagnifier, MagnetItem } from './DualMagnifier';
+import { ContentPicker, ContentPickerItem } from './ui/ContentPicker';
+import { MediaPicker, MediaItem } from './ui/MediaPicker';
+import { SEED_FEEDS } from '../../lib/data/seed-feeds';
 
-const ASPECT_RATIOS = ['1:1', '16:9', '9:16', '4:3'] as const;
-
+// --- Types & Interfaces ---
 export type PanelState = 'collapsed' | 'compact' | 'full';
 
+// Simplified Slider Component (Touch-Aware)
 interface UniversalSliderProps {
     value: number;
     min: number;
@@ -17,924 +19,749 @@ interface UniversalSliderProps {
     step?: number;
     onChange: (v: number) => void;
 }
+const UniversalSlider: React.FC<UniversalSliderProps> = ({ value, min, max, step = 1, onChange }) => {
+    const trackRef = useRef<HTMLDivElement>(null);
 
-const UniversalSlider: React.FC<UniversalSliderProps> = ({ value, min, max, step = 1, onChange }) => (
-    <input
-        type="range"
-        min={min}
-        max={max}
-        step={step}
-        value={value}
-        onChange={e => onChange(Number(e.target.value))}
-        className="w-full h-8 accent-black dark:accent-white cursor-pointer touch-none"
-    />
-);
+    const handleInteract = (e: React.MouseEvent | React.TouchEvent) => {
+        if (!trackRef.current) return;
+        const rect = trackRef.current.getBoundingClientRect();
+        const clientX = 'touches' in e ? e.touches[0].clientX : (e as React.MouseEvent).clientX;
 
-interface ToolCarouselItem {
-    id: string;
-    icon: React.ReactNode;
-    label: string;
-}
+        let percentage = (clientX - rect.left) / rect.width;
+        percentage = Math.max(0, Math.min(1, percentage));
 
-const ToolCarousel: React.FC<{ items: ToolCarouselItem[]; activeId: string; onSelect: (id: string) => void }> = ({ items, activeId, onSelect }) => {
-    const scrollRef = React.useRef<HTMLDivElement>(null);
-    const itemRefs = React.useRef<Map<string, HTMLButtonElement>>(new Map());
-    const isScrollingRef = React.useRef(false);
-    const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
-
-    // Initial Scroll to Active
-    useEffect(() => {
-        const container = scrollRef.current;
-        const item = itemRefs.current.get(activeId);
-        if (container && item && !isScrollingRef.current) {
-            const containerCenter = container.offsetWidth / 2;
-            const itemCenter = item.offsetLeft + item.offsetWidth / 2;
-            container.scrollTo({
-                left: itemCenter - containerCenter,
-                behavior: 'smooth'
-            });
-        }
-    }, [activeId]);
-
-    const handleScroll = React.useCallback(() => {
-        if (!scrollRef.current) return;
-        isScrollingRef.current = true;
-
-        const container = scrollRef.current;
-        const containerCenter = container.scrollLeft + container.offsetWidth / 2;
-
-        let closestId = '';
-        let minDistance = Infinity;
-
-        // Visual Updates (Scale) & Find Closest
-        items.forEach((item) => {
-            const el = itemRefs.current.get(item.id);
-            if (el) {
-                const itemCenter = el.offsetLeft + el.offsetWidth / 2;
-                const distance = Math.abs(containerCenter - itemCenter);
-                const maxDistance = 60;
-                const scale = Math.max(0.7, 1.3 - (distance / maxDistance) * 0.8);
-                const opacity = Math.max(0.3, 1 - (distance / maxDistance) * 0.8);
-
-                el.style.transform = `scale(${scale})`;
-                el.style.opacity = `${opacity}`;
-                el.style.zIndex = distance < 15 ? '20' : '10';
-
-                if (distance < minDistance) {
-                    minDistance = distance;
-                    closestId = item.id;
-                }
-            }
-        });
-
-        if (timeoutRef.current) clearTimeout(timeoutRef.current);
-        timeoutRef.current = setTimeout(() => {
-            if (closestId && closestId !== activeId) {
-                onSelect(closestId);
-            }
-            isScrollingRef.current = false;
-        }, 50);
-
-    }, [items, activeId, onSelect]);
-
-    useEffect(() => {
-        handleScroll();
-    }, []);
+        const rawValue = min + percentage * (max - min);
+        // Snap to step
+        const stepped = Math.round(rawValue / step) * step;
+        onChange(stepped);
+    };
 
     return (
-        <div className="relative w-[140px] h-14 flex items-center shrink-0">
-            <div
-                ref={scrollRef}
-                className="flex items-center gap-2 overflow-x-auto snap-x snap-mandatory scrollbar-none w-full h-full px-[50%]"
-                onScroll={handleScroll}
-                style={{
-                    scrollPaddingInline: '50%',
-                    scrollbarWidth: 'none',
-                    msOverflowStyle: 'none'
-                }}
-            >
-                <style jsx>{`
-                    div::-webkit-scrollbar { display: none; }
-                `}</style>
-
-                {items.map(item => (
-                    <button
-                        key={item.id}
-                        ref={el => { if (el) itemRefs.current.set(item.id, el); }}
-                        onClick={() => {
-                            onSelect(item.id);
-                            const container = scrollRef.current;
-                            const el = itemRefs.current.get(item.id);
-                            if (container && el) {
-                                const containerCenter = container.offsetWidth / 2;
-                                const itemCenter = el.offsetLeft + el.offsetWidth / 2;
-                                container.scrollTo({ left: itemCenter - containerCenter, behavior: 'smooth' });
-                            }
-                        }}
-                        className="flex-shrink-0 snap-center flex items-center justify-center w-8 h-8 rounded-full transition-transform duration-75 ease-linear bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 shadow-sm border border-neutral-200 dark:border-neutral-700"
-                        title={item.label}
-                    >
-                        {item.icon}
-                    </button>
-                ))}
+        <div
+            ref={trackRef}
+            className="relative w-full h-8 flex items-center group cursor-pointer touch-none"
+            onClick={handleInteract}
+            onTouchMove={handleInteract}
+            onTouchStart={handleInteract}
+        >
+            {/* Track bg */}
+            <div className="absolute w-full h-1 bg-neutral-200 dark:bg-neutral-800 rounded-full overflows-hidden">
+                {/* Progress Fill (Optional polish) */}
+                <div
+                    className="h-full bg-neutral-400 dark:bg-neutral-600 rounded-full"
+                    style={{ width: `${((value - min) / (max - min)) * 100}%` }}
+                />
             </div>
 
-            <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-white dark:from-neutral-900 to-transparent pointer-events-none z-30" />
-            <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white dark:from-neutral-900 to-transparent pointer-events-none z-30" />
+            {/* Thumb */}
+            <div
+                className="absolute w-4 h-4 bg-black dark:bg-white rounded-full shadow-sm transform -translate-x-1/2 pointer-events-none transition-transform duration-75"
+                style={{ left: `${((value - min) / (max - min)) * 100}%` }}
+            />
         </div>
     );
 };
 
+
+// Constants
+const ASPECT_RATIOS = ['16:9', '4:3', '1:1', '9:16'];
+
+// --- Main Component ---
 interface BottomControlsPanelProps {
     settingsContent: React.ReactNode;
     activeBlockId: string | null;
-    activeBlockType?: 'media' | 'text' | 'cta' | 'header' | 'row' | 'popup'; // Phase 19 Updated
-    isVisible?: boolean;
+    activeBlockType?: 'media' | 'text' | 'cta' | 'header' | 'row' | 'popup';
 }
 
 export function BottomControlsPanel({ settingsContent, activeBlockId, activeBlockType = 'media' }: BottomControlsPanelProps) {
     const { useToolState } = useToolControl();
 
-    // Consume visibility state directly
-    const [isVisible] = useToolState<boolean>({ target: { surfaceId: 'multi21.shell', toolId: 'ui.show_tools' }, defaultValue: false });
+    // 1. Visibility & State
+    const [isVisible, setIsVisible] = useToolState<boolean>({ target: { surfaceId: 'multi21.shell', toolId: 'ui.show_tools' }, defaultValue: false });
+    const [previewMode] = useToolState<'desktop' | 'mobile'>({ target: { surfaceId: 'multi21.designer', toolId: 'previewMode' }, defaultValue: 'desktop' });
+    const isMobileView = previewMode === 'mobile';
 
-    // Fallback scope if no block selected (shouldn't happen in usage, but safe)
+    // CRITICAL: Ensure we target the specific block if selected, else fallback (though fallback has no effect on specific blocks)
+    // The consumer (ConnectedBlock) listens to { surfaceId: 'multi21.designer', entityId: id }
+    // We MUST match that entityId.
     const scope = { surfaceId: 'multi21.designer', entityId: activeBlockId || 'none' };
 
-    // --- State: Layout (Media) ---
+    // 2. Control Mode State
+    const [isCollapsed, setIsCollapsed] = useState(false);
+    const [activeMode, setActiveMode] = useState<'layout' | 'typography' | 'style'>('layout');
+    const [activeLayoutTool, setActiveLayoutTool] = useState<string>('density');
+
+    // Content Mode State
+    const [activeContentCat, setActiveContentCat] = useState<string>('youtube');
+    const [activeStrategy, setActiveStrategy] = useState<string>('feed');
+
+    const [activeTypoTool, setActiveTypoTool] = useState<string>('identity');
+    const [activeStyleTool, setActiveStyleTool] = useState<string>('palette');
+    const [showSettings, setShowSettings] = useState(false);
+
+    // 3. Tool Hooks (Layout)
+    // COLS
     const [colsDesktop, setColsDesktop] = useToolState<number>({ target: { ...scope, toolId: 'grid.cols_desktop' }, defaultValue: 6 });
     const [colsMobile, setColsMobile] = useToolState<number>({ target: { ...scope, toolId: 'grid.cols_mobile' }, defaultValue: 2 });
 
+    // GAP X (Split)
     const [gapXDesktop, setGapXDesktop] = useToolState<number>({ target: { ...scope, toolId: 'grid.gap_x_desktop' }, defaultValue: 16 });
     const [gapXMobile, setGapXMobile] = useToolState<number>({ target: { ...scope, toolId: 'grid.gap_x_mobile' }, defaultValue: 16 });
 
+    // GAP Y (Split)
+    const [gapYDesktop, setGapYDesktop] = useToolState<number>({ target: { ...scope, toolId: 'grid.gap_y_desktop' }, defaultValue: 16 });
+    const [gapYMobile, setGapYMobile] = useToolState<number>({ target: { ...scope, toolId: 'grid.gap_y_mobile' }, defaultValue: 16 });
+
+    // RADIUS (Split)
     const [radiusDesktop, setRadiusDesktop] = useToolState<number>({ target: { ...scope, toolId: 'grid.tile_radius_desktop' }, defaultValue: 8 });
     const [radiusMobile, setRadiusMobile] = useToolState<number>({ target: { ...scope, toolId: 'grid.tile_radius_mobile' }, defaultValue: 8 });
 
-    const [itemsDesktop, setItemsDesktop] = useToolState<number>({ target: { ...scope, toolId: 'feed.query.limit_desktop' }, defaultValue: 12 });
-    const [itemsMobile, setItemsMobile] = useToolState<number>({ target: { ...scope, toolId: 'feed.query.limit_mobile' }, defaultValue: 6 });
+    // Aspect Ratio (Shared)
+    const [aspectRatioStr, setAspectRatioStr] = useToolState<string>({ target: { ...scope, toolId: 'grid.aspect_ratio' }, defaultValue: '1:1' });
 
-    const [aspectRatioStr, setAspectRatioStr] = useToolState<'1:1' | '16:9' | '9:16' | '4:3'>({ target: { ...scope, toolId: 'grid.aspect_ratio' }, defaultValue: '16:9' });
+    // Items Limit (Split)
+    const [limitDesktop, setLimitDesktop] = useToolState<number>({ target: { ...scope, toolId: 'feed.query.limit_desktop' }, defaultValue: 12 });
+    const [limitMobile, setLimitMobile] = useToolState<number>({ target: { ...scope, toolId: 'feed.query.limit_mobile' }, defaultValue: 6 });
 
-    // Global Preview Mode
-    const [previewMode, setPreviewMode] = useToolState<'desktop' | 'mobile'>({ target: { surfaceId: 'multi21.designer', toolId: 'previewMode' }, defaultValue: 'desktop' });
-    const isMobileView = previewMode === 'mobile';
 
-    // --- State: Typography ---
-    // Global (Shared / Media)
-    const [presetIndex, setPresetIndex] = useToolState<number>({ target: { ...scope, toolId: 'typo.preset_index' }, defaultValue: 3 });
+    // 4. Tool Hooks (Typography)
+    const [fontFamily, setFontFamily] = useToolState<number>({ target: { ...scope, toolId: 'typo.family' }, defaultValue: 0 }); // 0=Sans
+    const [axisWeight, setAxisWeight] = useToolState<number>({ target: { ...scope, toolId: 'typo.weight' }, defaultValue: 400 });
+    const [axisWidth, setAxisWidth] = useToolState<number>({ target: { ...scope, toolId: 'typo.width' }, defaultValue: 100 });
+    const [axisCasual, setAxisCasual] = useToolState<number>({ target: { ...scope, toolId: 'typo.casual' }, defaultValue: 0 });
     const [fontSizeDesktop, setFontSizeDesktop] = useToolState<number>({ target: { ...scope, toolId: 'typo.size_desktop' }, defaultValue: 16 });
     const [fontSizeMobile, setFontSizeMobile] = useToolState<number>({ target: { ...scope, toolId: 'typo.size_mobile' }, defaultValue: 16 });
 
-    // Scoped Text Props (Phase 13 Restored)
-    const [headlineSizeDesktop, setHeadlineSizeDesktop] = useToolState<number>({ target: { ...scope, toolId: 'typo.headline.size_desktop' }, defaultValue: 24 });
-    const [headlineSizeMobile, setHeadlineSizeMobile] = useToolState<number>({ target: { ...scope, toolId: 'typo.headline.size_mobile' }, defaultValue: 20 });
-    const [headlineWeight, setHeadlineWeight] = useToolState<number>({ target: { ...scope, toolId: 'typo.headline.weight' }, defaultValue: 700 });
+    // 5. Tool Hooks (Style)
+    const [bgColor, setBgColor] = useToolState<string>({ target: { ...scope, toolId: 'style.bg' }, defaultValue: 'transparent' });
+    const [blockBgColor, setBlockBgColor] = useToolState<string>({ target: { ...scope, toolId: 'style.block_bg' }, defaultValue: 'transparent' });
+    const [textColor, setTextColor] = useToolState<string>({ target: { ...scope, toolId: 'style.text' }, defaultValue: 'inherit' });
+    const [borderColor, setBorderColor] = useToolState<string>({ target: { ...scope, toolId: 'style.border_color' }, defaultValue: 'transparent' });
+    const [borderWidth, setBorderWidth] = useToolState<number>({ target: { ...scope, toolId: 'style.border_width' }, defaultValue: 0 });
+    const [opacity, setOpacity] = useToolState<number>({ target: { ...scope, toolId: 'style.opacity' }, defaultValue: 100 });
+    const [blur, setBlur] = useToolState<number>({ target: { ...scope, toolId: 'style.blur' }, defaultValue: 0 });
 
-    const [subheadSizeDesktop, setSubheadSizeDesktop] = useToolState<number>({ target: { ...scope, toolId: 'typo.subhead.size_desktop' }, defaultValue: 18 });
-    const [subheadSizeMobile, setSubheadSizeMobile] = useToolState<number>({ target: { ...scope, toolId: 'typo.subhead.size_mobile' }, defaultValue: 16 });
-    const [subheadWeight, setSubheadWeight] = useToolState<number>({ target: { ...scope, toolId: 'typo.subhead.weight' }, defaultValue: 400 });
+    // 6. Content Wiring (Phase 14)
+    // 6. Content Wiring (Phase 14)
+    const [tileVariant, setTileVariant] = useToolState<'generic' | 'product' | 'kpi' | 'text' | 'video' | 'youtube' | 'events' | 'blogs'>({
+        target: { ...scope, toolId: 'tile.variant' },
+        defaultValue: 'generic'
+    });
+    // Tile Elements (Booleans)
+    const [tileShowTitle, setTileShowTitle] = useToolState<boolean>({ target: { ...scope, toolId: 'tile.show_title' }, defaultValue: true });
+    const [tileShowMeta, setTileShowMeta] = useToolState<boolean>({ target: { ...scope, toolId: 'tile.show_meta' }, defaultValue: true });
+    const [tileShowBadge, setTileShowBadge] = useToolState<boolean>({ target: { ...scope, toolId: 'tile.show_badge' }, defaultValue: true });
+    const [tileShowCtaLabel, setTileShowCtaLabel] = useToolState<boolean>({ target: { ...scope, toolId: 'tile.show_cta_label' }, defaultValue: true });
+    const [tileShowCtaArrow, setTileShowCtaArrow] = useToolState<boolean>({ target: { ...scope, toolId: 'tile.show_cta_arrow' }, defaultValue: true });
+    const [feedSourceIndex, setFeedSourceIndex] = useToolState<number>({
+        target: { ...scope, toolId: 'content.feed_source_index' },
+        defaultValue: 0
+    });
 
-    const [bodySizeDesktop, setBodySizeDesktop] = useToolState<number>({ target: { ...scope, toolId: 'typo.body.size_desktop' }, defaultValue: 16 });
-    const [bodySizeMobile, setBodySizeMobile] = useToolState<number>({ target: { ...scope, toolId: 'typo.body.size_mobile' }, defaultValue: 16 });
-    const [bodyWeight, setBodyWeight] = useToolState<number>({ target: { ...scope, toolId: 'typo.body.weight' }, defaultValue: 300 });
-
-    // Scoped Text Props (Phase 13 Dynamic Binding Helper)
-    const [activeTextTarget, setActiveTextTarget] = useState<'headline' | 'subhead' | 'body'>('headline');
-
-    // We use a trick: Component renders "Size" slider, but we bind it to a different toolId based on 'activeTextTarget'
-    // This is handled in the Render section via `ToolScope`.
-
-    // Global Axes
-    const [axisWeight, setAxisWeight] = useToolState<number>({ target: { ...scope, toolId: 'typo.weight' }, defaultValue: -1 });
-    const [axisWidth, setAxisWidth] = useToolState<number>({ target: { ...scope, toolId: 'typo.width' }, defaultValue: -1 });
-    const [fontFamily, setFontFamily] = useToolState<number>({ target: { ...scope, toolId: 'typo.family' }, defaultValue: 0 });
-    const [axisCasual, setAxisCasual] = useToolState<number>({ target: { ...scope, toolId: 'typo.casual' }, defaultValue: 0 });
-    const [axisSlant, setAxisSlant] = useToolState<number>({ target: { ...scope, toolId: 'typo.slant' }, defaultValue: 0 });
-    const [axisGrade, setAxisGrade] = useToolState<number>({ target: { ...scope, toolId: 'typo.grade' }, defaultValue: 0 });
-
-    // --- State: Style ---
-    const [styleBgColor, setStyleBgColor] = useToolState<string>({ target: { ...scope, toolId: 'style.bg' }, defaultValue: 'transparent' });
-    const [styleTextColor, setStyleTextColor] = useToolState<string>({ target: { ...scope, toolId: 'style.text' }, defaultValue: 'inherit' });
-    const [styleAccentColor, setStyleAccentColor] = useToolState<string>({ target: { ...scope, toolId: 'style.accent' }, defaultValue: '#3b82f6' });
-
-    // Style Extensions (Phase 13/14)
-    const [styleBorderWidth, setStyleBorderWidth] = useToolState<number>({ target: { ...scope, toolId: 'style.border.width' }, defaultValue: 0 });
-    const [styleBorderColor, setStyleBorderColor] = useToolState<string>({ target: { ...scope, toolId: 'style.border.color' }, defaultValue: 'transparent' });
-    const [styleOpacity, setStyleOpacity] = useToolState<number>({ target: { ...scope, toolId: 'style.opacity' }, defaultValue: 100 });
-    const [styleBlur, setStyleBlur] = useToolState<number>({ target: { ...scope, toolId: 'style.blur' }, defaultValue: 0 });
-
-    // Local UI State
-    const [colorTarget, setColorTarget] = useState<'bg' | 'text' | 'funk'>('funk');
-    const fallbackColorInputRef = React.useRef<HTMLInputElement>(null);
-
-    // --- Phase 13: Text Block Layout Tools ---
-    const [textAlign, setTextAlign] = useToolState<'left' | 'center' | 'right' | 'justify'>({ target: { ...scope, toolId: 'text.align' }, defaultValue: 'left' });
-    const [stackGap, setStackGap] = useToolState<number>({ target: { ...scope, toolId: 'text.stack_gap' }, defaultValue: 16 });
-    const [contentWidthPercent, setContentWidthPercent] = useToolState<number>({ target: { ...scope, toolId: 'text.width_percent' }, defaultValue: 100 });
-
-    // --- Phase 14: CTA Tools ---
-    const [ctaVariant, setCtaVariant] = useToolState<'solid' | 'outline' | 'ghost'>({ target: { ...scope, toolId: 'cta.variant' }, defaultValue: 'solid' });
-    const [ctaSize, setCtaSize] = useToolState<'small' | 'medium' | 'large'>({ target: { ...scope, toolId: 'cta.size' }, defaultValue: 'medium' });
-    const [ctaFullWidth, setCtaFullWidth] = useToolState<boolean>({ target: { ...scope, toolId: 'cta.fullWidth' }, defaultValue: false });
-    const [ctaAlign, setCtaAlign] = useToolState<'left' | 'center' | 'right'>({ target: { ...scope, toolId: 'cta.align' }, defaultValue: 'center' });
-
-    // --- Phase 18: Header Tools ---
-    const [headerLayout, setHeaderLayout] = useToolState<string>({ target: { ...scope, toolId: 'header.layout' }, defaultValue: 'logo_left' });
-    const [headerTrust, setHeaderTrust] = useToolState<string>({ target: { ...scope, toolId: 'header.trust_signal' }, defaultValue: 'none' });
-    const [headerContact, setHeaderContact] = useToolState<string>({ target: { ...scope, toolId: 'header.contact_priority' }, defaultValue: 'standard' });
-    const [headerCtaMode, setHeaderCtaMode] = useToolState<string>({ target: { ...scope, toolId: 'header.cta_mode' }, defaultValue: 'conversion' });
-    const [headerSticky, setHeaderSticky] = useToolState<boolean>({ target: { ...scope, toolId: 'header.sticky' }, defaultValue: false });
-    const [headerMenu, setHeaderMenu] = useToolState<string>({ target: { ...scope, toolId: 'header.menu_source' }, defaultValue: 'main_site' });
-
-    // --- Phase 19: Popup Engine Tools ---
-    // Scope should ideally be passed for 'popup' type, but assuming 'page_popup' entity ID logic
-    const [popupTrigger, setPopupTrigger] = useToolState<string>({ target: { ...scope, toolId: 'popup.trigger' }, defaultValue: 'exit' });
-    const [popupDelay, setPopupDelay] = useToolState<number>({ target: { ...scope, toolId: 'popup.delay' }, defaultValue: 0 });
-    const [popupFreq, setPopupFreq] = useToolState<string>({ target: { ...scope, toolId: 'popup.frequency' }, defaultValue: 'every_time' });
-    const [popupPos, setPopupPos] = useToolState<string>({ target: { ...scope, toolId: 'popup.position' }, defaultValue: 'center' });
-    const [popupOpacity, setPopupOpacity] = useToolState<number>({ target: { ...scope, toolId: 'popup.overlay_opacity' }, defaultValue: 50 });
-    const [formUtms, setFormUtms] = useToolState<boolean>({ target: { ...scope, toolId: 'form.collect_utms' }, defaultValue: true });
-    const [formDest, setFormDest] = useToolState<string>({ target: { ...scope, toolId: 'form.destination' }, defaultValue: 'email' });
-
-    // Teaser
-    const [teaserText, setTeaserText] = useToolState<string>({ target: { ...scope, toolId: 'popup.teaser_text' }, defaultValue: 'Start Here' });
-    const [teaserPos, setTeaserPos] = useToolState<string>({ target: { ...scope, toolId: 'popup.teaser_position' }, defaultValue: 'bottom_right' });
-
-
-    // --- Panel Flow State ---
-    const [panelState, setPanelState] = useState<PanelState>('compact');
-    const [lastNonCollapsed, setLastNonCollapsed] = useState<PanelState>('compact');
-
-    // Dual Magnifier Logic
-    const [activeMode, setActiveMode] = useState<'layout' | 'typography' | 'style'>('layout');
-    const [activeLayoutTool, setActiveLayoutTool] = useState<string>('density');
-    const [activeTypoTool, setActiveTypoTool] = useState<string>('identity');
-    const [activeStyleTool, setActiveStyleTool] = useState<string>('palette');
-
-    // Auto-Expand
+    // Sync Strategy & Canvas State
     useEffect(() => {
-        if (isVisible) {
-            setPanelState('compact');
+        // 1. Reset UI Strategy
+        if (activeContentCat === 'youtube') setActiveStrategy('playlist');
+        else if (activeContentCat === 'product') setActiveStrategy('collection');
+        else if (activeContentCat === 'kpi') setActiveStrategy('6-core');
+        else if (activeContentCat === 'events') setActiveStrategy('sched');
+        else if (activeContentCat === 'blogs') setActiveStrategy('blog');
+        else setActiveStrategy('album');
+
+        // 2. Update Canvas (Tool State)
+        if (activeContentCat === 'youtube') {
+            setTileVariant('youtube');
+            setFeedSourceIndex(4);
+            setColsDesktop(3);
+            setLimitDesktop(6);
+            setAspectRatioStr('16:9');
+        } else if (activeContentCat === 'product') {
+            setTileVariant('product');
+            setFeedSourceIndex(2);
+            setColsDesktop(4);
+            setLimitDesktop(8);
+            setAspectRatioStr('1:1');
+        } else if (activeContentCat === 'kpi') {
+            setTileVariant('kpi');
+            setFeedSourceIndex(1);
+            setColsDesktop(6);
+            setLimitDesktop(12);
+            setAspectRatioStr('16:9');
+        } else if (activeContentCat === 'events') {
+            setTileVariant('events');
+            setFeedSourceIndex(5);
+            setColsDesktop(3);
+            setLimitDesktop(6);
+            setAspectRatioStr('4:3');
+        } else if (activeContentCat === 'blogs') {
+            setTileVariant('blogs');
+            setFeedSourceIndex(3);
+            setColsDesktop(3);
+            setLimitDesktop(6);
+            setAspectRatioStr('16:9');
+        } else {
+            // generic
+            setTileVariant('generic');
+            setFeedSourceIndex(3);
+            setColsDesktop(4);
+            setLimitDesktop(8);
+            setAspectRatioStr('16:9');
         }
-    }, [isVisible]);
+    }, [activeContentCat, setTileVariant, setFeedSourceIndex, setColsDesktop, setLimitDesktop, setAspectRatioStr]);
 
-    const expand = () => setPanelState(lastNonCollapsed);
-    const collapse = () => setPanelState('collapsed');
+    // UI Local State
+    const [colorTarget, setColorTarget] = useState<'block' | 'bg' | 'text'>('block');
+    const [elementMode, setElementMode] = useState<'fill' | 'stroke'>('fill');
 
-    // --- Configurations ---
-    // --- Configurations ---
-    const modes: ToolCarouselItem[] = [
-        { id: 'layout', label: 'Layout', icon: 'grid' },
-        { id: 'typography', label: 'Typography', icon: 'type' },
-        { id: 'style', label: 'Style', icon: 'palette' },
+    // --- Configuration Maps ---
+    const layoutTools: MagnetItem[] = [
+        { id: 'density', label: 'Density', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /></svg> },
+        { id: 'spacing', label: 'Spacing', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><line x1="4" y1="9" x2="20" y2="9" /><line x1="4" y1="15" x2="20" y2="15" /><line x1="10" y1="3" x2="10" y2="21" /><line x1="16" y1="3" x2="16" y2="21" /></svg> },
+        { id: 'geometry', label: 'Geometry', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><circle cx="12" cy="12" r="10" /></svg> },
     ];
 
-    const layoutTools: ToolCarouselItem[] = [
-        { id: 'density', label: 'Density', icon: 'grid' },
-        { id: 'spacing', label: 'Spacing', icon: 'maximize' },
-        { id: 'geometry', label: 'Geometry', icon: 'box' },
+    const typoTools: MagnetItem[] = [
+        { id: 'identity', label: 'Identity', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M4 7V4h16v3M9 20h6M12 4v16" /></svg> },
+        { id: 'body', label: 'Body', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="15" y2="12" /><line x1="3" y1="18" x2="18" y2="18" /></svg> },
+        { id: 'scale', label: 'Scale', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" /></svg> },
     ];
 
-    const typoTools: ToolCarouselItem[] = [
-        { id: 'identity', label: 'Identity', icon: 'type' },
-        { id: 'body', label: 'Body', icon: 'align-left' }, // Weight/Width
-        { id: 'scale', label: 'Scale', icon: 'maximize' }, // Preset/Size
-        { id: 'type_style', label: 'Style', icon: 'italic' }, // Slant/Grade
+    const styleTools: MagnetItem[] = [
+        { id: 'palette', label: 'Palette', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" /></svg> },
+        { id: 'effects', label: 'Effects', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg> },
     ];
 
-    const styleTools: ToolCarouselItem[] = [
-        { id: 'palette', label: 'Palette', icon: 'droplet' },
-        { id: 'effects', label: 'Effects', icon: 'zap' },
-        { id: 'borders', label: 'Borders', icon: 'square' },
+    // --- Content Source Config ---
+    const contentCategories: MagnetItem[] = [
+        { id: 'youtube', label: 'YouTube', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" /></svg> },
+        { id: 'product', label: 'Product', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" /><line x1="3" y1="6" x2="21" y2="6" /><path d="M16 10a4 4 0 0 1-8 0" /></svg> },
+        { id: 'kpi', label: 'KPI', icon: <span className="text-[10px] font-black tracking-tighter">KPI</span> },
+        { id: 'image', label: 'Image', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></svg> },
+        { id: 'video', label: 'Video', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><polygon points="23 7 16 12 23 17 23 7" /><rect x="1" y="5" width="15" height="14" rx="2" ry="2" /></svg> },
+        { id: 'events', label: 'Events', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg> },
+        { id: 'blogs', label: 'Blogs', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M12 19l7-7 3 3-7 7-3-3z" /><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z" /><path d="M2 2l7.586 7.586" /><circle cx="11" cy="11" r="2" /></svg> },
     ];
 
-    // --- Render Helpers ---
+    // Strategy Maps
+    const getStrategyTools = (category: string): MagnetItem[] => {
+        // Text Icon Helper
+        const mkText = (id: string, label: string, textOverride?: string) => ({
+            id,
+            label,
+            icon: <span className="text-[8px] font-bold tracking-tight uppercase leading-none">{textOverride || label}</span>
+        });
+
+        switch (category) {
+            case 'youtube': return [mkText('playlist', 'Playlist', 'P-LIST'), mkText('feed', 'Feed', 'FEED'), mkText('video', 'Video', 'VIDEO')];
+            case 'product': return [mkText('collection', 'Collection', 'COLL'), mkText('feed', 'Feed', 'FEED'), mkText('product', 'Product', 'PROD')];
+            case 'kpi': return [mkText('6-core', '6-Core', '6-CORE'), mkText('feed', 'Feed', 'FEED'), mkText('focused', 'Focused', 'FOCUS')];
+            case 'image': return [mkText('album', 'Album', 'ALBUM'), mkText('feed', 'Feed', 'FEED'), mkText('image', 'Image', 'IMG')];
+            case 'video': return [mkText('album', 'Album', 'ALBUM'), mkText('feed', 'Feed', 'FEED'), mkText('video', 'Video', 'VID')];
+            case 'events': return [
+                mkText('sched', 'Schedule', 'SCHED'),
+                mkText('feed', 'Feed', 'FEED'),
+                mkText('next', 'Next', 'NEXT')
+            ];
+            case 'blogs': return [mkText('blog', 'Blog', 'BLOG'), mkText('feed', 'Feed', 'FEED'), mkText('post', 'Post', 'POST')];
+            default: return [];
+        }
+    };
+
+    // --- Render Logic: Sliders ---
     const renderSliders = () => {
-        // --- LAYOUT MODE ---
+        // Shared Setters Check
+        const setCols = isMobileView ? setColsMobile : setColsDesktop;
+        const currentCols = isMobileView ? colsMobile : colsDesktop;
+        const setLimit = isMobileView ? setLimitMobile : setLimitDesktop;
+        const currentLimit = isMobileView ? limitMobile : limitDesktop;
+
+        const setGapX = isMobileView ? setGapXMobile : setGapXDesktop;
+        const currentGapX = isMobileView ? gapXMobile : gapXDesktop;
+        const setGapY = isMobileView ? setGapYMobile : setGapYDesktop;
+        const currentGapY = isMobileView ? gapYMobile : gapYDesktop;
+
+        const setRadius = isMobileView ? setRadiusMobile : setRadiusDesktop;
+        const currentRadius = isMobileView ? radiusMobile : radiusDesktop;
+
+        const setFontSize = isMobileView ? setFontSizeMobile : setFontSizeDesktop;
+        const currentFontSize = isMobileView ? fontSizeMobile : fontSizeDesktop;
+
+
+        // LAYOUT MODE
         if (activeMode === 'layout') {
-            // 1. Text Block Layout
-            if (activeBlockType === 'text') {
-                return (
-                    <div className="flex flex-col gap-3 animate-fadeIn p-1">
-                        {/* Text Align & Gap */}
-                        <div className="flex flex-col gap-1">
-                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium">
-                                <span>Alignment</span>
-                            </div>
-                            <div className="flex p-0.5 bg-neutral-100 dark:bg-neutral-800 rounded-lg">
-                                {(['left', 'center', 'right', 'justify'] as const).map(align => (
-                                    <button
-                                        key={align}
-                                        onClick={() => setTextAlign(align)}
-                                        className={`flex-1 flex items-center justify-center py-1.5 rounded-md text-xs font-medium transition-all ${textAlign === align
-                                            ? 'bg-white dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 shadow-sm'
-                                            : 'text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300'
-                                            }`}
-                                    >
-                                        {align === 'justify' ? 'Justify' : align.charAt(0).toUpperCase() + align.slice(1)}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Width */}
-                        <div className="flex flex-col gap-1">
-                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium"><span>Container Width</span><span>{contentWidthPercent}%</span></div>
-                            <UniversalSlider value={contentWidthPercent} min={20} max={100} step={5} onChange={setContentWidthPercent} />
-                        </div>
-
-                        {/* Stack Gap */}
-                        <div className="flex flex-col gap-1">
-                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium"><span>Stack Gap</span><span>{stackGap}px</span></div>
-                            <UniversalSlider value={stackGap} min={0} max={64} step={4} onChange={setStackGap} />
-                        </div>
-                    </div>
-                );
-            }
-
-            // 2. CTA Block Layout (Phase 14)
-            if (activeBlockType === 'cta') {
-                return (
-                    <div className="flex flex-col gap-3 animate-fadeIn p-1">
-                        {/* Alignment */}
-                        <div className="flex flex-col gap-1">
-                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium">
-                                <span>Alignment</span>
-                            </div>
-                            <div className="flex p-0.5 bg-neutral-100 dark:bg-neutral-800 rounded-lg">
-                                {(['left', 'center', 'right'] as const).map(align => (
-                                    <button
-                                        key={align}
-                                        onClick={() => setCtaAlign(align)}
-                                        className={`flex-1 flex items-center justify-center py-1.5 rounded-md text-xs font-medium transition-all ${ctaAlign === align
-                                            ? 'bg-white dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 shadow-sm'
-                                            : 'text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300'
-                                            }`}
-                                    >
-                                        {align.charAt(0).toUpperCase() + align.slice(1)}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Full Width Toggle */}
-                        <div className="flex items-center justify-between p-2 bg-neutral-50 dark:bg-neutral-900 rounded-lg border border-neutral-100 dark:border-neutral-800">
-                            <span className="text-sm font-medium">Full Width</span>
-                            <button
-                                onClick={() => setCtaFullWidth(!ctaFullWidth)}
-                                className={`w-11 h-6 rounded-full transition-colors relative ${ctaFullWidth ? 'bg-blue-500' : 'bg-neutral-200 dark:bg-neutral-700'}`}
-                            >
-                                <span className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform ${ctaFullWidth ? 'translate-x-5' : 'translate-x-0'}`} />
-                            </button>
-                        </div>
-                    </div>
-                );
-            }
-
-            // 3. Header Block Layout (Phase 18)
-            if (activeBlockType === 'header') {
-                return (
-                    <div className="flex flex-col gap-3 animate-fadeIn p-1">
-                        {/* Layout */}
-                        <div className="flex flex-col gap-1">
-                            <span className="text-xs text-neutral-500 font-medium">Layout</span>
-                            <div className="flex p-0.5 bg-neutral-100 dark:bg-neutral-800 rounded-lg">
-                                {(['logo_left', 'logo_center', 'logo_split'] as const).map(opt => (
-                                    <button
-                                        key={opt}
-                                        onClick={() => setHeaderLayout(opt)}
-                                        className={`flex-1 py-1.5 rounded-md text-xs font-medium transition-all ${headerLayout === opt ? 'bg-white dark:bg-neutral-700 shadow-sm' : 'text-neutral-500'}`}
-                                    >
-                                        {opt.replace('logo_', '').replace(/^\w/, c => c.toUpperCase())}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Trust Signal */}
-                        <div className="flex flex-col gap-1">
-                            <span className="text-xs text-neutral-500 font-medium">Trust Signal</span>
-                            <div className="flex p-0.5 bg-neutral-100 dark:bg-neutral-800 rounded-lg overflow-x-auto">
-                                {(['none', 'secure_icon', 'rating_star', 'verified_badge'] as const).map(opt => (
-                                    <button key={opt} onClick={() => setHeaderTrust(opt)} className={`px-2 py-1.5 rounded-md text-xs font-medium whitespace-nowrap ${headerTrust === opt ? 'bg-white dark:bg-neutral-700 shadow-sm' : 'text-neutral-500'}`}>{opt.replace('_', ' ')}</button>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Contact Priority */}
-                        <div className="flex flex-col gap-1">
-                            <span className="text-xs text-neutral-500 font-medium">Action Priority</span>
-                            <div className="flex p-0.5 bg-neutral-100 dark:bg-neutral-800 rounded-lg">
-                                {(['hidden', 'standard', 'highlight'] as const).map(opt => (
-                                    <button key={opt} onClick={() => setHeaderContact(opt)} className={`flex-1 py-1.5 rounded-md text-xs font-medium ${headerContact === opt ? 'bg-white dark:bg-neutral-700 shadow-sm' : 'text-neutral-500'}`}>{opt}</button>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Sticky Toggle */}
-                        <div className="flex items-center justify-between p-2 bg-neutral-50 dark:bg-neutral-900 rounded-lg border border-neutral-100 dark:border-neutral-800">
-                            <span className="text-sm font-medium">Sticky Header</span>
-                            <button onClick={() => setHeaderSticky(!headerSticky)} className={`w-9 h-5 rounded-full relative transition-colors ${headerSticky ? 'bg-blue-500' : 'bg-neutral-300'}`}>
-                                <span className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white transition-transform ${headerSticky ? 'translate-x-4' : 'translate-x-0'}`} />
-                            </button>
-                        </div>
-                    </div>
-                );
-            }
-
-            // 4. Popup Engine (Phase 19)
-            if (activeBlockType === 'popup') {
-                return (
-                    <div className="flex flex-col gap-3 animate-fadeIn p-1">
-                        {/* Trigger & Frequency */}
-                        <div className="flex flex-col gap-1">
-                            <span className="text-xs text-neutral-500 font-medium">Trigger & Timer</span>
-                            <div className="flex gap-2">
-                                <div className="flex-1 p-0.5 bg-neutral-100 dark:bg-neutral-800 rounded-lg flex flex-wrap gap-0.5">
-                                    {(['exit', 'timer', 'scroll', 'manual_teaser'] as const).map(t => (
-                                        <button key={t} onClick={() => setPopupTrigger(t)} className={`flex-1 py-1 px-1 text-[10px] font-medium rounded whitespace-nowrap ${popupTrigger === t ? 'bg-white shadow-sm' : 'text-neutral-400'}`}>{t.replace('_', ' ').toUpperCase()}</button>
-                                    ))}
-                                </div>
-                                {popupTrigger === 'timer' && (
-                                    <div className="w-16"><UniversalSlider value={popupDelay} min={0} max={60} onChange={setPopupDelay} /></div>
-                                )}
-                            </div>
-                        </div>
-
-                        {/* Teaser Settings */}
-                        {popupTrigger === 'manual_teaser' && (
-                            <div className="flex flex-col gap-2 p-2 bg-neutral-50 dark:bg-neutral-900 rounded-lg border border-neutral-100 dark:border-neutral-800">
-                                <div className="flex flex-col gap-1">
-                                    <span className="text-xs text-neutral-500 font-medium">Teaser Label</span>
-                                    <input
-                                        type="text"
-                                        value={teaserText}
-                                        onChange={(e) => setTeaserText(e.target.value)}
-                                        className="text-xs p-1.5 rounded border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 focus:ring-1 focus:ring-blue-500 outline-none"
-                                        placeholder="e.g. Chat with us"
-                                    />
-                                </div>
-                                <div className="flex flex-col gap-1">
-                                    <span className="text-xs text-neutral-500 font-medium">Teaser Position</span>
-                                    <div className="flex p-0.5 bg-neutral-200 dark:bg-neutral-800 rounded">
-                                        {(['bottom_left', 'bottom_right'] as const).map(p => (
-                                            <button key={p} onClick={() => setTeaserPos(p)} className={`flex-1 py-1 rounded text-[10px] font-medium ${teaserPos === p ? 'bg-white shadow-sm' : 'text-neutral-500'}`}>{p.replace('_', ' ').toUpperCase()}</button>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Position */}
-                        <div className="flex flex-col gap-1">
-                            <span className="text-xs text-neutral-500 font-medium">Position</span>
-                            <div className="flex p-0.5 bg-neutral-100 dark:bg-neutral-800 rounded-lg">
-                                {(['center', 'bottom_right', 'slide_in_left'] as const).map(opt => (
-                                    <button
-                                        key={opt}
-                                        onClick={() => setPopupPos(opt)}
-                                        className={`flex-1 py-1.5 rounded-md text-xs font-medium transition-all ${popupPos === opt ? 'bg-white dark:bg-neutral-700 shadow-sm' : 'text-neutral-500'}`}
-                                    >
-                                        {opt.replace(/_/g, ' ').replace(/^\w/, c => c.toUpperCase())}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Overlay Opacity */}
-                        <div className="flex flex-col gap-1">
-                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium"><span>Overlay Opacity</span><span>{popupOpacity}%</span></div>
-                            <UniversalSlider value={popupOpacity} min={0} max={100} onChange={setPopupOpacity} />
-                        </div>
-
-                        {/* Form Data */}
-                        <div className="flex flex-col gap-2 pt-2 border-t border-neutral-100 dark:border-neutral-800">
-                            <div className="flex items-center justify-between">
-                                <span className="text-xs font-medium">Collect UTMs</span>
-                                <button onClick={() => setFormUtms(!formUtms)} className={`w-8 h-4 rounded-full relative transition-colors ${formUtms ? 'bg-green-500' : 'bg-neutral-300'}`}>
-                                    <span className={`absolute top-0.5 left-0.5 w-3 h-3 rounded-full bg-white transition-transform ${formUtms ? 'translate-x-4' : 'translate-x-0'}`} />
-                                </button>
-                            </div>
-                            <div className="flex items-center justify-between">
-                                <span className="text-xs font-medium">Destination</span>
-                                <select
-                                    value={formDest}
-                                    onChange={(e) => setFormDest(e.target.value)}
-                                    className="text-xs bg-neutral-100 dark:bg-neutral-800 rounded p-1 border-none focus:ring-1 focus:ring-blue-500"
-                                >
-                                    <option value="email">Email</option>
-                                    <option value="webhook">Webhook</option>
-                                    <option value="crm_id">CRM ID</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                );
-            }
-
-            // 5. Media Block Layout (Default)
             if (activeLayoutTool === 'density') {
-                const currentCols = isMobileView ? colsMobile : colsDesktop;
-                const setCols = isMobileView ? setColsMobile : setColsDesktop;
-                const currentItems = isMobileView ? itemsMobile : itemsDesktop;
-                const setItems = isMobileView ? setItemsMobile : setItemsDesktop;
-
                 return (
-                    <div className="flex flex-col gap-3 animate-fadeIn p-1">
+                    <div className="flex flex-col gap-2 animate-fadeIn">
+                        {/* Top Slider: Mobile Cols */}
                         <div className="flex flex-col gap-1">
-                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium"><span>Columns</span><span>{currentCols}</span></div>
-                            <UniversalSlider value={currentCols} min={1} max={12} step={1} onChange={setCols} />
+                            <div className="flex justify-between items-center text-[10px] text-neutral-500 font-medium">
+                                <span>{isMobileView ? 'Mobile Cols' : 'Desktop Cols'}</span>
+                                <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{currentCols}</span>
+                            </div>
+                            <UniversalSlider
+                                value={currentCols}
+                                min={1}
+                                max={12}
+                                step={1}
+                                onChange={setCols}
+                            />
                         </div>
+                        {/* Bot Slider: Items Limit */}
                         <div className="flex flex-col gap-1">
-                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium"><span>Item Count</span><span>{currentItems}</span></div>
-                            <UniversalSlider value={currentItems} min={1} max={50} step={1} onChange={setItems} />
+                            <div className="flex justify-between items-center text-[10px] text-neutral-500 font-medium">
+                                <span>Total Items</span>
+                                <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{currentLimit}</span>
+                            </div>
+                            <UniversalSlider value={currentLimit} min={1} max={50} onChange={setLimit} />
                         </div>
                     </div>
                 );
             }
             if (activeLayoutTool === 'spacing') {
-                const currentGapX = isMobileView ? gapXMobile : gapXDesktop;
-                const setGapX = isMobileView ? setGapXMobile : setGapXDesktop;
-                // For simplicity, GapY is linked or just handled as X for now in this demo panel, 
-                // but let's show both if we want precision. Or just one 'Gap'.
-                // ConnectedBlock has separate states but let's just control Gap X for now as "Gap".
-
                 return (
-                    <div className="flex flex-col gap-3 animate-fadeIn p-1">
+                    <div className="flex flex-col gap-2 animate-fadeIn">
+                        {/* Top: Gap X */}
                         <div className="flex flex-col gap-1">
-                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium"><span>Grid Gap</span><span>{currentGapX}px</span></div>
+                            <div className="flex justify-between items-center text-[10px] text-neutral-500 font-medium">
+                                <span>Horizontal Gap (X)</span>
+                                <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{currentGapX}px</span>
+                            </div>
                             <UniversalSlider value={currentGapX} min={0} max={64} step={4} onChange={setGapX} />
+                        </div>
+                        {/* Bot: Gap Y */}
+                        <div className="flex flex-col gap-1">
+                            <div className="flex justify-between items-center text-[10px] text-neutral-500 font-medium">
+                                <span>Vertical Gap (Y)</span>
+                                <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{currentGapY}px</span>
+                            </div>
+                            <UniversalSlider value={currentGapY} min={0} max={64} step={4} onChange={setGapY} />
                         </div>
                     </div>
                 );
             }
             if (activeLayoutTool === 'geometry') {
-                const currentRadius = isMobileView ? radiusMobile : radiusDesktop;
-                const setRadius = isMobileView ? setRadiusMobile : setRadiusDesktop;
                 const currentRatioIndex = ASPECT_RATIOS.indexOf(aspectRatioStr) !== -1 ? ASPECT_RATIOS.indexOf(aspectRatioStr) : 1;
-
                 return (
-                    <div className="flex flex-col gap-3 animate-fadeIn p-1">
+                    <div className="flex flex-col gap-2 animate-fadeIn">
+                        {/* Top: Aspect Ratio */}
                         <div className="flex flex-col gap-1">
-                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium"><span>Ratio</span><span>{aspectRatioStr}</span></div>
+                            <div className="flex justify-between items-center text-[10px] text-neutral-500 font-medium">
+                                <span>Aspect Ratio</span>
+                                <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{aspectRatioStr}</span>
+                            </div>
                             <UniversalSlider
                                 value={currentRatioIndex}
                                 min={0}
                                 max={3}
                                 step={1}
-                                onChange={(idx) => {
-                                    // @ts-ignore
-                                    setAspectRatioStr(ASPECT_RATIOS[idx] || '16:9');
-                                }}
+                                onChange={(idx) => setAspectRatioStr(ASPECT_RATIOS[idx] || '1:1')}
                             />
                         </div>
+                        {/* Bot: Radius */}
                         <div className="flex flex-col gap-1">
-                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium"><span>Corner Radius</span><span>{currentRadius}px</span></div>
-                            <UniversalSlider value={currentRadius} min={0} max={50} step={2} onChange={setRadius} />
+                            <div className="flex justify-between items-center text-[10px] text-neutral-500 font-medium">
+                                <span>Corner Radius</span>
+                                <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{currentRadius}px</span>
+                            </div>
+                            <UniversalSlider value={currentRadius} min={0} max={50} onChange={setRadius} />
                         </div>
                     </div>
                 );
             }
         }
 
-        // --- TYPOGRAPHY MODE ---
-        else if (activeMode === 'typography') {
-            if (activeBlockType === 'text') {
-                const activeSize = activeTextTarget === 'headline'
-                    ? (isMobileView ? headlineSizeMobile : headlineSizeDesktop)
-                    : activeTextTarget === 'subhead'
-                        ? (isMobileView ? subheadSizeMobile : subheadSizeDesktop)
-                        : (isMobileView ? bodySizeMobile : bodySizeDesktop);
-
-                const activeWeight = activeTextTarget === 'headline' ? headlineWeight
-                    : activeTextTarget === 'subhead' ? subheadWeight : bodyWeight;
-
-                const setSize = activeTextTarget === 'headline'
-                    ? (isMobileView ? setHeadlineSizeMobile : setHeadlineSizeDesktop)
-                    : activeTextTarget === 'subhead'
-                        ? (isMobileView ? setSubheadSizeMobile : setSubheadSizeDesktop)
-                        : (isMobileView ? setBodySizeMobile : setBodySizeDesktop);
-
-                const setWeight = activeTextTarget === 'headline' ? setHeadlineWeight
-                    : activeTextTarget === 'subhead' ? setSubheadWeight : setBodyWeight;
-
-                return (
-                    <div className="flex flex-col gap-3 animate-fadeIn p-1">
-                        <div className="flex p-0.5 bg-neutral-100 dark:bg-neutral-800 rounded-lg">
-                            {(['headline', 'subhead', 'body'] as const).map(target => (
-                                <button
-                                    key={target}
-                                    onClick={() => setActiveTextTarget(target)}
-                                    className={`flex-1 flex items-center justify-center py-1.5 rounded-md text-xs font-medium transition-all ${activeTextTarget === target
-                                        ? 'bg-white dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 shadow-sm'
-                                        : 'text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300'
-                                        }`}
-                                >
-                                    {target.charAt(0).toUpperCase() + target.slice(1)}
-                                </button>
-                            ))}
-                        </div>
-                        <div className="flex flex-col gap-1">
-                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium"><span>Size</span><span>{activeSize}px</span></div>
-                            <UniversalSlider value={activeSize} min={10} max={128} onChange={setSize} />
-                        </div>
-                        <div className="flex flex-col gap-1">
-                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium"><span>Weight</span><span>{activeWeight}</span></div>
-                            <UniversalSlider value={activeWeight} min={100} max={1000} onChange={setWeight} />
-                        </div>
-                    </div>
-                );
-            }
-
+        // TYPOGRAPHY MODE
+        if (activeMode === 'typography') {
             if (activeTypoTool === 'identity') {
-                const families = ['Sans (Flex)', 'Serif', 'Slab', 'Mono'];
-                const currentFamily = families[fontFamily] || 'Sans';
-                const casualLabel = axisCasual < 0.2 ? 'Formal' : axisCasual > 0.8 ? 'Casual' : 'Neutral';
-
+                const families = ['Sans', 'Serif', 'Slab', 'Mono'];
                 return (
-                    <div className="flex flex-col gap-3 animate-fadeIn p-1">
+                    <div className="flex flex-col gap-5 animate-fadeIn">
                         <div className="flex flex-col gap-1">
-                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium"><span>Family</span><span>{currentFamily}</span></div>
+                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium">
+                                <span>Font Family</span>
+                                <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{families[fontFamily]}</span>
+                            </div>
                             <UniversalSlider value={fontFamily} min={0} max={3} step={1} onChange={setFontFamily} />
                         </div>
-                        <div className={`flex flex-col gap-1 transition-opacity duration-300 ${fontFamily === 0 ? 'opacity-100' : 'opacity-40 grayscale pointer-events-none'}`}>
+                        <div className="flex flex-col gap-1">
                             <div className="flex justify-between items-center text-xs text-neutral-500 font-medium">
-                                <span>Vibe {fontFamily !== 0 && '(Sans Only)'}</span>
-                                <span>{casualLabel}</span>
+                                <span>Casual Vibe</span>
+                                <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{(axisCasual * 100).toFixed(0)}%</span>
                             </div>
                             <UniversalSlider value={axisCasual} min={0} max={1} step={0.01} onChange={setAxisCasual} />
                         </div>
                     </div>
                 );
             }
-
             if (activeTypoTool === 'body') {
-                const safeWeight = axisWeight === -1 ? 400 : axisWeight;
-                const safeWidth = axisWidth === -1 ? 100 : axisWidth;
                 return (
-                    <div className="flex flex-col gap-3 animate-fadeIn p-1">
+                    <div className="flex flex-col gap-5 animate-fadeIn">
                         <div className="flex flex-col gap-1">
-                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium"><span>Weight</span><span>{axisWeight === -1 ? 'Auto' : axisWeight}</span></div>
-                            <UniversalSlider value={safeWeight} min={100} max={1000} onChange={setAxisWeight} />
+                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium">
+                                <span>Weight</span>
+                                <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{axisWeight}</span>
+                            </div>
+                            <UniversalSlider value={axisWeight} min={100} max={1000} onChange={setAxisWeight} />
                         </div>
                         <div className="flex flex-col gap-1">
-                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium"><span>Width</span><span>{axisWidth === -1 ? 'Auto' : axisWidth}</span></div>
-                            <UniversalSlider value={safeWidth} min={25} max={151} onChange={setAxisWidth} />
+                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium">
+                                <span>Width</span>
+                                <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{axisWidth}</span>
+                            </div>
+                            <UniversalSlider value={axisWidth} min={50} max={150} onChange={setAxisWidth} />
                         </div>
                     </div>
                 );
             }
-
-
-            if (activeTypoTool === 'scale') { // Preset & Size
-                const currentPresetName = ROBOTO_PRESETS[presetIndex]?.name || 'Unknown';
-                const currentFontSize = isMobileView ? fontSizeMobile : fontSizeDesktop;
-                const setFontSize = isMobileView ? setFontSizeMobile : setFontSizeDesktop;
-
+            if (activeTypoTool === 'scale') {
                 return (
-                    <div className="flex flex-col gap-3 animate-fadeIn p-1">
+                    <div className="flex flex-col gap-5 animate-fadeIn">
                         <div className="flex flex-col gap-1">
-                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium"><span>Preset</span><span>{currentPresetName}</span></div>
-                            <UniversalSlider value={presetIndex} min={0} max={ROBOTO_PRESETS.length - 1} step={1} onChange={setPresetIndex} />
-                        </div>
-                        <div className="flex flex-col gap-1">
-                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium"><span>{isMobileView ? 'Mobile Size' : 'Desktop Size'}</span><span>{currentFontSize}px</span></div>
+                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium">
+                                <span>Base Size</span>
+                                <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{currentFontSize}px</span>
+                            </div>
                             <UniversalSlider value={currentFontSize} min={10} max={64} onChange={setFontSize} />
                         </div>
                     </div>
                 );
             }
-            if (activeTypoTool === 'type_style') { // Slant & Grade
-                return (
-                    <div className="flex flex-col gap-3 animate-fadeIn p-1">
-                        <div className="flex flex-col gap-1">
-                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium"><span>Slant</span><span>{axisSlant}°</span></div>
-                            <UniversalSlider value={axisSlant} min={-10} max={0} step={1} onChange={setAxisSlant} />
-                        </div>
-                        <div className="flex flex-col gap-1">
-                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium"><span>Grade</span><span>{axisGrade}</span></div>
-                            <UniversalSlider value={axisGrade} min={-200} max={150} step={1} onChange={setAxisGrade} />
-                        </div>
-                    </div>
-                );
-            }
         }
 
-        // --- STYLE MODE ---
-        else if (activeMode === 'style') {
-            // 1. CTA Style
-            if (activeBlockType === 'cta') {
-                return (
-                    <div className="flex flex-col gap-3 animate-fadeIn p-1">
-                        {/* Variant */}
-                        <div className="flex flex-col gap-1">
-                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium">
-                                <span>Variant</span>
-                            </div>
-                            <div className="flex p-0.5 bg-neutral-100 dark:bg-neutral-800 rounded-lg">
-                                {(['solid', 'outline', 'ghost'] as const).map(variant => (
-                                    <button
-                                        key={variant}
-                                        onClick={() => setCtaVariant(variant)}
-                                        className={`flex-1 flex items-center justify-center py-1.5 rounded-md text-xs font-medium transition-all ${ctaVariant === variant
-                                            ? 'bg-white dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 shadow-sm'
-                                            : 'text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300'
-                                            }`}
-                                    >
-                                        {variant.charAt(0).toUpperCase() + variant.slice(1)}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Size */}
-                        <div className="flex flex-col gap-1">
-                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium">
-                                <span>Size</span>
-                            </div>
-                            <div className="flex p-0.5 bg-neutral-100 dark:bg-neutral-800 rounded-lg">
-                                {(['small', 'medium', 'large'] as const).map(size => (
-                                    <button
-                                        key={size}
-                                        onClick={() => setCtaSize(size)}
-                                        className={`flex-1 flex items-center justify-center py-1.5 rounded-md text-xs font-medium transition-all ${ctaSize === size
-                                            ? 'bg-white dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 shadow-sm'
-                                            : 'text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300'
-                                            }`}
-                                    >
-                                        {size.charAt(0).toUpperCase() + size.slice(1)}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Color (Funk) */}
-                        <div className="flex flex-col gap-1">
-                            <span className="text-[10px] uppercase font-semibold text-neutral-400 pl-1">Accent Color</span>
-                            <ColorRibbon value={styleAccentColor} onChange={setStyleAccentColor} />
-                        </div>
-                    </div>
-                );
-            }
-
+        // STYLE MODE
+        if (activeMode === 'style') {
             if (activeStyleTool === 'palette') {
+                // Resolve Active Color
+                let activeColor = '';
+                let setActiveColor: (c: string) => void = () => { };
+
+                if (colorTarget === 'block') {
+                    activeColor = blockBgColor;
+                    setActiveColor = setBlockBgColor;
+                } else if (colorTarget === 'text') {
+                    activeColor = textColor;
+                    setActiveColor = setTextColor;
+                } else {
+                    // Element (Background)
+                    if (elementMode === 'fill') {
+                        activeColor = bgColor;
+                        setActiveColor = setBgColor;
+                    } else {
+                        activeColor = borderColor;
+                        setActiveColor = setBorderColor;
+                    }
+                }
+
                 return (
-                    <div className="flex flex-col gap-3 p-1 animate-fadeIn">
-                        <div className="flex w-full items-center gap-2">
-                            {/* Target Switcher */}
-                            <div className="flex p-0.5 bg-neutral-100 dark:bg-neutral-800 rounded-full w-fit">
-                                {(['bg', 'text', 'funk'] as const).map(target => (
-                                    <button
-                                        key={target}
-                                        onClick={() => setColorTarget(target)}
-                                        className={`px-3 py-1 rounded-full text-xs font-medium capitalize transition-all ${colorTarget === target
-                                            ? 'bg-white dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 shadow-sm'
-                                            : 'text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300'
-                                            }`}
-                                    >
-                                        {target === 'bg' ? 'Background' : target === 'text' ? 'Text' : 'Funk'}
-                                    </button>
-                                ))}
+                    <div className="flex flex-col gap-3 animate-fadeIn">
+                        {/* Target Toggle */}
+                        <div className="flex items-center justify-between">
+                            <div className="flex p-1 bg-neutral-100 dark:bg-neutral-800 rounded-lg w-fit">
+                                <button onClick={() => setColorTarget('block')} className={`px-3 py-1 rounded text-xs font-medium transition-colors ${colorTarget === 'block' ? 'bg-white text-black shadow-sm' : 'text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300'}`}>Block</button>
+                                <button onClick={() => setColorTarget('bg')} className={`px-3 py-1 rounded text-xs font-medium transition-colors ${colorTarget === 'bg' ? 'bg-white text-black shadow-sm' : 'text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300'}`}>Background</button>
+                                <button onClick={() => setColorTarget('text')} className={`px-3 py-1 rounded text-xs font-medium transition-colors ${colorTarget === 'text' ? 'bg-white text-black shadow-sm' : 'text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300'}`}>Text</button>
                             </div>
-                            {/* Eyedropper (Hybrid) */}
+                        </div>
+
+                        {/* Sub-Toggle for Element (Fill vs Stroke) */}
+                        {colorTarget === 'bg' && (
+                            <div className="flex items-center gap-2 px-1">
+                                <span className="text-[10px] uppercase font-bold text-neutral-400">Mode</span>
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={() => setElementMode('fill')}
+                                        className={`px-2 py-0.5 rounded text-[10px] border ${elementMode === 'fill' ? 'bg-black text-white border-black dark:bg-white dark:text-black' : 'border-neutral-200 text-neutral-500'}`}
+                                    >
+                                        Fill
+                                    </button>
+                                    <button
+                                        onClick={() => setElementMode('stroke')}
+                                        className={`px-2 py-0.5 rounded text-[10px] border ${elementMode === 'stroke' ? 'bg-black text-white border-black dark:bg-white dark:text-black' : 'border-neutral-200 text-neutral-500'}`}
+                                    >
+                                        Outline
+                                    </button>
+                                </div>
+                                {/* Border Width Slider if Stroke */}
+                                {elementMode === 'stroke' && (
+                                    <div className="flex items-center gap-2 ml-auto w-24">
+                                        <span className="text-[10px] text-neutral-400">{borderWidth}px</span>
+                                        <UniversalSlider value={borderWidth} min={0} max={10} step={1} onChange={setBorderWidth} />
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
+                        {/* Helper Buttons (Transparent / White / Black) */}
+                        <div className="flex gap-2">
+                            {/* Transparent */}
                             <button
-                                onClick={() => {
-                                    // @ts-ignore
-                                    if (window.EyeDropper) {
-                                        try {
-                                            // @ts-ignore
-                                            const eyeDropper = new window.EyeDropper();
-                                            eyeDropper.open().then((result: { sRGBHex: string }) => {
-                                                if (colorTarget === 'bg') setStyleBgColor(result.sRGBHex);
-                                                else if (colorTarget === 'text') setStyleTextColor(result.sRGBHex);
-                                                else setStyleAccentColor(result.sRGBHex);
-                                            }).catch((e: any) => console.log('Eyedropper canceled'));
-                                        } catch (e) {
-                                            console.error('Eyedropper failed', e);
-                                        }
-                                        return;
-                                    }
-                                    fallbackColorInputRef.current?.click();
-                                }}
-                                className="w-8 h-8 flex items-center justify-center rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-200 transition-colors ml-auto border border-transparent hover:border-neutral-200 dark:hover:border-neutral-700"
-                                title="Pick Color from Screen"
+                                onClick={() => setActiveColor('transparent')}
+                                className="w-8 h-8 rounded-full border border-neutral-200 dark:border-neutral-700 flex items-center justify-center bg-gray-100 overflow-hidden"
+                                title="Transparent"
                             >
-                                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
-                                    <path d="m15 6 3 3" />
-                                </svg>
+                                <div className="w-full h-full" style={{
+                                    backgroundImage: 'linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%)',
+                                    backgroundSize: '8px 8px',
+                                    backgroundPosition: '0 0, 0 4px, 4px -4px, -4px 0px'
+                                }} />
+                                {/* Red Line */}
+                                <div className="absolute w-[2px] h-[32px] bg-red-500/50 rotate-45 transform" />
                             </button>
 
-                            {/* Hidden Fallback Input */}
-                            <input
-                                ref={fallbackColorInputRef}
-                                type="color"
-                                className="opacity-0 absolute top-0 left-0 w-0 h-0 pointer-events-none border-0 p-0 m-0"
-                                onChange={(e) => {
-                                    if (colorTarget === 'bg') setStyleBgColor(e.target.value);
-                                    else if (colorTarget === 'text') setStyleTextColor(e.target.value);
-                                    else setStyleAccentColor(e.target.value);
-                                }}
+                            {/* White */}
+                            <button
+                                onClick={() => setActiveColor('#ffffff')}
+                                className="w-8 h-8 rounded-full border border-neutral-200 dark:border-neutral-700 bg-white"
+                                title="White"
+                            />
+
+                            {/* Black */}
+                            <button
+                                onClick={() => setActiveColor('#000000')}
+                                className="w-8 h-8 rounded-full border border-neutral-200 dark:border-neutral-700 bg-black"
+                                title="Black"
                             />
                         </div>
 
-                        {/* Single Dynamic Ribbon */}
-                        <div className="flex flex-col gap-1">
-                            <ColorRibbon
-                                value={
-                                    colorTarget === 'bg' ? styleBgColor :
-                                        colorTarget === 'text' ? styleTextColor :
-                                            styleAccentColor
-                                }
-                                onChange={
-                                    colorTarget === 'bg' ? setStyleBgColor :
-                                        colorTarget === 'text' ? setStyleTextColor :
-                                            setStyleAccentColor
-                                }
-                            />
-                        </div>
+                        <ColorRibbon
+                            value={activeColor}
+                            onChange={setActiveColor}
+                        />
                     </div>
                 );
             }
             if (activeStyleTool === 'effects') {
-                // Slider X: Opacity, Slider Y: Blur
                 return (
-                    <div className="flex flex-col gap-3 animate-fadeIn p-1">
+                    <div className="flex flex-col gap-5 animate-fadeIn">
                         <div className="flex flex-col gap-1">
-                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium"><span>Opacity</span><span>{styleOpacity}%</span></div>
-                            <UniversalSlider value={styleOpacity} min={0} max={100} onChange={setStyleOpacity} />
+                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium">
+                                <span>Opacity</span>
+                                <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{opacity}%</span>
+                            </div>
+                            <UniversalSlider value={opacity} min={0} max={100} onChange={setOpacity} />
                         </div>
                         <div className="flex flex-col gap-1">
-                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium"><span>Blur</span><span>{styleBlur}px</span></div>
-                            <UniversalSlider value={styleBlur} min={0} max={20} onChange={setStyleBlur} />
-                        </div>
-                    </div>
-                );
-            }
-            if (activeStyleTool === 'borders') {
-                // Hybrid
-                return (
-                    <div className="flex flex-col gap-3 animate-fadeIn p-1">
-                        <div className="flex flex-col gap-1">
-                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium"><span>Border Width</span><span>{styleBorderWidth}px</span></div>
-                            <UniversalSlider value={styleBorderWidth} min={0} max={10} onChange={setStyleBorderWidth} />
-                        </div>
-                        <div className="flex flex-col gap-1">
-                            <span className="text-[10px] uppercase font-semibold text-neutral-400 pl-1">Border Color</span>
-                            <ColorRibbon value={styleBorderColor} onChange={setStyleBorderColor} />
+                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium">
+                                <span>Blur</span>
+                                <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{blur}px</span>
+                            </div>
+                            <UniversalSlider value={blur} min={0} max={20} onChange={setBlur} />
                         </div>
                     </div>
                 );
             }
         }
 
-        return null; // Fallback
+        return <div className="text-xs text-neutral-400 p-4 text-center">Select a tool</div>;
     };
 
+    // --- Visibility ---
+    const visibilityClass = isVisible
+        ? 'translate-y-0 opacity-100 pointer-events-auto'
+        : 'translate-y-[100%] opacity-0 pointer-events-none';
+
     return (
-        <div className={`fixed bottom-[72px] left-1/2 -translate-x-1/2 z-[60] flex flex-col items-center gap-2 transition-all duration-300 ease-out ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0 pointer-events-none'}`}>
-            <div className="w-[360px] bg-white/90 dark:bg-neutral-900/90 backdrop-blur-xl border border-neutral-200/50 dark:border-neutral-800/50 rounded-2xl shadow-2xl overflow-hidden ring-1 ring-black/5">
-                {/* Header / Tabs */}
-                <div className="flex items-center justify-between px-2 py-2 border-b border-neutral-100 dark:border-neutral-800 bg-white/50 dark:bg-neutral-900/50">
-                    <div className="flex gap-1 bg-neutral-100/50 dark:bg-neutral-800/50 p-1 rounded-xl">
-                        {(['layout', 'typography', 'style'] as const).map(mode => (
-                            <button
-                                key={mode}
-                                onClick={() => setActiveMode(mode)}
-                                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${activeMode === mode
-                                    ? 'bg-white dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100 shadow-sm ring-1 ring-black/5'
-                                    : 'text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300'
-                                    }`}
-                            >
-                                {mode.charAt(0).toUpperCase() + mode.slice(1)}
-                            </button>
-                        ))}
+        <div className={`fixed left-0 right-0 bg-white/95 dark:bg-neutral-900/95 backdrop-blur-xl border-t border-neutral-200 dark:border-neutral-800 rounded-2xl z-[40] shadow-[0_-5px_20px_rgba(0,0,0,0.08)] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] bottom-0 ${visibilityClass}`}>
+
+            <div className={`flex flex-col transition-all duration-300 ${isCollapsed ? 'h-[60px]' : 'h-[260px]'}`}>
+                {/* HEAD: Dual Magnifier + Settings Trigger */}
+                <div className="flex items-center justify-center p-2 border-b border-neutral-100 dark:border-neutral-800 relative bg-neutral-50/50 dark:bg-neutral-900/50 shrink-0 h-[60px] rounded-t-2xl">
+
+                    {/* Settings Trigger (Far Left) - Toggles Content Mode */}
+                    <button
+                        onClick={() => setShowSettings(!showSettings)}
+                        className={`absolute left-4 w-11 h-11 flex items-center justify-center rounded-full border transition-all touch-manipulation
+                            ${showSettings
+                                ? 'bg-black text-white dark:bg-white dark:text-black border-transparent shadow-md scale-105'
+                                : 'bg-white dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 text-neutral-500 hover:text-black dark:hover:text-white'
+                            }`}
+                        style={{ minWidth: '44px', minHeight: '44px' }}
+                    >
+                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09A1.65 1.65 0 0 0 15 4.6a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9c.15.48.5.87.97 1.08H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" /></svg>
+                    </button>
+
+                    {/* Dual Magnifier */}
+                    {/* If Settings is active, we show Content Mode Wheels (Category / Strategy) */}
+                    {/* If Settings is inactive, we show Design Mode Wheels (Mode / Tool) */}
+                    <DualMagnifier
+                        // Mode Wheel (Left)
+                        activeMode={showSettings ? activeContentCat : activeMode}
+                        onModeSelect={(id) => showSettings ? setActiveContentCat(id) : setActiveMode(id as any)}
+
+                        // Tool Wheel (Right)
+                        activeTool={showSettings ? activeStrategy : (activeMode === 'layout' ? activeLayoutTool : activeMode === 'typography' ? activeTypoTool : activeStyleTool)}
+                        onToolSelect={(id) => {
+                            if (showSettings) {
+                                setActiveStrategy(id);
+                            } else {
+                                if (activeMode === 'layout') setActiveLayoutTool(id);
+                                else if (activeMode === 'typography') setActiveTypoTool(id);
+                                else setActiveStyleTool(id);
+                            }
+                        }}
+
+                        // Options
+                        modeOptions={showSettings ? contentCategories : undefined}
+                        toolOptions={showSettings ? getStrategyTools(activeContentCat) : (activeMode === 'layout' ? layoutTools : activeMode === 'typography' ? typoTools : styleTools)}
+                    />
+
+                    {/* Collapse & Close Controls (Right) */}
+                    <div className="absolute right-4 flex items-center gap-2">
+                        {/* Minimize Chevron Removed per user request */}
+
+                        {/* Close X */}
+                        <button
+                            onClick={() => setIsVisible(false)}
+                            className="w-8 h-8 flex items-center justify-center rounded-full text-neutral-400 hover:text-red-500 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                        >
+                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M18 6L6 18M6 6l12 12" /></svg>
+                        </button>
                     </div>
                 </div>
 
-                {/* Sub-Tool Navigation (Media Only) */}
-                {activeBlockType === 'media' && (
-                    <div className="w-full border-b border-neutral-100 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-900/50">
-                        {activeMode === 'layout' && (
-                            <ToolCarousel items={layoutTools} activeId={activeLayoutTool} onSelect={setActiveLayoutTool} />
-                        )}
-                        {activeMode === 'typography' && (
-                            <ToolCarousel items={typoTools} activeId={activeTypoTool} onSelect={setActiveTypoTool} />
-                        )}
-                        {activeMode === 'style' && (
-                            <ToolCarousel items={styleTools} activeId={activeStyleTool} onSelect={setActiveStyleTool} />
-                        )}
-                    </div>
-                )}
+                {/* BODY: Sliders OR Settings */}
+                <div className={`flex-1 overflow-y-auto px-4 pt-4 pb-[calc(80px+env(safe-area-inset-bottom))] transition-opacity duration-200 ${isCollapsed ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+                    <div className="max-w-md mx-auto">
+                        {showSettings ? (
+                            <div className="flex flex-col gap-1 pt-0">
+                                {/* Dynamic Picker Switch */}
+                                {(() => {
+                                    // 1. ATOMIC MEDIA (Image/Video) - Use MediaPicker
+                                    if (['image', 'video'].includes(activeContentCat) && ['image', 'video', 'album'].includes(activeStrategy)) {
+                                        // Mock Data Transform
+                                        const mockItems: MediaItem[] = SEED_FEEDS.news.map(n => ({
+                                            id: n.id,
+                                            type: 'image',
+                                            src: n.image,
+                                            title: n.title
+                                        }));
+                                        // If video, mix in some video mocks
+                                        if (activeContentCat === 'video') {
+                                            const videoItems: MediaItem[] = SEED_FEEDS.youtube.map(v => ({
+                                                id: v.id,
+                                                type: 'video',
+                                                src: v.image, // Use thumb as src for now
+                                                title: v.title,
+                                                duration: v.subtitle?.split('•')[0] // hacky parse
+                                            }));
+                                            mockItems.push(...videoItems);
+                                        }
 
-                {/* Tool Sliders Area */}
-                <div className="p-3 min-h-[120px]">
-                    {renderSliders()}
+                                        return (
+                                            <MediaPicker
+                                                type={activeContentCat as 'image' | 'video'}
+                                                items={mockItems}
+                                                onSelect={(id) => console.log('Selected Media:', id)}
+                                                onUpload={() => console.log('Trigger Upload')}
+                                                onGenerate={() => console.log('Trigger AI Gen')}
+                                            />
+                                        );
+                                    }
+
+                                    // 2. HIGH LEVEL COLLECTIONS (Playlist, Feed, etc) - Use ContentPicker
+                                    let mockPickerItems: ContentPickerItem[] = [];
+                                    let label = `Select ${activeStrategy}`;
+
+                                    // Simple Mock Mapping based on Category
+                                    if (activeContentCat === 'youtube') {
+                                        mockPickerItems = SEED_FEEDS.youtube.map(y => ({ id: y.id, title: y.title, subtitle: y.subtitle }));
+                                    } else if (activeContentCat === 'product') {
+                                        mockPickerItems = SEED_FEEDS.retail.map(r => ({ id: r.id, title: r.title, subtitle: r.price, badge: r.badge }));
+                                    } else if (activeContentCat === 'kpi') {
+                                        mockPickerItems = SEED_FEEDS.kpi.map(k => ({ id: k.id, title: k.title, subtitle: k.subtitle, badge: k.badge }));
+                                    } else if (activeContentCat === 'events') {
+                                        // Use mock events
+                                        mockPickerItems = SEED_FEEDS.events.map(e => ({ id: e.id, title: e.title, subtitle: e.subtitle, badge: e.badge }));
+                                    } else {
+                                        // Generic Fallback
+                                        mockPickerItems = SEED_FEEDS.news.map(n => ({ id: n.id, title: n.title, subtitle: n.subtitle }));
+                                    }
+
+                                    return (
+                                        <ContentPicker
+                                            type={activeStrategy}
+                                            label={label}
+                                            items={mockPickerItems}
+                                            selectedValue={mockPickerItems[0]?.id} // Select 1st by default
+                                            onSelect={(id) => {
+                                                // WIRING: Update Block State
+                                                if (activeContentCat === 'youtube') {
+                                                    setTileVariant('youtube');
+                                                    setFeedSourceIndex(4); // 4 = youtube in Multi21 logic
+                                                } else if (activeContentCat === 'product') {
+                                                    setTileVariant('product');
+                                                    setFeedSourceIndex(2); // 2 = retail
+                                                } else if (activeContentCat === 'kpi') {
+                                                    setTileVariant('kpi');
+                                                    setFeedSourceIndex(1); // 1 = kpi
+                                                } else if (activeContentCat === 'events') {
+                                                    setTileVariant('events');
+                                                    setFeedSourceIndex(5); // 5 = events
+                                                } else {
+                                                    setTileVariant('generic');
+                                                    setFeedSourceIndex(3); // 3 = news/generic
+                                                }
+                                                console.log('Picked Content Source:', id);
+                                            }}
+                                            onCreate={() => console.log('Create New:', activeStrategy)}
+                                        />
+                                    );
+                                })()}
+
+                                {/* CONTEXTUAL SETTINGS */}
+                                <div className="mt-4 pt-4 border-t border-neutral-100 dark:border-neutral-800 flex flex-col gap-3">
+                                    <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">
+                                        {activeContentCat} Elements
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-y-2 gap-x-4">
+                                        {/* Helper for Checkboxes */}
+                                        {[
+                                            { label: 'Title', val: tileShowTitle, set: setTileShowTitle },
+                                            {
+                                                label: activeContentCat === 'youtube' ? 'Views & Date' :
+                                                    activeContentCat === 'product' ? 'Price' :
+                                                        activeContentCat === 'events' ? 'Date & Loc' :
+                                                            'Meta / Subtitle',
+                                                val: tileShowMeta, set: setTileShowMeta
+                                            },
+                                            {
+                                                label: activeContentCat === 'youtube' ? 'Duration' :
+                                                    activeContentCat === 'product' ? 'Status Tag' :
+                                                        'Badge',
+                                                val: tileShowBadge, set: setTileShowBadge
+                                            },
+                                            { label: 'Action (CTA)', val: tileShowCtaLabel, set: setTileShowCtaLabel },
+                                            { label: 'Arrow', val: tileShowCtaArrow, set: setTileShowCtaArrow },
+                                        ].map((opt, i) => (
+                                            <div
+                                                key={i}
+                                                className="flex items-center gap-2 cursor-pointer group select-none active:opacity-50"
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    e.stopPropagation();
+                                                    // Force toggle
+                                                    opt.set(!opt.val);
+                                                    console.log(`Toggling ${opt.label}: ${!opt.val}`);
+                                                }}
+                                            >
+                                                <div className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${opt.val
+                                                    ? 'bg-black border-black dark:bg-white dark:border-white'
+                                                    : 'bg-transparent border-neutral-300 dark:border-neutral-600 group-hover:border-neutral-400'
+                                                    }`}>
+                                                    {opt.val && <svg className="w-3 h-3 text-white dark:text-black pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3}><polyline points="20 6 9 17 4 12" /></svg>}
+                                                </div>
+                                                <span className="text-xs font-medium text-neutral-600 dark:text-neutral-400 group-hover:text-black dark:group-hover:text-white">
+                                                    {opt.label}
+                                                </span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        ) : renderSliders()}
+                    </div>
                 </div>
             </div>
         </div>
     );
 }
-
-

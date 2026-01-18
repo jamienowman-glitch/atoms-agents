@@ -435,7 +435,7 @@ function Multi21DesignerContent({ effectiveRole }: { effectiveRole: 'tenant' | '
                 <>
                     <BottomControlsPanel
                         settingsContent={settingsContent}
-                        activeBlockId={activeBlockId}
+                        activeBlockId={activeBlockId || (viewLayer === 'page' ? pageBlocks[0]?.id : popupBlocks[0]?.id)}
                         activeBlockType={
                             (() => {
                                 const findType = (items: Block[]): string | undefined => {

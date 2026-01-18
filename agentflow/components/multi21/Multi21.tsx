@@ -18,7 +18,7 @@ export interface Multi21Item {
     };
     // Feed Specifics
     price?: string;
-    variant?: 'generic' | 'product' | 'kpi' | 'text' | 'video' | 'youtube';
+    variant?: 'generic' | 'product' | 'kpi' | 'text' | 'video' | 'youtube' | 'events' | 'blogs';
 }
 
 export interface Multi21Props {
@@ -38,7 +38,7 @@ export interface Multi21Props {
     itemsMobile?: number;
 
     align?: 'left' | 'center' | 'right';
-    tileVariant?: 'generic' | 'product' | 'kpi' | 'text' | 'video' | 'youtube';
+    tileVariant?: 'generic' | 'product' | 'kpi' | 'text' | 'video' | 'youtube' | 'events' | 'blogs';
     gridAspectRatio?: '1:1' | '16:9' | '9:16' | '4:3';
     tileShowTitle?: boolean;
     tileShowMeta?: boolean;
@@ -73,10 +73,56 @@ export interface Multi21Props {
     isMobileView?: boolean;
 
     // Phase 10: Feeds & Layout
-    feedSource?: 'kpi' | 'retail' | 'news' | 'youtube' | null;
+    feedSource?: 'kpi' | 'retail' | 'news' | 'youtube' | 'events' | null;
     feedLimit?: number;
     isCarousel?: boolean;
 }
+
+// --- Sub-Components ---
+
+// YouTube Facade (Fixes "Giant Red Button" issue)
+const YouTubeTile = ({ videoId, title, aspectClass }: { videoId: string, title: string, aspectClass: string }) => {
+    const [isPlaying, setIsPlaying] = React.useState(false);
+
+    if (isPlaying) {
+        return (
+            <div className={`relative ${aspectClass} bg-black overflow-hidden multi21-card group/yt z-0`}>
+                <iframe
+                    src={`https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&rel=0&playsinline=1`}
+                    className="absolute inset-0 w-full h-full pointer-events-auto"
+                    title={title}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                />
+            </div>
+        );
+    }
+
+    return (
+        <div
+            onClick={() => setIsPlaying(true)}
+            className={`relative ${aspectClass} bg-black overflow-hidden multi21-card group/yt z-0 cursor-pointer`}
+        >
+            {/* Thumbnail */}
+            <img
+                src={`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`}
+                alt={title}
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover/yt:scale-105"
+            />
+            {/* Overlay */}
+            <div className="absolute inset-0 bg-black/20 group-hover/yt:bg-black/10 transition-colors" />
+
+            {/* Custom Play Button (Minimal) */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="w-8 h-8 flex items-center justify-center opacity-90 group-hover/yt:scale-110 transition-transform drop-shadow-md">
+                    <svg className="w-8 h-8 text-white fill-white" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+    );
+};
 
 export function Multi21({
     items: initialItems,
@@ -147,8 +193,10 @@ export function Multi21({
             let mappedVariant: Multi21Item['variant'] = 'generic';
 
             if (item.type === 'product') mappedVariant = 'product'; // Retail -> Product
-            else if (item.type === 'video') mappedVariant = 'youtube'; // Video -> Youtube (or video)
+            else if (item.type === 'video') mappedVariant = 'youtube'; // Video -> Youtube
             else if (item.type === 'kpi') mappedVariant = 'kpi';    // KPI -> KPI
+            else if (feedSource === 'events') mappedVariant = 'events'; // Events -> Events
+            else if (feedSource === 'news') mappedVariant = 'blogs'; // News -> Blogs (assumed)
 
             // 3. The Generator Function (getVarStyle) - SYNCED WITH MULTI21_TEXT
             const getVarStyle = (
@@ -186,7 +234,7 @@ export function Multi21({
                 title: item.title,
                 meta: item.subtitle, // News timestamp comes through here in seed-feeds
                 imageUrl: item.image,
-                videoUrl: item.type === 'video' ? `https://www.youtube.com/watch?v=dQw4w9WgXcQ` : undefined,
+                videoUrl: item.videoUrl || (item.type === 'video' ? `https://www.youtube.com/watch?v=dQw4w9WgXcQ` : undefined),
                 badge: item.badge,
                 price: item.price,
                 secondaryLink: item.cta ? { href: '#', label: item.cta } : undefined,
@@ -403,29 +451,91 @@ export function Multi21({
                         >
                             {(effectiveVariant === 'kpi') && (
                                 <div
-                                    className={`relative ${aspectClass} bg-gray-50 dark:bg-neutral-900 overflow-hidden multi21-card`}
+                                    className={`relative ${aspectClass} bg-neutral-900 overflow-hidden multi21-card`}
                                     style={{ lineHeight: 0 }}
                                 >
-                                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 px-3 text-center">
+                                    {/* Background Image with Overlay */}
+                                    {item.imageUrl && (
+                                        <>
+                                            <img src={item.imageUrl} alt="" className="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-overlay" />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/30" />
+                                        </>
+                                    )}
+
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 px-3 text-center z-10">
 
                                         {tileShowBadge && item.badge && (
-                                            <span className="multi21-accent-bg text-[10px] px-2 py-0.5 rounded-full font-semibold uppercase tracking-wide" style={{ lineHeight: 1.2 }}>
+                                            <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wide mb-2 ${item.badge.includes('+') ? 'bg-emerald-500/20 text-emerald-400' : 'bg-white/10 text-white'}`} style={{ lineHeight: 1.2 }}>
                                                 {item.badge}
                                             </span>
                                         )}
                                         {tileShowTitle && (
-                                            <div className="text-3xl font-semibold text-gray-900 dark:text-gray-100" style={{ fontSize: 'calc(var(--multi-font-size) * 2)', lineHeight: 1.1 }}>
+                                            <div className="font-bold text-white tracking-tight" style={{ fontSize: 'calc(var(--multi-font-size) * 2.5)', lineHeight: 1 }}>
                                                 {item.title}
                                             </div>
                                         )}
                                         {tileShowMeta && item.meta && (
-                                            <div className="text-sm text-gray-500 dark:text-gray-400">
+                                            <div className="text-xs text-neutral-400 font-medium uppercase tracking-widest mt-1">
                                                 {item.meta}
                                             </div>
                                         )}
                                     </div>
                                 </div>
                             )}
+
+                            {effectiveVariant === 'events' && (
+                                <div className={`relative ${aspectClass} overflow-hidden multi21-card group/event`}>
+                                    {/* Event Image */}
+                                    <div className="absolute inset-0">
+                                        <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover transition-transform duration-500 group-hover/event:scale-110" />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+                                    </div>
+
+                                    {/* Date Badge (Top Left) */}
+                                    <div className="absolute top-3 left-3 bg-white text-black rounded-lg overflow-hidden flex flex-col items-center w-10 text-center shadow-lg">
+                                        <div className="bg-red-500 w-full h-2"></div>
+                                        <div className="px-1 py-1">
+                                            <span className="block text-[8px] font-bold uppercase leading-none text-neutral-500">{item.meta?.split('•')[1]?.trim().split(' ')[0] || 'OCT'}</span>
+                                            <span className="block text-sm font-black leading-none">{item.meta?.split('•')[1]?.trim().split(' ')[1] || '15'}</span>
+                                        </div>
+                                    </div>
+
+                                    {/* Event Details (Bottom) */}
+                                    <div className="absolute inset-x-0 bottom-0 p-4 flex flex-col gap-1">
+                                        {tileShowTitle && <h3 className="text-white font-bold text-lg leading-tight">{item.title}</h3>}
+                                        {tileShowMeta && (
+                                            <div className="flex items-center gap-1 text-xs text-neutral-300">
+                                                <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                                                <span className="truncate">{item.meta?.split('•')[0] || 'Location TBD'}</span>
+                                            </div>
+                                        )}
+
+                                        {tileShowCtaLabel && item.secondaryLink && (
+                                            <button className="mt-2 w-full bg-white text-black py-2 rounded font-bold text-xs hover:bg-neutral-200 transition-colors uppercase tracking-wide">
+                                                {item.secondaryLink.label || 'Register'}
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* YouTube Real Player Logic (Facade) */}
+                            {(effectiveVariant === 'youtube' && item.videoUrl && item.videoUrl.includes('youtube')) ? (
+                                <div className="flex flex-col w-full h-full gap-2">
+                                    <YouTubeTile
+                                        videoId={item.videoUrl.split('v=')[1]?.split('&')[0]}
+                                        title={item.title}
+                                        aspectClass={aspectClass}
+                                    />
+                                    {/* Meta Below Video */}
+                                    {(tileShowTitle || tileShowMeta) && (
+                                        <div className="flex flex-col px-1">
+                                            {tileShowTitle && <h3 className="font-bold leading-tight" style={{ fontSize: 'calc(var(--multi-font-size) * 1.1)' }}>{item.title}</h3>}
+                                            {tileShowMeta && <p className="text-xs text-neutral-500 mt-0.5">{item.meta}</p>}
+                                        </div>
+                                    )}
+                                </div>
+                            ) : null}
 
                             {effectiveVariant === 'text' && (
                                 <div
@@ -447,8 +557,10 @@ export function Multi21({
                                 </div>
                             )}
 
-                            {/* Standard Image Cards (Generic, Product, Video/Youtube) */}
-                            {((effectiveVariant === 'generic' || effectiveVariant === 'product' || effectiveVariant === 'video' || effectiveVariant === 'youtube')) && (
+                            {/* Standard Image Cards (Generic, Product, Blogs, Image, Video fallback) */
+                                /* Render if NOT KPI, NOT Events, NOT Youtube-Player, NOT Text */
+                            }
+                            {(!['kpi', 'events', 'text'].includes(effectiveVariant) && !(effectiveVariant === 'youtube' && item.videoUrl?.includes('youtube'))) && (
                                 <>
                                     {/* Card Image */}
                                     <div

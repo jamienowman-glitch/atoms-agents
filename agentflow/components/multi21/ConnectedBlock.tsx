@@ -142,7 +142,9 @@ export const ConnectedBlock: React.FC<ConnectedBlockProps> = ({
     const [fontFamily] = useToolState<number>({ target: { ...scope, toolId: 'typo.family' }, defaultValue: 0 });
 
     // --- Styles ---
-    const [styleBgColor] = useToolState<string>({ target: { ...scope, toolId: 'style.bg' }, defaultValue: 'transparent' }); // Default to transparent for blocks
+    // --- Styles ---
+    const [styleBgColor] = useToolState<string>({ target: { ...scope, toolId: 'style.bg' }, defaultValue: 'transparent' }); // Tile BG
+    const [styleBlockBgColor] = useToolState<string>({ target: { ...scope, toolId: 'style.block_bg' }, defaultValue: 'transparent' }); // Block BG
     const [styleTextColor] = useToolState<string>({ target: { ...scope, toolId: 'style.text' }, defaultValue: 'inherit' });
     const [styleAccentColor] = useToolState<string>({ target: { ...scope, toolId: 'style.accent' }, defaultValue: '#3b82f6' });
     const [styleBorderColor] = useToolState<string>({ target: { ...scope, toolId: 'style.border_color' }, defaultValue: 'transparent' });
@@ -199,6 +201,7 @@ export const ConnectedBlock: React.FC<ConnectedBlockProps> = ({
                 e.stopPropagation();
                 onClick();
             }}
+            style={{ backgroundColor: styleBlockBgColor }}
             className={`
                 relative transition-all duration-200
                 ${isSelected ? 'ring-2 ring-blue-500 ring-offset-4 dark:ring-offset-black z-10' : 'hover:ring-1 hover:ring-neutral-300 dark:hover:ring-neutral-700'}
@@ -330,7 +333,7 @@ export const ConnectedBlock: React.FC<ConnectedBlockProps> = ({
                     styleBlur={styleBlur}
 
                     isMobileView={previewMode === 'mobile'}
-                    feedSource={['kpi', 'retail', 'news', 'youtube'][feedSourceIndex - 1] as any}
+                    feedSource={['kpi', 'retail', 'news', 'youtube', 'events'][feedSourceIndex - 1] as any}
                     feedLimit={feedLimit}
                     isCarousel={layoutMode === 1}
                 />

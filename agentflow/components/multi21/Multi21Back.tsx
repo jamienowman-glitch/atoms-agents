@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 export interface Multi21BackProps {
-    variant: 'generic' | 'product' | 'kpi' | 'text' | 'video' | 'youtube';
+    variant: 'generic' | 'product' | 'kpi' | 'text' | 'video' | 'youtube' | 'events' | 'blogs';
     onFlipBack: () => void;
     onUtmChange: (utm: { source: string; medium: string; campaign: string }) => void;
 }
@@ -20,7 +20,9 @@ export const Multi21Back: React.FC<Multi21BackProps> = ({ variant, onFlipBack, o
             case 'video':
             case 'youtube': return 'VideoObject';
             case 'kpi': return 'Dataset';
-            case 'text': return 'Article';
+            case 'text':
+            case 'blogs': return 'Article';
+            case 'events': return 'Event';
             default: return 'WebPage';
         }
     };

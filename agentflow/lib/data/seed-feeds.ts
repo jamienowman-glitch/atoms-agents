@@ -7,9 +7,46 @@ export interface FeedItem {
     badge?: string;
     price?: string;
     cta?: string;
+    videoUrl?: string;
 }
 
-export const SEED_FEEDS: Record<'kpi' | 'retail' | 'news' | 'youtube', FeedItem[]> = {
+export const SEED_FEEDS: Record<'kpi' | 'retail' | 'news' | 'youtube' | 'events', FeedItem[]> = {
+    events: [
+        {
+            id: 'e-1',
+            type: 'image',
+            title: 'Product Launch 2024',
+            subtitle: 'San Francisco, CA • Oct 15',
+            image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80',
+            badge: 'Upcoming',
+            cta: 'Register',
+        },
+        {
+            id: 'e-2',
+            type: 'image',
+            title: 'Developer Summit',
+            subtitle: 'London, UK • Nov 02',
+            image: 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80',
+            badge: 'Sold Out',
+            cta: 'Join Waitlist',
+        },
+        {
+            id: 'e-3',
+            type: 'image',
+            title: 'Design Week',
+            subtitle: 'New York, NY • Dec 10',
+            image: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=800&q=80',
+            cta: 'Tickets',
+        },
+        {
+            id: 'e-4',
+            type: 'image',
+            title: 'Tech mixer',
+            subtitle: 'Berlin, DE • Jan 20',
+            image: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=800&q=80',
+            cta: 'RSVP',
+        },
+    ],
     kpi: [
         {
             id: 'k-1',
@@ -174,6 +211,7 @@ export const SEED_FEEDS: Record<'kpi' | 'retail' | 'news' | 'youtube', FeedItem[
             subtitle: '12M views • 5 years ago',
             image: 'https://images.unsplash.com/photo-1493225255756-d9584f8606e9?auto=format&fit=crop&w=800&q=80',
             cta: 'Watch Now',
+            videoUrl: 'https://www.youtube.com/watch?v=jfKfPfyJRdk' // Lofi Girl
         },
         {
             id: 'y-2',
@@ -182,6 +220,7 @@ export const SEED_FEEDS: Record<'kpi' | 'retail' | 'news' | 'youtube', FeedItem[
             subtitle: '8M views • 3 years ago',
             image: 'https://images.unsplash.com/photo-1514525253440-b393452e8d26?auto=format&fit=crop&w=800&q=80',
             cta: 'Watch Now',
+            videoUrl: 'https://www.youtube.com/watch?v=aqz-KE-bpKQ' // Big Buck Bunny
         },
         {
             id: 'y-3',
@@ -214,6 +253,7 @@ export const SEED_FEEDS: Record<'kpi' | 'retail' | 'news' | 'youtube', FeedItem[
             subtitle: '15M views • 2 years ago',
             image: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=800&q=80',
             cta: 'Watch Now',
+            videoUrl: 'https://www.youtube.com/watch?v=LXb3EKWsInQ' // 4K Nature
         },
     ],
 };
