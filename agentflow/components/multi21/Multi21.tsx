@@ -228,6 +228,9 @@ export function Multi21({
         });
     }, [feedSource, feedLimit, initialItems, isMobileView, itemsMobile, itemsDesktop]);
 
+    // Map Vertical Align to Flex logic
+    const flexJustify = verticalAlign === 'top' ? 'flex-start' : verticalAlign === 'bottom' ? 'flex-end' : 'center';
+
     const alignmentClass = {
         left: 'justify-start',
         center: 'justify-center',
@@ -383,7 +386,7 @@ export function Multi21({
                     ['--multi-letter-spacing' as string]: cssLetterSpacing,
                     ['--multi-word-spacing' as string]: `${wordSpacing}em`,
                     ['--multi-text-align' as string]: textAlign,
-                    ['--multi-vert-align' as string]: verticalAlign === 'top' ? 'flex-start' : verticalAlign === 'bottom' ? 'flex-end' : 'center',
+                    ['--multi-vert-align' as string]: flexJustify,
                     ['--multi-text-transform' as string]: textTransform,
                     ['--multi-text-decoration' as string]: textDecoration,
                 }}
@@ -635,7 +638,17 @@ export function Multi21({
 
                                     {/* Content (Title, Meta, CTA) - Conditional Render for "Seamless" Mode */}
                                     {showContentArea && (
-                                        <div className="flex flex-col gap-0.5 multi21-content">
+                                        <div
+                                            className="flex flex-col gap-0.5 multi21-content"
+                                            style={{
+                                                textAlign: 'var(--multi-text-align)' as any,
+                                                textTransform: 'var(--multi-text-transform)' as any,
+                                                wordSpacing: 'var(--multi-word-spacing)',
+                                                justifyContent: 'var(--multi-vert-align)' as any,
+                                                display: 'flex',
+                                                flexDirection: 'column'
+                                            } as React.CSSProperties}
+                                        >
                                             {tileShowTitle && (
                                                 <h3 className="font-medium text-gray-900 dark:text-gray-100 line-clamp-2 group-hover:underline decoration-1 underline-offset-2">
                                                     <a href={getLinkWithUtm(item.href || '#')}>

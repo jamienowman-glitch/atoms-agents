@@ -105,7 +105,11 @@ export const ConnectedBlock: React.FC<ConnectedBlockProps> = ({
     const [radiusMobile] = useToolState<number>({ target: { ...scope, toolId: 'grid.tile_radius_mobile' }, defaultValue: 8 });
     const [itemsDesktop] = useToolState<number>({ target: { ...scope, toolId: 'feed.query.limit_desktop' }, defaultValue: 12 });
     const [itemsMobile] = useToolState<number>({ target: { ...scope, toolId: 'feed.query.limit_mobile' }, defaultValue: 6 });
-    const [align] = useToolState<'left' | 'center' | 'right'>({ target: { ...scope, toolId: 'align' }, defaultValue: 'center' });
+    const [textAlign] = useToolState<'left' | 'center' | 'right'>({ target: { ...scope, toolId: 'typo.align' }, defaultValue: 'left' });
+    const [verticalAlign] = useToolState<'top' | 'center' | 'bottom'>({ target: { ...scope, toolId: 'typo.vert' }, defaultValue: 'top' });
+    const [wordSpacing] = useToolState<number>({ target: { ...scope, toolId: 'typo.word_spacing' }, defaultValue: 0 });
+    const [textTransform] = useToolState<string>({ target: { ...scope, toolId: 'typo.case' }, defaultValue: 'none' });
+    const [textDecoration] = useToolState<string>({ target: { ...scope, toolId: 'typo.decoration' }, defaultValue: 'none' });
     const [tileVariant] = useToolState<'generic' | 'product' | 'kpi' | 'text' | 'video' | 'youtube'>({ target: { ...scope, toolId: 'tile.variant' }, defaultValue: 'generic' });
     const [aspectRatio] = useToolState<'1:1' | '16:9' | '9:16' | '4:3'>({ target: { ...scope, toolId: 'grid.aspect_ratio' }, defaultValue: '16:9' });
 
@@ -321,7 +325,7 @@ export const ConnectedBlock: React.FC<ConnectedBlockProps> = ({
                     gridTileRadiusMobile={radiusMobile}
                     itemsDesktop={itemsDesktop}
                     itemsMobile={itemsMobile}
-                    align={align}
+                    textAlign={textAlign}
                     tileVariant={tileVariant}
                     gridAspectRatio={aspectRatio}
                     tileShowTitle={showTitle}
@@ -335,13 +339,12 @@ export const ConnectedBlock: React.FC<ConnectedBlockProps> = ({
                     fontSizeMobile={fontSizeMobile}
                     lineHeight={typoLineHeight}
                     letterSpacing={typoLetterSpacing}
-                    wordSpacing={typoWordSpacing}
+                    wordSpacing={wordSpacing}
 
                     // Type Setting
-                    textAlign={typoAlign as any}
-                    verticalAlign={typoVerticalAlign as any}
-                    textTransform={typoTransform}
-                    textDecoration={typoDecoration}
+                    verticalAlign={verticalAlign}
+                    textTransform={textTransform}
+                    textDecoration={textDecoration}
                     axisWeight={axisWeight === -1 ? null : axisWeight}
                     axisWidth={axisWidth === -1 ? null : axisWidth}
                     fontFamily={fontFamily}
