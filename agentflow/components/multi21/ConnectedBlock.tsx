@@ -121,7 +121,6 @@ export const ConnectedBlock: React.FC<ConnectedBlockProps> = ({
     const [layoutMode] = useToolState<number>({ target: { ...scope, toolId: 'content.layout_mode' }, defaultValue: 0 });
 
     // --- Text Block Logic ---
-    const [textAlign] = useToolState<'left' | 'center' | 'right' | 'justify'>({ target: { ...scope, toolId: 'text.align' }, defaultValue: 'left' });
     const [contentWidth] = useToolState<number>({ target: { ...scope, toolId: 'text.width_percent' }, defaultValue: 100 });
     const [stackGap] = useToolState<number>({ target: { ...scope, toolId: 'text.stack_gap' }, defaultValue: 16 });
 
@@ -254,6 +253,7 @@ export const ConnectedBlock: React.FC<ConnectedBlockProps> = ({
 
                     // Type Setting
                     textAlign={typoAlign as any}
+                    verticalAlign={typoVerticalAlign as any}
                     textTransform={typoTransform}
                     textDecoration={typoDecoration}
 

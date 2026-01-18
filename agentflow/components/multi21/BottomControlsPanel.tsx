@@ -333,16 +333,23 @@ export function BottomControlsPanel({ settingsContent, activeBlockId, activeBloc
         // Helper: Button Group
         const renderBtnGroup = (options: { label: string, value: string }[], current: string, onChange: (v: string) => void) => (
             <div className="flex bg-neutral-100 dark:bg-neutral-800 rounded-lg p-1 gap-1">
-                {options.map(opt => (
+                {options.map((opt) => (
                     <button
                         key={opt.value}
-                        onClick={() => onChange(opt.value)}
-                        className={`flex-1 py-1.5 text-xs font-medium rounded-md transition-all ${current === opt.value
-                            ? 'bg-white dark:bg-neutral-600 text-black dark:text-white shadow-sm'
-                            : 'text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-200'
-                            }`}
-                    >
-                        {opt.label}
+                        type="button"
+                        onPointerDown={(e) => {
+                            e.preventDefault(); // Prevent focus stealing and ghost clicks
+                            onChange(opt.value);
+                        }}
+                        className={`
+                        flex-1 py-1.5 px-2 text-xs font-medium rounded-md transition-all
+                        flex items-center justify-center gap-1.5
+                        ${current === opt.value
+                                ? 'bg-black text-white dark:bg-white dark:text-black shadow-sm'
+                                : 'bg-transparent text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800'
+                            }
+                    `}
+                    >        {opt.label}
                     </button>
                 ))}
             </div>

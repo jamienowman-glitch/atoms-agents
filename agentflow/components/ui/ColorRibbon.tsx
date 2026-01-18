@@ -130,7 +130,16 @@ export const ColorRibbon: React.FC<ColorRibbonProps> = ({ value, onChange }) => 
             {mode === 'spectrum' && (
                 <div className="flex items-center gap-2 h-[44px]">
                     {/* Spectrum Slider */}
-                    <div className="flex-1 h-full relative group rounded-full overflow-hidden border border-neutral-200 dark:border-neutral-800">
+                    <div
+                        className="flex-1 h-full relative group rounded-full overflow-hidden border border-neutral-200 dark:border-neutral-800 cursor-crosshair"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            const rect = e.currentTarget.getBoundingClientRect();
+                            const x = e.clientX - rect.left;
+                            const hue = Math.round((x / rect.width) * 360);
+                            updateHue(hue);
+                        }}
+                    >
                         {/* Gradient Background */}
                         <div
                             className="absolute inset-0 w-full h-full pointer-events-none"

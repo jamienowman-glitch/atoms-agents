@@ -175,14 +175,15 @@ export function Multi21_Text({
     const headlineStyle = {
         ...getVarStyle(headlineSize, headlineWeight),
         lineHeight: 1.1,
-        letterSpacing: `${(letterSpacing - 0.02) / 1000}em`
+        letterSpacing: `${(letterSpacing - 2) / 100}em`, // Adjusted base offset and divisor
+        textTransform: textTransform
     };
 
     const subheadStyle = {
         ...getVarStyle(subheadSize, subheadWeight),
         lineHeight: 1.3,
-        letterSpacing: `${letterSpacing / 1000}em`,
-        wordSpacing: `${wordSpacing / 1000}em`,
+        letterSpacing: `${letterSpacing / 100}em`,
+        wordSpacing: `${wordSpacing / 10}em`,
         textTransform: textTransform,
         opacity: 0.85
     };
@@ -190,8 +191,8 @@ export function Multi21_Text({
     const bodyStyle = {
         ...getVarStyle(bodySize, bodyWeight),
         lineHeight: lineHeight,
-        letterSpacing: `${letterSpacing / 1000}em`,
-        wordSpacing: `${wordSpacing / 1000}em`,
+        letterSpacing: `${letterSpacing / 100}em`,
+        wordSpacing: `${wordSpacing / 10}em`,
         textTransform: textTransform,
         opacity: 0.95
     };

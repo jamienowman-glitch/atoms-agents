@@ -280,7 +280,7 @@ export function Multi21({
 
     const activeFontSize = isMobileView ? fontSizeMobile : fontSizeDesktop;
     const variationSettings = `'wght' ${axisWeight !== null ? axisWeight : 400}, 'wdth' ${wdth}, 'slnt' ${slnt}, 'CASL' ${casl}, 'GRAD' ${grd}`;
-    const cssLetterSpacing = `${letterSpacing / 1000}em`;
+    const cssLetterSpacing = `${letterSpacing / 100}em`;
 
     // Dynamic Spacing Variables
     const activeGapX = isMobileView ? gridGapXMobile : gridGapXDesktop;
@@ -402,6 +402,7 @@ export function Multi21({
              display: flex;
              flex-direction: column;
              justify-content: var(--multi-vert-align);
+             text-align: var(--multi-text-align);
              height: 100%;
           }
           
