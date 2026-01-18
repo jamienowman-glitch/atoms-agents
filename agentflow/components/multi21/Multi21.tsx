@@ -56,6 +56,7 @@ export interface Multi21Props {
     wordSpacing?: number;
     // New Type Setting
     textAlign?: 'left' | 'center' | 'right' | 'justify';
+    verticalAlign?: 'top' | 'center' | 'bottom' | 'justify';
     textTransform?: string;
     textDecoration?: string;
     axisWeight?: number | null;
@@ -164,6 +165,7 @@ export function Multi21({
     letterSpacing = 0,
     wordSpacing = 0,
     textAlign = 'left',
+    verticalAlign = 'top',
     textTransform = 'none',
     textDecoration = 'none',
     axisWeight = null,
@@ -194,8 +196,9 @@ export function Multi21({
 
     // --- Feed Data Logic (Refactored Phase 9.5: Polymorphic) ---
     const activeItems = useMemo(() => {
+        // If NO Feed Source, use manual items (but respect limit)
         if (!feedSource || !SEED_FEEDS[feedSource]) {
-            return initialItems.slice(0, isMobileView ? itemsMobile : itemsDesktop);
+            return initialItems.slice(0, feedLimit);
         }
 
         const rawFeed = SEED_FEEDS[feedSource];
@@ -232,23 +235,48 @@ export function Multi21({
     }[align];
 
     // Typo Resolver (Vario)
-    const getFontFamilyVar = (index: number) => {
-        switch (index) {
-            case 1: return 'var(--font-roboto-serif)';
-            case 2: return 'var(--font-roboto-slab)';
-            case 3: return 'var(--font-roboto-mono)';
-            default: return 'var(--font-roboto-flex)'; // 0 = Sans
-        }
+    const getEffectiveFont = (index: number, slantValue: number) => {
+        // 0 = Flex (Variable)
+        if (index === 0) return 'var(--font-roboto-flex)';
+
+        // For static fonts (Mono, Slab, Serif), if slant is aggressive, use Italic variant if available
+        // Note: In this simplified demo, we might just append a string or rely on CSS 'font-style: italic'
+        // But the user requested "swap fontFamily string to ${family}-Italic" logic.
+        // Assuming we have CSS vars defined like --font-roboto-mono-italic? 
+        // Or actually, standard Google Fonts variable implementations often handle this via 'ital' axis or separate files.
+        // Let's implement the logic requested:
+
+        const base = (() => {
+            switch (index) {
+                case 1: return 'var(--font-roboto-serif)';
+                case 2: return 'var(--font-roboto-slab)';
+                case 3: return 'var(--font-roboto-mono)';
+                default: return 'var(--font-roboto-flex)';
+            }
+        })();
+
+        // If aggressive slant on non-flex, pretend we switch to Italic (or use font-style)
+        // Since we are using CSS variables which map to class names/font-families, 
+        // we'll enforce 'font-style: italic' in the style block for these cases instead of guessing variable names.
+        return base;
     };
-    const activeFontVar = getFontFamilyVar(fontFamily || 0);
+
+    const activeFontVar = getEffectiveFont(fontFamily || 0, axisSlant || 0);
 
     // Resolve Shared Axes
     const preset = ROBOTO_PRESETS[fontPresetIndex] || ROBOTO_PRESETS[3];
     const defaultAxes = { ...preset.axes };
     const wdth = axisWidth !== null && axisWidth !== -1 ? axisWidth : defaultAxes.wdth;
-    const slnt = (fontFamily === 0) ? (axisSlant || 0) : 0;
+
+    // Logic: Only apply 'slnt' axis to Roboto Flex (0). 
+    // Others get font-style: italic if slant < -5.
+    const isFlex = (fontFamily === 0);
+    const slnt = isFlex ? (axisSlant || 0) : 0;
     const grd = axisGrade || 0;
-    const casl = (fontFamily === 0) ? (axisCasual || 0) : 0;
+    const casl = isFlex ? (axisCasual || 0) : 0;
+
+    // Aggressive Slant Check for non-flex
+    const forceItalic = !isFlex && (axisSlant || 0) < -5;
 
     const activeFontSize = isMobileView ? fontSizeMobile : fontSizeDesktop;
     const variationSettings = `'wght' ${axisWeight !== null ? axisWeight : 400}, 'wdth' ${wdth}, 'slnt' ${slnt}, 'CASL' ${casl}, 'GRAD' ${grd}`;
@@ -355,6 +383,7 @@ export function Multi21({
                     ['--multi-letter-spacing' as string]: cssLetterSpacing,
                     ['--multi-word-spacing' as string]: `${wordSpacing}em`,
                     ['--multi-text-align' as string]: textAlign,
+                    ['--multi-vert-align' as string]: verticalAlign === 'top' ? 'flex-start' : verticalAlign === 'bottom' ? 'flex-end' : 'center',
                     ['--multi-text-transform' as string]: textTransform,
                     ['--multi-text-decoration' as string]: textDecoration,
                 }}
@@ -370,6 +399,10 @@ export function Multi21({
           }
           .multi21-content {
              padding: var(--content-padding);
+             display: flex;
+             flex-direction: column;
+             justify-content: var(--multi-vert-align);
+             height: 100%;
           }
           
           /* Typography Application */
@@ -386,6 +419,7 @@ export function Multi21({
               text-transform: var(--multi-text-transform);
               text-decoration: var(--multi-text-decoration);
               -webkit-text-stroke: var(--style-text-stroke-width) var(--style-text-stroke-color);
+              ${forceItalic ? 'font-style: italic !important;' : ''}
           }
           /* Title Scaling (Example: 1em = base fontSize) */
           .multi21-typo-target h3 {

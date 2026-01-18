@@ -94,7 +94,16 @@ export function Multi21_Text({
     fontPresetIndex = 3,
     lineHeight = 1.6,
     letterSpacing = 0,
+    wordSpacing = 0,
     fontFamily = 0,
+
+    // New Type Settings
+    textTransform = 'none',
+    textDecoration = 'none',
+
+    // Scoped Body
+    bodySize = 16,
+    bodyWeight = 400,
 
     axisWidth = null,
     axisCasual = 0,

@@ -33,7 +33,7 @@ export const ToolPill: React.FC<ToolPillProps> = ({
 }) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [isPressing, setIsPressing] = useState(false);
-    const timerRef = useRef<NodeJS.Timeout>();
+    const timerRef = useRef<NodeJS.Timeout | undefined>(undefined);
     const containerRef = useRef<HTMLDivElement>(null);
 
     // Handle outside click to collapse

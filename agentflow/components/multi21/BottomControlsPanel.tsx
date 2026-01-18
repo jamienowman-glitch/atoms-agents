@@ -26,10 +26,13 @@ const UniversalSlider: React.FC<UniversalSliderProps> = ({ value, min, max, step
         // Prevent default touch actions (scrolling/selection)
         if ('touches' in e && e.cancelable) {
             e.preventDefault();
+            e.stopPropagation();
         }
 
         if (!trackRef.current) return;
         const rect = trackRef.current.getBoundingClientRect();
+
+        // Use pageX/clientX carefully. ClientX is consistent with getBoundingClientRect
         const clientX = 'touches' in e ? e.touches[0].clientX : (e as React.MouseEvent).clientX;
 
         let percentage = (clientX - rect.left) / rect.width;
@@ -37,7 +40,11 @@ const UniversalSlider: React.FC<UniversalSliderProps> = ({ value, min, max, step
 
         const rawValue = min + percentage * (max - min);
         // Snap to step
-        const stepped = Math.round(rawValue / step) * step;
+        let stepped = Math.round(rawValue / step) * step;
+
+        // Clamp result due to JS floating point
+        stepped = Math.max(min, Math.min(max, stepped));
+
         onChange(stepped);
     };
 
@@ -91,16 +98,16 @@ export function BottomControlsPanel({ settingsContent, activeBlockId, activeBloc
 
     // 2. Control Mode State
     const [isCollapsed, setIsCollapsed] = useState(false);
-    const [activeMode, setActiveMode] = useState<'layout' | 'typography' | 'style'>('layout');
+    const [activeMode, setActiveMode] = useState<'layout' | 'font' | 'type' | 'colour'>('layout');
     const [activeLayoutTool, setActiveLayoutTool] = useState<string>('density');
 
     // Content Mode State
     const [activeContentCat, setActiveContentCat] = useState<string>('youtube');
     const [activeStrategy, setActiveStrategy] = useState<string>('feed');
 
-    const [activeFontTool, setActiveFontTool] = useState<string>('identity'); // Was Typography
+    const [activeFontTool, setActiveFontTool] = useState<string>('size'); // Was Typography, Default to Size
     const [activeTypeTool, setActiveTypeTool] = useState<string>('align'); // Was Set/Typeset
-    const [activeStyleTool, setActiveStyleTool] = useState<string>('palette');
+    const [activeColourTool, setActiveColourTool] = useState<string>('palette');
     const [showSettings, setShowSettings] = useState(false);
 
     // 3. Tool Hooks (Layout)
@@ -133,6 +140,7 @@ export function BottomControlsPanel({ settingsContent, activeBlockId, activeBloc
     const [axisWeight, setAxisWeight] = useToolState<number>({ target: { ...scope, toolId: 'typo.weight' }, defaultValue: 400 });
     const [axisWidth, setAxisWidth] = useToolState<number>({ target: { ...scope, toolId: 'typo.width' }, defaultValue: 100 });
     const [axisCasual, setAxisCasual] = useToolState<number>({ target: { ...scope, toolId: 'typo.casual' }, defaultValue: 0 });
+    const [axisSlant, setAxisSlant] = useToolState<number>({ target: { ...scope, toolId: 'typo.slant' }, defaultValue: 0 });
     const [fontSizeDesktop, setFontSizeDesktop] = useToolState<number>({ target: { ...scope, toolId: 'typo.size_desktop' }, defaultValue: 16 });
     const [fontSizeMobile, setFontSizeMobile] = useToolState<number>({ target: { ...scope, toolId: 'typo.size_mobile' }, defaultValue: 16 });
 
@@ -153,10 +161,11 @@ export function BottomControlsPanel({ settingsContent, activeBlockId, activeBloc
     const [letterSpacing, setLetterSpacing] = useToolState<number>({ target: { ...scope, toolId: 'typo.letter_spacing' }, defaultValue: 0 });
     const [wordSpacing, setWordSpacing] = useToolState<number>({ target: { ...scope, toolId: 'typo.word_spacing' }, defaultValue: 0 });
     // Vertical Type
-    const [verticalAlign, setVerticalAlign] = useToolState<string>({ target: { ...scope, toolId: 'typo.vertical_align' }, defaultValue: 'top' });
+    // Vertical Type
+    const [verticalAlign, setVerticalAlign] = useToolState<string>({ target: { ...scope, toolId: 'typo.vert' }, defaultValue: 'top' });
     const [stackGap, setStackGap] = useToolState<number>({ target: { ...scope, toolId: 'typo.stack_gap' }, defaultValue: 16 });
 
-    const [textTransform, setTextTransform] = useToolState<string>({ target: { ...scope, toolId: 'typo.transform' }, defaultValue: 'none' });
+    const [textTransform, setTextTransform] = useToolState<string>({ target: { ...scope, toolId: 'typo.case' }, defaultValue: 'none' });
     const [textDecoration, setTextDecoration] = useToolState<string>({ target: { ...scope, toolId: 'typo.decoration' }, defaultValue: 'none' });
 
     // 6. Content Wiring (Phase 14)
@@ -231,6 +240,13 @@ export function BottomControlsPanel({ settingsContent, activeBlockId, activeBloc
     const [elementMode, setElementMode] = useState<'fill' | 'stroke'>('fill');
 
     // --- Configuration Maps ---
+    const designModes: MagnetItem[] = [
+        { id: 'layout', label: 'Layout', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /></svg> },
+        { id: 'font', label: 'Font', icon: <span className="text-[10px] font-bold">Aa</span> },
+        { id: 'type', label: 'Type', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><line x1="21" y1="10" x2="3" y2="10" /><line x1="21" y1="6" x2="3" y2="6" /><line x1="21" y1="14" x2="3" y2="14" /><line x1="21" y1="18" x2="3" y2="18" /></svg> },
+        { id: 'colour', label: 'Colour', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" /></svg> },
+    ];
+
     // Naming Proposal: Frame, Type, Style
     const layoutTools: MagnetItem[] = [
         { id: 'density', label: 'Grid', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /></svg> },
@@ -239,9 +255,9 @@ export function BottomControlsPanel({ settingsContent, activeBlockId, activeBloc
     ];
 
     const fontTools: MagnetItem[] = [
+        { id: 'size', label: 'Size', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" /></svg> },
         { id: 'identity', label: 'Font', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M4 7V4h16v3M9 20h6M12 4v16" /></svg> },
-        { id: 'body', label: 'Tune', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="15" y2="12" /><line x1="3" y1="18" x2="18" y2="18" /></svg> },
-        { id: 'scale', label: 'Size', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" /></svg> },
+        { id: 'tune', label: 'Tune', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="15" y2="12" /><line x1="3" y1="18" x2="18" y2="18" /></svg> },
     ];
 
     const typeTools: MagnetItem[] = [
@@ -253,7 +269,7 @@ export function BottomControlsPanel({ settingsContent, activeBlockId, activeBloc
         { id: 'decor', label: 'Decor', icon: <span className="text-[10px] font-bold underline">U</span> },
     ];
 
-    const styleTools: MagnetItem[] = [
+    const colourTools: MagnetItem[] = [
         { id: 'palette', label: 'Color', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" /></svg> },
         { id: 'effects', label: 'FX', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg> },
     ];
@@ -295,6 +311,7 @@ export function BottomControlsPanel({ settingsContent, activeBlockId, activeBloc
     };
 
     // --- Render Logic: Sliders ---
+    // --- Render Logic: Sliders ---
     const renderSliders = () => {
         // Shared Setters Check
         const setCols = isMobileView ? setColsMobile : setColsDesktop;
@@ -313,6 +330,23 @@ export function BottomControlsPanel({ settingsContent, activeBlockId, activeBloc
         const setFontSize = isMobileView ? setFontSizeMobile : setFontSizeDesktop;
         const currentFontSize = isMobileView ? fontSizeMobile : fontSizeDesktop;
 
+        // Helper: Button Group
+        const renderBtnGroup = (options: { label: string, value: string }[], current: string, onChange: (v: string) => void) => (
+            <div className="flex bg-neutral-100 dark:bg-neutral-800 rounded-lg p-1 gap-1">
+                {options.map(opt => (
+                    <button
+                        key={opt.value}
+                        onClick={() => onChange(opt.value)}
+                        className={`flex-1 py-1.5 text-xs font-medium rounded-md transition-all ${current === opt.value
+                            ? 'bg-white dark:bg-neutral-600 text-black dark:text-white shadow-sm'
+                            : 'text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-200'
+                            }`}
+                    >
+                        {opt.label}
+                    </button>
+                ))}
+            </div>
+        );
 
         // LAYOUT MODE
         if (activeMode === 'layout') {
@@ -397,140 +431,105 @@ export function BottomControlsPanel({ settingsContent, activeBlockId, activeBloc
             }
         }
 
-        // FONT MODE (Was Typography)
+        // FONT MODE
         if (activeMode === 'font') {
-            if (activeFontTool === 'identity') {
-                const families = ['Sans', 'Serif', 'Slab', 'Mono'];
+            if (activeFontTool === 'size') {
                 return (
-                    <div className="flex flex-col gap-2 animate-fadeIn">
-                        <div className="flex flex-col gap-1">
-                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium">
-                                <span>Font Family</span>
-                                <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{families[fontFamily]}</span>
-                            </div>
-                            <UniversalSlider value={fontFamily} min={0} max={3} step={1} onChange={setFontFamily} />
+                    <div className="flex flex-col gap-1 animate-fadeIn">
+                        <div className="flex justify-between items-center text-[10px] text-neutral-500 font-medium">
+                            <span>Base Size</span>
+                            <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{currentFontSize}px</span>
                         </div>
-                        <div className="flex flex-col gap-1">
-                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium">
-                                <span>Casual Vibe</span>
-                                <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{(axisCasual * 100).toFixed(0)}%</span>
-                            </div>
-                            <UniversalSlider value={axisCasual} min={0} max={1} step={0.01} onChange={setAxisCasual} />
-                        </div>
+                        <UniversalSlider value={currentFontSize} min={10} max={64} onChange={setFontSize} />
                     </div>
                 );
             }
-            if (activeFontTool === 'body') {
+            if (activeFontTool === 'identity') {
+                const families = [
+                    { label: 'Sans', value: '0' },
+                    { label: 'Serif', value: '1' },
+                    { label: 'Slab', value: '2' },
+                    { label: 'Mono', value: '3' }
+                ];
                 return (
-                    <div className="flex flex-col gap-2 animate-fadeIn">
-                        <div className="flex flex-col gap-1">
-                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium">
+                    <div className="flex flex-col gap-3 animate-fadeIn">
+                        {/* Font Family Button Group */}
+                        {renderBtnGroup(families, fontFamily.toString(), (v) => setFontFamily(parseInt(v)))}
+                    </div>
+                );
+            }
+            if (activeFontTool === 'tune') {
+                return (
+                    <div className="flex flex-col gap-1 animate-fadeIn">
+                        {/* Weight */}
+                        <div className="flex flex-col gap-0.5">
+                            <div className="flex justify-between items-center text-[10px] text-neutral-500 font-medium">
                                 <span>Weight</span>
                                 <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{axisWeight}</span>
                             </div>
                             <UniversalSlider value={axisWeight} min={100} max={1000} onChange={setAxisWeight} />
                         </div>
-                        <div className="flex flex-col gap-1">
-                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium">
+                        {/* Width */}
+                        <div className="flex flex-col gap-0.5">
+                            <div className="flex justify-between items-center text-[10px] text-neutral-500 font-medium">
                                 <span>Width</span>
                                 <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{axisWidth}</span>
                             </div>
                             <UniversalSlider value={axisWidth} min={50} max={150} onChange={setAxisWidth} />
                         </div>
-                    </div>
-                );
-            }
-            if (activeFontTool === 'scale') {
-                return (
-                    <div className="flex flex-col gap-2 animate-fadeIn">
-                        <div className="flex flex-col gap-1">
-                            <div className="flex justify-between items-center text-xs text-neutral-500 font-medium">
-                                <span>Base Size</span>
-                                <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{currentFontSize}px</span>
+                        {/* Slant */}
+                        <div className="flex flex-col gap-0.5">
+                            <div className="flex justify-between items-center text-[10px] text-neutral-500 font-medium">
+                                <span>Slant</span>
+                                <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{axisSlant}deg</span>
                             </div>
-                            <UniversalSlider value={currentFontSize} min={10} max={64} onChange={setFontSize} />
+                            <UniversalSlider value={axisSlant} min={-10} max={0} step={1} onChange={setAxisSlant} />
                         </div>
                     </div>
                 );
             }
         }
 
-        // TYPE MODE (Was Set/Typeset)
+        // TYPE MODE
         if (activeMode === 'type') {
             if (activeTypeTool === 'align') {
-                const aligns = ['left', 'center', 'right', 'justify'];
-                const icons: Record<string, React.ReactNode> = {
-                    left: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><line x1="17" y1="10" x2="3" y2="10" /><line x1="21" y1="6" x2="3" y2="6" /><line x1="21" y1="14" x2="3" y2="14" /><line x1="17" y1="18" x2="3" y2="18" /></svg>,
-                    center: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><line x1="21" y1="10" x2="3" y2="10" /><line x1="21" y1="6" x2="3" y2="6" /><line x1="21" y1="14" x2="3" y2="14" /><line x1="21" y1="18" x2="3" y2="18" /></svg>,
-                    right: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><line x1="21" y1="10" x2="7" y2="10" /><line x1="21" y1="6" x2="3" y2="6" /><line x1="21" y1="14" x2="3" y2="14" /><line x1="21" y1="18" x2="7" y2="18" /></svg>,
-                    justify: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><line x1="21" y1="10" x2="3" y2="10" /><line x1="21" y1="6" x2="3" y2="6" /><line x1="21" y1="14" x2="3" y2="14" /><line x1="21" y1="18" x2="3" y2="18" /></svg>
-                };
                 return (
-                    <div className="flex justify-center gap-2 p-2 animate-fadeIn">
-                        <div className="flex bg-neutral-100 dark:bg-neutral-800 p-1 rounded-full">
-                            {aligns.map(a => (
-                                <button
-                                    key={a}
-                                    onClick={() => setTextAlign(a)}
-                                    className={`w-10 h-10 flex items-center justify-center rounded-full transition-all ${textAlign === a ? 'bg-white text-black shadow-md' : 'text-neutral-500 hover:text-black dark:text-neutral-400 dark:hover:text-white'}`}
-                                >
-                                    {icons[a]}
-                                </button>
-                            ))}
-                        </div>
+                    <div className="flex flex-col gap-2 animate-fadeIn p-2">
+                        {renderBtnGroup([
+                            { label: 'Left', value: 'left' },
+                            { label: 'Center', value: 'center' },
+                            { label: 'Right', value: 'right' },
+                            { label: 'Justify', value: 'justify' }
+                        ], textAlign, setTextAlign)}
                     </div>
                 );
             }
             if (activeTypeTool === 'vert') {
-                const vAligns = ['top', 'center', 'bottom', 'justify'];
-                const icons: Record<string, React.ReactNode> = {
-                    top: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><line x1="3" y1="3" x2="21" y2="3" /><rect x="6" y="7" width="12" height="4" rx="1" /><rect x="6" y="13" width="12" height="4" rx="1" /></svg>,
-                    center: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><line x1="3" y1="2" x2="21" y2="2" /><line x1="3" y1="22" x2="21" y2="22" /><rect x="6" y="8" width="12" height="8" rx="1" /></svg>,
-                    bottom: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><line x1="3" y1="21" x2="21" y2="21" /><rect x="6" y="7" width="12" height="4" rx="1" /><rect x="6" y="13" width="12" height="4" rx="1" /></svg>,
-                    justify: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><line x1="3" y1="3" x2="21" y2="3" /><line x1="3" y1="21" x2="21" y2="21" /><rect x="6" y="7" width="12" height="4" rx="1" /><rect x="6" y="13" width="12" height="4" rx="1" /></svg>
-                };
                 return (
-                    <div className="flex flex-col gap-2 animate-fadeIn">
-                        {/* Aligns */}
-                        <div className="flex justify-center gap-2 p-1">
-                            <div className="flex bg-neutral-100 dark:bg-neutral-800 p-1 rounded-full">
-                                {vAligns.map(a => (
-                                    <button
-                                        key={a}
-                                        onClick={() => setVerticalAlign(a)}
-                                        className={`w-10 h-10 flex items-center justify-center rounded-full transition-all ${verticalAlign === a ? 'bg-white text-black shadow-md' : 'text-neutral-500 hover:text-black dark:text-neutral-400 dark:hover:text-white'}`}
-                                    >
-                                        {icons[a]}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-                        {/* Gap Slider */}
-                        <div className="flex flex-col gap-0.5">
-                            <div className="flex justify-between items-center text-[10px] text-neutral-500 font-medium">
-                                <span>Paragraph Spacing</span>
-                                <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{stackGap}px</span>
-                            </div>
-                            <UniversalSlider value={stackGap} min={0} max={100} step={4} onChange={setStackGap} />
-                        </div>
+                    <div className="flex flex-col gap-2 animate-fadeIn p-2">
+                        {renderBtnGroup([
+                            { label: 'Top', value: 'top' },
+                            { label: 'Mid', value: 'center' },
+                            { label: 'Bot', value: 'bottom' }
+                        ], verticalAlign, setVerticalAlign)}
                     </div>
                 );
             }
             if (activeTypeTool === 'space') {
                 return (
-                    <div className="flex flex-col gap-2 animate-fadeIn">
-                        {/* Top: Tracking (X) */}
+                    <div className="flex flex-col gap-1 animate-fadeIn">
+                        {/* Tracking */}
                         <div className="flex flex-col gap-0.5">
                             <div className="flex justify-between items-center text-[10px] text-neutral-500 font-medium">
-                                <span>Tracking (Letter Spacing)</span>
-                                <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{letterSpacing}em</span>
+                                <span>Tracking</span>
+                                <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{letterSpacing}</span>
                             </div>
-                            <UniversalSlider value={letterSpacing} min={-0.1} max={0.5} step={0.01} onChange={setLetterSpacing} />
+                            <UniversalSlider value={letterSpacing} min={-100} max={100} step={1} onChange={setLetterSpacing} />
                         </div>
-                        {/* Bot: Leading (Y) */}
+                        {/* Leading */}
                         <div className="flex flex-col gap-0.5">
                             <div className="flex justify-between items-center text-[10px] text-neutral-500 font-medium">
-                                <span>Leading (Line Height)</span>
+                                <span>Leading</span>
                                 <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{lineHeight}</span>
                             </div>
                             <UniversalSlider value={lineHeight} min={1.0} max={2.5} step={0.1} onChange={setLineHeight} />
@@ -540,68 +539,43 @@ export function BottomControlsPanel({ settingsContent, activeBlockId, activeBloc
             }
             if (activeTypeTool === 'words') {
                 return (
-                    <div className="flex flex-col gap-2 animate-fadeIn">
-                        {/* Top: Word Spacing (X) */}
-                        <div className="flex flex-col gap-0.5">
-                            <div className="flex justify-between items-center text-[10px] text-neutral-500 font-medium">
-                                <span>Word Spacing</span>
-                                <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{wordSpacing}em</span>
-                            </div>
-                            <UniversalSlider value={wordSpacing} min={-0.1} max={1.0} step={0.01} onChange={setWordSpacing} />
+                    <div className="flex flex-col gap-1 animate-fadeIn">
+                        <div className="flex justify-between items-center text-[10px] text-neutral-500 font-medium">
+                            <span>Word Spacing</span>
+                            <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{wordSpacing}em</span>
                         </div>
+                        <UniversalSlider value={wordSpacing} min={0} max={10} step={0.1} onChange={setWordSpacing} />
                     </div>
                 );
             }
             if (activeTypeTool === 'case') {
-                const transforms = [
-                    { id: 'none', label: '--' },
-                    { id: 'uppercase', label: 'AA' },
-                    { id: 'lowercase', label: 'aa' },
-                    { id: 'capitalize', label: 'Aa' }
-                ];
                 return (
-                    <div className="flex justify-center gap-2 p-2 animate-fadeIn">
-                        <div className="flex bg-neutral-100 dark:bg-neutral-800 p-1 rounded-full gap-1">
-                            {transforms.map(t => (
-                                <button
-                                    key={t.id}
-                                    onClick={() => setTextTransform(t.id)}
-                                    className={`px-4 h-10 flex items-center justify-center rounded-full text-xs font-bold transition-all ${textTransform === t.id ? 'bg-white text-black shadow-md' : 'text-neutral-500 hover:text-black dark:text-neutral-400 dark:hover:text-white'}`}
-                                >
-                                    {t.label}
-                                </button>
-                            ))}
-                        </div>
+                    <div className="flex flex-col gap-2 animate-fadeIn p-2">
+                        {renderBtnGroup([
+                            { label: '--', value: 'none' },
+                            { label: 'AA', value: 'uppercase' },
+                            { label: 'aa', value: 'lowercase' },
+                            { label: 'Aa', value: 'capitalize' }
+                        ], textTransform, setTextTransform)}
                     </div>
                 );
             }
             if (activeTypeTool === 'decor') {
-                const decors = [
-                    { id: 'none', label: 'None' },
-                    { id: 'underline', label: 'Underline' },
-                    { id: 'line-through', label: 'Strike' }
-                ];
                 return (
-                    <div className="flex justify-center gap-2 p-2 animate-fadeIn">
-                        <div className="flex bg-neutral-100 dark:bg-neutral-800 p-1 rounded-full gap-1">
-                            {decors.map(d => (
-                                <button
-                                    key={d.id}
-                                    onClick={() => setTextDecoration(d.id)}
-                                    className={`px-4 h-10 flex items-center justify-center rounded-full text-xs font-bold transition-all ${textDecoration === d.id ? 'bg-white text-black shadow-md' : 'text-neutral-500 hover:text-black dark:text-neutral-400 dark:hover:text-white'}`}
-                                >
-                                    <span style={{ textDecoration: d.id === 'none' ? 'none' : d.id }}>{d.label}</span>
-                                </button>
-                            ))}
-                        </div>
+                    <div className="flex flex-col gap-2 animate-fadeIn p-2">
+                        {renderBtnGroup([
+                            { label: 'None', value: 'none' },
+                            { label: 'Under', value: 'underline' },
+                            { label: 'Strike', value: 'line-through' }
+                        ], textDecoration, setTextDecoration)}
                     </div>
                 );
             }
         }
 
-        // STYLE MODE
-        if (activeMode === 'style') {
-            if (activeStyleTool === 'palette') {
+        // COLOUR MODE
+        if (activeMode === 'colour') {
+            if (activeColourTool === 'palette') {
                 // Resolve Active Color
                 let activeColor = '';
                 let setActiveColor: (c: string) => void = () => { };
@@ -660,6 +634,12 @@ export function BottomControlsPanel({ settingsContent, activeBlockId, activeBloc
                             )}
                         </div>
 
+                        {/* Color Ribbon */}
+                        <ColorRibbon
+                            value={activeColor}
+                            onChange={setActiveColor}
+                        />
+
                         {/* Stroke Width Slider (Contextual) */}
                         {colorTarget !== 'block' && elementMode === 'stroke' && (
                             <div className="animate-fadeIn">
@@ -676,7 +656,29 @@ export function BottomControlsPanel({ settingsContent, activeBlockId, activeBloc
                                 />
                             </div>
                         )}
-                        {/* Collapse & Close Controls (Right) */}
+                    </div>
+                );
+            }
+
+            if (activeColourTool === 'effects') {
+                return (
+                    <div className="flex flex-col gap-2 animate-fadeIn">
+                        {/* Opacity */}
+                        <div className="flex flex-col gap-0.5">
+                            <div className="flex justify-between items-center text-[10px] text-neutral-500 font-medium">
+                                <span>Opacity</span>
+                                <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{opacity}%</span>
+                            </div>
+                            <UniversalSlider value={opacity} min={0} max={100} onChange={setOpacity} />
+                        </div>
+                        {/* Blur */}
+                        <div className="flex flex-col gap-0.5">
+                            <div className="flex justify-between items-center text-[10px] text-neutral-500 font-medium">
+                                <span>Glass / Blur</span>
+                                <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{blur}px</span>
+                            </div>
+                            <UniversalSlider value={blur} min={0} max={20} onChange={setBlur} />
+                        </div>
                     </div>
                 );
             }
@@ -718,7 +720,7 @@ export function BottomControlsPanel({ settingsContent, activeBlockId, activeBloc
                         onModeSelect={(id) => showSettings ? setActiveContentCat(id) : setActiveMode(id as any)}
 
                         // Tool Wheel (Right)
-                        activeTool={showSettings ? activeStrategy : (activeMode === 'layout' ? activeLayoutTool : activeMode === 'font' ? activeFontTool : activeMode === 'type' ? activeTypeTool : activeStyleTool)}
+                        activeTool={showSettings ? activeStrategy : (activeMode === 'layout' ? activeLayoutTool : activeMode === 'font' ? activeFontTool : activeMode === 'type' ? activeTypeTool : activeColourTool)}
                         onToolSelect={(id) => {
                             if (showSettings) {
                                 setActiveStrategy(id);
@@ -726,13 +728,13 @@ export function BottomControlsPanel({ settingsContent, activeBlockId, activeBloc
                                 if (activeMode === 'layout') setActiveLayoutTool(id);
                                 else if (activeMode === 'font') setActiveFontTool(id);
                                 else if (activeMode === 'type') setActiveTypeTool(id);
-                                else setActiveStyleTool(id);
+                                else setActiveColourTool(id);
                             }
                         }}
 
                         // Options
-                        modeOptions={showSettings ? contentCategories : undefined}
-                        toolOptions={showSettings ? getStrategyTools(activeContentCat) : (activeMode === 'layout' ? layoutTools : activeMode === 'font' ? fontTools : activeMode === 'type' ? typeTools : styleTools)}
+                        modeOptions={showSettings ? contentCategories : designModes}
+                        toolOptions={showSettings ? getStrategyTools(activeContentCat) : (activeMode === 'layout' ? layoutTools : activeMode === 'font' ? fontTools : activeMode === 'type' ? typeTools : colourTools)}
                     />
 
                     {/* Collapse & Close Controls (Right) */}

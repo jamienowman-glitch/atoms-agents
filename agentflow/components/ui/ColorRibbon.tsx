@@ -164,6 +164,30 @@ export const ColorRibbon: React.FC<ColorRibbonProps> = ({ value, onChange }) => 
                         spellCheck={false}
                     />
 
+                    {/* Transparent Button (Checkerboard) */}
+                    <button
+                        onClick={() => onChange('rgba(0,0,0,0)')}
+                        className="w-[44px] h-[44px] rounded-lg border border-neutral-200 dark:border-neutral-800 shrink-0 overflow-hidden relative group"
+                        title="Transparent"
+                    >
+                        <div className="absolute inset-0 w-full h-full"
+                            style={{
+                                background: `
+                                    conic-gradient(
+                                        #80808025 0.25turn, 
+                                        transparent 0.25turn 0.5turn, 
+                                        #80808025 0.5turn 0.75turn, 
+                                        transparent 0.75turn
+                                    ) top left / 10px 10px repeat
+                                `
+                            }}
+                        />
+                        {/* Slash for visual clarity */}
+                        <div className="absolute inset-0 flex items-center justify-center text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><line x1="2" y1="2" x2="22" y2="22" /></svg>
+                        </div>
+                    </button>
+
                     {/* Grid Toggle */}
                     <button
                         onClick={() => setMode('grid')}
@@ -185,6 +209,25 @@ export const ColorRibbon: React.FC<ColorRibbonProps> = ({ value, onChange }) => 
                     </button>
 
                     <div className="flex flex-wrap gap-3 justify-center">
+                        {/* Transparent Swatch */}
+                        <button
+                            onClick={() => onChange('rgba(0,0,0,0)')}
+                            className={`w-9 h-9 rounded-full shrink-0 border border-black/10 transition-transform active:scale-95 relative overflow-hidden ${value === 'rgba(0,0,0,0)' ? 'ring-2 ring-neutral-400 ring-offset-2 dark:ring-offset-neutral-900 scale-105' : ''}`}
+                        >
+                            <div className="absolute inset-0 w-full h-full"
+                                style={{
+                                    background: `
+                                        conic-gradient(
+                                            #80808025 0.25turn, 
+                                            transparent 0.25turn 0.5turn, 
+                                            #80808025 0.5turn 0.75turn, 
+                                            transparent 0.75turn
+                                        ) top left / 8px 8px repeat
+                                    `
+                                }}
+                            />
+                        </button>
+
                         {SWATCHES.map((color) => {
                             const isActive = value.toLowerCase() === color.toLowerCase();
                             return (

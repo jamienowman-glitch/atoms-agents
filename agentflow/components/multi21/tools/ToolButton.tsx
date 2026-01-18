@@ -12,7 +12,7 @@ const LONG_PRESS_MS = 400;
 
 export function ToolButton({ tool, activeOptionId, onSelectOption, onOpenPopup }: ToolButtonProps) {
     const [pressing, setPressing] = useState(false);
-    const timer = useRef<number>();
+    const timer = useRef<number | undefined>(undefined);
 
     const options = tool.options || [];
     const currentIndex = options.findIndex(o => o.id === activeOptionId);

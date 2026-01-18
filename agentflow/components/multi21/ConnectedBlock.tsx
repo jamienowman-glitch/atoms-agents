@@ -118,7 +118,6 @@ export const ConnectedBlock: React.FC<ConnectedBlockProps> = ({
 
     // Content (Phase 10)
     const [feedSourceIndex] = useToolState<number>({ target: { ...scope, toolId: 'content.feed_source_index' }, defaultValue: 0 });
-    const [feedLimit] = useToolState<number>({ target: { ...scope, toolId: 'content.feed_limit' }, defaultValue: 12 });
     const [layoutMode] = useToolState<number>({ target: { ...scope, toolId: 'content.layout_mode' }, defaultValue: 0 });
 
     // --- Text Block Logic ---
@@ -158,9 +157,9 @@ export const ConnectedBlock: React.FC<ConnectedBlockProps> = ({
     const [typoLineHeight] = useToolState<number>({ target: { ...scope, toolId: 'typo.line_height' }, defaultValue: 1.5 });
     const [typoLetterSpacing] = useToolState<number>({ target: { ...scope, toolId: 'typo.letter_spacing' }, defaultValue: 0 });
     const [typoWordSpacing] = useToolState<number>({ target: { ...scope, toolId: 'typo.word_spacing' }, defaultValue: 0 });
-    const [typoVerticalAlign] = useToolState<string>({ target: { ...scope, toolId: 'typo.vertical_align' }, defaultValue: 'top' });
+    const [typoVerticalAlign] = useToolState<string>({ target: { ...scope, toolId: 'typo.vert' }, defaultValue: 'top' });
     const [typoStackGap] = useToolState<number>({ target: { ...scope, toolId: 'typo.stack_gap' }, defaultValue: 16 });
-    const [typoTransform] = useToolState<string>({ target: { ...scope, toolId: 'typo.transform' }, defaultValue: 'none' });
+    const [typoTransform] = useToolState<string>({ target: { ...scope, toolId: 'typo.case' }, defaultValue: 'none' });
     const [typoDecoration] = useToolState<string>({ target: { ...scope, toolId: 'typo.decoration' }, defaultValue: 'none' });
     const [styleOpacity] = useToolState<number>({ target: { ...scope, toolId: 'style.opacity' }, defaultValue: 100 });
     const [styleBlur] = useToolState<number>({ target: { ...scope, toolId: 'style.blur' }, defaultValue: 0 });
@@ -232,7 +231,7 @@ export const ConnectedBlock: React.FC<ConnectedBlockProps> = ({
                     onBodyChange={setBody}
 
                     // Layout
-                    textAlign={textAlign}
+
                     contentWidth={`${contentWidth}%`}
                     stackGap={stackGap}
 
@@ -336,9 +335,11 @@ export const ConnectedBlock: React.FC<ConnectedBlockProps> = ({
                     fontSizeMobile={fontSizeMobile}
                     lineHeight={typoLineHeight}
                     letterSpacing={typoLetterSpacing}
+                    wordSpacing={typoWordSpacing}
 
                     // Type Setting
                     textAlign={typoAlign as any}
+                    verticalAlign={typoVerticalAlign as any}
                     textTransform={typoTransform}
                     textDecoration={typoDecoration}
                     axisWeight={axisWeight === -1 ? null : axisWeight}
@@ -354,12 +355,14 @@ export const ConnectedBlock: React.FC<ConnectedBlockProps> = ({
                     styleAccentColor={styleAccentColor}
                     styleBorderColor={styleBorderColor}
                     styleBorderWidth={styleBorderWidth}
+                    styleTextStrokeColor={styleTextStrokeColor}
+                    styleTextStrokeWidth={styleTextStrokeWidth}
                     styleOpacity={styleOpacity}
                     styleBlur={styleBlur}
 
                     isMobileView={previewMode === 'mobile'}
                     feedSource={['kpi', 'retail', 'news', 'youtube', 'events'][feedSourceIndex - 1] as any}
-                    feedLimit={feedLimit}
+                    feedLimit={previewMode === 'mobile' ? itemsMobile : itemsDesktop}
                     isCarousel={layoutMode === 1}
                 />
             )}

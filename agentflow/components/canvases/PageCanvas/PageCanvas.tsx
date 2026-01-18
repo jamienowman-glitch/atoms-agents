@@ -412,7 +412,7 @@ export const PageCanvas = () => {
                             return undefined;
                         })()
                     }
-                    isVisible={showTools}
+
                 />
 
                 {isAddMenuOpen && (
