@@ -264,7 +264,6 @@ export function BottomControlsPanel({ settingsContent, activeBlockId, activeBloc
         { id: 'align', label: 'Align', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><line x1="21" y1="10" x2="3" y2="10" /><line x1="21" y1="6" x2="3" y2="6" /><line x1="21" y1="14" x2="3" y2="14" /><line x1="21" y1="18" x2="3" y2="18" /></svg> },
         { id: 'vert', label: 'Vert', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M12 3v18" /><path d="M8 6h8" /><path d="M8 18h8" /></svg> },
         { id: 'space', label: 'Space', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><polyline points="13 17 13 21 16 21 16 17" /><polyline points="13 7 13 3 16 3 16 7" /><line x1="9" y1="21" x2="9" y2="3" /></svg> },
-        { id: 'words', label: 'Words', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M4 12h16M4 12l4-4m-4 4l4 4M20 12l-4-4m4 4l-4 4" /></svg> },
         { id: 'case', label: 'Case', icon: <span className="text-[10px] font-bold">Aa</span> },
         { id: 'decor', label: 'Decor', icon: <span className="text-[10px] font-bold underline">U</span> },
     ];
@@ -533,28 +532,18 @@ export function BottomControlsPanel({ settingsContent, activeBlockId, activeBloc
                             </div>
                             <UniversalSlider value={letterSpacing} min={-100} max={100} step={1} onChange={setLetterSpacing} />
                         </div>
-                        {/* Leading */}
+                        {/* Word Spacing */}
                         <div className="flex flex-col gap-0.5">
                             <div className="flex justify-between items-center text-[10px] text-neutral-500 font-medium">
-                                <span>Leading</span>
-                                <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{lineHeight}</span>
+                                <span>Word Spacing</span>
+                                <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{wordSpacing}em</span>
                             </div>
-                            <UniversalSlider value={lineHeight} min={1.0} max={2.5} step={0.1} onChange={setLineHeight} />
+                            <UniversalSlider value={wordSpacing} min={-1} max={5} step={0.1} onChange={setWordSpacing} />
                         </div>
                     </div>
                 );
             }
-            if (activeTypeTool === 'words') {
-                return (
-                    <div className="flex flex-col gap-1 animate-fadeIn">
-                        <div className="flex justify-between items-center text-[10px] text-neutral-500 font-medium">
-                            <span>Word Spacing</span>
-                            <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{wordSpacing}em</span>
-                        </div>
-                        <UniversalSlider value={wordSpacing} min={0} max={10} step={0.1} onChange={setWordSpacing} />
-                    </div>
-                );
-            }
+
             if (activeTypeTool === 'case') {
                 return (
                     <div className="flex flex-col gap-2 animate-fadeIn p-2">
