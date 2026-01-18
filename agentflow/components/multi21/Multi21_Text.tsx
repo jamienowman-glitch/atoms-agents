@@ -30,6 +30,12 @@ export interface Multi21TextProps {
     fontPresetIndex?: number;
     lineHeight?: number;
     letterSpacing?: number; // EM units
+    wordSpacing?: number; // EM units
+    // Vertical
+    verticalAlign?: 'top' | 'center' | 'bottom' | 'justify'; // Note: justify here means space-between
+    // New Type Setting
+    textTransform?: string;
+    textDecoration?: string;
     fontFamily?: number;
 
     // Global Variable Axes (Shared Width/Slant/Casual/Grade)
@@ -50,6 +56,9 @@ export interface Multi21TextProps {
     styleAccentColor?: string;
     styleBorderColor?: string;
     styleBorderWidth?: number;
+    // New: Text Stroke
+    styleTextStrokeColor?: string;
+    styleTextStrokeWidth?: number;
     styleOpacity?: number;
     styleBlur?: number;
 
@@ -73,14 +82,13 @@ export function Multi21_Text({
     textAlign = 'left',
     contentWidth = '100%',
     stackGap = 16,
+    verticalAlign = 'top',
 
     // Scoped Typo Defaults
     headlineSize = 40,
     headlineWeight = 700,
     subheadSize = 24,
     subheadWeight = 400,
-    bodySize = 16,
-    bodyWeight = 300,
 
     // Global Defaults
     fontPresetIndex = 3,
@@ -99,6 +107,8 @@ export function Multi21_Text({
     styleAccentColor = '#3b82f6',
     styleBorderColor = 'transparent',
     styleBorderWidth = 0,
+    styleTextStrokeColor = 'transparent',
+    styleTextStrokeWidth = 0,
     styleOpacity = 100,
     styleBlur = 0,
 
@@ -147,8 +157,9 @@ export function Multi21_Text({
             fontVariationSettings: `'wght' ${targetWeight}, 'wdth' ${wdth}, 'slnt' ${effectiveSlant}, 'CASL' ${casl}, 'GRAD' ${grd}, 'opsz' ${opsz}`,
             fontSize: `${targetSize}px`,
             fontWeight: 'normal',
-            fontStyle: activeFontStyle
-        };
+            fontStyle: activeFontStyle,
+            WebkitTextStroke: styleTextStrokeWidth > 0 ? `${styleTextStrokeWidth}px ${styleTextStrokeColor}` : 'initial'
+        } as React.CSSProperties; // Cast to avoid TS issues with WebkitTextStroke
     };
 
     // --- Styles (Independent) ---
@@ -161,6 +172,9 @@ export function Multi21_Text({
     const subheadStyle = {
         ...getVarStyle(subheadSize, subheadWeight),
         lineHeight: 1.3,
+        letterSpacing: `${letterSpacing / 1000}em`,
+        wordSpacing: `${wordSpacing / 1000}em`,
+        textTransform: textTransform,
         opacity: 0.85
     };
 
@@ -168,6 +182,8 @@ export function Multi21_Text({
         ...getVarStyle(bodySize, bodyWeight),
         lineHeight: lineHeight,
         letterSpacing: `${letterSpacing / 1000}em`,
+        wordSpacing: `${wordSpacing / 1000}em`,
+        textTransform: textTransform,
         opacity: 0.95
     };
 
@@ -236,7 +252,15 @@ export function Multi21_Text({
 
     return (
         <div
-            className={`w-full relative flex flex-col ${alignmentClass} group/text-block transition-all duration-200`}
+            className={`
+                flex flex-col
+                ${verticalAlign === 'center' ? 'justify-center' : verticalAlign === 'bottom' ? 'justify-end' : verticalAlign === 'justify' ? 'justify-between' : 'justify-start'}
+                overflow-visible
+                transition-all duration-300
+                animate-fadeIn
+                multi21-typo-container
+                ${alignmentClass} group/text-block
+            `}
             style={{
                 backgroundColor: styleBgColor,
                 borderColor: styleBorderColor,
@@ -248,7 +272,11 @@ export function Multi21_Text({
                 maxWidth: containerWidth,
                 margin: textAlign === 'center' ? '0 auto' : undefined,
                 marginLeft: textAlign === 'right' ? 'auto' : undefined,
+                width: contentWidth,
                 gap: `${stackGap}px`,
+                // Ensure height 100% so vertical justify works
+                height: '100%',
+                minHeight: '100%',
                 padding: '24px',
                 borderRadius: '12px'
             }}

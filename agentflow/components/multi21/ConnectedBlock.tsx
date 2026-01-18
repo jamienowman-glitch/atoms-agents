@@ -149,6 +149,19 @@ export const ConnectedBlock: React.FC<ConnectedBlockProps> = ({
     const [styleAccentColor] = useToolState<string>({ target: { ...scope, toolId: 'style.accent' }, defaultValue: '#3b82f6' });
     const [styleBorderColor] = useToolState<string>({ target: { ...scope, toolId: 'style.border_color' }, defaultValue: 'transparent' });
     const [styleBorderWidth] = useToolState<number>({ target: { ...scope, toolId: 'style.border_width' }, defaultValue: 0 });
+    // New: Text Stroke
+    const [styleTextStrokeColor] = useToolState<string>({ target: { ...scope, toolId: 'style.text_stroke_color' }, defaultValue: 'transparent' });
+    const [styleTextStrokeWidth] = useToolState<number>({ target: { ...scope, toolId: 'style.text_stroke_width' }, defaultValue: 0 });
+
+    // Type Setting
+    const [typoAlign] = useToolState<string>({ target: { ...scope, toolId: 'typo.align' }, defaultValue: 'left' });
+    const [typoLineHeight] = useToolState<number>({ target: { ...scope, toolId: 'typo.line_height' }, defaultValue: 1.5 });
+    const [typoLetterSpacing] = useToolState<number>({ target: { ...scope, toolId: 'typo.letter_spacing' }, defaultValue: 0 });
+    const [typoWordSpacing] = useToolState<number>({ target: { ...scope, toolId: 'typo.word_spacing' }, defaultValue: 0 });
+    const [typoVerticalAlign] = useToolState<string>({ target: { ...scope, toolId: 'typo.vertical_align' }, defaultValue: 'top' });
+    const [typoStackGap] = useToolState<number>({ target: { ...scope, toolId: 'typo.stack_gap' }, defaultValue: 16 });
+    const [typoTransform] = useToolState<string>({ target: { ...scope, toolId: 'typo.transform' }, defaultValue: 'none' });
+    const [typoDecoration] = useToolState<string>({ target: { ...scope, toolId: 'typo.decoration' }, defaultValue: 'none' });
     const [styleOpacity] = useToolState<number>({ target: { ...scope, toolId: 'style.opacity' }, defaultValue: 100 });
     const [styleBlur] = useToolState<number>({ target: { ...scope, toolId: 'style.blur' }, defaultValue: 0 });
 
@@ -237,14 +250,21 @@ export const ConnectedBlock: React.FC<ConnectedBlockProps> = ({
                     axisSlant={axisSlant}
                     axisCasual={axisCasual}
                     axisGrade={axisGrade}
-                    lineHeight={lineHeight}
-                    letterSpacing={letterSpacing}
+                    lineHeight={typoLineHeight}
+                    letterSpacing={typoLetterSpacing}
+
+                    // Type Setting
+                    textAlign={typoAlign as any}
+                    textTransform={typoTransform}
+                    textDecoration={typoDecoration}
 
                     // Style
                     styleBgColor={styleBgColor}
                     styleTextColor={styleTextColor}
                     styleBorderColor={styleBorderColor}
                     styleBorderWidth={styleBorderWidth}
+                    styleTextStrokeColor={styleTextStrokeColor}
+                    styleTextStrokeWidth={styleTextStrokeWidth}
                     styleOpacity={styleOpacity}
                     styleBlur={styleBlur}
 
@@ -314,8 +334,13 @@ export const ConnectedBlock: React.FC<ConnectedBlockProps> = ({
                     fontPresetIndex={fontPresetIndex}
                     fontSizeDesktop={fontSizeDesktop}
                     fontSizeMobile={fontSizeMobile}
-                    lineHeight={lineHeight}
-                    letterSpacing={letterSpacing}
+                    lineHeight={typoLineHeight}
+                    letterSpacing={typoLetterSpacing}
+
+                    // Type Setting
+                    textAlign={typoAlign as any}
+                    textTransform={typoTransform}
+                    textDecoration={typoDecoration}
                     axisWeight={axisWeight === -1 ? null : axisWeight}
                     axisWidth={axisWidth === -1 ? null : axisWidth}
                     fontFamily={fontFamily}

@@ -1,14 +1,13 @@
-import { Multi21Designer } from "../../components/multi21/Multi21Designer";
-import { BuilderShell } from "../../components/multi21/BuilderShell";
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-    title: "MULTI 2¹ Designer",
-    description: "Pre-factory UI for designing Multi 2¹ grids",
-};
+import React from 'react';
+import { BuilderShell } from '../../components/multi21/BuilderShell';
+import { Multi21Designer } from '../../components/multi21/Multi21Designer'; // Ensure this path is correct
 
 export default function Multi21Page() {
+    // 🛑 EMERGENCY ROUTE: Forces the Multi21Designer to load.
+    // Logic checks are bypassed to ensure visibility.
     return (
-        <Multi21Designer />
+        <BuilderShell>
+            <Multi21Designer />
+        </BuilderShell>
     );
 }

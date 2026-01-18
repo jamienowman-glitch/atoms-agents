@@ -53,6 +53,11 @@ export interface Multi21Props {
     fontSizeMobile?: number;
     lineHeight?: number;
     letterSpacing?: number;
+    wordSpacing?: number;
+    // New Type Setting
+    textAlign?: 'left' | 'center' | 'right' | 'justify';
+    textTransform?: string;
+    textDecoration?: string;
     axisWeight?: number | null;
     axisWidth?: number | null;
     fontFamily?: number;
@@ -66,6 +71,8 @@ export interface Multi21Props {
     styleAccentColor?: string;
     styleBorderColor?: string;
     styleBorderWidth?: number;
+    styleTextStrokeColor?: string;
+    styleTextStrokeWidth?: number;
     styleOpacity?: number;
     styleBlur?: number;
 
@@ -155,6 +162,10 @@ export function Multi21({
     fontSizeMobile = 16,
     lineHeight = 1.5,
     letterSpacing = 0,
+    wordSpacing = 0,
+    textAlign = 'left',
+    textTransform = 'none',
+    textDecoration = 'none',
     axisWeight = null,
     axisWidth = null,
     fontFamily = 0,
@@ -168,6 +179,8 @@ export function Multi21({
     styleAccentColor = '#3b82f6',
     styleBorderColor = 'transparent',
     styleBorderWidth = 0,
+    styleTextStrokeColor = 'transparent',
+    styleTextStrokeWidth = 0,
     styleOpacity = 100,
     styleBlur = 0,
 
@@ -198,37 +211,6 @@ export function Multi21({
             else if (feedSource === 'events') mappedVariant = 'events'; // Events -> Events
             else if (feedSource === 'news') mappedVariant = 'blogs'; // News -> Blogs (assumed)
 
-            // 3. The Generator Function (getVarStyle) - SYNCED WITH MULTI21_TEXT
-            const getVarStyle = (
-                targetWeight: number,
-                targetWidth: number,
-                targetSlant: number,
-                targetCasual: number
-            ) => {
-                let activeFontStyle = 'normal';
-                let effectiveSlant = targetSlant;
-
-                if (fontFamily === 0) {
-                    // Flex: Use axis, style is normal
-                    effectiveSlant = targetSlant;
-                    activeFontStyle = 'normal';
-                } else {
-                    // Others (Serif/Mono): If slider pushed (e.g. < -1), switch to Italic style
-                    effectiveSlant = 0;
-                    if (targetSlant <= -1) {
-                        activeFontStyle = 'italic';
-                    }
-                }
-
-                return {
-                    fontFamily: `${activeFontVar}, sans-serif`,
-                    fontVariationSettings: `'wght' ${targetWeight}, 'wdth' ${targetWidth}, 'slnt' ${effectiveSlant}, 'CASL' ${targetCasual}, 'GRAD' ${axisGrade || 0}, 'opsz' ${12}`, // Fixed opsz for tiles
-                    fontWeight: 'normal',
-                    fontStyle: activeFontStyle
-                };
-            };
-            // Note: 'news' type falls back to 'generic', but we ensure meta has the timestamp.
-
             return {
                 id: item.id,
                 title: item.title,
@@ -248,47 +230,50 @@ export function Multi21({
         center: 'justify-center',
         right: 'justify-end',
     }[align];
-    const aspectClass = {
-        '1:1': 'aspect-square',
-        '9:16': 'aspect-[9/16]',
-        '16:9': 'aspect-video',
-        '4:3': 'aspect-[4/3]',
-    }[gridAspectRatio];
 
-    // --- Typography Engine ---
-    const preset = ROBOTO_PRESETS[fontPresetIndex] || ROBOTO_PRESETS[3];
-    const axes = { ...preset.axes };
-
-    // Manual Overrides
-    if (axisWeight !== null) axes.wght = axisWeight;
-    if (axisWidth !== null) axes.wdth = axisWidth;
-
-    // Font Family Logic
+    // Typo Resolver (Vario)
     const getFontFamilyVar = (index: number) => {
         switch (index) {
             case 1: return 'var(--font-roboto-serif)';
             case 2: return 'var(--font-roboto-slab)';
             case 3: return 'var(--font-roboto-mono)';
-            default: return 'var(--font-roboto-flex)';
+            default: return 'var(--font-roboto-flex)'; // 0 = Sans
         }
     };
-    const activeFontVar = getFontFamilyVar(fontFamily);
+    const activeFontVar = getFontFamilyVar(fontFamily || 0);
 
-    // Casual Axis (Only for Sans/Flex)
-    const activeCasual = fontFamily === 0 ? axisCasual : 0;
+    // Resolve Shared Axes
+    const preset = ROBOTO_PRESETS[fontPresetIndex] || ROBOTO_PRESETS[3];
+    const defaultAxes = { ...preset.axes };
+    const wdth = axisWidth !== null && axisWidth !== -1 ? axisWidth : defaultAxes.wdth;
+    const slnt = (fontFamily === 0) ? (axisSlant || 0) : 0;
+    const grd = axisGrade || 0;
+    const casl = (fontFamily === 0) ? (axisCasual || 0) : 0;
 
-    const variationSettings = `'opsz' ${axes.opsz}, 'wght' ${axes.wght}, 'GRAD' ${axisGrade}, 'wdth' ${axes.wdth}, 'slnt' ${axisSlant}, 'CASL' ${activeCasual}`;
+    const activeFontSize = isMobileView ? fontSizeMobile : fontSizeDesktop;
+    const variationSettings = `'wght' ${axisWeight !== null ? axisWeight : 400}, 'wdth' ${wdth}, 'slnt' ${slnt}, 'CASL' ${casl}, 'GRAD' ${grd}`;
     const cssLetterSpacing = `${letterSpacing / 1000}em`;
 
-    // --- Dynamic Layout Logic ---
-    const activeCols = isMobileView ? gridColsMobile : gridColsDesktop;
+    // Dynamic Spacing Variables
     const activeGapX = isMobileView ? gridGapXMobile : gridGapXDesktop;
     const activeGapY = isMobileView ? gridGapYMobile : gridGapYDesktop;
     const activeRadius = isMobileView ? gridTileRadiusMobile : gridTileRadiusDesktop;
-    const activeFontSize = isMobileView ? fontSizeMobile : fontSizeDesktop;
+    const activeCols = isMobileView ? gridColsMobile : gridColsDesktop;
 
-    const activeGapMargin = activeGapX > 0 ? '8px' : '0';
-    const activePadding = activeGapX > 0 ? '0 2px' : '0 4px';
+    // Derived
+    const activeGapMargin = `${activeGapY}px`;
+    const activePadding = `24px`;
+
+    // Helper: Determine if content area is needed
+    const showContentArea = tileShowTitle || tileShowMeta || tileShowCtaLabel || tileShowCtaArrow;
+
+    // Aspect Ratio Logic
+    const aspectClass = {
+        '16:9': 'aspect-video',
+        '4:3': 'aspect-[4/3]',
+        '1:1': 'aspect-square',
+        '9:16': 'aspect-[9/16]',
+    }[gridAspectRatio] || 'aspect-video';
 
     // --- Meta-Flip / SEO / UTM Logic (Phase 11) ---
     const [showMeta, setShowMeta] = React.useState(false);
@@ -357,6 +342,8 @@ export function Multi21({
                     ['--style-accent' as string]: styleAccentColor,
                     ['--style-border-color' as string]: styleBorderColor,
                     ['--style-border-width' as string]: `${styleBorderWidth}px`,
+                    ['--style-text-stroke-color' as string]: styleTextStrokeColor,
+                    ['--style-text-stroke-width' as string]: `${styleTextStrokeWidth}px`,
                     ['--style-opacity' as string]: `${styleOpacity / 100}`,
                     ['--style-blur' as string]: `${styleBlur}px`,
 
@@ -366,6 +353,10 @@ export function Multi21({
                     ['--multi-font-size' as string]: `${activeFontSize}px`,
                     ['--multi-line-height' as string]: lineHeight,
                     ['--multi-letter-spacing' as string]: cssLetterSpacing,
+                    ['--multi-word-spacing' as string]: `${wordSpacing}em`,
+                    ['--multi-text-align' as string]: textAlign,
+                    ['--multi-text-transform' as string]: textTransform,
+                    ['--multi-text-decoration' as string]: textDecoration,
                 }}
             >
                 <style jsx>{`
@@ -390,6 +381,11 @@ export function Multi21({
               font-variation-settings: var(--multi-font-variations) !important;
               line-height: var(--multi-line-height);
               letter-spacing: var(--multi-letter-spacing);
+              word-spacing: var(--multi-word-spacing);
+              text-align: var(--multi-text-align);
+              text-transform: var(--multi-text-transform);
+              text-decoration: var(--multi-text-decoration);
+              -webkit-text-stroke: var(--style-text-stroke-width) var(--style-text-stroke-color);
           }
           /* Title Scaling (Example: 1em = base fontSize) */
           .multi21-typo-target h3 {
@@ -463,7 +459,6 @@ export function Multi21({
                                     )}
 
                                     <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 px-3 text-center z-10">
-
                                         {tileShowBadge && item.badge && (
                                             <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wide mb-2 ${item.badge.includes('+') ? 'bg-emerald-500/20 text-emerald-400' : 'bg-white/10 text-white'}`} style={{ lineHeight: 1.2 }}>
                                                 {item.badge}
@@ -603,43 +598,45 @@ export function Multi21({
                                         )}
                                     </div>
 
-                                    {/* Content */}
-                                    <div className="flex flex-col gap-0.5 multi21-content">
-                                        {tileShowTitle && (
-                                            <h3 className="font-medium text-gray-900 dark:text-gray-100 line-clamp-2 group-hover:underline decoration-1 underline-offset-2">
-                                                <a href={getLinkWithUtm(item.href || '#')}>
-                                                    {item.title}
+                                    {/* Content (Title, Meta, CTA) - Conditional Render for "Seamless" Mode */}
+                                    {showContentArea && (
+                                        <div className="flex flex-col gap-0.5 multi21-content">
+                                            {tileShowTitle && (
+                                                <h3 className="font-medium text-gray-900 dark:text-gray-100 line-clamp-2 group-hover:underline decoration-1 underline-offset-2">
+                                                    <a href={getLinkWithUtm(item.href || '#')}>
+                                                        {item.title}
+                                                    </a>
+                                                </h3>
+                                            )}
+
+                                            {tileShowMeta && item.meta && (
+                                                <p className={`line-clamp-1 ${effectiveVariant === 'product' ? 'text-emerald-600 font-semibold' : 'text-gray-500 dark:text-gray-400'}`}>
+                                                    {/* Note: timestamp vs subtitle is handled by determining what mapped to 'meta' */}
+                                                    {item.meta}
+                                                </p>
+                                            )}
+
+                                            {(tileShowCtaLabel || tileShowCtaArrow) && item.secondaryLink && (
+                                                <a
+                                                    href={getLinkWithUtm(item.secondaryLink.href)}
+                                                    className={`mt-2 pb-1 text-[10px] flex items-center gap-2 transition-colors w-fit ${effectiveVariant === 'product'
+                                                        ? 'bg-black text-white px-3 py-1.5 rounded-full hover:bg-gray-800 no-underline group-hover:no-underline'
+                                                        : (effectiveVariant === 'youtube' || effectiveVariant === 'video')
+                                                            ? 'text-red-500 hover:text-red-700 font-bold uppercase tracking-wider'
+                                                            : 'text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
+                                                        }`}
+                                                    style={{ fontFamily: 'sans-serif', letterSpacing: '0.05em' }}
+                                                >
+                                                    {tileShowCtaLabel && (item.secondaryLink.label || 'More')}
+                                                    {tileShowCtaArrow && effectiveVariant !== 'product' && effectiveVariant !== 'youtube' && effectiveVariant !== 'video' && (
+                                                        <svg width="20" height="10" viewBox="0 0 28 10" fill="none" stroke="var(--multi-cta-arrow-color, currentColor)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                            <path d="M0 5h26M22 1l4 4-4 4" />
+                                                        </svg>
+                                                    )}
                                                 </a>
-                                            </h3>
-                                        )}
-
-                                        {tileShowMeta && item.meta && (
-                                            <p className={`line-clamp-1 ${effectiveVariant === 'product' ? 'text-emerald-600 font-semibold' : 'text-gray-500 dark:text-gray-400'}`}>
-                                                {/* Note: timestamp vs subtitle is handled by determining what mapped to 'meta' */}
-                                                {item.meta}
-                                            </p>
-                                        )}
-
-                                        {(tileShowCtaLabel || tileShowCtaArrow) && item.secondaryLink && (
-                                            <a
-                                                href={getLinkWithUtm(item.secondaryLink.href)}
-                                                className={`mt-2 pb-1 text-[10px] flex items-center gap-2 transition-colors w-fit ${effectiveVariant === 'product'
-                                                    ? 'bg-black text-white px-3 py-1.5 rounded-full hover:bg-gray-800 no-underline group-hover:no-underline'
-                                                    : (effectiveVariant === 'youtube' || effectiveVariant === 'video')
-                                                        ? 'text-red-500 hover:text-red-700 font-bold uppercase tracking-wider'
-                                                        : 'text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
-                                                    }`}
-                                                style={{ fontFamily: 'sans-serif', letterSpacing: '0.05em' }}
-                                            >
-                                                {tileShowCtaLabel && (item.secondaryLink.label || 'More')}
-                                                {tileShowCtaArrow && effectiveVariant !== 'product' && effectiveVariant !== 'youtube' && effectiveVariant !== 'video' && (
-                                                    <svg width="20" height="10" viewBox="0 0 28 10" fill="none" stroke="var(--multi-cta-arrow-color, currentColor)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                        <path d="M0 5h26M22 1l4 4-4 4" />
-                                                    </svg>
-                                                )}
-                                            </a>
-                                        )}
-                                    </div>
+                                            )}
+                                        </div>
+                                    )}
                                 </>
                             )}
                         </div>

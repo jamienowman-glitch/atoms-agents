@@ -50,7 +50,12 @@ export function ToolControlProvider({ children, initialState = {} }: { children:
             if (!ctx) throw new Error('useToolState must be used within ToolControlProvider');
             const k = keyOf(target);
             const val = (ctx.state[k] ?? defaultValue) as T;
-            const setter = (next: T) => ctx.updateTool(target, 'setValue', next);
+
+            // Memoize setter based on key to ensure stable reference even if target object is recreated
+            const setter = useMemo(() => {
+                return (next: T) => ctx.updateTool(target, 'setValue', next);
+            }, [k, ctx.updateTool]); // 'k' represents the target identity. 'target' usage in closure is fine as values are same.
+
             return [val, setter];
         },
         [],

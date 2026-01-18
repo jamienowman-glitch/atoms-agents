@@ -19,6 +19,11 @@ export const MagnetWheel: React.FC<MagnetWheelProps> = ({ items, activeId, onSel
     const isScrollingRef = useRef(false);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+    // Physics Config - Side based sizing
+    // Left side (Mode) is slightly dominant (50px vs 44px base)
+    const baseSize = side === 'left' ? 50 : 44;
+    const activeScale = 1.3;
+
     // Initial Scroll to Active
     useEffect(() => {
         const container = scrollRef.current;
@@ -54,8 +59,7 @@ export const MagnetWheel: React.FC<MagnetWheelProps> = ({ items, activeId, onSel
                 const maxDistance = 60; // Influence radius
 
                 // Scale Calculator
-                // Center item pops out (1.3x), neighbors recede (0.7x)
-                const scale = Math.max(0.7, 1.3 - (distance / maxDistance) * 0.8);
+                const scale = Math.max(0.7, activeScale - (distance / maxDistance) * 0.8);
                 const opacity = Math.max(0.3, 1 - (distance / maxDistance) * 0.8);
 
                 el.style.transform = `scale(${scale})`;
@@ -79,66 +83,76 @@ export const MagnetWheel: React.FC<MagnetWheelProps> = ({ items, activeId, onSel
             isScrollingRef.current = false;
         }, 50);
 
-    }, [items, activeId, onSelect]);
+    }, [items, activeId, onSelect, baseSize, activeScale]);
 
     // Initial visual setup
     useEffect(() => {
         handleScroll();
     }, []);
 
+    // Get Active Label
+    const activeItem = items.find(i => i.id === activeId);
+
     return (
-        <div className="relative w-[100px] h-10 flex items-center shrink-0">
-            {/* Center Marker (Optional, subtle glow) */}
-            {/* <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-blue-500/10 pointer-events-none blur-xl" /> */}
+        <div className="relative flex flex-col items-center justify-center -space-y-1">
+            {/* Wheel Container */}
+            <div className={`relative ${side === 'left' ? 'w-[110px]' : 'w-[100px]'} h-12 flex items-center shrink-0 select-none`}>
+                <div
+                    ref={scrollRef}
+                    className="flex items-center gap-2 overflow-x-auto snap-x snap-mandatory scrollbar-none w-full h-full px-[50%]"
+                    onScroll={handleScroll}
+                    style={{
+                        scrollPaddingInline: '50%',
+                        scrollbarWidth: 'none',
+                        msOverflowStyle: 'none'
+                    }}
+                >
+                    <style jsx>{`
+                        div::-webkit-scrollbar { display: none; }
+                    `}</style>
 
-            <div
-                ref={scrollRef}
-                className="flex items-center gap-1.5 overflow-x-auto snap-x snap-mandatory scrollbar-none w-full h-full px-[50%]"
-                onScroll={handleScroll}
-                style={{
-                    scrollPaddingInline: '50%',
-                    scrollbarWidth: 'none',
-                    msOverflowStyle: 'none'
-                }}
-            >
-                <style jsx>{`
-                    div::-webkit-scrollbar { display: none; }
-                `}</style>
-
-                {items.map(item => (
-                    <button
-                        key={item.id}
-                        ref={el => { if (el) itemRefs.current.set(item.id, el); }}
-                        onClick={() => {
-                            onSelect(item.id);
-                            // Force Snap
-                            const container = scrollRef.current;
-                            const el = itemRefs.current.get(item.id);
-                            if (container && el) {
-                                const containerCenter = container.offsetWidth / 2;
-                                const itemCenter = el.offsetLeft + el.offsetWidth / 2;
-                                container.scrollTo({ left: itemCenter - containerCenter, behavior: 'smooth' });
-                            }
-                        }}
-                        className={`
-                            flex-shrink-0 snap-center flex items-center justify-center 
-                            w-11 h-11 rounded-full transition-transform duration-75 ease-linear 
-                            bg-neutral-100 dark:bg-neutral-800 
-                            text-neutral-800 dark:text-neutral-200 
-                            shadow-sm border border-neutral-200 dark:border-neutral-700
-                            ${activeId === item.id ? 'ring-2 ring-blue-500/50 dark:ring-blue-400/50' : ''}
-                            touch-manipulation
-                        `}
-                        style={{ minWidth: '44px', minHeight: '44px' }} // Explicit touch target size
-                        title={item.label}
-                    >
-                        {/* Wrapper to control icon scale inside the larger button */}
-                        <div className="w-5 h-5 flex items-center justify-center">
-                            {item.icon}
-                        </div>
-                    </button>
-                ))}
+                    {items.map(item => (
+                        <button
+                            key={item.id}
+                            ref={el => { if (el) itemRefs.current.set(item.id, el); }}
+                            onClick={() => {
+                                onSelect(item.id);
+                                // Force Snap logic...
+                                const container = scrollRef.current;
+                                const el = itemRefs.current.get(item.id);
+                                if (container && el) {
+                                    const containerCenter = container.offsetWidth / 2;
+                                    const itemCenter = el.offsetLeft + el.offsetWidth / 2;
+                                    container.scrollTo({ left: itemCenter - containerCenter, behavior: 'smooth' });
+                                }
+                            }}
+                            className={`
+                                flex-shrink-0 snap-center flex items-center justify-center 
+                                rounded-full transition-transform duration-75 ease-linear 
+                                bg-neutral-100 dark:bg-neutral-800 
+                                text-neutral-800 dark:text-neutral-200 
+                                shadow-sm border border-neutral-200 dark:border-neutral-700
+                                ${activeId === item.id ? 'ring-2 ring-blue-500/50 dark:ring-blue-400/50' : ''}
+                                touch-manipulation
+                            `}
+                            style={{
+                                minWidth: `${baseSize}px`,
+                                minHeight: `${baseSize}px`,
+                                width: `${baseSize}px`,
+                                height: `${baseSize}px`
+                            }}
+                            title={item.label}
+                        >
+                            {/* Wrapper to control icon scale inside the larger button */}
+                            <div className={`${side === 'left' ? 'w-6 h-6' : 'w-5 h-5'} flex items-center justify-center`}>
+                                {item.icon}
+                            </div>
+                        </button>
+                    ))}
+                </div>
             </div>
+
+            {/* Label Moved External */}
 
             {/* Soft Fade Edges */}
             <div className="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-white dark:from-neutral-900 to-transparent pointer-events-none z-30" />
@@ -167,26 +181,50 @@ export function DualMagnifier({ activeMode, onModeSelect, activeTool, onToolSele
 
     const modesToUse = modeOptions || defaultModes;
 
+    // Label Lookups
+    const activeModeLabel = modesToUse.find(m => m.id === activeMode)?.label || '';
+    const activeToolLabel = toolOptions.find(t => t.id === activeTool)?.label || '';
+
     return (
-        <div className="flex bg-white dark:bg-neutral-800 rounded-full shadow-sm border border-neutral-200 dark:border-neutral-700 p-1 gap-2">
+        <div className="flex flex-col items-center gap-1">
+            {/* The Control Pill */}
+            <div className="flex bg-white dark:bg-neutral-800 rounded-full shadow-sm border border-neutral-200 dark:border-neutral-700 p-1 gap-2 z-20 relative">
 
-            {/* Left Wheel: Mode Selector */}
-            <MagnetWheel
-                items={modesToUse}
-                activeId={activeMode}
-                onSelect={onModeSelect}
-            />
+                {/* Left Wheel: Mode Selector */}
+                <MagnetWheel
+                    items={modesToUse}
+                    activeId={activeMode}
+                    onSelect={onModeSelect}
+                    side="left"
+                />
 
-            {/* Divider */}
-            <div className="w-px bg-neutral-200 dark:bg-neutral-700 my-2" />
+                {/* Divider */}
+                <div className="w-px bg-neutral-200 dark:bg-neutral-700 my-2" />
 
-            {/* Right Wheel: Tool Selector */}
-            <MagnetWheel
-                items={toolOptions}
-                activeId={activeTool}
-                onSelect={onToolSelect}
-                side="right"
-            />
+                {/* Right Wheel: Tool Selector */}
+                <MagnetWheel
+                    items={toolOptions}
+                    activeId={activeTool}
+                    onSelect={onToolSelect}
+                    side="right"
+                />
+            </div>
+
+            {/* External Labels Row */}
+            <div className="flex gap-2 text-[9px] font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 select-none z-10 w-full justify-center">
+                {/* Mode Label Area */}
+                <div className="w-[110px] flex justify-center">
+                    <span className="animate-fadeIn">{activeModeLabel}</span>
+                </div>
+
+                {/* Divider Spacer */}
+                <div className="w-px" />
+
+                {/* Tool Label Area */}
+                <div className="w-[100px] flex justify-center">
+                    <span className="animate-fadeIn">{activeToolLabel}</span>
+                </div>
+            </div>
         </div>
     );
 }

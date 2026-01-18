@@ -98,7 +98,26 @@ function Multi21DesignerContent({ effectiveRole }: { effectiveRole: 'tenant' | '
     const { useToolState } = useToolControl();
 
     // -- Global State (View) --
+    // Auto-Detect Mobile Device (Run Once)
+    useEffect(() => {
+        if (typeof window !== 'undefined' && window.innerWidth < 768) {
+            // We need to set the state, but we can't use 'setPreviewMode' before it's defined if we put this effect before the hook.
+            // However, hooks order matters.
+            // Better approach: Use the hook first, then the effect.
+        }
+    }, []);
+
     const [previewMode, setPreviewMode] = useToolState<'desktop' | 'mobile'>({ target: { surfaceId: 'multi21.designer', toolId: 'previewMode' }, defaultValue: 'desktop' });
+
+    // Auto-Detect Mobile Device (Implementation)
+    useEffect(() => {
+        const checkMobile = () => {
+            if (window.innerWidth < 768) {
+                setPreviewMode('mobile');
+            }
+        };
+        checkMobile();
+    }, [setPreviewMode]);
 
     // -- Active Lens State --
     const [activeLens, setActiveLens] = useToolState<'page' | 'graph'>({ target: { surfaceId: 'multi21.designer', toolId: 'activeLens' }, defaultValue: 'page' });
