@@ -17,14 +17,16 @@
 
 ## 3. THE MAPPING (Right Wheel Wiring)
 *How does this atom react to Standard Tools?*
-**FONT:** (Size targets? Font overrides?)
-**TYPE:** (Aligns text or container? Vertical align?)
-**COLOUR:** (Where does BG/Text color go?)
+**FONT:** sensible CTA Defaults.  Maps to every slider as they are currently set 
+**TYPE:** (
+**COLOUR:** 
 
 ## 4. THE FLIP (Settings)
 *Back of card.*
 - **SEO Tags:**
 - **Tracking:**
+- **UTM Tracking:**
+
 
 ---
 

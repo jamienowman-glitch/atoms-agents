@@ -7,7 +7,7 @@ import { LensType } from '../../lib/LensRegistry';
 
 export function TopControls({ showGraphControls = false }: { showGraphControls?: boolean }) {
     const { useToolState } = useToolControl();
-    const { setSettingsOpen } = usePageControl();
+    const { setSettingsOpen, setExportOpen } = usePageControl();
 
     // View State (Global)
     const [previewMode, setPreviewMode] = useToolState<'desktop' | 'mobile'>({
@@ -96,7 +96,11 @@ export function TopControls({ showGraphControls = false }: { showGraphControls?:
             </button>
 
             {/* Right: Export/Publish */}
-            <button className="flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 text-xs font-medium text-neutral-600 dark:text-neutral-300 transition-colors">
+            <button
+                onClick={() => setExportOpen(true)}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 text-xs font-medium text-neutral-600 dark:text-neutral-300 transition-colors"
+                type="button"
+            >
                 <span>Export</span>
                 <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" x2="12" y1="15" y2="3" /></svg>
             </button>

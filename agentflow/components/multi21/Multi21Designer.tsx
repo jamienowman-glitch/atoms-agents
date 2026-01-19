@@ -134,8 +134,7 @@ function Multi21DesignerContent({ effectiveRole }: { effectiveRole: 'tenant' | '
 
     // -- Stack State (Recursive) --
     const [pageBlocks, setPageBlocks] = useState<Block[]>([
-        { id: 'block-1', type: 'media' },
-        { id: 'block-2', type: 'header' }
+        { id: 'block-1', type: 'media' }
     ]);
     const [popupBlocks, setPopupBlocks] = useState<Block[]>([
         // Default empty or simple text
@@ -566,7 +565,6 @@ function Multi21DesignerContent({ effectiveRole }: { effectiveRole: 'tenant' | '
                             <button onClick={() => handleAddBlock('copy')} className="w-8 h-8 rounded-full bg-amber-50 hover:bg-amber-100 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 flex items-center justify-center shadow-sm" title="Add Copy"><span className="font-serif font-bold text-lg leading-none">C</span></button>
                             <button onClick={() => handleAddBlock('media')} className="w-8 h-8 rounded-full bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 flex items-center justify-center shadow-sm" title="Add Media"><svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></svg></button>
                             <button onClick={() => handleAddBlock('cta')} className="w-8 h-8 rounded-full bg-purple-50 hover:bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 flex items-center justify-center shadow-sm" title="Add Button"><svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="4" y="8" width="16" height="8" rx="2" /><path d="M10 8V8" /></svg></button>
-                            <button onClick={() => handleAddBlock('header')} className="w-8 h-8 rounded-full bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shadow-sm" title="Add Header"><svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="3" y="3" width="18" height="6" rx="1" /><path d="M3 9h18" /></svg></button>
                             <div className="w-full h-px bg-neutral-100 dark:bg-neutral-800 my-1" />
                             <button onClick={() => handleAddBlock('row', 1)} className="w-8 h-8 rounded-full bg-neutral-50 hover:bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 flex items-center justify-center shadow-sm font-mono text-xs" title="1 Column">[I]</button>
                             <button onClick={() => handleAddBlock('row', 2)} className="w-8 h-8 rounded-full bg-neutral-50 hover:bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 flex items-center justify-center shadow-sm font-mono text-xs" title="2 Columns">[II]</button>
@@ -577,25 +575,20 @@ function Multi21DesignerContent({ effectiveRole }: { effectiveRole: 'tenant' | '
 
                     {isDesktop && <DesktopPanelSystem panels={panels} />}
 
-                    <main className="p-4 pb-32 max-w-[1600px] mx-auto flex flex-col items-center">
-                        <div className="w-full mb-8 border-b border-neutral-200 dark:border-neutral-800 pb-4">
-                            {/* Title reflects Layer */}
-                            <h2 className="text-2xl font-light tracking-tight flex items-center gap-2">
-                                {viewLayer === 'popup' ? (
-                                    <><span className="text-neutral-400">Layer:</span> Pop-up</>
-                                ) : (
-                                    'Collection Demo'
-                                )}
-                            </h2>
-                        </div>
+                    <main
+                        className={`pb-32 flex flex-col ${previewMode === 'mobile'
+                            ? 'px-0 max-w-none items-stretch'
+                            : 'p-4 max-w-[1600px] mx-auto items-center'
+                            }`}
+                    >
 
                         <div
                             className={`transition-all duration-300 ease-in-out border border-transparent ${previewMode === 'mobile'
-                                ? 'w-[390px] border-neutral-200 dark:border-neutral-800 rounded-3xl overflow-hidden shadow-2xl bg-white dark:bg-black'
+                                ? 'w-full sm:w-[390px] sm:border-neutral-200 sm:dark:border-neutral-800 sm:rounded-3xl sm:overflow-hidden sm:shadow-2xl sm:bg-white sm:dark:bg-black'
                                 : 'w-full'
                                 }`}
                         >
-                            <div className={previewMode === 'mobile' ? 'p-4 h-[844px] overflow-y-auto scrollbar-hide' : ''}>
+                            <div className={previewMode === 'mobile' ? 'p-0 sm:p-4 min-h-[100vh] sm:h-[844px] overflow-y-auto scrollbar-hide' : ''}>
                                 {/* 1. Page Background Blocks (Dimmed if popup active) */}
                                 <div className={`transition-opacity duration-300 ${viewLayer === 'popup' ? 'opacity-20 pointer-events-none filter blur-sm' : 'opacity-100'}`}>
                                     {/* If Page is Active, we use DnD for it. If Popup is active, we just render it statically here. */}

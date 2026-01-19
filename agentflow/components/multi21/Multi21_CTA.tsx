@@ -13,14 +13,34 @@ export interface Multi21CTAProps {
     fullWidth?: boolean;
 
     // Visuals
-    variant?: 'solid' | 'outline' | 'ghost';
+    variant?: 'solid' | 'outline' | 'ghost' | 'atomic';
     size?: 'small' | 'medium' | 'large';
+    width?: number;
+    height?: number;
+    scale?: number;
 
     // Style (Scoped via ConnectedBlock)
     styleAccentColor?: string; // The "Funk" color
+    styleBgColor?: string;
+    styleTextColor?: string;
+    styleBorderColor?: string;
+    styleBorderWidth?: number;
 
     // Typography (Vario Engine - Simplified for Button)
+    fontPresetIndex?: number;
     fontFamily?: number; // 0=Sans, 1=Serif, etc.
+    fontSizeDesktop?: number;
+    fontSizeMobile?: number;
+    axisWeight?: number | null;
+    axisWidth?: number | null;
+    axisCasual?: number;
+    axisSlant?: number;
+    axisGrade?: number;
+    letterSpacing?: number;
+    wordSpacing?: number;
+    textTransform?: string;
+    textDecoration?: string;
+    isMobileView?: boolean;
 }
 
 export function Multi21_CTA({
@@ -32,8 +52,28 @@ export function Multi21_CTA({
     fullWidth = false,
     variant = 'solid',
     size = 'medium',
+    width = 180,
+    height = 48,
+    scale = 1,
     styleAccentColor = '#3b82f6',
+    styleBgColor = 'transparent',
+    styleTextColor = 'inherit',
+    styleBorderColor = 'transparent',
+    styleBorderWidth = 0,
+    fontPresetIndex = 3,
     fontFamily = 0,
+    fontSizeDesktop = 16,
+    fontSizeMobile = 16,
+    axisWeight = null,
+    axisWidth = null,
+    axisCasual = 0,
+    axisSlant = 0,
+    axisGrade = 0,
+    letterSpacing = 0,
+    wordSpacing = 0,
+    textTransform = 'none',
+    textDecoration = 'none',
+    isMobileView = false,
 }: Multi21CTAProps) {
 
     // --- Vario Engine (Simplified) ---
@@ -47,10 +87,29 @@ export function Multi21_CTA({
         }
     };
 
-    // Hardcoded punchy button font settings
-    const fontStyle = {
-        fontFamily: getFontFamilyVar(fontFamily),
-        fontVariationSettings: `'wght' 600, 'wdth' 100`,
+    const baseWeight = variant === 'atomic' ? 500 : 600;
+    const activeFontVar = getFontFamilyVar(fontFamily);
+    const preset = ROBOTO_PRESETS[fontPresetIndex] || ROBOTO_PRESETS[3];
+    const defaultAxes = { ...preset.axes };
+    const wdth = axisWidth !== null && axisWidth !== -1 ? axisWidth : defaultAxes.wdth;
+    const slnt = fontFamily === 0 ? axisSlant || 0 : 0;
+    const casl = fontFamily === 0 ? axisCasual || 0 : 0;
+    const grd = axisGrade || 0;
+    const weight = axisWeight !== null && axisWeight !== -1 ? axisWeight : baseWeight;
+
+    let activeFontStyle = 'normal';
+    let effectiveSlant = slnt;
+    if (fontFamily !== 0) {
+        effectiveSlant = 0;
+        if ((axisSlant || 0) <= -1) {
+            activeFontStyle = 'italic';
+        }
+    }
+
+    const baseFontStyle = {
+        fontFamily: `${activeFontVar}, sans-serif`,
+        fontVariationSettings: `'wght' ${weight}, 'wdth' ${wdth}, 'slnt' ${effectiveSlant}, 'CASL' ${casl}, 'GRAD' ${grd}`,
+        fontStyle: activeFontStyle,
     };
 
     // --- Helpers ---
@@ -71,38 +130,57 @@ export function Multi21_CTA({
     // We use dynamic styles because Tailwind can't interpolate arbitrary CSS variables for colors easily without setup.
     // relying on `styleAccentColor` passed from the tool.
 
+    const textColor = styleTextColor !== 'inherit' ? styleTextColor : styleAccentColor;
+    const bgColor = styleBgColor !== 'transparent' ? styleBgColor : styleAccentColor;
+    const borderColor = styleBorderColor !== 'transparent' ? styleBorderColor : styleAccentColor;
+    const resolvedBorderWidth = styleBorderWidth > 0 ? styleBorderWidth : 2;
+
     const getVariantStyle = () => {
         const base = {
-            ...fontStyle,
+            ...baseFontStyle,
             transition: 'all 0.2s ease',
         };
 
         if (variant === 'solid') {
             return {
                 ...base,
-                backgroundColor: styleAccentColor,
-                color: '#ffffff',
-                border: `2px solid ${styleAccentColor}`,
+                backgroundColor: bgColor,
+                color: styleTextColor !== 'inherit' ? styleTextColor : '#ffffff',
+                border: `${styleBorderWidth > 0 ? styleBorderWidth : 0}px solid ${borderColor}`,
             };
         }
         if (variant === 'outline') {
             return {
                 ...base,
                 backgroundColor: 'transparent',
-                color: styleAccentColor,
-                border: `2px solid ${styleAccentColor}`,
+                color: textColor,
+                border: `${resolvedBorderWidth}px solid ${borderColor}`,
             };
         }
         if (variant === 'ghost') {
             return {
                 ...base,
                 backgroundColor: 'transparent',
-                color: styleAccentColor,
-                border: '2px solid transparent', // Keep alignment stable
+                color: textColor,
+                border: '2px solid transparent',
+            };
+        }
+        if (variant === 'atomic') {
+            return {
+                ...base,
+                backgroundColor: 'transparent',
+                color: textColor,
+                border: '2px solid transparent',
             };
         }
         return base;
     };
+
+    const scaledWidth = Math.round(width * scale);
+    const scaledHeight = Math.round(height * scale);
+    const baseFontSize = isMobileView ? fontSizeMobile : fontSizeDesktop;
+    const scaledFontSize = Math.max(10, Math.round(baseFontSize * scale));
+    const scaledPadding = Math.max(6, Math.round(12 * scale));
 
 
     // --- Inline Editing (Manual DOM Sync) ---
@@ -129,7 +207,18 @@ export function Multi21_CTA({
                     ${fullWidth ? 'w-full' : ''}
                     ${sizeClasses}
                 `}
-                style={getVariantStyle()}
+                style={{
+                    ...getVariantStyle(),
+                    width: fullWidth ? undefined : scaledWidth,
+                    height: scaledHeight,
+                    paddingInline: fullWidth ? undefined : scaledPadding,
+                    paddingBlock: 0,
+                    fontSize: scaledFontSize,
+                    letterSpacing: `${letterSpacing / 100}em`,
+                    wordSpacing: `${wordSpacing / 10}em`,
+                    textTransform: textTransform,
+                    textDecoration: textDecoration,
+                }}
                 onClick={(e) => e.preventDefault()} // Prevent nav in editor
             >
                 {/* Editable Span */}
@@ -138,11 +227,20 @@ export function Multi21_CTA({
                     contentEditable
                     suppressContentEditableWarning
                     onBlur={handleBlur}
-                    className="outline-none min-w-[1em] text-center"
+                    className="outline-none min-w-[1em] text-center font-sans"
                     style={{ whiteSpace: 'nowrap' }}
                 >
                     {label}
                 </span>
+
+                {variant === 'atomic' && (
+                    <span className="ml-2 inline-flex items-center" aria-hidden="true">
+                        <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                            <polyline points="13 6 19 12 13 18" />
+                        </svg>
+                    </span>
+                )}
 
                 {/* Optional: Hover overlay for "Ghost" or generic hover effects could go here, 
                     but simplistic CSS transition is usually handled by `hover:` classes. 

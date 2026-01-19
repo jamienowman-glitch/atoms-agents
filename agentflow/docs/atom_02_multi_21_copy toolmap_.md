@@ -1,15 +1,38 @@
 # Toolmap Template: Toolpop -> <ATOM NAME>
 
 Tool Surface: Toolpop (Bottom Controller)
-Tool Name: <ATOM NAME>
+Tool Name: MULTI-21-COPY
 Scope: `surfaceId: <surfaceId>`, `entityId: <entityId>`
 Primary Wiring: <controller file> -> <connected block> -> <renderer>
 
 ---
 
+Description:  this will be for copy similar to what Tiles is a high dynamic tool that then for this and then Tiles you can kind of use as a reference points for later on hopefully building all of the functionality that you would need in any further atom that will be a really end up being a combination of the two. 
+
+This atom when added only adds ONE of the following A HEADLINE. A SUBTITLE. A BODY. 
+
+To create documents rather than follow almost every other builder which ends up being not very controllable you would stack these where the next one on the canvas should inherit the same and of course be able to be overwritten but the same formatting so left a line centre right or justifie. 
+
+You must be able to click into the Element to edit text.
+
+In the tools we will split H2 | H3 | H4 | Body from STYLING: JUMBO | HEADLINE | SUBTITLE | TAGLINE | QUOTE | BODY| CAPTION
+
+You MUST SET H1 AT THE PAGE LEVEL SETTINGS. 
+
+JUMBO A preset for a size where the longest word / line takes up the entire width of the screen. 
+
+Caption this would sit tightly under a photograph set to left the line on the edge of that image Element where you have three elements that could be model or skater name in extra bold inrobotoflex, trick or outfit in semibold and PHotographer in extra bold and then name in bold. 
+
+Tagline: This will be in between JUMBO & HEAD LINE and able to highlight a word and sselect a colour. 
+
+
+
+
 ## Left Magnifier: LAYOUT (Blank Slot)
-Right Magnifier: <Tool 1>
-- UI: <controls>
+Right Magnifier: 
+- UI: TOP SLIDER: H2 | H3 | H4 | Body 
+Bottom Slider: JUMBO | HEADLINE | SUBTITLE | TAGLINE | QUOTE | BODY| CAPTION
+
 - Tool IDs: <tool ids>
 - Renderer mapping: <what it drives>
 - Pseudocode:

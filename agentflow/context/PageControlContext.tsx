@@ -42,6 +42,8 @@ interface PageControlContextType {
     // UI State
     isSettingsOpen: boolean;
     setSettingsOpen: (open: boolean) => void;
+    isExportOpen: boolean;
+    setExportOpen: (open: boolean) => void;
 }
 
 const defaultState: PageState = {
@@ -70,6 +72,7 @@ export function PageControlProvider({ children, initialData }: { children: React
     const [tracking, setTrackingState] = useState<PageTrackingState>({ ...defaultState.tracking, ...initialData?.tracking });
 
     const [isSettingsOpen, setSettingsOpen] = useState(false);
+    const [isExportOpen, setExportOpen] = useState(false);
 
     // --- Helpers to merge updates ---
     const setDesign = (updates: Partial<PageDesignState>) => setDesignState(prev => ({ ...prev, ...updates }));
@@ -91,6 +94,8 @@ export function PageControlProvider({ children, initialData }: { children: React
         setTracking,
         isSettingsOpen,
         setSettingsOpen,
+        isExportOpen,
+        setExportOpen,
     };
 
     return (

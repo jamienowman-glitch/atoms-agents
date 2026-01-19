@@ -1,0 +1,41 @@
+card_type: capability
+capability_id: cap.text.chat
+capability_name: Text Chat
+description: Standard LLM conversational ability.
+embedded_or_separate: EMBEDDED
+---
+card_type: capability
+capability_id: cap.multimodal.image_input
+capability_name: Image Input (Vision)
+description: Ability to process images in prompt.
+embedded_or_separate: EMBEDDED
+---
+card_type: capability
+capability_id: cap.multimodal.video_input
+capability_name: Video Input
+description: Ability to process video files.
+embedded_or_separate: EMBEDDED
+---
+card_type: capability
+capability_id: cap.jules.sessions.create
+capability_name: Jules: Create Session
+description: Create a new interaction session.
+embedded_or_separate: SEPARATE
+---
+card_type: capability
+capability_id: cap.jules.sessions.list
+capability_name: Jules: List Sessions
+description: List existing sessions.
+embedded_or_separate: SEPARATE
+---
+card_type: capability
+capability_id: cap.jules.sessions.send_message
+capability_name: Jules: Send Message
+description: Send user input to a session.
+embedded_or_separate: SEPARATE
+---
+card_type: capability
+capability_id: cap.jules.sessions.approve_plan
+capability_name: Jules: Approve Plan
+description: Signal approval for a proposed plan.
+embedded_or_separate: SEPARATE

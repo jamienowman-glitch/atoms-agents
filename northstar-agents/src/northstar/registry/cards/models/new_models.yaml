@@ -1,0 +1,55 @@
+card_type: model
+model_id: model.gemini_1_5_flash
+provider_id: gemini
+model_or_deployment_id: gemini-1.5-flash
+platform_api_surface: google_ai_studio
+invocation_primitive: REST
+streaming_support: token
+confidence: production
+notes: Ultra-fast multimodal model.
+---
+card_type: model
+model_id: model.gemini_1_5_pro
+provider_id: gemini
+model_or_deployment_id: gemini-1.5-pro
+platform_api_surface: google_ai_studio
+invocation_primitive: REST
+streaming_support: token
+confidence: production
+notes: Best performing multimodal model.
+---
+card_type: model
+model_id: model.openrouter_claude_3_5_sonnet
+provider_id: openrouter
+model_or_deployment_id: anthropic/claude-3.5-sonnet
+platform_api_surface: openai_compat
+invocation_primitive: REST
+streaming_support: token
+confidence: production
+---
+card_type: model
+model_id: model.openrouter_gpt4o
+provider_id: openrouter
+model_or_deployment_id: openai/gpt-4o
+platform_api_surface: openai_compat
+invocation_primitive: REST
+streaming_support: token
+confidence: production
+---
+card_type: model
+model_id: model.nvidia_llama3_70b
+provider_id: nvidia
+model_or_deployment_id: meta/llama3-70b-instruct
+platform_api_surface: openai_compat
+invocation_primitive: REST
+streaming_support: token
+confidence: production
+---
+card_type: model
+model_id: model.comet_default
+provider_id: comet
+model_or_deployment_id: comet-default
+platform_api_surface: openai_compat
+invocation_primitive: REST
+streaming_support: none
+confidence: experimental

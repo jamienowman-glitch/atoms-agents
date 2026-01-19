@@ -1,0 +1,70 @@
+from typing import List, Dict, Any, Optional
+import requests
+from northstar.runtime.gateway import LLMGateway, CapabilityToggleRequest, ReadinessResult, ReadinessStatus
+from northstar.runtime.auth_loader import require_key
+
+class OpenRouterGateway(LLMGateway):
+    """
+    Gateway for OpenRouter (OpenAI-compatible).
+    """
+    BASE_URL = "https://openrouter.ai/api/v1"
+
+    def _get_headers(self) -> Dict[str, str]:
+        api_key = require_key("OPENROUTER_API_KEY")
+        return {
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+            "HTTP-Referer": "https://northstar.dev", # Required by OpenRouter
+            "X-Title": "Northstar Agents"
+        }
+
+    def generate(
+        self,
+        messages: List[Dict[str, str]],
+        model_card: Any,
+        provider_config: Any,
+        stream: bool = False,
+        capability_toggles: Optional[List[CapabilityToggleRequest]] = None,
+        limits: Optional[Any] = None,
+        request_context: Optional[Any] = None,
+    ) -> Dict[str, Any]:
+        
+        url = f"{self.BASE_URL}/chat/completions"
+        headers = self._get_headers()
+        
+        payload = {
+            "model": model_card.official_id_or_deployment,
+            "messages": messages,
+        }
+        
+        if limits and limits.max_output_tokens:
+             payload["max_tokens"] = limits.max_output_tokens
+        
+        try:
+            resp = requests.post(url, headers=headers, json=payload, timeout=60)
+            resp.raise_for_status()
+            data = resp.json()
+            
+            choice = data["choices"][0]
+            message = choice["message"]
+            usage = data.get("usage", {})
+            
+            return {
+                "role": message["role"],
+                "content": message["content"],
+                "usage": usage
+            }
+            
+        except Exception as e:
+             return {"status": "FAIL", "reason": f"OpenRouter Error: {str(e)}", "error": str(e)}
+
+    def check_readiness(self) -> ReadinessResult:
+        try:
+            headers = self._get_headers()
+            # Simple models check
+            resp = requests.get(f"{self.BASE_URL}/models", headers=headers, timeout=10)
+            if resp.status_code == 200:
+                return ReadinessResult(ReadinessStatus.READY, "OpenRouter Connected", True)
+            return ReadinessResult(ReadinessStatus.RateLimited, f"Status: {resp.status_code}", False)
+        except Exception as e:
+            return ReadinessResult(ReadinessStatus.MISSING_CREDS_OR_CONFIG, str(e), False)

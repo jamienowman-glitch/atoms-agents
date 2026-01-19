@@ -1,0 +1,23 @@
+card_type: capability_binding
+binding_id: binding.gemini_video
+provider_id: gemini
+model_or_deployment_id: gemini-1.5-pro
+capability_id: cap.multimodal.video_input
+toggle_mechanism: inferred
+minimal_toggle_snippet: "Upload file via API"
+---
+card_type: capability_binding
+binding_id: binding.jules_create
+provider_id: jules
+model_or_deployment_id: default
+capability_id: cap.jules.sessions.create
+toggle_mechanism: inferred
+minimal_toggle_snippet: "Call CreateSession"
+---
+card_type: capability_binding
+binding_id: binding.jules_msg
+provider_id: jules
+model_or_deployment_id: default
+capability_id: cap.jules.sessions.send_message
+toggle_mechanism: inferred
+minimal_toggle_snippet: "Call SendMessage"

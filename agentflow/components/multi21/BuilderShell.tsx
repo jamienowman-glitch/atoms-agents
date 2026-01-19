@@ -11,6 +11,7 @@ import { PageControlProvider, usePageControl } from '../../context/PageControlCo
 // import { TopControls } from './TopControls';
 import { TopPill } from './headers/TopPill';
 import { PageSettingsPanel } from './PageSettingsPanel';
+import { ExportPanel } from './ExportPanel';
 
 const initialToolState = {
     'multi21.designer:global:global:grid.cols_desktop': 6,
@@ -48,7 +49,7 @@ export function BuilderShell({ children, showGraphControls }: { children: React.
 
 function BuilderShellInner({ children, showGraphControls }: { children: React.ReactNode, showGraphControls?: boolean }) {
     const { useToolState } = useToolControl();
-    const { design, setSettingsOpen } = usePageControl();
+    const { design, setSettingsOpen, setExportOpen } = usePageControl();
 
     // Global Preview Mode
     const [previewMode] = useToolState<'desktop' | 'mobile'>({ target: { surfaceId: 'multi21.designer', toolId: 'previewMode' }, defaultValue: 'desktop' });
@@ -69,10 +70,11 @@ function BuilderShellInner({ children, showGraphControls }: { children: React.Re
         <React.Fragment>
             {/* 1. Global Controls (Command Center) */}
             {/* <TopControls showGraphControls={showGraphControls} /> */}
-            <TopPill setIsRightPanelOpen={setSettingsOpen} />
+            <TopPill setIsRightPanelOpen={setSettingsOpen} setIsExportOpen={setExportOpen} />
 
             {/* 2. Global Settings Drawer */}
             <PageSettingsPanel />
+            <ExportPanel />
 
             {/* 4. Chat Rail Shell (Bottom Fixed) */}
             {/* Manual Wiring: Passed toggle function and CONTROLLED mode */}

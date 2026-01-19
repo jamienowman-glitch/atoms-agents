@@ -115,7 +115,13 @@ export function BottomControlsPanel({ settingsContent, activeBlockId, activeBloc
     useEffect(() => {
         if (activeBlockType === 'copy') {
             if (activeLayoutTool !== 'copy') setActiveLayoutTool('copy');
-        } else if (activeLayoutTool === 'copy') {
+            return;
+        }
+        if (activeBlockType === 'cta') {
+            if (!activeLayoutTool.startsWith('cta_')) setActiveLayoutTool('cta_frame');
+            return;
+        }
+        if (activeLayoutTool === 'copy' || activeLayoutTool.startsWith('cta_')) {
             setActiveLayoutTool('density');
         }
     }, [activeBlockType, activeLayoutTool]);
@@ -143,6 +149,12 @@ export function BottomControlsPanel({ settingsContent, activeBlockId, activeBloc
     // Copy Atom Layout
     const [copyLevel, setCopyLevel] = useToolState<string>({ target: { ...scope, toolId: 'copy.level' }, defaultValue: 'body' });
     const [copyStyle, setCopyStyle] = useToolState<string>({ target: { ...scope, toolId: 'copy.style' }, defaultValue: 'body' });
+
+    // CTA Atom Layout
+    const [ctaWidth, setCtaWidth] = useToolState<number>({ target: { ...scope, toolId: 'cta.width' }, defaultValue: 180 });
+    const [ctaHeight, setCtaHeight] = useToolState<number>({ target: { ...scope, toolId: 'cta.height' }, defaultValue: 48 });
+    const [ctaScale, setCtaScale] = useToolState<number>({ target: { ...scope, toolId: 'cta.scale' }, defaultValue: 1 });
+    const [ctaVariant, setCtaVariant] = useToolState<string>({ target: { ...scope, toolId: 'cta.variant' }, defaultValue: 'solid' });
 
     // Items Limit (Split)
     const [limitDesktop, setLimitDesktop] = useToolState<number>({ target: { ...scope, toolId: 'feed.query.limit_desktop' }, defaultValue: 12 });
@@ -272,13 +284,23 @@ export function BottomControlsPanel({ settingsContent, activeBlockId, activeBloc
         { id: 'copy', label: 'Copy', icon: <span className="text-[10px] font-bold">H</span> },
     ];
 
+    const ctaLayoutTools: MagnetItem[] = [
+        { id: 'cta_frame', label: 'Frame', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="4" y="7" width="16" height="10" rx="2" /><path d="M4 12h16" /></svg> },
+        { id: 'cta_scale', label: 'Scale', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M4 4h6v6M20 20h-6v-6" /><path d="M20 4l-6 6" /><path d="M4 20l6-6" /></svg> },
+        { id: 'cta_style', label: 'Style', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="3" y="5" width="18" height="14" rx="3" /><path d="M7 12h10" /></svg> },
+    ];
+
     const fontTools: MagnetItem[] = [
         { id: 'size', label: 'Size', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" /></svg> },
         { id: 'identity', label: 'Font', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M4 7V4h16v3M9 20h6M12 4v16" /></svg> },
         { id: 'tune', label: 'Tune', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="15" y2="12" /><line x1="3" y1="18" x2="18" y2="18" /></svg> },
     ];
 
-    const layoutTools = activeBlockType === 'copy' ? copyLayoutTools : defaultLayoutTools;
+    const layoutTools = activeBlockType === 'copy'
+        ? copyLayoutTools
+        : activeBlockType === 'cta'
+            ? ctaLayoutTools
+            : defaultLayoutTools;
 
     const typeTools: MagnetItem[] = [
         { id: 'align', label: 'Align', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><line x1="21" y1="10" x2="3" y2="10" /><line x1="21" y1="6" x2="3" y2="6" /><line x1="21" y1="14" x2="3" y2="14" /><line x1="21" y1="18" x2="3" y2="18" /></svg> },
@@ -374,6 +396,50 @@ export function BottomControlsPanel({ settingsContent, activeBlockId, activeBloc
 
         // LAYOUT MODE
         if (activeMode === 'layout') {
+            if (activeBlockType === 'cta' && activeLayoutTool === 'cta_frame') {
+                return (
+                    <div className="flex flex-col gap-1 animate-fadeIn">
+                        <div className="flex flex-col gap-0.5">
+                            <div className="flex justify-between items-center text-[10px] text-neutral-500 font-medium">
+                                <span>Width (X)</span>
+                                <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{ctaWidth}px</span>
+                            </div>
+                            <UniversalSlider value={ctaWidth} min={80} max={520} step={4} onChange={setCtaWidth} />
+                        </div>
+                        <div className="flex flex-col gap-0.5">
+                            <div className="flex justify-between items-center text-[10px] text-neutral-500 font-medium">
+                                <span>Height (Y)</span>
+                                <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{ctaHeight}px</span>
+                            </div>
+                            <UniversalSlider value={ctaHeight} min={24} max={120} step={2} onChange={setCtaHeight} />
+                        </div>
+                    </div>
+                );
+            }
+            if (activeBlockType === 'cta' && activeLayoutTool === 'cta_scale') {
+                return (
+                    <div className="flex flex-col gap-1 animate-fadeIn">
+                        <div className="flex justify-between items-center text-[10px] text-neutral-500 font-medium">
+                            <span>Scale</span>
+                            <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{ctaScale.toFixed(2)}x</span>
+                        </div>
+                        <UniversalSlider value={ctaScale} min={0.5} max={2} step={0.05} onChange={setCtaScale} />
+                    </div>
+                );
+            }
+            if (activeBlockType === 'cta' && activeLayoutTool === 'cta_style') {
+                const variants = [
+                    { label: 'Primary', value: 'solid' },
+                    { label: 'Secondary', value: 'outline' },
+                    { label: 'Text', value: 'ghost' },
+                    { label: 'Atomic', value: 'atomic' },
+                ];
+                return (
+                    <div className="flex flex-col gap-3 animate-fadeIn">
+                        {renderBtnGroup(variants, ctaVariant, setCtaVariant)}
+                    </div>
+                );
+            }
             if (activeBlockType === 'copy' && activeLayoutTool === 'copy') {
                 const levelIndex = Math.max(0, COPY_LEVELS.indexOf(copyLevel as any));
                 const styleIndex = Math.max(0, COPY_STYLES.indexOf(copyStyle as any));

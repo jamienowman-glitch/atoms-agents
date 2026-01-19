@@ -136,11 +136,14 @@ export const ConnectedBlock: React.FC<ConnectedBlockProps> = ({
     const [copyStyle] = useToolState<string>({ target: { ...scope, toolId: 'copy.style' }, defaultValue: 'body' });
 
     // --- CTA Block Logic (Phase 14) ---
-    const [ctaVariant] = useToolState<'solid' | 'outline' | 'ghost'>({ target: { ...scope, toolId: 'cta.variant' }, defaultValue: 'solid' });
+    const [ctaVariant] = useToolState<'solid' | 'outline' | 'ghost' | 'atomic'>({ target: { ...scope, toolId: 'cta.variant' }, defaultValue: 'solid' });
     const [ctaSize] = useToolState<'small' | 'medium' | 'large'>({ target: { ...scope, toolId: 'cta.size' }, defaultValue: 'medium' });
     const [ctaFullWidth] = useToolState<boolean>({ target: { ...scope, toolId: 'cta.fullWidth' }, defaultValue: false });
     const [ctaAlign] = useToolState<'left' | 'center' | 'right'>({ target: { ...scope, toolId: 'cta.align' }, defaultValue: 'center' });
     const [ctaLabel, setCtaLabel] = useToolState<string>({ target: { ...scope, toolId: 'cta.content.label' }, defaultValue: 'Click Me' });
+    const [ctaWidth] = useToolState<number>({ target: { ...scope, toolId: 'cta.width' }, defaultValue: 180 });
+    const [ctaHeight] = useToolState<number>({ target: { ...scope, toolId: 'cta.height' }, defaultValue: 48 });
+    const [ctaScale] = useToolState<number>({ target: { ...scope, toolId: 'cta.scale' }, defaultValue: 1 });
 
     // Typography (Global / Shared)
     const [fontPresetIndex] = useToolState<number>({ target: { ...scope, toolId: 'typo.preset_index' }, defaultValue: 3 });
@@ -321,8 +324,28 @@ export const ConnectedBlock: React.FC<ConnectedBlockProps> = ({
                     fullWidth={ctaFullWidth}
                     variant={ctaVariant}
                     size={ctaSize}
+                    width={ctaWidth}
+                    height={ctaHeight}
+                    scale={ctaScale}
                     styleAccentColor={styleAccentColor}
+                    styleBgColor={styleBgColor}
+                    styleTextColor={styleTextColor}
+                    styleBorderColor={styleBorderColor}
+                    styleBorderWidth={styleBorderWidth}
+                    fontPresetIndex={fontPresetIndex}
                     fontFamily={fontFamily}
+                    fontSizeDesktop={fontSizeDesktop}
+                    fontSizeMobile={fontSizeMobile}
+                    axisWeight={axisWeight === -1 ? null : axisWeight}
+                    axisWidth={axisWidth === -1 ? null : axisWidth}
+                    axisSlant={axisSlant}
+                    axisCasual={axisCasual}
+                    axisGrade={axisGrade}
+                    letterSpacing={typoLetterSpacing}
+                    wordSpacing={typoWordSpacing}
+                    textTransform={textTransform}
+                    textDecoration={textDecoration}
+                    isMobileView={previewMode === 'mobile'}
                 />
             ) : type === 'header' ? (
                 <Multi21_Header

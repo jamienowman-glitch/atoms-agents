@@ -3,6 +3,10 @@ from typing import List, Optional, Dict
 
 @dataclass
 class NodeCard:
+    """
+    [DEPRECATED] This 'Typed Node' schema is being replaced by NeutralNodeCard + Lenses.
+    Do not use for new 'GraphLens' architecture flows.
+    """
     node_id: str
     name: str
     kind: str  # agent | framework_team | subflow
