@@ -77,12 +77,14 @@ const UniversalSlider: React.FC<UniversalSliderProps> = ({ value, min, max, step
 
 // Constants
 const ASPECT_RATIOS = ['16:9', '4:3', '1:1', '9:16'];
+const COPY_LEVELS = ['h2', 'h3', 'h4', 'body'] as const;
+const COPY_STYLES = ['jumbo', 'headline', 'subtitle', 'tagline', 'quote', 'body', 'caption'] as const;
 
 // --- Main Component ---
 interface BottomControlsPanelProps {
     settingsContent: React.ReactNode;
     activeBlockId: string | null;
-    activeBlockType?: 'media' | 'text' | 'cta' | 'header' | 'row' | 'popup';
+    activeBlockType?: 'media' | 'text' | 'copy' | 'cta' | 'header' | 'row' | 'popup';
 }
 
 export function BottomControlsPanel({ settingsContent, activeBlockId, activeBlockType = 'media' }: BottomControlsPanelProps) {
@@ -110,6 +112,14 @@ export function BottomControlsPanel({ settingsContent, activeBlockId, activeBloc
     const [activeColourTool, setActiveColourTool] = useState<string>('palette');
     const [showSettings, setShowSettings] = useState(false);
 
+    useEffect(() => {
+        if (activeBlockType === 'copy') {
+            if (activeLayoutTool !== 'copy') setActiveLayoutTool('copy');
+        } else if (activeLayoutTool === 'copy') {
+            setActiveLayoutTool('density');
+        }
+    }, [activeBlockType, activeLayoutTool]);
+
     // 3. Tool Hooks (Layout)
     // COLS
     const [colsDesktop, setColsDesktop] = useToolState<number>({ target: { ...scope, toolId: 'grid.cols_desktop' }, defaultValue: 6 });
@@ -129,6 +139,10 @@ export function BottomControlsPanel({ settingsContent, activeBlockId, activeBloc
 
     // Aspect Ratio (Shared)
     const [aspectRatioStr, setAspectRatioStr] = useToolState<string>({ target: { ...scope, toolId: 'grid.aspect_ratio' }, defaultValue: '1:1' });
+
+    // Copy Atom Layout
+    const [copyLevel, setCopyLevel] = useToolState<string>({ target: { ...scope, toolId: 'copy.level' }, defaultValue: 'body' });
+    const [copyStyle, setCopyStyle] = useToolState<string>({ target: { ...scope, toolId: 'copy.style' }, defaultValue: 'body' });
 
     // Items Limit (Split)
     const [limitDesktop, setLimitDesktop] = useToolState<number>({ target: { ...scope, toolId: 'feed.query.limit_desktop' }, defaultValue: 12 });
@@ -158,7 +172,7 @@ export function BottomControlsPanel({ settingsContent, activeBlockId, activeBloc
     // 5b. Tool Hooks (Type Setting - Phase 16)
     const [textAlign, setTextAlign] = useToolState<string>({ target: { ...scope, toolId: 'typo.align' }, defaultValue: 'left' });
     const [lineHeight, setLineHeight] = useToolState<number>({ target: { ...scope, toolId: 'typo.line_height' }, defaultValue: 1.5 });
-    const [letterSpacing, setLetterSpacing] = useToolState<number>({ target: { ...scope, toolId: 'typo.letter_spacing' }, defaultValue: 0 });
+    const [letterSpacing, setLetterSpacing] = useToolState<number>({ target: { ...scope, toolId: 'typo.tracking' }, defaultValue: 0 });
     const [wordSpacing, setWordSpacing] = useToolState<number>({ target: { ...scope, toolId: 'typo.word_spacing' }, defaultValue: 0 });
     // Vertical Type
     // Vertical Type
@@ -206,7 +220,7 @@ export function BottomControlsPanel({ settingsContent, activeBlockId, activeBloc
             setFeedSourceIndex(2);
             setColsDesktop(4);
             setLimitDesktop(8);
-            setAspectRatioStr('1:1');
+            setAspectRatioStr('9:16');
         } else if (activeContentCat === 'kpi') {
             setTileVariant('kpi');
             setFeedSourceIndex(1);
@@ -218,13 +232,13 @@ export function BottomControlsPanel({ settingsContent, activeBlockId, activeBloc
             setFeedSourceIndex(5);
             setColsDesktop(3);
             setLimitDesktop(6);
-            setAspectRatioStr('4:3');
+            setAspectRatioStr('9:16');
         } else if (activeContentCat === 'blogs') {
             setTileVariant('blogs');
             setFeedSourceIndex(3);
             setColsDesktop(3);
             setLimitDesktop(6);
-            setAspectRatioStr('16:9');
+            setAspectRatioStr('9:16');
         } else {
             // generic
             setTileVariant('generic');
@@ -243,15 +257,19 @@ export function BottomControlsPanel({ settingsContent, activeBlockId, activeBloc
     const designModes: MagnetItem[] = [
         { id: 'layout', label: 'Layout', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /></svg> },
         { id: 'font', label: 'Font', icon: <span className="text-[10px] font-bold">Aa</span> },
-        { id: 'type', label: 'Type', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><line x1="21" y1="10" x2="3" y2="10" /><line x1="21" y1="6" x2="3" y2="6" /><line x1="21" y1="14" x2="3" y2="14" /><line x1="21" y1="18" x2="3" y2="18" /></svg> },
+        { id: 'type', label: 'Type', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><line x1="4" y1="6" x2="20" y2="6" /><line x1="4" y1="12" x2="16" y2="12" /><line x1="4" y1="18" x2="18" y2="18" /></svg> },
         { id: 'colour', label: 'Colour', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" /></svg> },
     ];
 
     // Naming Proposal: Frame, Type, Style
-    const layoutTools: MagnetItem[] = [
+    const defaultLayoutTools: MagnetItem[] = [
         { id: 'density', label: 'Grid', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /></svg> },
         { id: 'spacing', label: 'Space', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><line x1="4" y1="9" x2="20" y2="9" /><line x1="4" y1="15" x2="20" y2="15" /><line x1="10" y1="3" x2="10" y2="21" /><line x1="16" y1="3" x2="16" y2="21" /></svg> },
         { id: 'geometry', label: 'Shape', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><circle cx="12" cy="12" r="10" /></svg> },
+    ];
+
+    const copyLayoutTools: MagnetItem[] = [
+        { id: 'copy', label: 'Copy', icon: <span className="text-[10px] font-bold">H</span> },
     ];
 
     const fontTools: MagnetItem[] = [
@@ -260,12 +278,12 @@ export function BottomControlsPanel({ settingsContent, activeBlockId, activeBloc
         { id: 'tune', label: 'Tune', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="15" y2="12" /><line x1="3" y1="18" x2="18" y2="18" /></svg> },
     ];
 
+    const layoutTools = activeBlockType === 'copy' ? copyLayoutTools : defaultLayoutTools;
+
     const typeTools: MagnetItem[] = [
         { id: 'align', label: 'Align', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><line x1="21" y1="10" x2="3" y2="10" /><line x1="21" y1="6" x2="3" y2="6" /><line x1="21" y1="14" x2="3" y2="14" /><line x1="21" y1="18" x2="3" y2="18" /></svg> },
-        { id: 'vert', label: 'Vert', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M12 3v18" /><path d="M8 6h8" /><path d="M8 18h8" /></svg> },
-        { id: 'space', label: 'Space', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><polyline points="13 17 13 21 16 21 16 17" /><polyline points="13 7 13 3 16 3 16 7" /><line x1="9" y1="21" x2="9" y2="3" /></svg> },
-        { id: 'case', label: 'Case', icon: <span className="text-[10px] font-bold">Aa</span> },
-        { id: 'decor', label: 'Decor', icon: <span className="text-[10px] font-bold underline">U</span> },
+        { id: 'space', label: 'Spacing', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><polyline points="13 17 13 21 16 21 16 17" /><polyline points="13 7 13 3 16 3 16 7" /><line x1="9" y1="21" x2="9" y2="3" /></svg> },
+        { id: 'vert', label: 'Vertical', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M12 3v18" /><path d="M8 6h8" /><path d="M8 18h8" /></svg> },
     ];
 
     const colourTools: MagnetItem[] = [
@@ -356,6 +374,44 @@ export function BottomControlsPanel({ settingsContent, activeBlockId, activeBloc
 
         // LAYOUT MODE
         if (activeMode === 'layout') {
+            if (activeBlockType === 'copy' && activeLayoutTool === 'copy') {
+                const levelIndex = Math.max(0, COPY_LEVELS.indexOf(copyLevel as any));
+                const styleIndex = Math.max(0, COPY_STYLES.indexOf(copyStyle as any));
+                return (
+                    <div className="flex flex-col gap-1 animate-fadeIn">
+                        <div className="flex flex-col gap-0.5">
+                            <div className="flex justify-between items-center text-[10px] text-neutral-500 font-medium">
+                                <span>Level</span>
+                                <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">
+                                    {COPY_LEVELS[levelIndex]?.toUpperCase() || 'BODY'}
+                                </span>
+                            </div>
+                            <UniversalSlider
+                                value={levelIndex}
+                                min={0}
+                                max={COPY_LEVELS.length - 1}
+                                step={1}
+                                onChange={(idx) => setCopyLevel(COPY_LEVELS[idx] || 'body')}
+                            />
+                        </div>
+                        <div className="flex flex-col gap-0.5">
+                            <div className="flex justify-between items-center text-[10px] text-neutral-500 font-medium">
+                                <span>Style</span>
+                                <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">
+                                    {(COPY_STYLES[styleIndex] || 'body').toUpperCase()}
+                                </span>
+                            </div>
+                            <UniversalSlider
+                                value={styleIndex}
+                                min={0}
+                                max={COPY_STYLES.length - 1}
+                                step={1}
+                                onChange={(idx) => setCopyStyle(COPY_STYLES[idx] || 'body')}
+                            />
+                        </div>
+                    </div>
+                );
+            }
             if (activeLayoutTool === 'density') {
                 return (
                     <div className="flex flex-col gap-1 animate-fadeIn">
@@ -510,17 +566,6 @@ export function BottomControlsPanel({ settingsContent, activeBlockId, activeBloc
                     </div>
                 );
             }
-            if (activeTypeTool === 'vert') {
-                return (
-                    <div className="flex flex-col gap-2 animate-fadeIn p-2">
-                        {renderBtnGroup([
-                            { label: 'Top', value: 'top' },
-                            { label: 'Mid', value: 'center' },
-                            { label: 'Bot', value: 'bottom' }
-                        ], verticalAlign, setVerticalAlign)}
-                    </div>
-                );
-            }
             if (activeTypeTool === 'space') {
                 return (
                     <div className="flex flex-col gap-1 animate-fadeIn">
@@ -530,44 +575,33 @@ export function BottomControlsPanel({ settingsContent, activeBlockId, activeBloc
                                 <span>Tracking</span>
                                 <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{letterSpacing}</span>
                             </div>
-                            <UniversalSlider value={letterSpacing} min={-100} max={100} step={1} onChange={setLetterSpacing} />
+                            <UniversalSlider value={letterSpacing} min={-0.1} max={0.5} step={0.01} onChange={setLetterSpacing} />
                         </div>
-                        {/* Word Spacing */}
+                        {/* Leading */}
                         <div className="flex flex-col gap-0.5">
                             <div className="flex justify-between items-center text-[10px] text-neutral-500 font-medium">
-                                <span>Word Spacing</span>
-                                <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{wordSpacing}em</span>
+                                <span>Leading</span>
+                                <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">{lineHeight}</span>
                             </div>
-                            <UniversalSlider value={wordSpacing} min={-1} max={5} step={0.1} onChange={setWordSpacing} />
+                            <UniversalSlider value={lineHeight} min={0.8} max={3.0} step={0.1} onChange={setLineHeight} />
                         </div>
                     </div>
                 );
             }
-
-            if (activeTypeTool === 'case') {
+            if (activeTypeTool === 'vert') {
                 return (
                     <div className="flex flex-col gap-2 animate-fadeIn p-2">
                         {renderBtnGroup([
-                            { label: '--', value: 'none' },
-                            { label: 'AA', value: 'uppercase' },
-                            { label: 'aa', value: 'lowercase' },
-                            { label: 'Aa', value: 'capitalize' }
-                        ], textTransform, setTextTransform)}
-                    </div>
-                );
-            }
-            if (activeTypeTool === 'decor') {
-                return (
-                    <div className="flex flex-col gap-2 animate-fadeIn p-2">
-                        {renderBtnGroup([
-                            { label: 'None', value: 'none' },
-                            { label: 'Under', value: 'underline' },
-                            { label: 'Strike', value: 'line-through' }
-                        ], textDecoration, setTextDecoration)}
+                            { label: 'Top', value: 'top' },
+                            { label: 'Center', value: 'center' },
+                            { label: 'Bottom', value: 'bottom' }
+                        ], verticalAlign, setVerticalAlign)}
                     </div>
                 );
             }
         }
+
+
 
         // COLOUR MODE
         if (activeMode === 'colour') {

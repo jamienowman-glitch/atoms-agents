@@ -1,0 +1,399 @@
+{% comment %}
+Red Pen — Videos Feed (landscape covers + per-device limits + autoplay options)
+- Pulls JSON items [{id,title,channel,url,thumb}] from Apps Script (/exec)
+- Landscape covers (16:9) by default
+- Limits: separate desktop & mobile
+- Options: hover preview, sticky player, autoplay tiles in view (muted)
+{% endcomment %}
+
+<section id="rp-vfeed-{{ section.id }}" class="rp-vfeed"
+  style="
+    --vf-bg: {{ section.settings.bg }};
+    --vf-text: {{ section.settings.text }};
+    --vf-arrow: {{ section.settings.arrow }};
+    --vf-gap: {{ section.settings.gap }}px;
+    --vf-cols-m: {{ section.settings.cols_mobile }};
+    --vf-cols-d: {{ section.settings.cols_desktop }};
+    --vf-pad-d: {{ section.settings.pad_desktop }}px;
+    --vf-pad-m: {{ section.settings.pad_mobile }}px;
+    --vf-label: {{ section.settings.label_size }}px;
+  ">
+  <div class="rp-vfeed__inner">
+    {% if section.settings.heading != blank %}
+      <h2 class="rp-vfeed__heading{% if section.settings.heading_bold %} is-bold{% endif %}">
+        {{ section.settings.heading }}
+      </h2>
+    {% endif %}
+    <div class="rp-vfeed__grid" role="list" aria-live="polite"></div>
+  </div>
+
+  {% if section.settings.player_only %}
+    <div class="rp-vfeed__sticky" hidden>
+      <button class="rp-vfeed__close" aria-label="Close player">×</button>
+      <div class="rp-vfeed__player" aria-label="Video player area"></div>
+      <div class="rp-vfeed__title"></div>
+    </div>
+  {% endif %}
+
+  <!-- Hovercard (reusable) -->
+  <div class="rp-vfeed__hover" hidden>
+    <div class="rp-vfeed__card" role="dialog" aria-modal="false" aria-label="Preview">
+      <button class="rp-vfeed__x" aria-label="Close preview">×</button>
+      <div class="rp-vfeed__media"></div>
+      <div class="rp-vfeed__meta">
+        <div class="rp-vfeed__t"></div>
+        <div class="rp-vfeed__c"></div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    #rp-vfeed-{{ section.id }}{background:var(--vf-bg);color:var(--vf-text);padding:var(--vf-pad-d) 0;}
+    @media(max-width:749px){#rp-vfeed-{{ section.id }}{padding:var(--vf-pad-m) 0;}}
+    #rp-vfeed-{{ section.id }} .rp-vfeed__inner{width:min(1200px,94vw);margin:0 auto;}
+    #rp-vfeed-{{ section.id }} .rp-vfeed__heading{margin:0 0 12px;letter-spacing:.06em;text-transform:uppercase;font-size:14px;opacity:.9}
+    #rp-vfeed-{{ section.id }} .rp-vfeed__heading.is-bold{font-weight:700}
+
+    /* Grid */
+    #rp-vfeed-{{ section.id }} .rp-vfeed__grid{
+      display:grid; gap:var(--vf-gap);
+      grid-template-columns:repeat(var(--vf-cols-d),minmax(0,1fr));
+    }
+    @media(max-width:749px){
+      #rp-vfeed-{{ section.id }} .rp-vfeed__grid{grid-template-columns:repeat(var(--vf-cols-m),minmax(0,1fr));}
+    }
+
+    /* Tile */
+    #rp-vfeed-{{ section.id }} .tile{margin:0}
+    #rp-vfeed-{{ section.id }} .thumb{display:block; position:relative; width:100%; aspect-ratio:16/9; background:#f2f2f2; overflow:hidden;}
+    #rp-vfeed-{{ section.id }} .thumb img{width:100%; height:100%; object-fit:cover; display:block;}
+    #rp-vfeed-{{ section.id }} .thumb iframe{width:100%; height:100%; border:0; display:block;}
+    #rp-vfeed-{{ section.id }} .label{font-size:var(--vf-label);line-height:1.35;margin-top:6px}
+    #rp-vfeed-{{ section.id }} .arrow{margin-top:4px;text-align:center}
+    #rp-vfeed-{{ section.id }} .arrow a{font-size:14px;color:var(--vf-arrow);text-decoration:none}
+    #rp-vfeed-{{ section.id }} .arrow a:hover{transform:translateX(2px)}
+
+    /* Hover card */
+    #rp-vfeed-{{ section.id }} .rp-vfeed__hover[hidden]{display:none}
+    #rp-vfeed-{{ section.id }} .rp-vfeed__hover{position:fixed;inset:0;z-index:9998;pointer-events:none}
+    #rp-vfeed-{{ section.id }} .rp-vfeed__hover.is-pinned{pointer-events:auto}
+    #rp-vfeed-{{ section.id }} .rp-vfeed__hover::before{content:"";position:fixed;inset:0;background:rgba(0,0,0,0);transition:background .16s ease;z-index:-1}
+    #rp-vfeed-{{ section.id }} .rp-vfeed__hover.is-pinned::before{background:rgba(0,0,0,.35)}
+    #rp-vfeed-{{ section.id }} .rp-vfeed__card{
+      position:absolute;min-width:260px;max-width:min(460px,92vw);
+      background:#fff;color:#111;border:1px solid rgba(0,0,0,.08);border-radius:8px;overflow:hidden;
+      box-shadow:0 12px 30px rgba(0,0,0,.18);opacity:0;transform:scale(.98);transform-origin:top left;
+      transition:transform .14s ease,opacity .14s ease;
+    }
+    #rp-vfeed-{{ section.id }} .rp-vfeed__hover.is-open .rp-vfeed__card{opacity:1;transform:scale(1)}
+    #rp-vfeed-{{ section.id }} .rp-vfeed__x{position:absolute;top:6px;right:6px;width:28px;height:28px;border:0;border-radius:6px;background:rgba(0,0,0,.6);color:#fff;cursor:pointer}
+    #rp-vfeed-{{ section.id }} .rp-vfeed__media{width:100%;aspect-ratio:16/9;background:#000;overflow:hidden}
+    #rp-vfeed-{{ section.id }} .rp-vfeed__media iframe{width:100%;height:100%;border:0;display:block}
+    #rp-vfeed-{{ section.id }} .rp-vfeed__meta{padding:10px 12px 12px}
+    #rp-vfeed-{{ section.id }} .rp-vfeed__t{font-size:14px;font-weight:600;margin-bottom:4px}
+    #rp-vfeed-{{ section.id }} .rp-vfeed__c{font-size:12px;opacity:.75}
+
+    /* Sticky player (player-only mode) */
+    #rp-vfeed-{{ section.id }} .rp-vfeed__sticky[hidden]{display:none}
+    #rp-vfeed-{{ section.id }} .rp-vfeed__sticky{
+      position:sticky; bottom:8px; z-index:9990; width:min(900px,94vw); margin:12px auto 0;
+      background:#fff;color:#111;border:1px solid rgba(0,0,0,.1); border-radius:10px; box-shadow:0 10px 24px rgba(0,0,0,.18);
+      padding:10px; display:grid; grid-template-columns:1fr; gap:8px;
+    }
+    #rp-vfeed-{{ section.id }} .rp-vfeed__close{
+      position:absolute;top:6px;right:6px;width:28px;height:28px;border:0;border-radius:6px;background:rgba(0,0,0,.6);color:#fff;cursor:pointer
+    }
+    #rp-vfeed-{{ section.id }} .rp-vfeed__player{width:100%;aspect-ratio:16/9;background:#000;overflow:hidden}
+    #rp-vfeed-{{ section.id }} .rp-vfeed__player iframe{width:100%;height:100%;border:0;display:block}
+    #rp-vfeed-{{ section.id }} .rp-vfeed__title{font-size:14px;font-weight:600}
+  </style>
+
+  <script>
+  (function(){
+    var root = document.getElementById('rp-vfeed-{{ section.id }}');
+    var grid = root.querySelector('.rp-vfeed__grid');
+
+    var feedUrl = {{ section.settings.feed_url | json }};
+    var showTitle = {{ section.settings.show_title | json }};
+    var showArrow = {{ section.settings.show_arrow | json }};
+    var enableHover = {{ section.settings.enable_hover | json }};
+    var autoplayHover = {{ section.settings.autoplay_hover | json }};
+    var playerOnly = {{ section.settings.player_only | json }};
+    var autoplayFirst = {{ section.settings.autoplay_first | json }};
+    var playTilesInView = {{ section.settings.play_tiles_in_view | json }};
+    var randomizeOnLoad = {{ section.settings.random_on_load | json }};
+    var limitDesktop = {{ section.settings.limit_desktop | json }};
+    var limitMobile  = {{ section.settings.limit_mobile  | json }};
+
+    if(!feedUrl){
+      grid.innerHTML = '<div style="opacity:.7;font-size:12px">Add a Feed URL in this section’s settings.</div>';
+      return;
+    }
+
+    // Hover elements
+    var hover = root.querySelector('.rp-vfeed__hover');
+    var card = hover && hover.querySelector('.rp-vfeed__card');
+    var media = hover && hover.querySelector('.rp-vfeed__media');
+    var titleEl = hover && hover.querySelector('.rp-vfeed__t');
+    var chanEl = hover && hover.querySelector('.rp-vfeed__c');
+
+    // Sticky player (player-only mode)
+    var sticky = root.querySelector('.rp-vfeed__sticky');
+    var stickyWrap = sticky && sticky.querySelector('.rp-vfeed__player');
+    var stickyTitle = sticky && sticky.querySelector('.rp-vfeed__title');
+
+    var finalUrl = feedUrl + (randomizeOnLoad ? (feedUrl.includes('?') ? '&' : '?') + 'random=1' : '');
+
+    fetch(finalUrl).then(function(r){return r.json();}).then(function(items){
+      if(!Array.isArray(items)){ return; }
+
+      // Per-device limits
+      var isMobile = window.matchMedia('(max-width: 749px)').matches;
+      var limit = isMobile ? (parseInt(limitMobile,10)||20) : (parseInt(limitDesktop,10)||48);
+      if(limit > 0) items = items.slice(0, limit);
+
+      var frag = document.createDocumentFragment();
+
+      items.forEach(function(it, idx){
+        var fig = document.createElement('figure');
+        fig.className = 'tile'; fig.setAttribute('role','listitem');
+
+        var a = document.createElement('a');
+        a.className = 'thumb';
+        a.href = it.url || ('https://www.youtube.com/watch?v='+it.id);
+        a.target = '_blank'; a.rel = 'noopener';
+        a.dataset.vId = it.id || '';
+        a.dataset.title = it.title || '';
+        a.dataset.channel = it.channel || '';
+        a.dataset.embed = 'https://www.youtube.com/embed/'+ (it.id || '') +'?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1';
+        a.dataset.thumb = it.thumb || '';
+
+        var img = document.createElement('img');
+        img.loading = 'lazy'; img.decoding = 'async';
+        img.alt = it.title || 'Video';
+        img.src = it.thumb || '';
+        a.appendChild(img);
+        fig.appendChild(a);
+
+        if(showTitle){
+          var cap = document.createElement('figcaption');
+          cap.className = 'label';
+          cap.textContent = it.title || '';
+          fig.appendChild(cap);
+        }
+
+        if(showArrow){
+          var arrow = document.createElement('div');
+          arrow.className = 'arrow';
+          var al = document.createElement('a');
+          al.href = a.href; al.target = '_blank'; al.rel = 'noopener';
+          al.textContent = '→';
+          arrow.appendChild(al);
+          fig.appendChild(arrow);
+        }
+
+        // Hover preview
+        if(enableHover){
+          a.addEventListener('mouseover', function(){ openHover(a, fig); }, {passive:true});
+          a.addEventListener('mouseout', function(){ scheduleHoverClose(); }, {passive:true});
+          a.addEventListener('focus', function(){ openHover(a, fig); });
+          a.addEventListener('blur', function(){ scheduleHoverClose(); });
+          a.addEventListener('click', function(e){
+            // Pin preview instead of navigating
+            e.preventDefault(); openHover(a, fig, true);
+          });
+        }
+
+        // Player-only mode: clicking a tile loads single sticky player
+        if(playerOnly){
+          a.addEventListener('click', function(e){
+            e.preventDefault(); openSticky(a);
+          });
+        }
+
+        // Autoplay tiles in view (muted)
+        if(playTilesInView){
+          a.dataset.mode = 'thumb';
+          ioTiles.observe(a);
+        }
+
+        frag.appendChild(fig);
+      });
+
+      grid.appendChild(frag);
+
+      // Autoplay first video into sticky player if requested
+      if(playerOnly && autoplayFirst){
+        var first = grid.querySelector('.thumb');
+        if(first) openSticky(first);
+      }
+    });
+
+    // ---- Hover preview logic ----
+    var closeTimer=null, pinned=false;
+    function openHover(linkEl, tileEl, pin){
+      if(!hover) return;
+      clearTimeout(closeTimer);
+      placeCardNear(tileEl);
+      titleEl.textContent = linkEl.dataset.title || '';
+      chanEl.textContent = linkEl.dataset.channel ? ('YouTube • ' + linkEl.dataset.channel) : 'YouTube';
+      media.innerHTML = '';
+      var fr = document.createElement('iframe');
+      fr.allow = 'autoplay; encrypted-media; picture-in-picture';
+      fr.allowFullscreen = true;
+      fr.loading = 'lazy';
+      fr.src = (autoplayHover ? linkEl.dataset.embed : linkEl.dataset.embed.replace('autoplay=1','autoplay=0'));
+      media.appendChild(fr);
+
+      hover.hidden = false;
+      requestAnimationFrame(function(){
+        hover.classList.add('is-open');
+        if(pin){ pinned=true; hover.classList.add('is-pinned'); }
+      });
+    }
+    function placeCardNear(tileEl){
+      var r = tileEl.getBoundingClientRect();
+      var pad = 8, vw = window.innerWidth, vh = window.innerHeight;
+      var cardW = Math.min(460, vw*0.92), cardH = Math.min(420, vh*0.9);
+      var x = r.right + pad, y = r.top;
+      if(x + cardW > vw - 8) x = r.left - pad - cardW;
+      if(x < 8) x = 8;
+      if(y + cardH > vh - 8) y = vh - 8 - cardH;
+      if(y < 8) y = 8;
+      var scrollX = window.scrollX || document.documentElement.scrollLeft || 0;
+      var scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+      var cardEl = root.querySelector('.rp-vfeed__card');
+      cardEl.style.left = (x + scrollX) + 'px';
+      cardEl.style.top  = (y + scrollY) + 'px';
+    }
+    function scheduleHoverClose(){
+      if(pinned) return;
+      clearTimeout(closeTimer);
+      closeTimer = setTimeout(closeHover, 140);
+    }
+    function closeHover(){
+      if(!hover) return;
+      pinned=false;
+      hover.classList.remove('is-open','is-pinned');
+      var fr = media.querySelector('iframe'); if(fr) fr.src = 'about:blank';
+      hover.hidden = true;
+    }
+    hover && hover.addEventListener('click', function(e){
+      if(e.target === hover && pinned){ closeHover(); }
+    });
+    hover && hover.querySelector('.rp-vfeed__x').addEventListener('click', function(e){ e.stopPropagation(); closeHover(); });
+
+    // Pause preview if card goes off-screen
+    var cardEl = root.querySelector('.rp-vfeed__card');
+    var ioHover = ('IntersectionObserver' in window) ? new IntersectionObserver(function(entries){
+      entries.forEach(function(ent){ if(!ent.isIntersecting){ closeHover(); } });
+    }, {threshold: 0}) : null;
+    if(cardEl && ioHover) ioHover.observe(cardEl);
+
+    // ---- Sticky player (single) ----
+    function openSticky(linkEl){
+      if(!sticky) return;
+      sticky.hidden = false;
+      stickyTitle.textContent = linkEl.dataset.title || '';
+      stickyWrap.innerHTML = '';
+      var fr = document.createElement('iframe');
+      fr.allow = 'autoplay; encrypted-media; picture-in-picture';
+      fr.allowFullscreen = true;
+      fr.src = 'https://www.youtube.com/embed/'+ (linkEl.dataset.vId || '') +'?autoplay=1&mute=0&playsinline=1&rel=0&modestbranding=1';
+      stickyWrap.appendChild(fr);
+      closeHover();
+    }
+    {% if section.settings.player_only %}
+    sticky && sticky.querySelector('.rp-vfeed__close').addEventListener('click', function(){
+      var fr = stickyWrap.querySelector('iframe'); if(fr) fr.src = 'about:blank';
+      sticky.hidden = true;
+    });
+    var ioSticky = ('IntersectionObserver' in window) ? new IntersectionObserver(function(entries){
+      entries.forEach(function(ent){
+        if(!ent.isIntersecting){
+          var fr = stickyWrap.querySelector('iframe'); if(fr) fr.src = 'about:blank';
+        }
+      });
+    }, {threshold: 0}) : null;
+    if(sticky && ioSticky) ioSticky.observe(sticky);
+    {% endif %}
+
+    // ---- Tiles-in-view autoplay (muted) ----
+    function makeIframeFor(linkEl){
+      var fr = document.createElement('iframe');
+      fr.allow = 'autoplay; encrypted-media; picture-in-picture';
+      fr.allowFullscreen = true;
+      fr.loading = 'lazy';
+      fr.src = linkEl.dataset.embed; // autoplay=1&mute=1
+      return fr;
+    }
+    var ioTiles = ('IntersectionObserver' in window) ? new IntersectionObserver(function(entries){
+      entries.forEach(function(ent){
+        var link = ent.target;
+        if(ent.isIntersecting){
+          if(link.dataset.mode === 'thumb'){
+            var img = link.querySelector('img');
+            var fr = makeIframeFor(link);
+            link.replaceChild(fr, img);
+            link.dataset.mode = 'player';
+          }
+        }else{
+          if(link.dataset.mode === 'player'){
+            var frOld = link.querySelector('iframe');
+            if(frOld){ frOld.src = 'about:blank'; }
+            link.innerHTML = '';
+            var imgBack = document.createElement('img');
+            imgBack.loading='lazy'; imgBack.decoding='async';
+            imgBack.alt = link.dataset.title || 'Video';
+            imgBack.src = link.dataset.thumb || '';
+            link.appendChild(imgBack);
+            link.dataset.mode = 'thumb';
+          }
+        }
+      });
+    }, {root:null, rootMargin:'0px', threshold: 0.25}) : {observe:function(){}};
+
+  })();
+  </script>
+</section>
+
+{% schema %}
+{
+  "name": "Videos Feed",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Latest videos" },
+    { "type": "checkbox", "id": "heading_bold", "label": "Bold heading", "default": false },
+
+    { "type": "text", "id": "feed_url", "label": "Feed URL (Apps Script /exec)", "default": "https://script.google.com/macros/s/AKfycbyUCqLQ8PU20-dVu2-Ke3HvdyoEWjWbxy_CfF8e01TUIP0SbOaqJtKA93O2OyWzRYHp/exec?format=long" },
+
+    { "type": "checkbox", "id": "random_on_load", "label": "Randomise on load (?random=1)", "default": false },
+
+    { "type": "checkbox", "id": "show_title", "label": "Show titles under tiles", "default": false },
+    { "type": "checkbox", "id": "show_arrow", "label": "Show tiny arrow under tiles", "default": true },
+
+    { "type": "checkbox", "id": "enable_hover", "label": "Enable hover preview", "default": true },
+    { "type": "checkbox", "id": "autoplay_hover", "label": "Autoplay in hover preview", "default": true },
+
+    { "type": "checkbox", "id": "player_only", "label": "Enable sticky player (single player)", "default": false },
+    { "type": "checkbox", "id": "autoplay_first", "label": "Auto-load first video into sticky player", "default": false },
+
+    { "type": "checkbox", "id": "play_tiles_in_view", "label": "Autoplay tiles while in view (muted)", "default": false },
+
+    { "type": "range", "id": "limit_desktop", "label": "Max videos (desktop)", "min": 1, "max": 100, "step": 1, "default": 48 },
+    { "type": "range", "id": "limit_mobile",  "label": "Max videos (mobile)",  "min": 1, "max": 100, "step": 1, "default": 36 },
+
+    { "type": "color", "id": "bg", "label": "Background", "default": "#ffffff" },
+    { "type": "color", "id": "text", "label": "Text", "default": "#111111" },
+    { "type": "color", "id": "arrow", "label": "Arrow colour", "default": "#F50E0E" },
+
+    { "type": "range", "id": "cols_mobile", "label": "Columns (mobile)", "min": 1, "max": 6, "step": 1, "default": 5 },
+    { "type": "range", "id": "cols_desktop", "label": "Columns (desktop)", "min": 1, "max": 20, "step": 1, "default": 12 },
+    { "type": "range", "id": "gap", "label": "Gap", "min": 0, "max": 24, "step": 2, "default": 8 },
+    { "type": "range", "id": "label_size", "label": "Title text size", "min": 10, "max": 18, "step": 1, "default": 12 },
+
+    { "type": "range", "id": "pad_desktop", "label": "Padding (desktop)", "min": 0, "max": 120, "step": 8, "default": 40 },
+    { "type": "range", "id": "pad_mobile",  "label": "Padding (mobile)",  "min": 0, "max": 80,  "step": 4, "default": 20 }
+  ],
+  "presets": [{ "name": "Videos Feed", "category": "Red Pen" }]
+}
+{% endschema %}

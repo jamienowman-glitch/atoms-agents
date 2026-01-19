@@ -102,6 +102,7 @@ export const ColorRibbon: React.FC<ColorRibbonProps> = ({ value, onChange }) => 
         setLocalHex(value);
     }, [value]);
 
+    const isTransparent = value === 'transparent' || value === 'rgba(0,0,0,0)';
     const hsl = React.useMemo(() => hexToHSL(value || '#000000'), [value]);
 
     const updateHue = (newHue: number) => {
@@ -175,25 +176,16 @@ export const ColorRibbon: React.FC<ColorRibbonProps> = ({ value, onChange }) => 
 
                     {/* Transparent Button (Checkerboard) */}
                     <button
-                        onClick={() => onChange('rgba(0,0,0,0)')}
-                        className="w-[44px] h-[44px] rounded-lg border border-neutral-200 dark:border-neutral-800 shrink-0 overflow-hidden relative group"
+                        onClick={() => onChange('transparent')}
+                        className="w-[44px] h-[44px] rounded-lg border border-neutral-200 dark:border-neutral-800 shrink-0 overflow-hidden relative bg-white"
                         title="Transparent"
+                        aria-label="Transparent"
                     >
-                        <div className="absolute inset-0 w-full h-full"
-                            style={{
-                                background: `
-                                    conic-gradient(
-                                        #80808025 0.25turn, 
-                                        transparent 0.25turn 0.5turn, 
-                                        #80808025 0.5turn 0.75turn, 
-                                        transparent 0.75turn
-                                    ) top left / 10px 10px repeat
-                                `
-                            }}
-                        />
-                        {/* Slash for visual clarity */}
-                        <div className="absolute inset-0 flex items-center justify-center text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><line x1="2" y1="2" x2="22" y2="22" /></svg>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="w-5 h-5 rounded-full border border-neutral-300 bg-white" />
+                            <svg className="w-6 h-6 text-red-500 absolute" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                                <line x1="4" y1="4" x2="20" y2="20" />
+                            </svg>
                         </div>
                     </button>
 
@@ -220,21 +212,16 @@ export const ColorRibbon: React.FC<ColorRibbonProps> = ({ value, onChange }) => 
                     <div className="flex flex-wrap gap-3 justify-center">
                         {/* Transparent Swatch */}
                         <button
-                            onClick={() => onChange('rgba(0,0,0,0)')}
-                            className={`w-9 h-9 rounded-full shrink-0 border border-black/10 transition-transform active:scale-95 relative overflow-hidden ${value === 'rgba(0,0,0,0)' ? 'ring-2 ring-neutral-400 ring-offset-2 dark:ring-offset-neutral-900 scale-105' : ''}`}
+                            onClick={() => onChange('transparent')}
+                            className={`w-9 h-9 rounded-full shrink-0 border border-black/10 transition-transform active:scale-95 relative overflow-hidden bg-white ${isTransparent ? 'ring-2 ring-neutral-400 ring-offset-2 dark:ring-offset-neutral-900 scale-105' : ''}`}
+                            aria-label="Transparent"
                         >
-                            <div className="absolute inset-0 w-full h-full"
-                                style={{
-                                    background: `
-                                        conic-gradient(
-                                            #80808025 0.25turn, 
-                                            transparent 0.25turn 0.5turn, 
-                                            #80808025 0.5turn 0.75turn, 
-                                            transparent 0.75turn
-                                        ) top left / 8px 8px repeat
-                                    `
-                                }}
-                            />
+                            <div className="absolute inset-0 flex items-center justify-center">
+                                <div className="w-4 h-4 rounded-full border border-neutral-300 bg-white" />
+                                <svg className="w-5 h-5 text-red-500 absolute" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                                    <line x1="4" y1="4" x2="20" y2="20" />
+                                </svg>
+                            </div>
                         </button>
 
                         {SWATCHES.map((color) => {

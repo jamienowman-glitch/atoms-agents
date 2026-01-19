@@ -8,7 +8,8 @@ import { ChatRailShell } from '../chat/ChatRailShell';
 
 
 import { PageControlProvider, usePageControl } from '../../context/PageControlContext';
-import { TopControls } from './TopControls';
+// import { TopControls } from './TopControls';
+import { TopPill } from './headers/TopPill';
 import { PageSettingsPanel } from './PageSettingsPanel';
 
 const initialToolState = {
@@ -47,7 +48,7 @@ export function BuilderShell({ children, showGraphControls }: { children: React.
 
 function BuilderShellInner({ children, showGraphControls }: { children: React.ReactNode, showGraphControls?: boolean }) {
     const { useToolState } = useToolControl();
-    const { design } = usePageControl();
+    const { design, setSettingsOpen } = usePageControl();
 
     // Global Preview Mode
     const [previewMode] = useToolState<'desktop' | 'mobile'>({ target: { surfaceId: 'multi21.designer', toolId: 'previewMode' }, defaultValue: 'desktop' });
@@ -67,7 +68,8 @@ function BuilderShellInner({ children, showGraphControls }: { children: React.Re
     return (
         <React.Fragment>
             {/* 1. Global Controls (Command Center) */}
-            <TopControls showGraphControls={showGraphControls} />
+            {/* <TopControls showGraphControls={showGraphControls} /> */}
+            <TopPill setIsRightPanelOpen={setSettingsOpen} />
 
             {/* 2. Global Settings Drawer */}
             <PageSettingsPanel />

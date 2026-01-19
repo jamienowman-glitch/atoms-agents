@@ -119,13 +119,13 @@ export function ChatRailShell({ showTools = false, onToggleTools, mode, onModeCh
                 <div className="flex items-center flex-1 min-w-0 pointer-events-none">
                     {mode === 'nano' ? (
                         <div className="flex flex-col min-w-0 overflow-hidden">
-                            <span className="font-semibold text-xs text-neutral-400 uppercase tracking-wider mb-0.5">Agent</span>
+                            <span className="font-semibold text-xs text-neutral-400 uppercase tracking-wider mb-0.5">AGENTFAX</span>
                             <span className="text-sm text-neutral-300 truncate font-light opacity-80">
                                 I can help you adjust the grid layout...
                             </span>
                         </div>
                     ) : (
-                        <span className="font-semibold text-sm text-neutral-200">Chat with Agent</span>
+                        <span className="font-semibold text-sm text-neutral-200">AGENTFAX</span>
                     )}
                 </div>
 
@@ -169,6 +169,7 @@ export function ChatRailShell({ showTools = false, onToggleTools, mode, onModeCh
                     </div>
                     <div className="px-3 py-3 border-t border-white/10 bg-neutral-900 pb-safe w-full max-w-full">
                         <div className="flex items-center gap-2 bg-neutral-950 border border-white/10 rounded-full px-4 py-2 focus-within:border-neutral-500 transition-colors w-full max-w-full">
+                            <img src="/assets/AGENT_STREETWEAR_BLACK.png" alt="Agent Streetwear" className="h-6 w-6 object-contain" />
                             <input
                                 ref={inputRef}
                                 type="text"

@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { useToolControl } from '../../context/ToolControlContext';
 import { Multi21, Multi21Item } from './Multi21';
 import { Multi21_Text } from './Multi21_Text';
+import { Multi21_Copy } from './Multi21_Copy';
 import { Multi21_CTA } from './Multi21_CTA';
 import { Multi21_Row } from './Multi21_Row';
 import { Multi21_Header_Impl as Multi21_Header } from './Multi21_Header';
@@ -34,7 +35,8 @@ const generateItems = (count: number, variant: 'generic' | 'product' | 'kpi' | '
             return {
                 id: `${idPrefix}-product-${i}`,
                 title: `Board Pro ${900 + i}`,
-                meta: `£${(49 + i * 5).toFixed(2)}`,
+                meta: `Style ${i + 1}`,
+                price: `£${(49 + i * 5).toFixed(2)}`,
                 imageUrl: `https://picsum.photos/seed/product-${i}/600/400`,
                 href: '#',
                 badge: i % 3 === 0 ? 'SALE' : undefined,
@@ -65,7 +67,7 @@ const generateItems = (count: number, variant: 'generic' | 'product' | 'kpi' | '
 
 interface ConnectedBlockProps {
     id: string;
-    type: 'media' | 'text' | 'cta' | 'row' | 'header';
+    type: 'media' | 'text' | 'copy' | 'cta' | 'row' | 'header';
     isSelected: boolean;
     onClick: () => void;
     previewMode: 'desktop' | 'mobile';
@@ -128,6 +130,11 @@ export const ConnectedBlock: React.FC<ConnectedBlockProps> = ({
     const [contentWidth] = useToolState<number>({ target: { ...scope, toolId: 'text.width_percent' }, defaultValue: 100 });
     const [stackGap] = useToolState<number>({ target: { ...scope, toolId: 'text.stack_gap' }, defaultValue: 16 });
 
+    // --- Copy Block Logic ---
+    const [copyText, setCopyText] = useToolState<string>({ target: { ...scope, toolId: 'copy.text' }, defaultValue: 'Copy text' });
+    const [copyLevel] = useToolState<string>({ target: { ...scope, toolId: 'copy.level' }, defaultValue: 'body' });
+    const [copyStyle] = useToolState<string>({ target: { ...scope, toolId: 'copy.style' }, defaultValue: 'body' });
+
     // --- CTA Block Logic (Phase 14) ---
     const [ctaVariant] = useToolState<'solid' | 'outline' | 'ghost'>({ target: { ...scope, toolId: 'cta.variant' }, defaultValue: 'solid' });
     const [ctaSize] = useToolState<'small' | 'medium' | 'large'>({ target: { ...scope, toolId: 'cta.size' }, defaultValue: 'medium' });
@@ -140,7 +147,6 @@ export const ConnectedBlock: React.FC<ConnectedBlockProps> = ({
     const [fontSizeDesktop] = useToolState<number>({ target: { ...scope, toolId: 'typo.size_desktop' }, defaultValue: 16 });
     const [fontSizeMobile] = useToolState<number>({ target: { ...scope, toolId: 'typo.size_mobile' }, defaultValue: 16 });
     const [lineHeight] = useToolState<number>({ target: { ...scope, toolId: 'typo.line_height' }, defaultValue: 1.5 });
-    const [letterSpacing] = useToolState<number>({ target: { ...scope, toolId: 'typo.tracking' }, defaultValue: 0 });
     const [fontFamily] = useToolState<number>({ target: { ...scope, toolId: 'typo.family' }, defaultValue: 0 });
 
     // --- Styles ---
@@ -158,7 +164,7 @@ export const ConnectedBlock: React.FC<ConnectedBlockProps> = ({
     // Type Setting
     const [typoAlign] = useToolState<string>({ target: { ...scope, toolId: 'typo.align' }, defaultValue: 'left' });
     const [typoLineHeight] = useToolState<number>({ target: { ...scope, toolId: 'typo.line_height' }, defaultValue: 1.5 });
-    const [typoLetterSpacing] = useToolState<number>({ target: { ...scope, toolId: 'typo.letter_spacing' }, defaultValue: 0 });
+    const [typoLetterSpacing] = useToolState<number>({ target: { ...scope, toolId: 'typo.tracking' }, defaultValue: 0 });
     const [typoWordSpacing] = useToolState<number>({ target: { ...scope, toolId: 'typo.word_spacing' }, defaultValue: 0 });
     const [typoVerticalAlign] = useToolState<string>({ target: { ...scope, toolId: 'typo.vert' }, defaultValue: 'top' });
     const [typoStackGap] = useToolState<number>({ target: { ...scope, toolId: 'typo.stack_gap' }, defaultValue: 16 });
@@ -271,6 +277,40 @@ export const ConnectedBlock: React.FC<ConnectedBlockProps> = ({
                     styleOpacity={styleOpacity}
                     styleBlur={styleBlur}
 
+                    isMobileView={previewMode === 'mobile'}
+                />
+            ) : type === 'copy' ? (
+                <Multi21_Copy
+                    text={copyText}
+                    onTextChange={setCopyText}
+                    level={copyLevel as any}
+                    stylePreset={copyStyle as any}
+                    textAlign={typoAlign as any}
+                    verticalAlign={typoVerticalAlign as any}
+                    contentWidth={`${contentWidth}%`}
+                    stackGap={stackGap}
+                    fontPresetIndex={fontPresetIndex}
+                    fontSizeDesktop={fontSizeDesktop}
+                    fontSizeMobile={fontSizeMobile}
+                    lineHeight={typoLineHeight}
+                    letterSpacing={typoLetterSpacing}
+                    wordSpacing={typoWordSpacing}
+                    textTransform={typoTransform}
+                    textDecoration={typoDecoration}
+                    fontFamily={fontFamily}
+                    axisWeight={axisWeight === -1 ? null : axisWeight}
+                    axisWidth={axisWidth === -1 ? null : axisWidth}
+                    axisCasual={axisCasual}
+                    axisSlant={axisSlant}
+                    axisGrade={axisGrade}
+                    styleBgColor={styleBgColor}
+                    styleTextColor={styleTextColor}
+                    styleBorderColor={styleBorderColor}
+                    styleBorderWidth={styleBorderWidth}
+                    styleTextStrokeColor={styleTextStrokeColor}
+                    styleTextStrokeWidth={styleTextStrokeWidth}
+                    styleOpacity={styleOpacity}
+                    styleBlur={styleBlur}
                     isMobileView={previewMode === 'mobile'}
                 />
             ) : type === 'cta' ? (
