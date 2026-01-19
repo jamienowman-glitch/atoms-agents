@@ -1,8 +1,0 @@
-{
-  "framework": "crewai",
-  "mode_id": "sequential",
-  "status": "FAIL",
-  "model_id": "N/A",
-  "evidence_path": "docs/evidence/modes/20251221_072827/crewai/sequential",
-  "error": "duplicate argument 'inputs' in function definition (sequential.py, line 14)"
-}

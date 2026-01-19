@@ -2,7 +2,17 @@
 import pytest
 from datetime import datetime
 from engines.realtime.contracts import (
-    StreamEvent, RoutingKeys, EventIds, ActorType, from_legacy_message
+    StreamEvent,
+    RoutingKeys,
+    EventIds,
+    ActorType,
+    MediaPayload,
+    MediaSidecar,
+    SpatialBounds,
+    SpatialUpdatePayload,
+    build_atom_metadata_event,
+    build_spatial_update_event,
+    from_legacy_message,
 )
 from engines.chat.contracts import Message, Contact, ChatScope
 
@@ -11,6 +21,7 @@ def test_stream_event_minimal():
     routing = RoutingKeys(
         tenant_id="t_demo",
         env="dev",
+        project_id="p_demo",
         actor_id="user-123",
         actor_type=ActorType.HUMAN
     )
@@ -32,6 +43,7 @@ def test_routing_validation():
         RoutingKeys(
             tenant_id="bad-tenant", # Missing t_
             env="dev",
+            project_id="p_demo",
             actor_id="u1",
             actor_type=ActorType.HUMAN
         )
@@ -40,6 +52,7 @@ def test_routing_validation():
     rk = RoutingKeys(
         tenant_id="t_valid_1",
         env="prod",
+        project_id="p_demo",
         actor_id="u1",
         actor_type=ActorType.HUMAN
     )
@@ -56,7 +69,13 @@ def test_legacy_message_conversion():
         scope=ChatScope(app="app-1")
     )
     
-    event = from_legacy_message(msg, tenant_id="t_legacy", env="dev", request_id="req-1")
+    event = from_legacy_message(
+        msg,
+        tenant_id="t_legacy",
+        env="dev",
+        project_id="p_legacy",
+        request_id="req-1",
+    )
     
     assert event.type == "user_message"
     assert event.routing.tenant_id == "t_legacy"
@@ -80,6 +99,7 @@ def test_legacy_message_trace_id():
         msg,
         tenant_id="t_legacy",
         env="dev",
+        project_id="p_legacy",
         trace_id="trace-007"
     )
 
@@ -101,8 +121,66 @@ def test_legacy_json_unwrapping():
         role="agent"
     )
     
-    event = from_legacy_message(msg, tenant_id="t_legacy", env="dev")
+    event = from_legacy_message(
+        msg,
+        tenant_id="t_legacy",
+        env="dev",
+        project_id="p_legacy",
+    )
     
     assert event.type == "token_chunk"
     assert event.ids.request_id == "req-internal"
     assert event.data["delta"] == "Hi"
+
+
+def test_media_payload_rejects_data_uri():
+    with pytest.raises(ValueError):
+        MediaSidecar(uri="data:image/png;base64,abcd", object_id=None, artifact_id=None)
+
+    payload = MediaPayload(
+        sidecars=[MediaSidecar(uri="https://example.com/image.png")],
+        caption="safe",
+    )
+    assert payload.sidecars[0].uri.endswith("image.png")
+
+
+def test_spatial_update_payload_round_trip():
+    payload = SpatialUpdatePayload(
+        atom_id="atom-1",
+        atom_metadata={"color": "red"},
+        bounds=SpatialBounds(x=1, y=2, w=100, h=200, z=0),
+    )
+    data = payload.model_dump()
+    assert data["bounds"]["w"] == 100
+    assert "atom_metadata" in data
+
+
+def test_build_spatial_update_event_sets_slots():
+    payload = SpatialUpdatePayload(
+        atom_id="atom-2",
+        atom_metadata={"color": "blue"},
+        media_payload=MediaPayload(
+            sidecars=[MediaSidecar(uri="https://example.com/blob.png")],
+        ),
+        bounds=SpatialBounds(x=0, y=0, w=10, h=20, z=0),
+    )
+    routing = RoutingKeys(
+        tenant_id="t_demo",
+        env="dev",
+        project_id="p_demo",
+        actor_id="actor",
+        actor_type=ActorType.HUMAN,
+    )
+    ids = EventIds(request_id="req-1", run_id="run-1", step_id="spatial")
+    event = build_spatial_update_event(
+        payload,
+        routing,
+        ids,
+        trace_id="trace-1",
+        event_id="evt-123",
+    )
+    assert event.type == "SPATIAL_UPDATE"
+    assert event.atom_metadata["color"] == "blue"
+    assert event.media_payload is not None
+    assert event.media_payload.sidecars[0].uri.startswith("https://")
+    assert event.ids.run_id == "run-1"

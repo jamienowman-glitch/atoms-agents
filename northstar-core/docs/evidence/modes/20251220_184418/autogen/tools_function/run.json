@@ -1,8 +1,0 @@
-{
-  "framework": "autogen",
-  "mode_id": "tools_function",
-  "status": "FAIL",
-  "model_id": "N/A",
-  "evidence_path": "docs/evidence/modes/20251220_184418/autogen/tools_function",
-  "error": "not enough values to unpack (expected 2, got 1)"
-}

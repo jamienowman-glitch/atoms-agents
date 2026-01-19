@@ -1,9 +1,0 @@
-framework: autogen
-mode_id: handoff_swarm
-pinned_version_ref: integration/autogen/PINNED_VERSION.md
-invoke_entrypoint: runtime.autogen.modes.handoff_swarm:run
-required_params:
-  - agents
-  - max_turns
-supports_streaming: token
-notes: "Agents use HandoffMessage to transfer control. Decentralized coordination."

@@ -34,6 +34,7 @@ def _build_event() -> StreamEvent:
         routing=RoutingKeys(
             tenant_id="t_demo",
             env="dev",
+            project_id="p_demo",
             thread_id="thread-ws-clean",
             actor_id="u1",
             actor_type=ActorType.HUMAN,

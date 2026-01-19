@@ -98,6 +98,7 @@ def test_stream_event_requires_scope(monkeypatch):
             routing=RoutingKeys(
                 tenant_id="t_demo",
                 env="dev",
+                project_id="p_demo",
                 thread_id="thread",
                 actor_id="actor",
                 actor_type=ActorType.HUMAN,
@@ -106,6 +107,7 @@ def test_stream_event_requires_scope(monkeypatch):
             data={},
         )
     assert "routing.mode" in str(exc.value)
+    assert "routing.project_id" in str(exc.value)
     assert "run_id" in str(exc.value)
     assert "step_id" in str(exc.value)
 

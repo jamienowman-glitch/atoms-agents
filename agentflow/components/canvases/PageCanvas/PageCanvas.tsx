@@ -3,6 +3,7 @@
 // =============================================================================
 
 import React, { useEffect, useMemo, useState } from 'react';
+import { CanvasTransport } from '@/lib/gate3/transport';
 import {
     DndContext,
     DragEndEvent,
@@ -60,7 +61,13 @@ const findContainer = (id: string, items: Block[]): string | undefined => {
     return undefined;
 };
 
-export const PageCanvas = () => {
+interface PageCanvasProps {
+    transport?: CanvasTransport | null;
+    canvasId?: string;
+    canvasType?: string;
+}
+
+export const PageCanvas = ({ transport, canvasId = 'page-canvas', canvasType = 'page_canvas' }: PageCanvasProps) => {
     // Controls State
     const { useToolState, updateTool, state } = useToolControl();
 
@@ -244,6 +251,19 @@ export const PageCanvas = () => {
         });
     };
 
+    const emitSpatialUpdate = (atomId: string) => {
+        if (!transport) return;
+        transport.sendSpatialUpdate({
+            atom_id: atomId,
+            bounds: { x: 0, y: 0, w: 320, h: 180, z: 0 },
+            atom_metadata: {
+                canvas_id: canvasId,
+                canvas_type: canvasType,
+            },
+            media_payload: { sidecars: [] },
+        });
+    };
+
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event;
         const activeContainer = findContainer(active.id as string, blocks);
@@ -290,6 +310,7 @@ export const PageCanvas = () => {
             }
         }
         setActiveId(null);
+        emitSpatialUpdate(active.id as string);
     };
 
     // --- Deletion Logic (Recursive) ---

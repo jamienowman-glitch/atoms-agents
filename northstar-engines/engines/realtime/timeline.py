@@ -30,7 +30,9 @@ class InMemoryTimelineStore:
         routing = event.routing
         if routing.tenant_id != context.tenant_id:
             raise RuntimeError("Timeline routing tenant mismatch")
-        if routing.project_id and routing.project_id != context.project_id:
+        if not routing.project_id:
+            raise RuntimeError("Timeline routing project missing")
+        if routing.project_id != context.project_id:
             raise RuntimeError("Timeline routing project mismatch")
         if routing.mode and routing.mode != context.mode:
             raise RuntimeError("Timeline routing mode mismatch")
@@ -69,6 +71,10 @@ class FirestoreTimelineStore:
     def append(self, stream_id: str, event: StreamEvent, context: RequestContext) -> None:
         if context is None:
             raise RuntimeError("RequestContext is required for timeline append")
+        if event.routing.tenant_id != context.tenant_id:
+            raise RuntimeError("Timeline routing tenant mismatch")
+        if not event.routing.project_id or event.routing.project_id != context.project_id:
+            raise RuntimeError("Timeline routing project mismatch")
         self._event_collection(stream_id).document(event.event_id).set(event.dict())  # type: ignore[attr-defined]
 
     def list_after(self, stream_id: str, after_event_id: Optional[str] = None) -> List[StreamEvent]:

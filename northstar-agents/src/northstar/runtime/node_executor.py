@@ -10,6 +10,7 @@ import uuid
 from northstar.nexus.client import NexusClient, NoOpNexusClient
 from northstar.runtime.context import AgentsRequestContext  # Type hint
 from northstar.runtime.gateway_resolution import resolve_gateway
+from northstar.runtime.canvas_mirror import CanvasMirror
 
 
 class NodeExecutor:
@@ -18,10 +19,12 @@ class NodeExecutor:
         registry_ctx: Any,
         audit_emitter: Optional[AuditEmitter] = None,
         nexus_client: Optional[NexusClient] = None,
+        canvas_mirror: Optional[CanvasMirror] = None,
     ):
         self.registry = registry_ctx
         self.audit_emitter = audit_emitter or ConsoleAuditEmitter()
         self.nexus_client = nexus_client or NoOpNexusClient()
+        self.canvas_mirror = canvas_mirror
 
     def execute_node(
         self,
@@ -42,6 +45,12 @@ class NodeExecutor:
                 "AgentsRequestContext is required for Node execution. "
                 "Ensure you are running via a context-aware entrypoint (CLI/Server)."
             )
+        if self.canvas_mirror:
+            events.append({
+                "type": "canvas_mirror_attached",
+                "canvas_id": self.canvas_mirror.canvas_id,
+                "mirrored_events": len(self.canvas_mirror.snapshot()),
+            })
 
         ctx_args = {
             "tenant_id": request_context.tenant_id,
@@ -238,6 +247,10 @@ class NodeExecutor:
         )
         events.append({"type": "invocation_end"})
         return dict(resp)
+
+    def attach_canvas_mirror(self, mirror: CanvasMirror) -> None:
+        """Attach a CanvasMirror for downstream lenses to read."""
+        self.canvas_mirror = mirror
 
     def _write_outputs(self, node: NodeCard, content: str, blackboard: Dict[str, Any]) -> tuple[List[str], Dict[str, Any]]:
         from northstar.runtime.artifact_writer import ArtifactWriter

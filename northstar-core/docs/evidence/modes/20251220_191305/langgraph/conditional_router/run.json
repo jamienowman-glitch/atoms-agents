@@ -1,8 +1,0 @@
-{
-  "framework": "langgraph",
-  "mode_id": "conditional_router",
-  "status": "FAIL",
-  "model_id": "N/A",
-  "evidence_path": "docs/evidence/modes/20251220_191305/langgraph/conditional_router",
-  "error": "not enough values to unpack (expected 2, got 1)"
-}

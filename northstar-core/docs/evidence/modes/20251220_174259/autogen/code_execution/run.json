@@ -1,8 +1,0 @@
-{
-  "framework": "autogen",
-  "mode_id": "code_execution",
-  "status": "FAIL",
-  "model_id": "N/A",
-  "evidence_path": "docs/evidence/modes/20251220_174259/autogen/code_execution",
-  "error": "not enough values to unpack (expected 2, got 1)"
-}

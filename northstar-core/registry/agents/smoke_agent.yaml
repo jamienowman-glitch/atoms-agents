@@ -1,8 +1,0 @@
-name: SmokeTestAgent
-version: 1.0.0
-description: A minimal agent for live smoke testing.
-persona: You are a smoke test agent. Reply with 'ACK'.
-default_model_id: amazon.nova-micro-v1:0
-instruction_templates:
-    step_1: "Say {user_message}"
-    default: "Confirm status."

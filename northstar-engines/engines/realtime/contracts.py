@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 from enum import Enum
 from typing import Any, Dict, List, Literal, Optional, Union
 
-from pydantic import BaseModel, Field, root_validator
+from pydantic import BaseModel, Field, root_validator, validator
 
 from engines.logging.events.contract import (
     DEFAULT_STREAM_SCHEMA_VERSION,
@@ -31,7 +31,7 @@ class RoutingKeys(BaseModel):
     env: Literal["dev", "staging", "prod", "stage"]
     # Hierarchy
     workspace_id: Optional[str] = None
-    project_id: Optional[str] = None
+    project_id: str = Field(..., min_length=1)
     app_id: Optional[str] = None
     # Surface
     surface_id: Optional[str] = None
@@ -61,6 +61,7 @@ class EventPriority(str, Enum):
     TRUTH = "truth"  # Authoritative commits
     GESTURE = "gesture"  # Ephemeral (mouse, typing)
     INFO = "info"  # Notifications/Chat
+    CRITICAL = "critical"  # Severe errors/interrupts
 
 
 class PersistPolicy(str, Enum):
@@ -77,6 +78,94 @@ class EventMeta(BaseModel):
     schema_version: str = Field(default=DEFAULT_STREAM_SCHEMA_VERSION)
     severity: EventSeverity = Field(default=EventSeverity.INFO)
     storage_class: StorageClass = Field(default=StorageClass.STREAM)
+
+
+# --- Payload Helpers ---
+
+class MediaSidecar(BaseModel):
+    """
+    Sidecar reference for media payloads (URLs, object IDs, artifacts).
+    Raw bytes or data URIs are explicitly rejected.
+    """
+    uri: Optional[str] = None
+    object_id: Optional[str] = None
+    artifact_id: Optional[str] = None
+    mime_type: Optional[str] = None
+    size_bytes: Optional[int] = None
+    checksum: Optional[str] = None
+    metadata: Dict[str, Any] = Field(default_factory=dict)
+
+    @root_validator(skip_on_failure=True)
+    def _require_reference(cls, values: dict[str, Any]) -> dict[str, Any]:
+        uri = values.get("uri")
+        object_id = values.get("object_id")
+        artifact_id = values.get("artifact_id")
+        if not (uri or object_id or artifact_id):
+            raise ValueError("media sidecar requires uri, object_id, or artifact_id")
+        if isinstance(uri, (bytes, bytearray)):
+            raise ValueError("media sidecar uri must be a string reference, not raw bytes")
+        if isinstance(uri, str) and uri.startswith("data:"):
+            raise ValueError("data: URIs are not allowed for media sidecars; use durable references")
+        return values
+
+
+class MediaPayload(BaseModel):
+    """
+    Generic media payload that only carries sidecar references.
+    """
+    sidecars: List[MediaSidecar] = Field(default_factory=list)
+    caption: Optional[str] = None
+    atom_metadata: Dict[str, Any] = Field(default_factory=dict)
+
+    @validator("caption")
+    def _reject_bytes_caption(cls, value: Optional[str]) -> Optional[str]:
+        if isinstance(value, (bytes, bytearray)):
+            raise ValueError("media payload caption must be text, not raw bytes")
+        return value
+
+
+class AtomMetadataPayload(BaseModel):
+    """
+    Canonical atom metadata payload used across surfaces and runtimes.
+    """
+    atom_id: str
+    atom_revision: Optional[Union[str, int]] = None
+    atom_metadata: Dict[str, Any] = Field(default_factory=dict)
+    media_payload: Optional[MediaPayload] = None
+    surface_id: Optional[str] = None
+    canvas_id: Optional[str] = None
+    projection_id: Optional[str] = None
+    panel_id: Optional[str] = None
+
+
+class SpatialBounds(BaseModel):
+    """2.5D spatial bounds for an atom (screen or canvas coordinates)."""
+    x: float
+    y: float
+    w: float
+    h: float
+    z: float = 0.0
+    d: Optional[float] = None
+
+
+BroadcastChannel = Literal["spatial", "content", "media"]
+
+
+class SpatialUpdatePayload(AtomMetadataPayload):
+    """
+    ENG-RT-SPATIAL-UPDATE payload. Captures layout with optional semantic/meta.
+    """
+    bounds: SpatialBounds
+    broadcast: List[BroadcastChannel] = Field(
+        default_factory=lambda: ["spatial"],
+        description="Channels requested by the surface (spatial/content/media).",
+    )
+
+    @validator("broadcast", each_item=True)
+    def _validate_broadcast(cls, value: BroadcastChannel) -> BroadcastChannel:
+        if value not in ("spatial", "content", "media"):
+            raise ValueError("broadcast must be one of spatial|content|media")
+        return value
 
 
 # --- Canonical StreamEvent ---
@@ -97,6 +186,8 @@ class StreamEvent(BaseModel):
     ids: EventIds = Field(default_factory=EventIds)
     routing: RoutingKeys
     data: Dict[str, Any] = Field(default_factory=dict)
+    atom_metadata: Dict[str, Any] = Field(default_factory=dict)
+    media_payload: Optional[MediaPayload] = None
     meta: EventMeta = Field(default_factory=EventMeta)
 
     @root_validator(skip_on_failure=True)
@@ -109,6 +200,8 @@ class StreamEvent(BaseModel):
         missing = []
         if not routing or not routing.mode:
             missing.append("routing.mode")
+        if not routing or not routing.project_id:
+            missing.append("routing.project_id")
         if not ids or not ids.request_id:
             missing.append("ids.request_id")
         if not ids or not ids.run_id:
@@ -133,12 +226,78 @@ class StreamEvent(BaseModel):
         }
 
 
+def build_atom_metadata_event(
+    payload: AtomMetadataPayload,
+    routing: RoutingKeys,
+    ids: EventIds,
+    *,
+    trace_id: Optional[str] = None,
+    meta: Optional[EventMeta] = None,
+    event_id: Optional[str] = None,
+    ts: Optional[datetime] = None,
+) -> StreamEvent:
+    """
+    Build a canonical ATOM_METADATA event carrying optional media sidecars.
+    """
+    event_kwargs: Dict[str, Any] = {
+        "type": "ATOM_METADATA",
+        "event_id": event_id or str(uuid.uuid4()),
+        "routing": routing,
+        "ids": ids,
+        "trace_id": trace_id,
+        "data": payload.model_dump(),
+        "atom_metadata": payload.atom_metadata,
+        "media_payload": payload.media_payload,
+        "meta": meta or EventMeta(
+            priority=EventPriority.TRUTH,
+            persist=PersistPolicy.ALWAYS,
+        ),
+    }
+    if ts is not None:
+        event_kwargs["ts"] = ts
+    return StreamEvent(**event_kwargs)
+
+
+def build_spatial_update_event(
+    payload: SpatialUpdatePayload,
+    routing: RoutingKeys,
+    ids: EventIds,
+    *,
+    trace_id: Optional[str] = None,
+    meta: Optional[EventMeta] = None,
+    event_id: Optional[str] = None,
+    ts: Optional[datetime] = None,
+) -> StreamEvent:
+    """
+    Build a canonical SPATIAL_UPDATE event (ENG-RT-SPATIAL-UPDATE contract).
+    """
+    meta = meta or EventMeta(
+        priority=EventPriority.TRUTH,
+        persist=PersistPolicy.ALWAYS,
+    )
+    event_kwargs: Dict[str, Any] = {
+        "type": "SPATIAL_UPDATE",
+        "event_id": event_id or str(uuid.uuid4()),
+        "routing": routing,
+        "ids": ids,
+        "trace_id": trace_id,
+        "data": payload.model_dump(),
+        "atom_metadata": payload.atom_metadata,
+        "media_payload": payload.media_payload,
+        "meta": meta,
+    }
+    if ts is not None:
+        event_kwargs["ts"] = ts
+    return StreamEvent(**event_kwargs)
+
+
 # --- Legacy Adapter Helpers ---
 
 def from_legacy_message(
     msg: Any,  # engines.chat.contracts.Message
     tenant_id: str,
     env: str,
+    project_id: str,
     request_id: Optional[str] = None,
     trace_id: Optional[str] = None
 ) -> StreamEvent:
@@ -157,6 +316,7 @@ def from_legacy_message(
         tenant_id=tenant_id,
         env=env,  # type: ignore
         mode=env,
+        project_id=project_id,
         thread_id=msg.thread_id,
         actor_id=msg.sender.id,
         actor_type=actor_type,

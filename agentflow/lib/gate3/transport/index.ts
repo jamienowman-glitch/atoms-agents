@@ -65,13 +65,16 @@ export class CanvasTransport {
 
     constructor(config: TransportConfig) {
         // Runtime Assertions
-        if (!config.context.mode) throw new Error('Transport Error: Missing context.mode');
-        if (!['saas', 'enterprise', 'lab'].includes(config.context.mode)) {
+        if (!config.context.mode) console.warn('Transport Warning: Missing context.mode');
+        if (config.context.mode && !['saas', 'enterprise', 'lab'].includes(config.context.mode)) {
             throw new Error(`Transport Error: Invalid context.mode "${config.context.mode}"`);
         }
-        if (!config.context.tenant_id) throw new Error('Transport Error: Missing context.tenant_id');
-        if (!config.context.project_id) throw new Error('Transport Error: Missing context.project_id');
-        if (!config.context.request_id) throw new Error('Transport Error: Missing context.request_id');
+        if (!config.context.tenant_id) console.warn('Transport Warning: Missing context.tenant_id');
+        if (!config.context.project_id) console.warn('Transport Warning: Missing context.project_id');
+        if (!config.context.request_id) {
+            console.warn('Transport Warning: Missing context.request_id. Generating one.');
+            config.context.request_id = crypto.randomUUID();
+        }
 
         this.config = config;
     }
@@ -81,13 +84,13 @@ export class CanvasTransport {
     private getHeaders(extra?: Record<string, string>): HeadersInit {
         const h: Record<string, string> = {
             'Authorization': `Bearer ${this.config.token}`,
-            'X-Tenant-Id': this.config.context.tenant_id,
             'X-Mode': this.config.context.mode,
-            'X-Project-Id': this.config.context.project_id,
             'X-Request-Id': this.config.context.request_id,
             ...extra
         };
 
+        if (this.config.context.tenant_id) h['X-Tenant-Id'] = this.config.context.tenant_id;
+        if (this.config.context.project_id) h['X-Project-Id'] = this.config.context.project_id;
         if (this.config.context.app_id) h['X-App-Id'] = this.config.context.app_id;
         if (this.config.context.surface_id) h['X-Surface-Id'] = this.config.context.surface_id;
         if (this.config.context.user_id) h['X-User-Id'] = this.config.context.user_id;
@@ -115,6 +118,18 @@ export class CanvasTransport {
     // --- Connection Management ---
 
     async connect(canvasId: string, lastEventId?: string) {
+        if (!this.config.context.project_id) {
+            console.warn('[CanvasTransport] project_id missing; delaying connection until provided');
+            return;
+        }
+        if (!this.config.context.tenant_id) {
+            console.warn('[CanvasTransport] tenant_id missing; delaying connection until provided');
+            return;
+        }
+        if (!this.config.context.app_id) {
+            console.warn('[CanvasTransport] app_id missing; delaying connection until provided');
+            return;
+        }
         if (this.canvasId === canvasId && (this.sseStatus === 'connected' || this.sseStatus === 'connecting')) return;
 
         this.canvasId = canvasId;
@@ -279,6 +294,7 @@ export class CanvasTransport {
         url.searchParams.append('tenant_id', this.config.context.tenant_id);
         url.searchParams.append('project_id', this.config.context.project_id);
         url.searchParams.append('request_id', this.config.context.request_id);
+        if (this.config.context.app_id) url.searchParams.append('app_id', this.config.context.app_id);
         if (this.config.context.user_id) url.searchParams.append('user_id', this.config.context.user_id);
 
         if (this.lastEventId) {
@@ -384,6 +400,37 @@ export class CanvasTransport {
         if (this.ws?.readyState === WebSocket.OPEN) {
             const event: GestureEvent = { type: 'gesture', data: gesture };
             this.ws.send(JSON.stringify(event));
+        }
+    }
+
+    sendCanvasReady(payload: { canvas_type: string; tools: string[] }) {
+        if (this.ws?.readyState === WebSocket.OPEN) {
+            const event = {
+                type: 'CANVAS_READY',
+                data: payload
+            };
+            this.ws.send(JSON.stringify(event));
+        } else {
+            console.warn('[CanvasTransport] Cannot emit CANVAS_READY; WS not open');
+        }
+    }
+
+    sendSpatialUpdate(event: {
+        atom_id: string;
+        bounds: { x: number; y: number; w: number; h: number; z?: number; d?: number };
+        atom_metadata?: Record<string, unknown>;
+        media_payload?: { sidecars: { uri?: string; object_id?: string; artifact_id?: string; mime_type?: string; size_bytes?: number; checksum?: string; metadata?: Record<string, unknown> }[] };
+    }) {
+        if (this.ws?.readyState === WebSocket.OPEN) {
+            const envelope = {
+                type: 'SPATIAL_UPDATE',
+                data: event,
+                atom_metadata: event.atom_metadata,
+                media_payload: event.media_payload
+            };
+            this.ws.send(JSON.stringify(envelope));
+        } else {
+            console.warn('[CanvasTransport] Cannot emit SPATIAL_UPDATE; WS not open');
         }
     }
 

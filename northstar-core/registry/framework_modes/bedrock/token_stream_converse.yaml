@@ -1,9 +1,0 @@
-framework: bedrock
-mode_id: token_stream_converse
-pinned_version_ref: integration/bedrock/PINNED_VERSION.md
-invoke_entrypoint: runtime.bedrock.modes.converse_stream:run
-required_params:
-  - model_id
-  - user_message
-supports_streaming: token
-notes: "Direct invocation of Bedrock ConverseStream API."

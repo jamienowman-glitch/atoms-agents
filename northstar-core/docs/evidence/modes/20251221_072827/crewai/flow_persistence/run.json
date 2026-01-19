@@ -1,8 +1,0 @@
-{
-  "framework": "crewai",
-  "mode_id": "flow_persistence",
-  "status": "FAIL",
-  "model_id": "N/A",
-  "evidence_path": "docs/evidence/modes/20251221_072827/crewai/flow_persistence",
-  "error": "not enough values to unpack (expected 2, got 1)"
-}

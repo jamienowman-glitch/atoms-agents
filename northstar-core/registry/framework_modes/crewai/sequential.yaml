@@ -1,9 +1,0 @@
-framework: crewai
-mode_id: sequential
-pinned_version_ref: integration/crewai/PINNED_VERSION.md
-invoke_entrypoint: runtime.crewai.modes.sequential:run
-required_params:
-  - agents
-  - tasks
-supports_streaming: event
-notes: "Default mode. Tasks run one after another."

@@ -1,4 +1,0 @@
-This is a dummy input document.
-It simulates an uploaded file that the agent might read or ignore.
-In this specific Blackboard test, the agents are playing Shirotori, so they might not use this content directly, 
-but the test runner must persist this file as an artifact.

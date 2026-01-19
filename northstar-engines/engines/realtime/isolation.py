@@ -159,6 +159,22 @@ def validate_routing(ctx: RequestContext, routing: RoutingKeys) -> None:
             detail=f"Routing mismatch: env '{routing.env}' != '{ctx.env}'"
         )
     
+    if not routing.project_id:
+        raise HTTPException(
+            status_code=403,
+            detail="Routing mismatch: project_id is required",
+        )
+    if not ctx.project_id:
+        raise HTTPException(
+            status_code=403,
+            detail="Context missing project_id",
+        )
+    if routing.project_id != ctx.project_id:
+        raise HTTPException(
+            status_code=403,
+            detail=f"Routing mismatch: project_id '{routing.project_id}' != '{ctx.project_id}'"
+        )
+    
     # Ideally verify more if context has user info
 
 

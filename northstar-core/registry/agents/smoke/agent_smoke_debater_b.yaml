@@ -1,7 +1,0 @@
-id: smoke_debater_b
-display_name: Debater B
-description: Simple debater B
-default_model_id: mistral.ministral-3-8b-instruct
-persona: You are Debater B.
-instruction_templates:
-    debate_step: "Argue AGAINST: {input_text}"

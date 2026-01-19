@@ -56,15 +56,11 @@ async def append_event(
     try:
         timeline_store = _default_timeline_store()
         
-        # Create event
+        # Create event with explicit routing/ids (contract-compliant)
         actor_id = req.user_id or context.user_id or "system"
         event = StreamEvent(
             event_id=str(uuid4()),
             type=req.type,
-            stream_id=stream_id,
-            content=req.content,
-            user_id=req.user_id,
-            metadata=req.metadata or {},
             routing=RoutingKeys(
                 tenant_id=context.tenant_id,
                 project_id=context.project_id,
@@ -73,6 +69,18 @@ async def append_event(
                 actor_id=actor_id,
                 actor_type=ActorType.HUMAN if (req.user_id or context.user_id) else ActorType.SYSTEM,
             ),
+            ids=EventIds(
+                request_id=context.request_id,
+                run_id=stream_id,
+                step_id=req.type,
+            ),
+            trace_id=context.request_id,
+            data={
+                "stream_id": stream_id,
+                "content": req.content,
+                "user_id": req.user_id,
+                "metadata": req.metadata or {},
+            },
         )
         
         # Append to timeline - this will raise ForbiddenBackendClass if filesystem + sellable mode
@@ -81,11 +89,11 @@ async def append_event(
         return {
             "event_id": event.event_id,
             "type": event.type,
-            "stream_id": event.stream_id,
+            "stream_id": stream_id,
             "timestamp": event.ts.isoformat() if event.ts else "",
-            "content": event.content,
-            "user_id": event.user_id,
-            "metadata": event.metadata,
+            "content": req.content,
+            "user_id": req.user_id,
+            "metadata": req.metadata,
         }
     
     except ForbiddenBackendClass as e:
@@ -123,11 +131,11 @@ async def list_events(
             {
                 "event_id": ev.event_id,
                 "type": ev.type,
-                "stream_id": ev.stream_id,
+                "stream_id": (ev.data or {}).get("stream_id") or stream_id,
                 "timestamp": ev.ts.isoformat() if ev.ts else "",
-                "content": ev.content,
-                "user_id": ev.user_id,
-                "metadata": ev.metadata,
+                "content": (ev.data or {}).get("content"),
+                "user_id": (ev.data or {}).get("user_id"),
+                "metadata": (ev.data or {}).get("metadata"),
             }
             for ev in events
         ]

@@ -1,8 +1,0 @@
-{
-  "framework": "crewai",
-  "mode_id": "sequential",
-  "status": "FAIL",
-  "model_id": "N/A",
-  "evidence_path": "docs/evidence/modes/20251220_174144/crewai/sequential",
-  "error": "run() missing 3 required positional arguments: 'inputs', 'blackboard', and 'emit'"
-}

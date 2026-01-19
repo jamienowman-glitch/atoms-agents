@@ -1,4 +1,0 @@
-element_name	category	base_atom_type	required_groups	optional_groups	allowed_children	tracking_needs	accessibility_notes	na_fields	sample_use_cases	mapping_notes
-Sample Button	web,email	button	content,color,typography,spacing,interaction,linking	border,effects,layout	None	click,conversion	role=button, label required	media	Buying a product	Shopify 'Buy Button'
-Hero Section	web	section	layout,color,spacing,size	effects,border	text,image,button	impression	role=region, label	interaction,linking	Landing page hero	Shopify 'Image with text overlay'
-Chat Bubble	dm	text	content,typography,color	linking,interaction	None	none	role=article	border,spacing,layout	AI response bubble	ManyChat text block

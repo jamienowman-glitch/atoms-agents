@@ -1,5 +1,0 @@
-backend_id	label	description
-native_canvas_orch	Native Canvas Orchestrator	In-house canvas PoC orchestrator for INTERPRETER_HUB_V1; used only for early tests.
-langgraph_canvas_orch	LangGraph Canvas Orchestrator	LangGraph-based implementation of INTERPRETER_HUB_V1.
-autogen_multi_chat	AutoGen Multi-Chat	AutoGen/AG2-style multi-agent chat backend for ROUND_TABLE_V1.
-langgraph_multi_chat	LangGraph Multi-Chat	LangGraph chat-graph backend for ROUND_TABLE_V1.

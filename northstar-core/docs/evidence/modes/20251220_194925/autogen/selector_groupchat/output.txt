@@ -1,1 +1,0 @@
-{'status': 'FAIL', 'reason': "'NoneType' object has no attribute 'chat'"}

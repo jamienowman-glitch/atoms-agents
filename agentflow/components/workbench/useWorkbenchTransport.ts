@@ -16,7 +16,7 @@ export function useWorkbenchTransport(canvasId: string, context: any) {
         }
         transport.current.connect(canvasId);
         return () => transport.current?.disconnect();
-    }, [canvasId]);
+    }, [canvasId, context]);
 
     return transport.current;
 }

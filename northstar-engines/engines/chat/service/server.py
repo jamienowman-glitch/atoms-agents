@@ -34,8 +34,17 @@ from engines.strategy_lock.routes import (
 )
 from engines.temperature.routes import router as temperature_router
 from engines.video_timeline.routes import router as video_timeline_router
-from engines.video_render.routes import router as video_render_router
-from engines.video_360 import routes as video_360_routes
+try:
+    from engines.video_render.routes import router as video_render_router
+except Exception:  # pragma: no cover - optional dependency
+    from fastapi import APIRouter
+    video_render_router = APIRouter()
+try:
+    from engines.video_360 import routes as video_360_routes
+except Exception:  # pragma: no cover - optional dependency
+    from types import SimpleNamespace
+    from fastapi import APIRouter
+    video_360_routes = SimpleNamespace(router=APIRouter())
 from engines.video_regions import routes as video_regions_routes
 from engines.audio_service.routes import router as audio_service_router
 from engines.video_mask import routes as video_mask_routes
@@ -58,7 +67,11 @@ from engines.memory.routes import router as memory_router
 from engines.kill_switch.routes import router as kill_switch_router
 from engines.knowledge.routes import router as knowledge_router
 from engines.ops.status import router as ops_status_router
-from engines.origin_snippets.routes import router as origin_snippets_router
+try:
+    from engines.origin_snippets.routes import router as origin_snippets_router
+except Exception:  # pragma: no cover - optional dependency
+    from fastapi import APIRouter
+    origin_snippets_router = APIRouter()
 from engines.persistence.routes import router as persistence_router
 from engines.routing.routes import router as routing_router
 from engines.config_store.routes import router as config_store_router

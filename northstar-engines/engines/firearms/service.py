@@ -7,7 +7,7 @@ from fastapi import HTTPException
 
 from engines.common.identity import RequestContext
 from engines.common.error_envelope import error_response
-from engines.firearms.models import Firearm, FirearmGrant, FirearmBinding, FirearmDecision
+from engines.firearms.models import Firearm, FirearmGrant, FirearmBinding, FirearmDecision, LicenceStatus
 from engines.firearms.repository import FirearmsRepository, get_firearms_repo
 from engines.logging.audit import emit_audit_event
 
@@ -111,7 +111,21 @@ class FirearmsService:
 
     def list_licences(self, ctx: RequestContext, status: Optional[str] = None, agent_id: Optional[str] = None, user_id: Optional[str] = None) -> List[FirearmGrant]:
         """Legacy alias for list_grants to preserve callers."""
-        return self.list_grants(ctx, agent_id=agent_id, user_id=user_id)
+        grants = self.list_grants(ctx, agent_id=agent_id, user_id=user_id)
+        if not status:
+            return grants
+        now = datetime.now(timezone.utc)
+        norm = str(status).lower()
+        filtered: List[FirearmGrant] = []
+        for grant in grants:
+            expired = grant.expires_at is not None and grant.expires_at <= now
+            if norm == LicenceStatus.active.value and (not expired) and not grant.revoked:
+                filtered.append(grant)
+            elif norm == LicenceStatus.expired.value and expired:
+                filtered.append(grant)
+            elif norm == LicenceStatus.revoked.value and grant.revoked:
+                filtered.append(grant)
+        return filtered
 
 
 _default_service: Optional[FirearmsService] = None

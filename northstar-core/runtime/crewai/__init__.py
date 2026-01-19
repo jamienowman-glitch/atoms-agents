@@ -1,3 +1,0 @@
-from .adapter import CrewAIAdapter
-
-__all__ = ["CrewAIAdapter"]

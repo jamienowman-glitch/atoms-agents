@@ -12,7 +12,7 @@ from fastapi.responses import StreamingResponse
 from engines.chat.store_service import chat_store_or_503
 from engines.canvas_stream.service import subscribe_canvas
 from engines.common.error_envelope import error_response, cursor_invalid_error
-from engines.common.identity import RequestContext, get_request_context
+from engines.common.identity import RequestContext, assert_context_matches, get_request_context
 from engines.identity.auth import AuthContext, get_auth_context, get_optional_auth_context
 from engines.identity.ticket_service import TicketError, context_from_ticket
 from engines.realtime.contracts import (
@@ -20,9 +20,13 @@ from engines.realtime.contracts import (
     EventIds,
     EventMeta,
     EventPriority,
+    AtomMetadataPayload,
+    SpatialUpdatePayload,
     PersistPolicy,
     RoutingKeys,
     StreamEvent,
+    build_atom_metadata_event,
+    build_spatial_update_event,
 )
 from engines.realtime.isolation import verify_canvas_access
 
@@ -94,6 +98,55 @@ async def _canvas_stream_with_resume(
         yield chunk
 
 
+def _require_identity_header(value: Optional[str], header_name: str, code: str) -> None:
+    if not value:
+        error_response(
+            code=code,
+            message=f"{header_name} header is required",
+            status_code=400,
+            resource_kind="canvas",
+        )
+
+
+def _enforce_canvas_identity(
+    ctx: RequestContext,
+    header_mode: Optional[str],
+    header_project: Optional[str],
+    header_app: Optional[str],
+    query_tenant: Optional[str],
+    query_project: Optional[str],
+    query_surface: Optional[str],
+    query_app: Optional[str],
+) -> None:
+    _require_identity_header(header_mode, "X-Mode", "auth.mode_missing")
+    _require_identity_header(header_project, "X-Project-Id", "auth.project_missing")
+    _require_identity_header(header_app, "X-App-Id", "auth.app_missing")
+    try:
+        assert_context_matches(
+            ctx,
+            tenant_id=query_tenant,
+            mode=header_mode,
+            project_id=query_project,
+            surface_id=query_surface,
+            app_id=query_app,
+        )
+    except HTTPException as exc:
+        error_response(
+            code="auth.context_mismatch",
+            message=str(exc.detail),
+            status_code=exc.status_code,
+            resource_kind="canvas",
+            details={
+                "provided": {
+                    "tenant_id": query_tenant,
+                    "project_id": query_project,
+                    "surface_id": query_surface,
+                    "app_id": query_app,
+                },
+            },
+        )
+
+
 async def _canvas_context(
     request: Request,
     ticket: Optional[str] = Query(default=None, alias="ticket"),
@@ -124,7 +177,10 @@ async def _canvas_context(
                 resource_kind="canvas",
             )
 
-    return await get_request_context(
+    _require_identity_header(header_mode, "X-Mode", "auth.mode_missing")
+    _require_identity_header(header_project, "X-Project-Id", "auth.project_missing")
+    _require_identity_header(header_app, "X-App-Id", "auth.app_missing")
+    ctx = await get_request_context(
         request,
         header_tenant=header_tenant,
         header_mode=header_mode,
@@ -142,6 +198,17 @@ async def _canvas_context(
         query_app=query_app,
         query_user=query_user,
     )
+    _enforce_canvas_identity(
+        ctx,
+        header_mode,
+        header_project,
+        header_app,
+        query_tenant,
+        query_project,
+        query_surface,
+        query_app,
+    )
+    return ctx
 
 
 async def event_stream(
@@ -169,31 +236,63 @@ async def event_stream(
         if not kind and {"action", "result", "gate"}.issubset(content.keys()):
             kind = "SAFETY_DECISION"
         kind = kind or "canvas_commit"
-        
-        # Build strict StreamEvent
-        event = StreamEvent(
-            type=kind,
-            ts=msg.created_at,
-            event_id=msg.id,
-            routing=RoutingKeys(
-                tenant_id=request_context.tenant_id,
-                env=request_context.env, # type: ignore
-                mode=request_context.mode,
-                project_id=request_context.project_id,
-                app_id=request_context.app_id,
-                surface_id=request_context.surface_id,
-                canvas_id=canvas_id,
-                actor_id=msg.sender.id,
-                # Assume human for now, or infer from sender ID prefix
-                actor_type=ActorType.AGENT if msg.sender.id.startswith("agent-") else ActorType.HUMAN
-            ),
-            data=content,
-            meta=EventMeta(
-                # If gesture, ephemeral?
-                priority=EventPriority.GESTURE if "gesture" in kind else EventPriority.TRUTH,
-                persist=PersistPolicy.NEVER if "gesture" in kind else PersistPolicy.ALWAYS
-            )
+        canonical_kind = str(kind).upper()
+
+        routing = RoutingKeys(
+            tenant_id=request_context.tenant_id,
+            env=request_context.env, # type: ignore
+            mode=request_context.mode,
+            project_id=request_context.project_id,
+            app_id=request_context.app_id,
+            surface_id=request_context.surface_id,
+            canvas_id=canvas_id,
+            actor_id=msg.sender.id,
+            # Assume human for now, or infer from sender ID prefix
+            actor_type=ActorType.AGENT if msg.sender.id.startswith("agent-") else ActorType.HUMAN
         )
+        ids = EventIds(
+            request_id=request_context.request_id,
+            run_id=canvas_id,
+            step_id=canonical_kind.lower(),
+        )
+
+        if canonical_kind == "SPATIAL_UPDATE":
+            payload = SpatialUpdatePayload(**content)
+            event = build_spatial_update_event(
+                payload=payload,
+                routing=routing,
+                ids=ids,
+                trace_id=request_context.request_id,
+                event_id=msg.id,
+                ts=msg.created_at,
+            )
+        elif canonical_kind in {"ATOM_METADATA", "ATOM_META", "ATOM_UPDATE"}:
+            payload = AtomMetadataPayload(**content)
+            event = build_atom_metadata_event(
+                payload=payload,
+                routing=routing,
+                ids=ids,
+                trace_id=request_context.request_id,
+                event_id=msg.id,
+                ts=msg.created_at,
+            )
+            event.type = "ATOM_UPDATE" if canonical_kind == "ATOM_UPDATE" else "ATOM_METADATA"
+        else:
+            priority = EventPriority.GESTURE if "GESTURE" in canonical_kind else EventPriority.TRUTH
+            persist = PersistPolicy.NEVER if priority == EventPriority.GESTURE else PersistPolicy.ALWAYS
+            event = StreamEvent(
+                type=kind,
+                ts=msg.created_at,
+                event_id=msg.id,
+                routing=routing,
+                ids=ids,
+                trace_id=request_context.request_id,
+                data=content,
+                meta=EventMeta(
+                    priority=priority,
+                    persist=persist
+                )
+            )
 
         yield _format_sse_event(event)
         await asyncio.sleep(0)

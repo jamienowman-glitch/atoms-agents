@@ -1,7 +1,0 @@
-task_id	lane	description	acceptance_criteria
-T_ATOM_01	Framework	Formalize `schema.ts` vs `default.ts`.	All existing atoms must export `DEFAULTS` from `default.ts` (migrate from `schema.ts` default values if mixed).
-T_ATOM_02	Inspector	Implement Schema Constraints support.	Inspector `TokenEditor` reads `options: []` from schema for Dropdowns.
-T_ATOM_03	Inspector	Connect Font/Shadow Registry.	Inspector injects global options (Fonts) into relevant token controls.
-T_ATOM_04	Persistence	Implement Local Storage / API Save.	Replace "Export JSON" with `PUT /atoms/{id}` (to local FS or API).
-T_ATOM_05	Atoms	Migrate `cta_button` to Standard.	Ensure `cta_button` strictly follows `ATOM_DEFINITION_STANDARD.md`.
-T_ATOM_06	Atoms	Migrate `hero_banner` to Standard.	Ensure `hero_banner` strictly follows `ATOM_DEFINITION_STANDARD.md`.

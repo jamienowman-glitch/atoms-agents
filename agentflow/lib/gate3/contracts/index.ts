@@ -139,4 +139,41 @@ export interface SafetyDecisionEvent {
     };
 }
 
-export type StreamEvent = GestureEvent | OpCommittedEvent | SystemEvent | SafetyDecisionEvent;
+export interface MediaSidecar {
+    uri?: string;
+    object_id?: string;
+    artifact_id?: string;
+    mime_type?: string;
+    size_bytes?: number;
+    checksum?: string;
+    metadata?: Record<string, unknown>;
+}
+
+export interface MediaPayload {
+    sidecars: MediaSidecar[];
+    caption?: string;
+}
+
+export interface AtomMetadataPayload {
+    atom_id: AtomId;
+    atom_revision?: string | number;
+    atom_metadata?: Record<string, unknown>;
+    media_payload?: MediaPayload;
+    surface_id?: string;
+    canvas_id?: string;
+    projection_id?: string;
+    panel_id?: string;
+}
+
+export interface StreamEnvelopeBase {
+    type: string;
+    atom_metadata?: Record<string, unknown>;
+    media_payload?: MediaPayload;
+    [key: string]: unknown;
+}
+
+export type StreamEvent =
+    | (GestureEvent & StreamEnvelopeBase)
+    | (OpCommittedEvent & StreamEnvelopeBase)
+    | (SystemEvent & StreamEnvelopeBase)
+    | (SafetyDecisionEvent & StreamEnvelopeBase);

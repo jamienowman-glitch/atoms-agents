@@ -1,8 +1,0 @@
-{
-  "framework": "autogen",
-  "mode_id": "stub_control",
-  "status": "FAIL",
-  "model_id": "N/A",
-  "evidence_path": "docs/evidence/modes/20251220_195002/autogen/stub_control",
-  "error": "This is a control stub designed to fail."
-}

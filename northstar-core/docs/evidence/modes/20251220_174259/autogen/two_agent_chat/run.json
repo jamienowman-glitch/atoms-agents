@@ -1,8 +1,0 @@
-{
-  "framework": "autogen",
-  "mode_id": "two_agent_chat",
-  "status": "FAIL",
-  "model_id": "N/A",
-  "evidence_path": "docs/evidence/modes/20251220_174259/autogen/two_agent_chat",
-  "error": "not enough values to unpack (expected 2, got 1)"
-}

@@ -1,3 +1,0 @@
-pattern_id	label	description
-INTERPRETER_HUB_V1	Interpreter Hub V1	Canvas interpreter hub + specialists for atomic patches.
-ROUND_TABLE_V1	Round Table V1	Host + specialists multi-agent round-table for chat; up to N agents respond per round.

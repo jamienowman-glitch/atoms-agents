@@ -1,8 +1,0 @@
-{
-  "framework": "bedrock",
-  "mode_id": "action_groups",
-  "status": "FAIL",
-  "model_id": "N/A",
-  "evidence_path": "docs/evidence/modes/20251220_195926/bedrock/action_groups",
-  "error": "not enough values to unpack (expected 2, got 1)"
-}

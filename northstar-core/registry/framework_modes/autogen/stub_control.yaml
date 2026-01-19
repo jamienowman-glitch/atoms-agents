@@ -1,7 +1,0 @@
-framework: autogen
-mode_id: stub_control
-pinned_version_ref: integration/autogen/PINNED_VERSION.md
-invoke_entrypoint: runtime.autogen.modes.stub_control:run
-required_params: []
-supports_streaming: none
-notes: "Mode designed to fail loudly for smoke verification."

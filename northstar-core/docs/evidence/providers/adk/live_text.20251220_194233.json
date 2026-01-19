@@ -1,7 +1,0 @@
-{
-  "timestamp": "2025-12-20T19:42:47.750821",
-  "modelId": "gemini-2.5-flash",
-  "input": "Hello",
-  "output": "Hello! How can I assist you today?",
-  "usage": "prompt_token_count: 1\ncandidates_token_count: 9\ntotal_token_count: 196\nprompt_tokens_details {\n  modality: TEXT\n  token_count: 1\n}\ncandidates_tokens_details {\n  modality: TEXT\n  token_count: 9\n}\nthoughts_token_count: 186\n"
-}

@@ -1,8 +1,0 @@
-{
-  "framework": "autogen",
-  "mode_id": "handoff_swarm",
-  "status": "FAIL",
-  "model_id": "N/A",
-  "evidence_path": "docs/evidence/modes/20251220_191305/autogen/handoff_swarm",
-  "error": "name 'resolve_bedrock_model' is not defined"
-}

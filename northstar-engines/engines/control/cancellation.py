@@ -53,6 +53,7 @@ async def cancel_run(
         routing=RoutingKeys(
             tenant_id=owner_tenant,
             env=request_context.env,
+            project_id=request_context.project_id,
             thread_id=thread_id,
             actor_id=auth_context.user_id,
             actor_type=ActorType.HUMAN

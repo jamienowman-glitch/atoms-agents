@@ -1,8 +1,0 @@
-{
-  "framework": "crewai",
-  "mode_id": "hierarchical",
-  "status": "FAIL",
-  "model_id": "N/A",
-  "evidence_path": "docs/evidence/modes/20251220_191658/crewai/hierarchical",
-  "error": "name 'BedrockGateway' is not defined"
-}

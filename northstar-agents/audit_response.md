@@ -1,87 +1,60 @@
 # Audit Response: Agents Repo (Northstar-Agents)
 
-## Commentary on Reality
-The "Tri-Repo Audit" accurately identifies the current gap in `northstar-agents`.
-1.  **Disconnected Brain**: While we have an `EnginesBoundaryClient` that *can* listen to SSE (`canvas_commit` events exist in tests), the actual `NodeExecutor` does **not** currently use it. The Agent is "blind" to the live canvas state.
-2.  **GraphLens Solution**: The **GraphLens Refactor** (specifically `TokenLens` / `TokenMapCard`) provides the exact mechanism to solve "Agent-Canvas Awareness". We can uses `TokenMap` to declare *which* parts of the Canvas State an Agent needs to see.
-3.  **Event Schema Mismatch**: Our internal `AuditEvent` (`src/northstar/runtime/audit/events.py`) has `node_id` and `surface_id`, but lacks `canvasType` and `pii_stripped`. We need to harmonize this if we want to use the same envelope for internal audit and external Spine communication.
+## 1. Local Agent Commentary
+The "Tri-Repo Audit" results align perfectly with my local analysis of `northstar-agents`.
+*   **Disconnected Brain CONFIRMED**: The `NodeExecutor` is currently purely blackboard-driven and blind to the Real-Time Canvas State.
+*   **GraphLens Solution**: The `TokenMapCard` and `ComponentRunner` (Phase 3) are ready to receive the "Canvas Mirror" logic once the specific Transport Protocols are defined.
+*   **Event Schema**: I acknowledge the gap in `AuditEvent` fields (`canvas_type`, `pii_stripped`) vs the Engine's `StreamEvent`.
 
-## The Repo Task Manifest: Agents
+## 2. Global Tri-Repo Audit Findings (The "Spine-Sync")
 
-#### **REPO 2: AGENTS (THE BRAINS)**
+**Status**: audit_complete
+**Scope**: Engines, Agents, Surface (`agentflow`)
 
-* [ ] **Implement Spine Listener in Runtime**: Update `NodeExecutor` to initialize `EnginesBoundaryClient` and subscribe to the `canvas_stream` for the active session.
-* [ ] **Harmonize Event Schema**: Update `AuditEvent` (or create `SpineEvent`) to include `canvas_type` and `pii_stripped` fields to match the Engine's Event Envelope.
-* [ ] **Implement Canvas State Injection**: Create a middleware (using the new `ContextLens` or `TokenLens` logic) that injects the latest subscribed Canvas State into the Agent's system prompt (The "Real-Time Mirror").
-* [ ] **Handle Spatial Updates**: Add a specific handler/token for `SPATIAL_UPDATE` events so "Layout Agents" can react to human resizing even if the text content hasn't changed.
+### Protocol Audit
+*   **Chat WebSocket**: `/ws/chat/{thread_id}` (Auth enforced).
+*   **Chat SSE**: `/sse/chat/{thread_id}` (Legacy/Parallel?).
+*   **Canvas SSE**: `/sse/canvas/{canvas_id}` ( Wraps bus messages in `StreamEvent`).
+*   **Surface Gap**: `agentflow` (formerly `ui`/`atoms-factory`) uses `EventSource` without headers (Auth Fail) and expects different event snapshot types.
+*   **Gesture Transport**: UI expects `/msg/ws` for gestures; Engines only have `/ws/chat`.
+
+### Event Envelope & Schema Gaps
+*   **Engines**: `StreamEvent` (realtime) vs `SpineEvent` (storage). Missing `nodeId`, `canvasType`.
+*   **Agents**: `AuditEvent` mirrors scope but lacks `pii_stripped`, `canvas_type`.
+*   **UI**: Expects `op_committed` / `gesture` formats.
+*   **Consolidation Needed**: We need a unified `SpinePayload` that all three repos agree on.
+
+### Spatial Awareness (The "DOM-Unit")
+*   **Critical Gap**: No `ResizeObserver` or `SPATIAL_UPDATE` event exists in the pipeline.
+*   **Impact**: Agents cannot see if a user manually resizes an element.
 
 ---
 
-# CONTEXT: Operation "Spine-Sync"
+## 3. The Repo Task Manifest (Consolidated)
 
-> **Mission**: We are moving from "UI Building" to **"Engine Integration"**.
+### **REPO 1: ENGINES (THE SPINE)**
+*   [ ] Extend `StreamEvent` (or define `SpinePayload`) to include `node_id`, `canvas_type`, `pii_stripped`.
+*   [ ] align `StreamEvent` (Realtime) and `SpineEvent` (Storage).
+*   [ ] Define `SPATIAL_UPDATE` command/event schema.
+*   [ ] Review Tenant-Scoped connection keys to prevent collisions.
 
-You are referencing the **Event Envelope** and the **Spine**—the core orchestration layer in Engines that handles the state of the world. To make this "Real," the Agents need to see the Canvas not just as a React component, but as a **Node in the Graph**.
+### **REPO 2: AGENTS (THE BRAINS)**
+*   [ ] **Implement Spine Listener**: Create `CanvasMirror` in `NodeExecutor` to subscribe to `/sse/canvas/{id}`.
+*   [ ] **Inject State**: Use `TokenMap` lenses to inject subscribed canvas state into the System Prompt.
+*   [ ] **Harmonize Events**: Update `AuditEvent` to match the new `SpinePayload` fields.
+*   [ ] **Handle Spatial**: Add runtime handler for `SPATIAL_UPDATE` events.
 
-Here is the **Diagnostic & Strategy Prompt** for your Repo-Connected Agent. This is designed to act as a "Consultant" that audits **Engines**, **Agents**, and **AtomsFam** to find the gaps.
+### **REPO 3: ATOMSFAM / AGENTFLOW (THE SURFACE)**
+*   [ ] **Fix Transport**: Replace `EventSource` with Authenticated Fetch/SSE or `CanvasTransport`.
+*   [ ] **Align Payloads**: Update Workbench commands to match `CommandEnvelope`.
+*   [ ] **Implement DOM Unit**: Add `ResizeObserver` hooks to emit `SPATIAL_UPDATE`.
+*   [ ] **Map Gestures**: Route gestures through the canonical Canvas Kernel.
 
-## 🧠 PROMPT: THE TRI-REPO INTEGRATION AUDIT (SPINE-SYNC)
+---
 
-**Role:** Full-Stack Systems Architect & Engine Specialist.
-**Objective:** Audit the relationship between **Engines** (The Spine), **Agents** (The Brains), and **AtomsFam** (The Surface) to finalize the Real-Time Event loop.
-
-### 🔍 THE AUDIT CHECKLIST
-
-#### 1. The Socket/SSE Split (Protocol Audit)
-
-* **Engines:** Identify the existing WebSocket implementation for **Chat**. Is it a dedicated `/chat` socket? Does it support multi-tenant sessions?
-* **AtomsFam:** Locate where we currenty use SSE (Server-Sent Events).
-* **Mission:** Confirm the logic for:
-* **Chat (Websocket):** Bi-directional, sub-100ms for "Lead-the-Dance" chat.
-* **Canvas State (SSE/Spine):** One-way or low-frequency updates for UI syncing.
-
-#### 2. The Event Envelope (Spine Audit)
-
-* **Engines:** Look for the `EventEnvelope` or `SpinePayload` schema.
-* **Requirement:** Does the envelope include:
-* `nodeId`: Which part of the flow are we in?
-* `canvasType`: Which UI should be mounted?
-* `payload`: The actual data (e.g., text, colors, video timestamps).
-* `pii_stripped`: A boolean flag confirming PrivacyLens has processed the data.
-
-#### 3. The "DOM-Unit" (Spatial Awareness)
-
-* **AtomsFam:** Locate the prototype logic for the **DOM-Measurement Unit**.
-* **Requirement:** How do we send the "Size" of an Atom back to the Agent?
-* **Mission:** Ensure that when a human resizes an element on the Canvas, the **Spine** receives a `SPATIAL_UPDATE` event so the Agent knows the "Box" has changed.
-
-#### 4. Agent-Canvas Awareness (Memory Audit)
-
-* **Agents:** Check the current "Memory" implementation.
-* **Problem:** Do the Agents see the "Canvas State" as part of their context, or is it hidden from them?
-* **Mission:** Establish the "Real-Time Mirror"—where the Agent's internal representation of the blog post/video matches exactly what is rendered in the user's browser.
-
-### 📝 REQUIRED OUTPUT: THE REPO TASK MANIFEST
-
-After the audit, you must provide a **Markdown Table** of specific tasks per repo:
-
-#### **REPO 1: ENGINES (THE SPINE)**
-
-* [ ] (Example: Update `EventEnvelope.ts` to include `canvas_manifest`.)
-* [ ] (Example: Finalize WebSocket route for `AgentFax` Chat.)
-
-#### **REPO 2: AGENTS (THE BRAINS)**
-
-* [ ] (Example: Inject `current_canvas_state` into the Agent's system prompt.)
-* [ ] (Example: Add handler for `USER_UI_INTERACTION` events.)
-
-#### **REPO 3: ATOMSFAM (THE SURFACE)**
-
-* [ ] (Example: Wrap the Canvas in a `SpineProvider` that listens to the WebSocket.)
-* [ ] (Example: Implement the DOM-Measurement hook for all Atoms.)
-
-### 🛑 GUARDRAILS
-
-* **NO CODE CHANGES:** This is an audit and strategy phase only.
-* **FOLLOW THE SPINE:** Do not invent new communication channels. If a channel exists in the Spine, use it.
-* **UI IS SECONDARY:** Treat the UI as a "Read/Write Head" for the Engine.
+## 4. Plan & Status
+**Current State**: `WAITING_FOR_DECISION`
+**Plan**:
+1.  **Hold** on Phase 4 (Integration/Wireframe Builder).
+2.  **Hold** on implementing the Agent-side listeners until the `SpinePayload` schema is finalized in Engines.
+3.  **Ready** to implement the Agents Task Manifest as soon as the signal is given.

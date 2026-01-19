@@ -1,8 +1,0 @@
-{
-  "framework": "autogen",
-  "mode_id": "handoff_swarm",
-  "status": "FAIL",
-  "model_id": "global.amazon.nova-2-lite-v1:0",
-  "evidence_path": "docs/evidence/modes/20251220_184317/autogen/handoff_swarm",
-  "error": "Expected 'alive' not found in output."
-}

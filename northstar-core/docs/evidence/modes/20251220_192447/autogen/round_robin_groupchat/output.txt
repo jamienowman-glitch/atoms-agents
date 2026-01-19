@@ -1,1 +1,0 @@
-{'status': 'PASS', 'final_output': "ACK\nHello, I'm alive and ready to assist. How can I help you today?", 'steps': [{'agent_id': 'agent_smoke', 'text': "ACK\nHello, I'm alive and ready to assist. How can I help you today?"}]}

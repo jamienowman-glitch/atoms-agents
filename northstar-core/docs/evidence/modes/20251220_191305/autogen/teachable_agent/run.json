@@ -1,8 +1,0 @@
-{
-  "framework": "autogen",
-  "mode_id": "teachable_agent",
-  "status": "FAIL",
-  "model_id": "N/A",
-  "evidence_path": "docs/evidence/modes/20251220_191305/autogen/teachable_agent",
-  "error": "not enough values to unpack (expected 2, got 1)"
-}

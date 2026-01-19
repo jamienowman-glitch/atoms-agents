@@ -1,8 +1,0 @@
-{
-  "framework": "crewai",
-  "mode_id": "sequential",
-  "status": "FAIL",
-  "model_id": "global.amazon.nova-2-lite-v1:0",
-  "evidence_path": "docs/evidence/modes/20251220_184317/crewai/sequential",
-  "error": "1 validation error for Agent\nrole\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.11/v/string_type"
-}

@@ -1,8 +1,0 @@
-{
-  "framework": "bedrock",
-  "mode_id": "token_stream_converse",
-  "status": "FAIL",
-  "model_id": "N/A",
-  "evidence_path": "docs/evidence/modes/20251220_191305/bedrock/token_stream_converse",
-  "error": "name 'resolve_bedrock_model' is not defined"
-}

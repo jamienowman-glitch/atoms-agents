@@ -1,7 +1,0 @@
-repo	area	task_id	priority	title	description	dependencies	files_or_modules	tests	acceptance_criteria	status
-atoms_factory	ui	AF-CORE-001	P0	Selection Plumbing	Implement/Verify useSelection hook connects Canvas click to Inspector	-	apps/workbench/src/hooks/useSelection.ts	-	Clicking element fills Inspector	DONE
-atoms_factory	ui	AF-CORE-002	P0	Control Factory	Implement Schema-to-Widget factory based on CONTROL_TYPE_MAPPING	-	apps/workbench/src/inspector/ControlFactory.tsx	test_control_factory.tsx	Bool renders Toggle, Number renders Slider	DONE
-atoms_factory	atom	AF-ATOM-001	P0	Multi-21 Scaffold	Create fresh Multi-21 atom structure	-	atoms/aitom_family/multi21/*	-	Files exist, no legacy code	DONE
-atoms_factory	ui	AF-FEED-001	P0	Feed Picker	Implement Feed Selector component fetching from Engines	AF-CORE-002	apps/workbench/src/components/FeedPicker.tsx	-	Dropdown lists feeds from API	DONE
-atoms_factory	ui	AF-FEED-002	P0	Create Feed Flow	Modal to create new feed (YouTube/Shopify)	AF-FEED-001	apps/workbench/src/components/CreateFeedModal.tsx	-	Can create generic feed	DONE
-atoms_factory	test	AF-TEST-001	P1	Mobile Smoke Test	Playwright test for end-to-end add/edit flow	-	e2e/mobile_builder.spec.ts	-	Passes in CI	DONE

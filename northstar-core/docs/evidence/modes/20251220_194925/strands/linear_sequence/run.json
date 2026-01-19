@@ -1,8 +1,0 @@
-{
-  "framework": "strands",
-  "mode_id": "linear_sequence",
-  "status": "FAIL",
-  "model_id": "N/A",
-  "evidence_path": "docs/evidence/modes/20251220_194925/strands/linear_sequence",
-  "error": "not enough values to unpack (expected 2, got 1)"
-}

@@ -23,6 +23,12 @@ class Firearm(BaseModel):
     created_at: datetime = Field(default_factory=_now)
 
 
+class LicenceStatus(str, Enum):
+    active = "active"
+    expired = "expired"
+    revoked = "revoked"
+
+
 class FirearmGrant(BaseModel):
     """
     Assignment of a Firearm to an actor within a scope.

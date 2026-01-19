@@ -1,1 +1,0 @@
-{'status': 'FAIL', 'reason': "'BedrockResponse' object has no attribute 'model_id'"}

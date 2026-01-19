@@ -1,7 +1,0 @@
-display_name: Content Runner
-filename: content_runner.yaml
-framework: crewai
-manifest: Post content on Shopify
-persona: The Content Runner receives the optimized content and schedules it for publication
-  on Shopify.
-role: Content Runner

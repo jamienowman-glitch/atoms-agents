@@ -19,9 +19,9 @@ def clean_registry():
     yield
 
 def test_validate_routing_happy():
-    ctx = RequestContext(tenant_id="t_1", env="dev")
+    ctx = RequestContext(tenant_id="t_1", env="dev", project_id="p_demo")
     routing = RoutingKeys(
-        tenant_id="t_1", env="dev", actor_id="u1", actor_type=ActorType.HUMAN
+        tenant_id="t_1", env="dev", project_id="p_demo", actor_id="u1", actor_type=ActorType.HUMAN
     )
     # Should not raise
     validate_routing(ctx, routing)
@@ -32,14 +32,22 @@ def test_validate_routing_mismatch():
     # Tenant mismatch
     with pytest.raises(HTTPException) as exc:
         validate_routing(ctx, RoutingKeys(
-            tenant_id="t_2", env="dev", actor_id="u1", actor_type=ActorType.HUMAN
+            tenant_id="t_2", env="dev", project_id="p_demo", actor_id="u1", actor_type=ActorType.HUMAN
+        ))
+    assert exc.value.status_code == 403
+
+def test_validate_routing_project_mismatch():
+    ctx = RequestContext(tenant_id="t_1", env="dev", project_id="p_a")
+    with pytest.raises(HTTPException) as exc:
+        validate_routing(ctx, RoutingKeys(
+            tenant_id="t_1", env="dev", project_id="p_b", actor_id="u1", actor_type=ActorType.HUMAN
         ))
     assert exc.value.status_code == 403
     
     # Env mismatch
     with pytest.raises(HTTPException) as exc:
         validate_routing(ctx, RoutingKeys(
-            tenant_id="t_1", env="prod", actor_id="u1", actor_type=ActorType.HUMAN
+            tenant_id="t_1", env="prod", project_id="p_demo", actor_id="u1", actor_type=ActorType.HUMAN
         ))
     assert exc.value.status_code == 403
 

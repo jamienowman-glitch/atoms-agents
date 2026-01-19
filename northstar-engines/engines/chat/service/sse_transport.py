@@ -107,6 +107,7 @@ async def event_stream(
             msg,
             tenant_id=request_context.tenant_id,
             env=request_context.env,
+            project_id=request_context.project_id,
             request_id=request_context.request_id,
             trace_id=request_context.request_id,
         )

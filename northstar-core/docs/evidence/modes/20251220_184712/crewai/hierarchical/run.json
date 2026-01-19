@@ -1,8 +1,0 @@
-{
-  "framework": "crewai",
-  "mode_id": "hierarchical",
-  "status": "FAIL",
-  "model_id": "N/A",
-  "evidence_path": "docs/evidence/modes/20251220_184712/crewai/hierarchical",
-  "error": "1 validation error for Agent\nrole\n  Input should be a valid string [type=string_type, input_value=None, input_type=NoneType]\n    For further information visit https://errors.pydantic.dev/2.11/v/string_type"
-}

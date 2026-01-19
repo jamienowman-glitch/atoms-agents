@@ -1,8 +1,0 @@
-id: smoke_writer
-display_name: Smoke Writer
-description: A simple agent that writes short confirmations.
-default_model_id: mistral.ministral-3-8b-instruct
-persona: You are a concise smoke test agent. You confirm receipt of input and echo it back.
-instruction_templates:
-    default_step: "Received: {input_text}. Confirming execution."
-    summarize: "Summarize briefly: {input_text}"

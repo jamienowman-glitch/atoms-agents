@@ -81,27 +81,33 @@
   - Acceptance: every tool/LLM call emits audit/usage with envelope handling; no silent drops; tests cover 503 missing-route behavior.  
   - Tests: integration mocks asserting payloads and error propagation.
 
-## /ui
+## /agentflow
 
-- **UI-REPLAY-01 (Canvas Replay & 410 Handling)**  
-  - Files: `packages/transport/src/index.ts`, `packages/builder-core/src/index.ts`, `packages/canvas-kernel/src/index.ts`.  
-  - Endpoints: `GET /canvas/{id}/snapshot`, `GET /canvas/{id}/replay?cursor=`, `GET /sse/canvas/{id}`, `POST /canvas/{id}/commands`.  
-  - resource_kind: consumes `canvas_command_store` + `event_stream`.  
-  - Acceptance: on load, fetch snapshot then replay gap (no reliance on localStorage as truth); 410 triggers re-snapshot + replay; cursors persisted from server responses; pending ops rebase on recovery_ops.  
-  - Tests: transport unit tests for 410 handling; builder-core integration replaying after simulated restart.
+- **AF-SENSOR-01 (Spatial + Content Observers)**  
+  - Files: `docs/atom_flow/templates/_GenericAtom.tsx`, atom implementations under `components/*/atoms/*.tsx`.  
+  - Endpoints: emits `SPATIAL_UPDATE` + `ATOM_UPDATE` via surface transport.  
+  - resource_kind: consumes `event_stream`.  
+  - Acceptance: `broadcast` prop controls `spatial`/`content` reporting; ResizeObserver reports x/y/z/w/h; ContentObserver reports semantic changes with `atom_metadata`.  
+  - Tests: unit test for observer toggle and payload shape; integration test to verify events emitted on resize/prop change.
 
-- **UI-UX-01 (Safety/Error Envelope Surfacing)**  
-  - Files: `packages/transport/src/index.ts`, `packages/builder-core/src/index.ts`, `packages/projections/src/index.tsx`.  
-  - Endpoints: all Engines calls.  
-  - resource_kind: consumes envelope.  
-  - Acceptance: render gate (firearms/strategy_lock/budget) from envelope; block optimistic ops on BLOCK; show last safety decision per stream.  
-  - Tests: UI unit tests for envelope parsing; e2e stub verifying block UX.
+- **AF-CAPTURE-01 (CaptureUnit + Sampler)**  
+  - Files: `lib/capture/*` (new), surface transport layer for uploads.  
+  - Endpoints: emits `media_payload` sidecar refs on `StreamEvent`.  
+  - resource_kind: consumes `object_store` + `event_stream`.  
+  - Acceptance: capture `viewport`, `canvas_root`, or `atom_id`; optional sampler interval; emits `image_url`/`blob_ref` instead of raw bytes.  
+  - Tests: mock capture targets + sampler cadence, verify envelope payloads.
 
-- **UI-CONFIG-01 (Config Toggle Consumption)**  
-  - Files: `packages/transport/src/index.ts`, `packages/builder-core/src/index.ts`.  
-  - Endpoints: `GET /config/{scope}`.  
-  - resource_kind: `config_store`.  
-  - Acceptance: builder reads `tool_canvas_mode` (and other toggles) from config_store; no hardcoded defaults in production modes; handles 503 gracefully.  
-  - Tests: transport mock tests for config fetch + fallback messaging.
+- **AF-AUDIO-01 (AudioStream Hook)**  
+  - Files: surface audio capture hook (new) plus transport integration.  
+  - Endpoints: emits audio chunk refs via `StreamEvent`.  
+  - resource_kind: consumes `object_store` + `event_stream`.  
+  - Acceptance: supports real-time chunking to Spine; optional direct model ingestion.  
+  - Tests: chunking cadence + upload path; envelope payload validation.
+
+- **AF-SESSION-01 (Session Isolation for Surfaces)**  
+  - Files: surface components (ChatRail, TopPill) under `components/*`.  
+  - Endpoints: all surface events scoped by `project_id`.  
+  - resource_kind: consumes `event_stream`.  
+  - Acceptance: `project_id` required for initialization; surface events rejected if missing.
 
 > All tasks: no in-memory/filesystem defaults in saas/enterprise; missing routes must fail with 503 envelope.

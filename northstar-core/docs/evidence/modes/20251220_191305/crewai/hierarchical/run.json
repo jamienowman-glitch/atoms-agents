@@ -1,8 +1,0 @@
-{
-  "framework": "crewai",
-  "mode_id": "hierarchical",
-  "status": "FAIL",
-  "model_id": "N/A",
-  "evidence_path": "docs/evidence/modes/20251220_191305/crewai/hierarchical",
-  "error": "name 'resolve_bedrock_model' is not defined"
-}

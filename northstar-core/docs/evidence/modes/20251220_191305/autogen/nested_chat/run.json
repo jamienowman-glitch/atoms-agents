@@ -1,8 +1,0 @@
-{
-  "framework": "autogen",
-  "mode_id": "nested_chat",
-  "status": "FAIL",
-  "model_id": "N/A",
-  "evidence_path": "docs/evidence/modes/20251220_191305/autogen/nested_chat",
-  "error": "name 'resolve_bedrock_model' is not defined"
-}
