@@ -1,8 +1,8 @@
 import React from 'react';
-import { AgentNodeView } from '../../components/multi21/graph-views/AgentNodeView';
-import { FrameworkNodeView } from '../../components/multi21/graph-views/FrameworkNodeView';
-import { BlackboardNodeView } from '../../components/multi21/graph-views/BlackboardNodeView';
-import { GenericNodeView } from '../../components/multi21/graph-views/GenericNodeView';
+import { AgentNodeView } from '../../app/nx-marketing-agents/core/multi21/graph-views/AgentNodeView';
+import { FrameworkNodeView } from '../../app/nx-marketing-agents/core/multi21/graph-views/FrameworkNodeView';
+import { BlackboardNodeView } from '../../app/nx-marketing-agents/core/multi21/graph-views/BlackboardNodeView';
+import { GenericNodeView } from '../../app/nx-marketing-agents/core/multi21/graph-views/GenericNodeView';
 
 export const NodeViewRegistry: Record<string, React.FC<any>> = {
     agent_node: AgentNodeView,

@@ -34,6 +34,12 @@ class AuditEvent:
     actor: Optional[str] = None  # User ID or System
     node_id: Optional[str] = None
     payload: Dict[str, Any] = field(default_factory=dict)
+    
+    # Spine-Sync / StreamEvent Alignment
+    atom_metadata: Optional[Dict[str, Any]] = None
+    media_payload: Optional[Dict[str, Any]] = None
+    canvas_type: Optional[str] = None
+    pii_stripped: bool = False
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -52,4 +58,8 @@ class AuditEvent:
             "actor": self.actor,
             "node_id": self.node_id,
             "payload": self.payload,
+            "atom_metadata": self.atom_metadata,
+            "media_payload": self.media_payload,
+            "canvas_type": self.canvas_type,
+            "pii_stripped": self.pii_stripped,
         }

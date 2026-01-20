@@ -5,7 +5,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { LensRegistry, GraphFlow, GraphNode, NodeType, GraphEdge, Lens, createDefaultNode } from '../../lib/LensRegistry';
 import { NodeViewRegistry } from '../../lib/multi21/NodeViewRegistry';
-import { GraphTokenEditor } from '../multi21/lenses/GraphTokenEditor'; // Keeping original path for now
+import { GraphTokenEditor } from '../../app/nx-marketing-agents/core/multi21/lenses/GraphTokenEditor'; // Keeping original path for now
 
 // Mocks for missing APIs
 const CanvasApi = { getSSEUrl: (id: string) => '' };

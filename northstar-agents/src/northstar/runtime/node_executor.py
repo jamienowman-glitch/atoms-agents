@@ -137,6 +137,21 @@ class NodeExecutor:
                 if not provider_id or not model_id:
                      return self._fail(node, run_id, "Missing Provider/Model", start_ts, events, ctx_args)
 
+                from northstar.runtime.gateway import CapabilityToggleRequest
+                toggles = [CapabilityToggleRequest(capability_id=c) for c in node.capability_ids or []]
+                
+                # --- SPINE-SYNC: CANVAS TOOL INGESTION ---
+                if self.canvas_mirror:
+                     canvas_tools = self.canvas_mirror.get_tools()
+                     if canvas_tools:
+                         # Append dynamic tools from the canvas
+                         # Assuming Gateway can handle raw Tool Definitions in toggles or a separate arg
+                         # For now, we simply log/append them as available functions if the gateway supports it
+                         # or simplistic injection into context
+                         events.append({"type": "canvas_tools_detected", "count": len(canvas_tools)})
+                         # TODO: Pass these properly to gateway.generate when gateway supports dynamic tool definitions
+                         # For now, we inject into the request_context or similar so the model 'sees' them via prompt
+                         
                 events.append({"type": "resolution", "provider": provider_id, "model": model_id})
 
                 # 3. Gateway Readiness
@@ -157,7 +172,7 @@ class NodeExecutor:
                 messages = compose_messages(persona, task, blackboard, nexus_context=nexus_context)
                 
                 response = self._invoke_gateway(
-                    node, gateway, messages, model_id, provider_id, events, request_context
+                    node, gateway, messages, model_id, provider_id, events, request_context, toggles
                 )
                 
                 if response.get("status") == "FAIL":

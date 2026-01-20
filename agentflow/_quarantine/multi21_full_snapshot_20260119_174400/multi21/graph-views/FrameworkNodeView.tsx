@@ -1,5 +1,5 @@
 import React from 'react';
-import { GraphNode } from '../../../lib/multi21/LensRegistry';
+import { GraphNode } from '../../../lib/LensRegistry';
 
 interface FrameworkNodeProps {
     data: any;

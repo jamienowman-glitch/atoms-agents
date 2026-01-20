@@ -4,6 +4,7 @@ import {
     SafetyDecisionEvent,
     StreamEvent,
     GestureEvent,
+    StreamEnvelopeBase,
 } from '@/lib/gate3/contracts';
 
 export interface RequestContext {
@@ -179,7 +180,7 @@ export class CanvasTransport {
         this.handlers.forEach(h => h(event));
     }
 
-    private isSafetyDecisionEvent(event: StreamEvent): event is SafetyDecisionEvent {
+    private isSafetyDecisionEvent(event: StreamEvent): event is SafetyDecisionEvent & StreamEnvelopeBase {
         return event.type === 'safety_decision';
     }
 

@@ -300,7 +300,7 @@ class SystemRegistryService:
     def get_namespaces(self, ctx: RequestContext) -> List[str]:
         """Return list of known namespaces."""
         # This list could be dynamic, but for now we list the expected ones
-        return ["connectors", "firearms", "kpis", "utms", "canvases"]
+        return ["connectors", "firearms", "kpis", "utms", "canvases", "muscles", "agents"]
 
     def list_entries(self, ctx: RequestContext, namespace: str) -> List[RegistryEntry]:
         """List all entries for a namespace."""

@@ -8,6 +8,8 @@ export const getCanvasTypeForNode = (nodeType: NodeType): CanvasType | null => {
         case 'video_node':
             return 'video_canvas';
         case 'page_node':
+        case 'text_node':
+        case 'image_node':
         case 'agent_node':
             return 'page_canvas';
         // Future mappings

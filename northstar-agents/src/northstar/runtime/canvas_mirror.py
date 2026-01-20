@@ -52,6 +52,23 @@ class CanvasMirror:
     def snapshot(self) -> List[Dict[str, Any]]:
         """Return a shallow copy of mirrored events."""
         return list(self._events)
+        
+    def get_tools(self) -> List[Dict[str, Any]]:
+        """
+        Extract tool manifests from CANVAS_READY events.
+        Browses the mirror for the latest 'tool_manifest' payload.
+        """
+        tools = []
+        # Reverse search for the latest manifest
+        for event in reversed(self._events):
+            # Check for standard StreamEvent structure
+            data = event.get("data", {})
+            msg_type = event.get("event") or data.get("type")
+            
+            if msg_type == "CANVAS_READY" and "tool_manifest" in data:
+                tools.extend(data["tool_manifest"])
+                
+        return tools
 
     async def start(self) -> None:
         """Start streaming in the current event loop."""

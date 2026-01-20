@@ -8,7 +8,19 @@ export interface WorkbenchTool {
     component: React.FC<any>;
 }
 
-export type NodeType = 'agent_node' | 'framework_node' | 'blackboard_node' | 'task_node' | 'artefact_node' | 'asset_node' | 'router_node' | 'header' | 'page_node' | 'video_node';
+export type NodeType =
+    | 'agent_node'
+    | 'framework_node'
+    | 'blackboard_node'
+    | 'task_node'
+    | 'artefact_node'
+    | 'asset_node'
+    | 'router_node'
+    | 'header'
+    | 'page_node'
+    | 'text_node'
+    | 'image_node'
+    | 'video_node';
 
 export interface GraphNode {
     id: string;
@@ -95,6 +107,12 @@ export const createDefaultNode = (type: NodeType, x: number, y: number): GraphNo
             break;
         case 'page_node':
             data = { page: { title: 'New Page', slug: 'new-page' } };
+            break;
+        case 'text_node':
+            data = { text: { content: 'New Text', style: 'body', align: 'left' } };
+            break;
+        case 'image_node':
+            data = { image: { url: '', alt: 'New Image', width: 640, height: 360, fit: 'cover' } };
             break;
         case 'video_node':
             data = { video: { title: 'New Video', duration: 0 } };

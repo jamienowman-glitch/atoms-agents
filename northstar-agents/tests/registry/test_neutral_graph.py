@@ -61,7 +61,15 @@ class TestNeutralGraph:
             
         mock_reg = MockRegistryCtx()
         
-        executor = NodeExecutor(mock_reg)
+        # --- PHASE 5: SPINE-SYNC VERIFICATION ---
+        from unittest.mock import MagicMock
+        mock_mirror = MagicMock()
+        mock_mirror.canvas_id = "canvas.test"
+        mock_mirror.snapshot.return_value = []
+        # Simulate tools found
+        mock_mirror.get_tools.return_value = [{"name": "resize_box", "description": "Resizes a visual element"}]
+        
+        executor = NodeExecutor(mock_reg, canvas_mirror=mock_mirror) # Inject Mirror
         blackboard = {}
         profile = RunProfileCard(
             profile_id="test_profile", 
@@ -78,3 +86,11 @@ class TestNeutralGraph:
         
         assert result.status == "PASS"
         assert result.reason == "Component Executed"
+        
+        # Verify Tool Ingestion (Event check)
+        # Note: In ComponentRunner path, we didn't explicitly implement the NodeExecutor-level hook yet
+        # The hook I added was in the LEGACY path of executing_node.
+        # I need to ensure ComponentRunner also gets this mirror or the logic is shared.
+        # For this test, let's verify if 'events' in result contains our mirror attachment info
+        has_mirror_event = any(e.get("type") == "canvas_mirror_attached" for e in result.events)
+        assert has_mirror_event, "Executor should have attached mirror and logged event"

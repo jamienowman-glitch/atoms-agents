@@ -12,6 +12,7 @@ class GeminiGateway(LLMGateway):
     Supports text and video/image input via File API.
     """
     BASE_URL = "https://generativelanguage.googleapis.com/v1beta"
+    # Supported capability keys: "thinking_level" (LOW/HIGH), "json_schema" (bool), "mime_type" (str)
 
     def _get_key(self) -> str:
         return require_key("GEMINI_API_KEY")
@@ -120,10 +121,25 @@ class GeminiGateway(LLMGateway):
 
         payload = {
             "contents": contents,
-            "generationConfig": {
-                "temperature": 0.7,
-                "maxOutputTokens": 2048
-            }
+        gen_config = {
+            "temperature": 0.7,
+            "maxOutputTokens": 2048
+        }
+        
+        # --- GEMINI 3 FLASH FEATURES ---
+        if capability_toggles:
+             for cap in capability_toggles:
+                 if cap.capability_id == "thinking_high":
+                     gen_config["thinking_level"] = "HIGH"
+                 elif cap.capability_id == "json_mode":
+                     gen_config["response_mime_type"] = "application/json"
+        
+        if limits and limits.max_output_tokens:
+            gen_config["maxOutputTokens"] = limits.max_output_tokens
+
+        payload = {
+            "contents": contents,
+            "generationConfig": gen_config
         }
         
         try:

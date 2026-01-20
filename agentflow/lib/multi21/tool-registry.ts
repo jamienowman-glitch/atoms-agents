@@ -670,41 +670,8 @@ export const TOOL_REGISTRY: Record<string, ToolDefinition> = {
     },
 
     // --- Phase 14: CTA Tools ---
-    'cta.variant': {
-        toolId: 'cta.variant',
-        label: 'Button Variant',
-        surfaceId: 'multi21.designer',
-        kind: 'enum',
-        valueType: 'string',
-        allowedOps: ['setValue', 'selectOption'],
-        options: ['solid', 'outline', 'ghost'],
-    },
-    'cta.size': {
-        toolId: 'cta.size',
-        label: 'Button Size',
-        surfaceId: 'multi21.designer',
-        kind: 'enum',
-        valueType: 'string',
-        allowedOps: ['setValue', 'selectOption'],
-        options: ['small', 'medium', 'large'],
-    },
-    'cta.fullWidth': {
-        toolId: 'cta.fullWidth',
-        label: 'Full Width',
-        surfaceId: 'multi21.designer',
-        kind: 'toggle',
-        valueType: 'boolean',
-        allowedOps: ['setValue', 'toggle'],
-    },
-    'cta.align': {
-        toolId: 'cta.align',
-        label: 'Button Alignment',
-        surfaceId: 'multi21.designer',
-        kind: 'enum',
-        valueType: 'string',
-        allowedOps: ['setValue', 'selectOption'],
-        options: ['left', 'center', 'right'],
-    },
+
+
     // --- Headline ---
     'typo.headline.size_desktop': {
         toolId: 'typo.headline.size_desktop',

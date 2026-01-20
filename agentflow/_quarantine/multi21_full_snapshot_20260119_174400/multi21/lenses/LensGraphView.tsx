@@ -4,7 +4,7 @@
 // =============================================================================
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { LensRegistry, GraphFlow, GraphNode, NodeType, GraphEdge, Lens, createDefaultNode } from '../../../lib/multi21/LensRegistry';
+import { LensRegistry, GraphFlow, GraphNode, NodeType, GraphEdge, Lens, createDefaultNode } from '../../../lib/LensRegistry';
 import { NodeViewRegistry } from '../../../lib/multi21/NodeViewRegistry';
 import { GraphTokenEditor } from './GraphTokenEditor';
 

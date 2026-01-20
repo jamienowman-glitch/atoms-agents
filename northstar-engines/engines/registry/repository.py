@@ -27,47 +27,47 @@ class ComponentRegistryRepository:
 
     def list_components(self, ctx: RequestContext) -> List[Dict[str, Any]]:
         """Return all component records for the current context."""
-        return self._tabular(ctx).list_by_prefix(self.COMPONENTS_TABLE, "", ctx)
+        return self._tabular(ctx).list_by_prefix(self.COMPONENTS_TABLE, "")
 
     def list_atoms(self, ctx: RequestContext) -> List[Dict[str, Any]]:
         """Return all atom records for the current context."""
-        return self._tabular(ctx).list_by_prefix(self.ATOMS_TABLE, "", ctx)
+        return self._tabular(ctx).list_by_prefix(self.ATOMS_TABLE, "")
 
     def list_specs(self, ctx: RequestContext) -> List[Dict[str, Any]]:
         """Return all registered specs for the current context."""
-        return self._tabular(ctx).list_by_prefix(self.SPECS_TABLE, "", ctx)
+        return self._tabular(ctx).list_by_prefix(self.SPECS_TABLE, "")
 
     def get_spec(self, ctx: RequestContext, spec_id: str) -> Optional[Dict[str, Any]]:
         """Retrieve a single spec by ID."""
-        return self._tabular(ctx).get(self.SPECS_TABLE, spec_id, ctx)
+        return self._tabular(ctx).get(self.SPECS_TABLE, spec_id)
 
     def save_component(self, ctx: RequestContext, component: Dict[str, Any]) -> None:
         """Persist a component record (tests/admin helpers only)."""
         component_id = component.get("id")
         if not component_id:
             raise ValueError("component data must include id")
-        self._tabular(ctx).upsert(self.COMPONENTS_TABLE, component_id, component, ctx)
+        self._tabular(ctx).upsert(self.COMPONENTS_TABLE, component_id, component)
 
     def save_atom(self, ctx: RequestContext, atom: Dict[str, Any]) -> None:
         """Persist an atom record (tests/admin helpers only)."""
         atom_id = atom.get("id")
         if not atom_id:
             raise ValueError("atom data must include id")
-        self._tabular(ctx).upsert(self.ATOMS_TABLE, atom_id, atom, ctx)
+        self._tabular(ctx).upsert(self.ATOMS_TABLE, atom_id, atom)
 
     def save_spec(self, ctx: RequestContext, spec: Dict[str, Any]) -> None:
         """Persist a spec record (tests/admin helpers only)."""
         spec_id = spec.get("id")
         if not spec_id:
             raise ValueError("spec data must include id")
-        self._tabular(ctx).upsert(self.SPECS_TABLE, spec_id, spec, ctx)
+        self._tabular(ctx).upsert(self.SPECS_TABLE, spec_id, spec)
 
     def save_surface(self, ctx: RequestContext, surface: Dict[str, Any]) -> None:
         """Persist a surface record."""
         surface_id = surface.get("id")
         if not surface_id:
             raise ValueError("surface data must include id")
-        self._tabular(ctx).upsert(self.SURFACES_TABLE, surface_id, surface, ctx)
+        self._tabular(ctx).upsert(self.SURFACES_TABLE, surface_id, surface)
 
 
 class SystemRegistryRepository:
@@ -89,12 +89,12 @@ class SystemRegistryRepository:
         """List all entries for a given namespace."""
         # Keys are stored as "{namespace}::{key}"
         prefix = f"{namespace}::"
-        return self._tabular(ctx).list_by_prefix(self.SYSTEM_REGISTRY_TABLE, prefix, ctx)
+        return self._tabular(ctx).list_by_prefix(self.SYSTEM_REGISTRY_TABLE, prefix)
 
     def get_entry(self, ctx: RequestContext, namespace: str, key: str) -> Optional[Dict[str, Any]]:
         """Retrieve a single entry."""
         storage_key = f"{namespace}::{key}"
-        return self._tabular(ctx).get(self.SYSTEM_REGISTRY_TABLE, storage_key, ctx)
+        return self._tabular(ctx).get(self.SYSTEM_REGISTRY_TABLE, storage_key)
 
     def upsert_entry(self, ctx: RequestContext, entry: Dict[str, Any]) -> None:
         """Upsert a registry entry."""
@@ -104,7 +104,7 @@ class SystemRegistryRepository:
             raise ValueError("Entry must have namespace and key")
 
         storage_key = f"{namespace}::{key}"
-        self._tabular(ctx).upsert(self.SYSTEM_REGISTRY_TABLE, storage_key, entry, ctx)
+        self._tabular(ctx).upsert(self.SYSTEM_REGISTRY_TABLE, storage_key, entry)
 
     def delete_entry(self, ctx: RequestContext, namespace: str, key: str) -> None:
         """Delete a registry entry."""

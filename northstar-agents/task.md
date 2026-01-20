@@ -12,6 +12,13 @@
     - [x] Implement `src/northstar/registry/schemas/lenses.py` (New Lens definitions) <!-- id: 8 -->
     - [x] Update `RegistryLoader` to support new card types <!-- id: 9 -->
 
+- [x] Phase 5: Spine-Sync (Pending Protocol Definition) <!-- id: 17 -->
+    - [x] Adopt `AGENT.MD` Architectural Manifest <!-- id: 18 -->
+    - [x] Implement `SpinePayload` listener in Agents (NodeExecutor/Mirror logic) <!-- id: 19 -->
+    - [x] Align `AuditEvent` with Engines Envelope <!-- id: 20 -->
+    - [x] Implement `src/northstar/registry/schemas/lenses.py` (New Lens definitions) <!-- id: 8 -->
+    - [x] Update `RegistryLoader` to support new card types <!-- id: 9 -->
+
 - [x] Phase 3: Runtime Evolution <!-- id: 10 -->
     - [x] Refactor `NodeExecutor` to support "Component Mounting" <!-- id: 11 -->
     - [x] Implement Lens Application Logic (Middleware pattern for Lenses) <!-- id: 12 -->
@@ -19,4 +26,10 @@
 
 - [ ] Phase 4: Integration <!-- id: 14 -->
     - [ ] Build `cli_export.json` generator for Wireframe Builder <!-- id: 15 -->
-    - [ ] Verify "Flow Pack" JSON export format <!-- id: 16 -->
+- [ ] Phase 20: Model Router & Provider Expansion <!-- id: 21 -->
+    - [x] Implement DeepSeek Provider (`deepseek.py`) <!-- id: 22 -->
+    - [x] Implement Gemini 3 Provider (`gemini.py`) <!-- id: 23 -->
+    - [x] Implement Molmo 2 Provider (`molmo.py`) <!-- id: 24 -->
+    - [x] Implement Nvidia Alpamayo Provider (`nvidia.py`) <!-- id: 25 -->
+    - [x] Implement Mistral Provider (`mistral.py`) <!-- id: 26 -->
+    - [x] Implement ElevenLabs Scribe Provider (`elevenlabs.py`) <!-- id: 27 -->

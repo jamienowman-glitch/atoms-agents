@@ -5,7 +5,7 @@
 "use client";
 
 import React, { useEffect } from 'react';
-import { BuilderShell } from '../multi21/BuilderShell';
+import { BuilderShell } from '../../app/nx-marketing-agents/core/multi21/BuilderShell';
 import { useToolControl } from '../../context/ToolControlContext';
 import { GraphLens } from '../lenses/GraphLens';
 import { CanvasLens } from '../lenses/CanvasLens/CanvasLens';

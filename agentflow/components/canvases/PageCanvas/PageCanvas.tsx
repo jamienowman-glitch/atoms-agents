@@ -23,14 +23,14 @@ import {
     arrayMove
 } from '@dnd-kit/sortable';
 
-import { ConnectedBlock } from '../../multi21/ConnectedBlock';
-import { BottomControlsPanel } from '../../multi21/BottomControlsPanel';
-import { DesktopPanelSystem } from '../../multi21/DesktopPanelSystem';
+import { ConnectedBlock } from '@/app/nx-marketing-agents/core/multi21/ConnectedBlock';
+import { BottomControlsPanel } from '@/app/nx-marketing-agents/core/multi21/BottomControlsPanel';
+import { DesktopPanelSystem } from '@/app/nx-marketing-agents/core/multi21/DesktopPanelSystem';
 import { FloatingAction } from '../../ui/FloatingAction';
 import { useToolControl } from '../../../context/ToolControlContext';
-import { SortableBlockWrapper } from '../../multi21/SortableBlockWrapper';
-import { Multi21_PopupWrapper } from '../../multi21/Multi21_PopupWrapper';
-import { HiddenAttributionFields } from '../../multi21/HiddenAttributionFields';
+import { SortableBlockWrapper } from '@/app/nx-marketing-agents/core/multi21/SortableBlockWrapper';
+import { Multi21_PopupWrapper } from '@/app/nx-marketing-agents/core/multi21/Multi21_PopupWrapper';
+import { HiddenAttributionFields } from '@/app/nx-marketing-agents/core/multi21/HiddenAttributionFields';
 
 // --- Types ---
 export type Block = {
@@ -516,11 +516,11 @@ export const PageCanvas = ({ transport, canvasId = 'page-canvas', canvasType = '
 
                 />
 
-                    {isAddMenuOpen && (
-                        <div className="fixed bottom-44 right-4 bg-white dark:bg-neutral-900 shadow-xl rounded-full p-2 flex flex-col gap-3 border border-neutral-200 dark:border-neutral-800 z-[60] animate-in fade-in slide-in-from-bottom-4 items-center w-12">
-                            <button onClick={() => handleAddBlock('text')} className="w-8 h-8 rounded-full bg-orange-50 hover:bg-orange-100 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 flex items-center justify-center shadow-sm" title="Add Text"><span className="font-serif font-bold text-lg leading-none">T</span></button>
-                            <button onClick={() => handleAddBlock('copy')} className="w-8 h-8 rounded-full bg-amber-50 hover:bg-amber-100 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 flex items-center justify-center shadow-sm" title="Add Copy"><span className="font-serif font-bold text-lg leading-none">C</span></button>
-                            <button onClick={() => handleAddBlock('media')} className="w-8 h-8 rounded-full bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 flex items-center justify-center shadow-sm" title="Add Media"><svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></svg></button>
+                {isAddMenuOpen && (
+                    <div className="fixed bottom-44 right-4 bg-white dark:bg-neutral-900 shadow-xl rounded-full p-2 flex flex-col gap-3 border border-neutral-200 dark:border-neutral-800 z-[60] animate-in fade-in slide-in-from-bottom-4 items-center w-12">
+                        <button onClick={() => handleAddBlock('text')} className="w-8 h-8 rounded-full bg-orange-50 hover:bg-orange-100 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 flex items-center justify-center shadow-sm" title="Add Text"><span className="font-serif font-bold text-lg leading-none">T</span></button>
+                        <button onClick={() => handleAddBlock('copy')} className="w-8 h-8 rounded-full bg-amber-50 hover:bg-amber-100 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 flex items-center justify-center shadow-sm" title="Add Copy"><span className="font-serif font-bold text-lg leading-none">C</span></button>
+                        <button onClick={() => handleAddBlock('media')} className="w-8 h-8 rounded-full bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 flex items-center justify-center shadow-sm" title="Add Media"><svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" /></svg></button>
                         <button onClick={() => handleAddBlock('cta')} className="w-8 h-8 rounded-full bg-purple-50 hover:bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 flex items-center justify-center shadow-sm" title="Add Button"><svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="4" y="8" width="16" height="8" rx="2" /><path d="M10 8V8" /></svg></button>
                         <button onClick={() => handleAddBlock('header')} className="w-8 h-8 rounded-full bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shadow-sm" title="Add Header"><svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="3" y="3" width="18" height="6" rx="1" /><path d="M3 9h18" /></svg></button>
                         <div className="w-full h-px bg-neutral-100 dark:bg-neutral-800 my-1" />
@@ -557,17 +557,17 @@ export const PageCanvas = ({ transport, canvasId = 'page-canvas', canvasType = '
                                 {/* If Page is Active, we use DnD for it. If Popup is active, we just render it statically here. */}
                                 {viewLayer === 'page' ? (
                                     isClient ? (
-                                    <DndContext
-                                        sensors={sensors}
-                                        collisionDetection={closestCenter}
-                                        onDragStart={handleDragStart}
-                                        onDragOver={handleDragOver}
-                                        onDragEnd={handleDragEnd}
-                                    >
-                                        <SortableContext items={pageBlocks.map(b => b.id)} strategy={verticalListSortingStrategy}>
-                                            {renderBlockList(pageBlocks, true)}
-                                        </SortableContext>
-                                    </DndContext>
+                                        <DndContext
+                                            sensors={sensors}
+                                            collisionDetection={closestCenter}
+                                            onDragStart={handleDragStart}
+                                            onDragOver={handleDragOver}
+                                            onDragEnd={handleDragEnd}
+                                        >
+                                            <SortableContext items={pageBlocks.map(b => b.id)} strategy={verticalListSortingStrategy}>
+                                                {renderBlockList(pageBlocks, true)}
+                                            </SortableContext>
+                                        </DndContext>
                                     ) : (
                                         renderBlockList(pageBlocks, false)
                                     )
