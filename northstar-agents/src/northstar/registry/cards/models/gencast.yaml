@@ -1,0 +1,8 @@
+model_id: gencast-ensemble
+provider_id: gencast
+friendly_name: GenCast (Ensemble)
+official_id_or_deployment: gencast
+context_window: 0
+supports_streaming: true
+description: Probabilistic 14-day Forecasting Model.
+default_capabilities: []

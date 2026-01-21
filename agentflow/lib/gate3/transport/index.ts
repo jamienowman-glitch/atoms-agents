@@ -74,7 +74,15 @@ export class CanvasTransport {
         if (!config.context.project_id) console.warn('Transport Warning: Missing context.project_id');
         if (!config.context.request_id) {
             console.warn('Transport Warning: Missing context.request_id. Generating one.');
-            config.context.request_id = crypto.randomUUID();
+            // Polyfill for insecure contexts (HTTP mobile) where crypto.randomUUID is undefined
+            if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+                config.context.request_id = crypto.randomUUID();
+            } else {
+                config.context.request_id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                    return v.toString(16);
+                });
+            }
         }
 
         this.config = config;

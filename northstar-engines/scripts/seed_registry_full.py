@@ -174,7 +174,7 @@ def seed_registry():
                         mat_enum = MaturityLevel.CONCEPT
 
                     config = spec.get("config", {})
-                    # PATCH: Ensure auth_type exists for validation
+                    # PATCH: Ensure auth_type exists for validation (Resolved: Default to none)
                     if "auth_type" not in config:
                         config["auth_type"] = "none"
 
