@@ -1,13 +1,19 @@
 import asyncio
 import json
 import logging
+import re
 from typing import Any, Dict, List, Optional
 
 import httpx
 
+from northstar.runtime.visual_sidecar import sanitize_canvas_event
+
 from northstar.runtime.context import AgentsRequestContext
 
 logger = logging.getLogger(__name__)
+
+
+_INLINE_DATA_URI_RE = re.compile(r"data:[^;]+;base64,", re.IGNORECASE)
 
 
 class CanvasMirror:
@@ -117,9 +123,24 @@ class CanvasMirror:
 
     def _append(self, payload: Dict[str, Any]) -> None:
         """Store the payload, preserving only the most recent capacity entries."""
+        payload = sanitize_canvas_event(payload)
+        if self._contains_inline_data(payload):
+            logger.warning(
+                "CanvasMirror blocked event containing inline assets after sanitization"
+            )
+            return
         event_id = payload.get("event_id") or payload.get("id")
         if event_id:
             self._last_event_id = event_id
         if len(self._events) >= self.capacity:
             self._events.pop(0)
         self._events.append(payload)
+
+    def _contains_inline_data(self, value: Any) -> bool:
+        if isinstance(value, str):
+            return bool(_INLINE_DATA_URI_RE.search(value))
+        if isinstance(value, dict):
+            return any(self._contains_inline_data(v) for v in value.values())
+        if isinstance(value, list):
+            return any(self._contains_inline_data(item) for item in value)
+        return False

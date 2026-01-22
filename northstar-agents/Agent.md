@@ -1,5 +1,10 @@
 # ARCHITECTURAL MANIFEST: THE AGNOSTIC SPINE & DYNAMIC CANVAS
 
+## 🛑 TRANSPORT & INTEGRITY PROTOCOLS
+- **VISIBILITY:** All Chain-of-Thought must be tagged visibility='internal'.
+- **SIDECAR RULE:** Never emit raw images to Chat. Upload to ArtifactStore, then emit URI.
+- **MEMORY ISOLATION:** Respect run_global (Whiteboard) vs edge_scoped (Blackboard).
+
 ## 1. THE CORE PHILOSOPHY
 **We do not build for specific flows. We build Capabilities.**
 

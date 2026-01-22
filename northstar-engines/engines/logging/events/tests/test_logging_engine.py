@@ -6,6 +6,7 @@ from engines.logging.events.engine import run
 from engines.logging.event_log import default_event_logger, EventLogEntry
 from engines.privacy.train_prefs import TrainingPreferenceService, set_training_pref_service
 from engines.logging import events as logging_events
+from engines.logging.event_sink import sanitize_dataset_event
 from unittest import mock
 
 
@@ -137,3 +138,19 @@ def test_audit_logger_failure_not_silent(monkeypatch):
     result = run(ev)
     assert result["status"] == "error"
     assert "boom" in result["error"]
+
+
+def test_sanitizer_gate_redacts_big_strings():
+    ev = DatasetEvent(
+        tenantId="t_demo",
+        env="dev",
+        surface="web",
+        agentId="agent1",
+        input={"image": "A" * 3000},
+        output={},
+    )
+    sanitize_dataset_event(ev)
+    artifact = ev.input["image"]
+    assert isinstance(artifact, dict)
+    assert artifact.get("redacted") is True
+    assert artifact.get("original_size") == 3000

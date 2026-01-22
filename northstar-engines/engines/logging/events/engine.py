@@ -5,6 +5,7 @@ import json
 import logging
 import sys
 
+from engines.logging.event_sink import sanitize_dataset_event
 from engines.dataset.events.schemas import DatasetEvent
 from engines.guardrails.pii_text.engine import run as pii_strip
 from engines.guardrails.pii_text.schemas import PiiTextRequest
@@ -15,6 +16,7 @@ logger = logging.getLogger(__name__)
 
 
 def run(event: DatasetEvent) -> dict:
+    sanitize_dataset_event(event)
     # 1) Strip PII
     text_fields = []
     for bucket in (event.input, event.output, event.metadata):

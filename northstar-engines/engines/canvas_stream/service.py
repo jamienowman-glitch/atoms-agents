@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import asyncio
-from typing import AsyncGenerator
 import json
+import uuid
+from typing import AsyncGenerator
 from engines.chat.service.transport_layer import bus, subscribe_async, publish_message
 from engines.chat.contracts import Message, Contact
 from engines.canvas_stream.models import GestureEvent
@@ -108,6 +109,21 @@ async def publish_canvas_event(canvas_id: str, event_type: str, data: dict, acto
     payload = json.dumps({"type": event_type, "data": data})
     
     sender = Contact(id=actor_id)
+    normalized_type = event_type.strip().upper()
+    if normalized_type == "VISUAL_SNAPSHOT":
+        message = Message(
+            id=uuid.uuid4().hex,
+            thread_id=canvas_id,
+            sender=sender,
+            text=payload,
+            role="system",
+        )
+        try:
+            bus.add_message(canvas_id, message)
+        except Exception:
+            pass
+        return message
+
     return await publish_message(
         canvas_id,
         sender,

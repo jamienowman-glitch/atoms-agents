@@ -49,6 +49,7 @@ class WriteWhiteboardRequest(BaseModel):
     value: Any = Field(..., description="Serializable payload")
     run_id: str = Field(..., description="Run identifier for provenance")
     edge_id: str = Field(..., description="Edge identifier (global for whiteboard)")
+    source_node_id: Optional[str] = Field(None, description="Originating node id for this write")
     expected_version: Optional[int] = Field(None, description="Optimistic version")
 
 
@@ -88,20 +89,42 @@ async def _emit_whiteboard_write_event(
     edge_id: str,
     key: str,
     version: int,
+    source_node_id: Optional[str] = None,
 ) -> None:
     try:
+        payload: Dict[str, Any] = {"key": key, "version": version, "edge_id": edge_id}
+        if source_node_id:
+            payload["source_node_id"] = source_node_id
         await publish_run_event(
             context,
             run_id,
             "whiteboard.write",
-            {"key": key, "version": version, "edge_id": edge_id},
+            payload,
+            edge_id=edge_id,
+            node_id=source_node_id,
         )
     except Exception:
         logger.warning("Failed to publish run event for whiteboard %s", run_id)
 
 
-def _schedule_run_event(context: RequestContext, run_id: str, edge_id: str, key: str, version: int) -> None:
-    asyncio.create_task(_emit_whiteboard_write_event(context, run_id, edge_id, key, version))
+def _schedule_run_event(
+    context: RequestContext,
+    run_id: str,
+    edge_id: str,
+    key: str,
+    version: int,
+    source_node_id: Optional[str] = None,
+) -> None:
+    asyncio.create_task(
+        _emit_whiteboard_write_event(
+            context,
+            run_id,
+            edge_id,
+            key,
+            version,
+            source_node_id=source_node_id,
+        )
+    )
 
 
 @router.post("/write", response_model=WriteWhiteboardResponse)
@@ -120,7 +143,14 @@ def write_value(
             edge_id=payload.edge_id,
             expected_version=payload.expected_version,
         )
-        _schedule_run_event(context, payload.run_id, payload.edge_id, payload.key, result.get("version"))
+        _schedule_run_event(
+            context,
+            payload.run_id,
+            payload.edge_id,
+            payload.key,
+            result.get("version"),
+            payload.source_node_id,
+        )
         return WriteWhiteboardResponse(
             key=result.get("key"),
             edge_id=payload.edge_id,

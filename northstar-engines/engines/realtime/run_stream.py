@@ -55,6 +55,9 @@ async def publish_run_event(
     run_id: str,
     event_type: str,
     data: Dict[str, Any],
+    *,
+    node_id: Optional[str] = None,
+    edge_id: Optional[str] = None,
 ) -> StreamEvent:
     """Persist and broadcast a run-level event."""
     if not run_id:
@@ -67,6 +70,20 @@ async def publish_run_event(
         actor_type = ActorType.HUMAN
     else:
         actor_type = ActorType.SYSTEM
+
+    payload: Dict[str, Any] = dict(data)
+    resolved_node_id = node_id or payload.get("source_node_id") or payload.get("node_id")
+    agent_id = context.actor_id or context.user_id or "system"
+    provenance: Dict[str, Optional[str]] = {
+        "agent_id": agent_id,
+        "node_id": resolved_node_id,
+        "run_id": run_id,
+    }
+    if edge_id:
+        provenance["edge_id"] = edge_id
+    if not resolved_node_id:
+        logger.warning("Run event %s missing node_id (run=%s)", event_type, run_id)
+    payload["provenance"] = provenance
 
     event = StreamEvent(
         type=event_type,
@@ -88,7 +105,7 @@ async def publish_run_event(
             actor_type=actor_type,
         ),
         trace_id=context.request_id,
-        data=data,
+        data=payload,
         meta=EventMeta(
             priority=EventPriority.INFO,
             persist=PersistPolicy.ALWAYS,

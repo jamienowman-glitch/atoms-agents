@@ -104,13 +104,24 @@ def test_run_stream_publish_and_stream(context):
         store = InMemoryTimelineStore()
         set_timeline_store(store)
         timeline_module._timeline_service = None
-        event = await publish_run_event(context, run_id="run-123", event_type="blackboard.write", data={"key": "k"})
+        event = await publish_run_event(
+            context,
+            run_id="run-123",
+            event_type="blackboard.write",
+            data={"key": "k", "source_node_id": "node-1"},
+            node_id="node-1",
+            edge_id="edge-1",
+        )
         assert event.routing.tenant_id == context.tenant_id
         gen = stream_run_events("run-123", context, None)
         received = await gen.__anext__()
         assert received.event_id == event.event_id
         formatted = format_sse_event(received)
         assert "blackboard.write" in formatted
+        proto = event.data.get("provenance", {})
+        assert proto.get("agent_id") == context.user_id
+        assert proto.get("node_id") == "node-1"
+        assert proto.get("edge_id") == "edge-1"
         await asyncio.sleep(0)
 
     asyncio.run(_run())

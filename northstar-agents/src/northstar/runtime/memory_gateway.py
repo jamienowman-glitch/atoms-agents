@@ -1,7 +1,14 @@
 from typing import Protocol, Dict, Any, List, TypedDict, Optional, cast
-import json as jsonlib
 from northstar.engines_boundary.client import EnginesBoundaryClient
 from northstar.runtime.context import AgentsRequestContext
+
+def _build_provenance(agent_id: Optional[str], source_node_id: Optional[str]) -> Dict[str, str]:
+    result: Dict[str, str] = {}
+    if agent_id:
+        result["agent_id"] = agent_id
+    if source_node_id:
+        result["node_id"] = source_node_id
+    return result
 
 class MemoryRecord(TypedDict):
     content: Any
@@ -13,7 +20,25 @@ class MemoryGateway(Protocol):
         """Reads the whiteboard state used for caching/dedup."""
         ...
 
-    def write_blackboard(self, edge_id: str, data: Dict[str, Any]) -> None:
+    def write_whiteboard(
+        self,
+        edge_id: str,
+        data: Dict[str, Any],
+        *,
+        agent_id: Optional[str] = None,
+        source_node_id: Optional[str] = None,
+    ) -> None:
+        """Writes run-global data to the whiteboard."""
+        ...
+
+    def write_blackboard(
+        self,
+        edge_id: str,
+        data: Dict[str, Any],
+        *,
+        agent_id: Optional[str] = None,
+        source_node_id: Optional[str] = None,
+    ) -> None:
         """Writes output to the edge's blackboard."""
         ...
 
@@ -37,12 +62,50 @@ class HttpMemoryGateway:
             # Fallback to empty if not found or error, strictness can be configurable later
             return {}
 
-    def write_blackboard(self, edge_id: str, data: Dict[str, Any]) -> None:
-        path = f"/v1/memory/blackboard/{edge_id}"
+    def write_whiteboard(
+        self,
+        edge_id: str,
+        data: Dict[str, Any],
+        *,
+        agent_id: Optional[str] = None,
+        source_node_id: Optional[str] = None,
+    ) -> None:
+        path = f"/v1/memory/whiteboard/{edge_id}"
+        agent_identifier = agent_id or self.ctx.actor_id or self.ctx.user_id
         payload = {
             "data": data,
-            "modified_by": self.ctx.user_id # Ensure attribution
+            "modified_by": self.ctx.user_id,
         }
+        if agent_identifier:
+            payload["agent_id"] = agent_identifier
+        if source_node_id:
+            payload["source_node_id"] = source_node_id
+        provenance = _build_provenance(agent_identifier, source_node_id)
+        if provenance:
+            payload["provenance"] = provenance
+        self.client.request_json("POST", path, self.ctx, json=payload)
+
+    def write_blackboard(
+        self,
+        edge_id: str,
+        data: Dict[str, Any],
+        *,
+        agent_id: Optional[str] = None,
+        source_node_id: Optional[str] = None,
+    ) -> None:
+        path = f"/v1/memory/blackboard/{edge_id}"
+        agent_identifier = agent_id or self.ctx.actor_id or self.ctx.user_id
+        payload = {
+            "data": data,
+            "modified_by": self.ctx.user_id,  # Ensure attribution
+        }
+        if agent_identifier:
+            payload["agent_id"] = agent_identifier
+        if source_node_id:
+            payload["source_node_id"] = source_node_id
+        provenance = _build_provenance(agent_identifier, source_node_id)
+        if provenance:
+            payload["provenance"] = provenance
         self.client.request_json("POST", path, self.ctx, json=payload)
 
     def get_inbound_blackboards(self, edge_ids: List[str]) -> Dict[str, Dict[str, Any]]:

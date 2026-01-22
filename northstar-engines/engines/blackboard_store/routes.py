@@ -40,6 +40,7 @@ class WriteBlackboardRequest(BaseModel):
     edge_id: str = Field(..., description="Edge identifier for this board write")
     key: str = Field(..., description="Unique identifier within run")
     value: Dict[str, Any] = Field(..., description="Value to store (must be JSON-serializable)")
+    source_node_id: Optional[str] = Field(None, description="Originating node id for provenance")
     expected_version: Optional[int] = Field(None, description="Expected version; None = new key")
 
 
@@ -86,13 +87,19 @@ async def _emit_blackboard_write_event(
     edge_id: str,
     key: str,
     version: int,
+    source_node_id: Optional[str] = None,
 ) -> None:
     try:
+        payload: Dict[str, Any] = {"key": key, "version": version, "edge_id": edge_id}
+        if source_node_id:
+            payload["source_node_id"] = source_node_id
         await publish_run_event(
             context,
             run_id,
             "blackboard.write",
-            {"key": key, "version": version, "edge_id": edge_id},
+            payload,
+            edge_id=edge_id,
+            node_id=source_node_id,
         )
     except Exception:
         logger.warning("Failed to publish run event for blackboard %s/%s", run_id, edge_id)
@@ -104,14 +111,25 @@ def _schedule_blackboard_event(
     edge_id: str,
     key: str,
     version: int,
+    source_node_id: Optional[str] = None,
 ) -> None:
-    asyncio.create_task(_emit_blackboard_write_event(context, run_id, edge_id, key, version))
+    asyncio.create_task(
+        _emit_blackboard_write_event(
+            context,
+            run_id,
+            edge_id,
+            key,
+            version,
+            source_node_id=source_node_id,
+        )
+    )
 
 
 class CommitTurnRequest(BaseModel):
     """Request to commit a turn."""
     run_id: str = Field(..., description="Run identifier")
     edge_id: str = Field(..., description="Edge identifier")
+    source_node_id: Optional[str] = Field(None, description="Node emitting the commit")
     data: Dict[str, Any] = Field(..., description="New raw data")
     active_agents: Optional[List[str]] = Field(None, description="List of active agents")
     auto_distill: bool = Field(True, description="Whether to run auto-distillation")
@@ -152,6 +170,7 @@ async def write_blackboard(
             payload.edge_id,
             payload.key,
             result.get("version"),
+            payload.source_node_id,
         )
         return WriteBlackboardResponse(
             key=result.get("key"),
@@ -259,6 +278,7 @@ async def commit_board_turn(
             payload.edge_id,
             key,
             result.get("version"),
+            payload.source_node_id,
         )
 
         return WriteBlackboardResponse(

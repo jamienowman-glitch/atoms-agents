@@ -14,6 +14,8 @@ from northstar.runtime.canvas_mirror import CanvasMirror
 from northstar.runtime.memory_gateway import MemoryGateway, HttpMemoryGateway
 from northstar.engines_boundary.client import EnginesBoundaryClient
 
+VALID_VISIBILITIES = {"public", "internal", "system"}
+
 
 class NodeExecutor:
     def __init__(
@@ -32,6 +34,7 @@ class NodeExecutor:
         self,
         node: Any, # Can be NodeCard (Legacy) or NeutralNodeCard (New)
         profile: RunProfileCard,
+        blackboard: Optional[Dict[str, Any]] = None,
         request_context: Optional[AgentsRequestContext] = None,
         provider_override: Optional[str] = None,
         model_override: Optional[str] = None,
@@ -49,11 +52,12 @@ class NodeExecutor:
                 "Ensure you are running via a context-aware entrypoint (CLI/Server)."
             )
         if self.canvas_mirror:
-            events.append({
-                "type": "canvas_mirror_attached",
-                "canvas_id": self.canvas_mirror.canvas_id,
-                "mirrored_events": len(self.canvas_mirror.snapshot()),
-            })
+            self._log_event(
+                events,
+                "canvas_mirror_attached",
+                canvas_id=self.canvas_mirror.canvas_id,
+                mirrored_events=len(self.canvas_mirror.snapshot()),
+            )
 
         ctx_args = {
             "tenant_id": request_context.tenant_id,
@@ -152,7 +156,7 @@ class NodeExecutor:
                 model_id = model_override or node.model_ref
                 
                 if not provider_id or not model_id:
-                     return self._fail(node, run_id, "Missing Provider/Model", start_ts, events, ctx_args)
+                     return self._fail(node, run_id, "No provider specified or model missing", start_ts, events, ctx_args)
 
                 from northstar.runtime.gateway import CapabilityToggleRequest
                 toggles = [CapabilityToggleRequest(capability_id=c) for c in node.capability_ids or []]
@@ -170,11 +174,16 @@ class NodeExecutor:
                          # Assuming Gateway can handle raw Tool Definitions in toggles or a separate arg
                          # For now, we simply log/append them as available functions if the gateway supports it
                          # or simplistic injection into context
-                         events.append({"type": "canvas_tools_detected", "count": len(canvas_tools)})
+                         self._log_event(events, "canvas_tools_detected", count=len(canvas_tools))
                          # TODO: Pass these properly to gateway.generate when gateway supports dynamic tool definitions
                          # For now, we inject into the request_context or similar so the model 'sees' them via prompt
                          
-                events.append({"type": "resolution", "provider": provider_id, "model": model_id})
+                self._log_event(
+                    events,
+                    "resolution",
+                    provider=provider_id,
+                    model=model_id,
+                )
 
                 # 3. Gateway Readiness
                 try:
@@ -183,13 +192,18 @@ class NodeExecutor:
                     return self._fail(node, run_id, str(e), start_ts, events, ctx_args)
 
                 readiness = gateway.check_readiness()
-                events.append({"type": "readiness_check", "ready": readiness.ready, "reason": readiness.reason})
+                self._log_event(
+                    events,
+                    "readiness_check",
+                    ready=readiness.ready,
+                    reason=readiness.reason,
+                )
                 if not readiness.ready:
                     return self._skip(node, run_id, f"Provider not ready: {readiness.reason}", start_ts, ctx_args, events)
 
                 # 4. Context & Invocation
                 nexus_context = self._fetch_nexus_context(task, events)
-                
+
                 from northstar.runtime.prompting.composer import compose_messages
                 messages = compose_messages(
                     persona, 
@@ -197,7 +211,7 @@ class NodeExecutor:
                     inbound_blackboards, # Was blackboard
                     nexus_context=nexus_context
                 )
-                
+
                 response = self._invoke_gateway(
                     node, gateway, messages, model_id, provider_id, events, request_context
                 )
@@ -209,6 +223,8 @@ class NodeExecutor:
                 if not content:
                     return self._fail(node, run_id, "Empty response", start_ts, events, ctx_args)
 
+                self._log_chain_of_thought(events, response, provider_id, model_id)
+
                 # 5. Outputs
                 artifacts_written, writes = self._write_outputs(node, content)
                 
@@ -217,7 +233,12 @@ class NodeExecutor:
                     for edge_id in outbound_edge_ids:
                         # We write the same output to all outbound edges (broadcast)
                         # Or we could filter based on connection handles if we parsed that far
-                        memory_gateway.write_blackboard(edge_id, writes)
+                        memory_gateway.write_blackboard(
+                            edge_id,
+                            writes,
+                            agent_id=request_context.actor_id or request_context.user_id,
+                            source_node_id=node.node_id,
+                        )
                 
                 # End
                 self.audit_emitter.emit(
@@ -261,7 +282,7 @@ class NodeExecutor:
         nexus_docs = self.nexus_client.search(query=task.goal, k=3)
         nexus_context = [f"{d.document.content} (Score: {d.score:.2f})" for d in nexus_docs]
         if nexus_context:
-            events.append({"type": "nexus_retrieval", "count": len(nexus_context)})
+            self._log_event(events, "nexus_retrieval", count=len(nexus_context))
         return nexus_context
 
     def _invoke_gateway(
@@ -282,7 +303,7 @@ class NodeExecutor:
         from northstar.runtime.gateway import CapabilityToggleRequest
         toggles = [CapabilityToggleRequest(capability_id=c) for c in node.capability_ids or []]
         
-        events.append({"type": "invocation_start"})
+        self._log_event(events, "invocation_start")
         from northstar.runtime.limits import RunLimits
         limits = RunLimits(max_calls=1, max_output_tokens=4096, timeout_seconds=60.0)
         
@@ -294,8 +315,39 @@ class NodeExecutor:
             limits=limits,
             request_context=request_context,
         )
-        events.append({"type": "invocation_end"})
+        self._log_event(events, "invocation_end")
         return dict(resp)
+
+    def _log_event(
+        self,
+        events: List[Dict[str, Any]],
+        event_type: str,
+        *,
+        visibility: str = "system",
+        **payload: Any,
+    ) -> None:
+        entry: Dict[str, Any] = {"type": event_type, "visibility": self._normalize_visibility(visibility)}
+        entry.update(payload)
+        events.append(entry)
+
+    def _log_chain_of_thought(
+        self,
+        events: List[Dict[str, Any]],
+        response: Dict[str, Any],
+        provider_id: str,
+        model_id: str,
+    ) -> None:
+        payload: Dict[str, Any] = {"provider": provider_id, "model": model_id}
+        for key in ("content", "analysis", "reason", "status"):
+            if key in response:
+                payload[key] = response[key]
+        visibility = response.get("visibility") if isinstance(response.get("visibility"), str) else None
+        if visibility not in VALID_VISIBILITIES:
+            visibility = "internal"
+        self._log_event(events, "chain_of_thought", visibility=visibility, **payload)
+
+    def _normalize_visibility(self, value: str) -> str:
+        return value if value in VALID_VISIBILITIES else "system"
 
     def attach_canvas_mirror(self, mirror: CanvasMirror) -> None:
         """Attach a CanvasMirror for downstream lenses to read."""
