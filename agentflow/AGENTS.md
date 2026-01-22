@@ -54,6 +54,10 @@ We do not "build agents" in code. We assemble them from Atomic Cards.
 > **IF YOU VIOLATE THESE PROTOCOLS, YOU BREAK THE FACTORY.**
 
 ## 🎨 UI FOUNDRY SKILL ( REQUIRED FOR GUI TASKS )
-* **Location:** `agentflow/docs/skills/UI_FOUNDRY_SKILL.md`
+* **Location:** `agentflow/docs/skills/ui-foundry/SKILL.md`
 * **Protocol:** Any agent working on UI, Canvas, or Components within `agentflow` MUST ingest this skill file before modifying the Workbench.
 * **Key Constraint:** The Workbench Frame is immutable. All work happens inside Cartridges.
+
+## 🔨 FRONTEND CRAFTSMANSHIP SKILL ( REFERENCE )
+* **Location:** `agentflow/docs/skills/frontend-craftsmanship/SKILL.md`
+* **Protocol:** Reference for code style, patterns, and component architecture.

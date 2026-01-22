@@ -1,3 +1,8 @@
+---
+name: agent-assembly
+description: How to merge capabilities, personas, and frameworks into a runtime agent configuration.
+---
+
 # Skill: Agent Assembly
 
 ## Capabilities

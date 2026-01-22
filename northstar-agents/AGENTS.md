@@ -12,8 +12,51 @@
 - Do not relocate existing plans unless explicitly instructed.
 
 ## Reference Sources
-- `/Users/jaynowman/dev/northstar-agents/Agent.md`
 - `/Users/jaynowman/dev/northstar-agents/src/northstar/registry/cards/README.md`
+- **Skill Authoring:** `/Users/jaynowman/dev/docs/skills/skill-authoring/SKILL.md`
+
+# 🛑 PROTOCOL: COMMERCE & VERIFICATION
+
+- **NO GHOSTS:** Do not hardcode Model IDs. Use `list_models()` to fetch reality.
+- **THE TRUTH LOOP:** Verification is only valid if confirmed via the SSE Stream. Local logs are not proof.
+
+# ARCHITECTURAL MANIFEST (Merged from Agent.md)
+
+## 🛑 TRANSPORT & INTEGRITY PROTOCOLS
+- **VISIBILITY:** All Chain-of-Thought must be tagged visibility='internal'.
+- **SIDECAR RULE:** Never emit raw images to Chat. Upload to ArtifactStore, then emit URI.
+- **MEMORY ISOLATION:** Respect run_global (Whiteboard) vs edge_scoped (Blackboard).
+
+## 1. THE CORE PHILOSOPHY
+**We do not build for specific flows. We build Capabilities.**
+
+*   **Infrastructure is Agnostic**: The Spine (Engines) and the Surface (AgentFlow) do not know what "Lead the Dance" or "Multi-21" are. They only know Nodes, Atoms, and Events.
+*   **Context is Selective**: Information (Spatial, Content, Multimodal) is strictly "Need to Know." The GraphLens determines which agent gets which token.
+
+## 2. REPO RESPONSIBILITIES
+
+### REPO: ENGINES (THE SPINE)
+*   **The Authority**: `contracts.py` defines the `StreamEvent`. All data must fit this envelope.
+*   **Isolation**: All real-time streams (WS/SSE) MUST require `project_id`. No project, no pipe.
+*   **The Mirror**: Engines provide a snapshot + delta stream to allow Agents to maintain a "mental mirror" of the UI state.
+
+### REPO: AGENTS (THE BRAINS)
+*   **The Mirror**: Every agent runtime has a `canvas_mirror.py` capability. It buffers UI state but only exposes it to the agent's context if the GraphLens attaches that specific `Token`.
+*   **Capability over Model**: Skills like `VisionCapable` or `SpatialAware` are modular toggles. They are not hardcoded to specific personas.
+
+### REPO: AGENTFLOW (THE SURFACE)
+*   **The Sensors**: Atoms are sensors. They report spatial moves (`SPATIAL_UPDATE`) and content changes (`ATOM_UPDATE`) only when the broadcast prop is active.
+*   **Handshake**: On mount, every canvas emits a `CANVAS_READY` event containing its Tool Manifest. This tells the Agent what "buttons" it can press.
+
+## 3. DATA FLOW PROTOCOL
+### MEMORY LAWS (NON-NEGOTIABLE)
+1. **No Global State**: Agents must NEVER rely on a global `run_context` dictionary for task data.
+2. **Deterministic Edges**: All data flows across `edge_id`s. An agent reads from Inbound Blackboards and writes to Outbound Blackboards using the `MemoryGateway`.
+3. **Traceability**: Every memory write is stamped with a `run_id` and `user_id`.
+
+*   **Transport**: WebSocket is the primary bi-directional rail. SSE is the secondary broadcast rail.
+*   **Multimodal**: Media (Screenshots/Audio) is handled via Sidecars. The Event Envelope carries a reference/URL; the model fetches the blob separately.
+
 # 🛑 ATOMS FAM: NON-NEGOTIABLE PRESERVATION PROTOCOLS
 
 > **CRITICAL INSTRUCTION:** You are working inside a high-precision **Orchestration Factory**, not a simple App. The following architectural pillars are **INVIOLATE**. You must NEVER collapse, summarize, or hardcode over these structures.
@@ -54,3 +97,8 @@ We do not "build agents" in code. We assemble them from Atomic Cards.
 * **Location:** `agentflow/docs/skills/UI_FOUNDRY_SKILL.md`
 * **Protocol:** Any agent working on UI, Canvas, or Components within `agentflow` MUST ingest this skill file before modifying the Workbench.
 * **Key Constraint:** The Workbench Frame is immutable. All work happens inside Cartridges.
+
+## 🔌 CONNECTIVITY SKILL ( REQUIRED FOR NETWORK/COMMERCE TASKS )
+* **Location:** `northstar-agents/docs/skills/connectivity-protocol/SKILL.md`
+* **Protocol:** Any agent working on Gateways, Pricing, or Lab Verification MUST ingest this skill.
+* **Key Constraint:** "Ghost" usage is forbidden. All tokens must be accounted and verified via SSE.

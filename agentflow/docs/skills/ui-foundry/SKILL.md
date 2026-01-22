@@ -1,3 +1,8 @@
+---
+name: ui-foundry
+description: Protocol for working on the Workbench UI, Canvas Cartridges, and maintaining Atomic Consistency.
+---
+
 # 🛠️ SKILL: UI FOUNDRY & ATOM ARCHITECTURE
 
 > **THE GOLDEN RULE:** We do not build "Apps." We build **Cartridges** that plug into the **Workbench**.
