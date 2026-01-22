@@ -1,22 +1,22 @@
 card_type: model
-model_id: model.gemini_1_5_flash
+model_id: model.gemini_2_0_flash
 provider_id: gemini
-model_or_deployment_id: gemini-1.5-flash
+model_or_deployment_id: gemini-2.0-flash
 platform_api_surface: google_ai_studio
 invocation_primitive: REST
 streaming_support: token
 confidence: production
-notes: Ultra-fast multimodal model.
+notes: Ultra-fast multimodal model (2.0).
 ---
 card_type: model
-model_id: model.gemini_1_5_pro
+model_id: model.gemini_2_0_pro
 provider_id: gemini
-model_or_deployment_id: gemini-1.5-pro
+model_or_deployment_id: gemini-2.0-pro-exp-02-05
 platform_api_surface: google_ai_studio
 invocation_primitive: REST
 streaming_support: token
-confidence: production
-notes: Best performing multimodal model.
+confidence: experimental
+notes: Best performing multimodal model (2.0 Pro).
 ---
 card_type: model
 model_id: model.openrouter_claude_3_5_sonnet

@@ -63,12 +63,35 @@ class AzureOpenAIGateway(LLMGateway):
         if stream:
             # Simple stream collector for smoke test
             full_text = ""
+            usage = {"input_tokens": 0, "output_tokens": 0, "total_tokens": 0}
             for chunk in response:
                 if chunk.choices and chunk.choices[0].delta.content:
                     full_text += chunk.choices[0].delta.content
-            return {"role": "assistant", "content": full_text}
+
+            return {
+                "role": "assistant",
+                "content": full_text,
+                "usage": usage,
+                "finish_reason": "stop",
+                "model_id": deployment_name
+            }
         else:
-            return {"role": "assistant", "content": response.choices[0].message.content}
+            u = getattr(response, "usage", None)
+            usage = {
+                "input_tokens": u.prompt_tokens if u else 0,
+                "output_tokens": u.completion_tokens if u else 0,
+                "total_tokens": u.total_tokens if u else 0
+            }
+            return {
+                "role": "assistant",
+                "content": response.choices[0].message.content,
+                "usage": usage,
+                "finish_reason": response.choices[0].finish_reason,
+                "model_id": deployment_name
+            }
+
+    def list_models(self) -> List[str]:
+        return ["gpt-4o", "gpt-4o-mini"]
 
     def check_readiness(self) -> Any:
         from northstar.runtime.gateway import ReadinessResult, ReadinessStatus

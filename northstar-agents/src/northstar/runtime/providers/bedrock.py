@@ -70,10 +70,24 @@ class BedrockGateway(LLMGateway):
                 inferenceConfig={"maxTokens": 1024},
             )
             full_text = ""
+            usage = {"input_tokens": 0, "output_tokens": 0, "total_tokens": 0}
+
             for event in response.get("stream", []):
                 if "contentBlockDelta" in event:
                     full_text += event["contentBlockDelta"]["delta"]["text"]
-            return {"role": "assistant", "content": full_text}
+                if "metadata" in event and "usage" in event["metadata"]:
+                    u = event["metadata"]["usage"]
+                    usage["input_tokens"] = u.get("inputTokens", 0)
+                    usage["output_tokens"] = u.get("outputTokens", 0)
+                    usage["total_tokens"] = u.get("totalTokens", 0)
+
+            return {
+                "role": "assistant",
+                "content": full_text,
+                "usage": usage,
+                "finish_reason": "stop",
+                "model_id": model_id
+            }
         else:
             response = client.converse(
                 modelId=model_id,
@@ -81,10 +95,28 @@ class BedrockGateway(LLMGateway):
                 system=system_prompts,
                 inferenceConfig={"maxTokens": 1024},
             )
+
+            u = response.get("usage", {})
+            usage = {
+                "input_tokens": u.get("inputTokens", 0),
+                "output_tokens": u.get("outputTokens", 0),
+                "total_tokens": u.get("totalTokens", 0)
+            }
+
             return {
                 "role": "assistant",
                 "content": response["output"]["message"]["content"][0]["text"],
+                "usage": usage,
+                "finish_reason": response.get("stopReason"),
+                "model_id": model_id
             }
+
+    def list_models(self) -> List[str]:
+        return [
+            "anthropic.claude-3-5-sonnet-20240620-v1:0",
+            "anthropic.claude-3-sonnet-20240229-v1:0",
+            "anthropic.claude-3-haiku-20240307-v1:0"
+        ]
 
     def check_readiness(self) -> Any:
         from northstar.runtime.gateway import ReadinessResult, ReadinessStatus

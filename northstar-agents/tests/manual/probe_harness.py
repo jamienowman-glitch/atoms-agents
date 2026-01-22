@@ -56,7 +56,7 @@ class ProbeHarness:
                  print("Gemini not ready")
                  return
                  
-             model = ModelCard("probe.gemini_flash", "gemini", "gemini-1.5-flash")
+             model = ModelCard("probe.gemini_flash", "gemini", "gemini-2.0-flash")
              # Send file path as text (our hack in gemini.py)
              messages = [{"role": "user", "content": f"file://{video_path}"}, {"role": "user", "content": "Describe this video."}]
              
@@ -95,7 +95,7 @@ if __name__ == "__main__":
     harness.probe_provider_connectivity("comet", "comet-default")
     
     # 5. Gemini Text
-    harness.probe_provider_connectivity("gemini", "gemini-1.5-flash")
+    harness.probe_provider_connectivity("gemini", "gemini-2.0-flash")
     
     # 6. Jules
     harness.probe_provider_connectivity("jules", "default", prompt="Hello Jules")

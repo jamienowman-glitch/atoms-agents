@@ -43,7 +43,7 @@ def test_cost_estimator_gcp_price_table():
             tenant_id="t_demo",
             env="dev",
             provider="gcp",
-            model_or_plan_id="gemini-1.5-flash-002",
+            model_or_plan_id="gemini-2.0-flash-001",
             tokens_input=1000,
             tokens_output=500,
             cost=Decimal("0"),  # rely on estimator

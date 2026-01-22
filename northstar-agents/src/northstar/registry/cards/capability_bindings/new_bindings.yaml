@@ -1,7 +1,7 @@
 card_type: capability_binding
 binding_id: binding.gemini_video
 provider_id: gemini
-model_or_deployment_id: gemini-1.5-pro
+model_or_deployment_id: gemini-2.0-pro-exp-02-05
 capability_id: cap.multimodal.video_input
 toggle_mechanism: inferred
 minimal_toggle_snippet: "Upload file via API"

@@ -6,6 +6,8 @@ authors = [{name = "Northstar Team"}]
 requires-python = ">=3.11"
 dependencies = [
     "PyYAML",
+    "streamlit",
+    "httpx",
 ]
 
 [project.optional-dependencies]
