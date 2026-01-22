@@ -28,6 +28,7 @@ from engines.realtime.contracts import (
     from_legacy_message,
 )
 from engines.realtime.isolation import verify_thread_access
+from engines.realtime.run_stream import format_sse_event, stream_run_events
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -86,12 +87,26 @@ async def _chat_stream_with_resume(
         resume_event = _build_resume_event(thread_id, request_context, latest_cursor)
         yield _format_sse_event(resume_event)
 
-    async for chunk in event_stream(
-        thread_id=thread_id,
-        request_context=request_context,
+        async for chunk in event_stream(
+            thread_id=thread_id,
+            request_context=request_context,
+            last_event_id=last_event_id,
+        ):
+            yield chunk
+
+
+async def _run_stream_with_resume(
+    run_id: str,
+    request_context: RequestContext,
+    last_event_id: Optional[str],
+) -> AsyncGenerator[str, None]:
+    async for event in stream_run_events(
+        run_id=run_id,
+        context=request_context,
         last_event_id=last_event_id,
     ):
-        yield chunk
+        yield format_sse_event(event)
+        await asyncio.sleep(0)
 
 
 async def event_stream(
@@ -271,6 +286,24 @@ async def sse_chat(
             last_event_id=cursor,
             store=store,
             validate_cursor=False,
+        ),
+        media_type="text/event-stream",
+    )
+
+
+@router.get("/sse/run/{run_id}")
+async def sse_run_stream(
+    run_id: str,
+    last_event_id: Optional[str] = Header(None, alias="Last-Event-ID"),
+    query_last_event_id: Optional[str] = Query(None, alias="last_event_id"),
+    request_context: RequestContext = Depends(_sse_context),
+) -> StreamingResponse:
+    cursor = last_event_id or query_last_event_id
+    return StreamingResponse(
+        _run_stream_with_resume(
+            run_id=run_id,
+            request_context=request_context,
+            last_event_id=cursor,
         ),
         media_type="text/event-stream",
     )

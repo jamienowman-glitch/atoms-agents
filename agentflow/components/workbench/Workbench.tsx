@@ -4,26 +4,22 @@
 // =============================================================================
 "use client";
 
-import React, { useEffect } from 'react';
-import { BuilderShell } from '../../app/nx-marketing-agents/core/multi21/BuilderShell';
+import React from 'react';
+import { WorkbenchShell } from './WorkbenchShell';
+import { Multi21Cartridge } from './cartridges/multi21';
 import { useToolControl } from '../../context/ToolControlContext';
 import { GraphLens } from '../lenses/GraphLens';
 import { CanvasLens } from '../lenses/CanvasLens/CanvasLens';
 import { VideoLens } from '../lenses/VideoLens';
-import { LensType, GraphNode, NodeType } from '../../lib/LensRegistry';
+import { LensType, GraphNode } from '../../lib/LensRegistry';
 import { getCanvasTypeForNode, CanvasType } from '../../lib/CanvasRegistry';
 import { RegistryManager } from '../registry/RegistryManager';
 
 export function Workbench() {
-    // We wrapped Workbench content in BuilderShell at the top level?
-    // Wait, BuilderShell PROVIDES the context. So we must use BuilderShell to wrap inner content.
-    // But we need access to `useToolState` inside here to manage routing?
-    // Yes. So we might need a `WorkbenchInner` component.
-
     return (
-        <BuilderShell showGraphControls={true}>
+        <WorkbenchShell cartridge={Multi21Cartridge}>
             <WorkbenchInner />
-        </BuilderShell>
+        </WorkbenchShell>
     );
 }
 

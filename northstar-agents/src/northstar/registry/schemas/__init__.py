@@ -16,7 +16,7 @@ from .providers_models import ProviderConfigCard, ModelCard
 from .capabilities import CapabilityCard, CapabilityBindingCard
 from .atomic_cards import PersonaCard, TaskCard, ArtifactSpecCard
 from .nodes import NodeCard
-from .flows import FlowCard
+from .flows import FlowCard, FlowEdge
 
 __all__ = [
     "FrameworkAdapterCard",
@@ -31,4 +31,5 @@ __all__ = [
     "ArtifactSpecCard",
     "NodeCard",
     "FlowCard",
+    "FlowEdge",
 ]

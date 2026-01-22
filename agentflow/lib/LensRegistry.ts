@@ -34,6 +34,9 @@ export interface GraphEdge {
     id: string;
     source: string;
     target: string;
+    sourceHandle?: string;
+    targetHandle?: string;
+    edge_id?: string; // Deterministic Hash
 }
 
 export interface GraphFlow {

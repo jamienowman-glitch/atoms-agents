@@ -28,7 +28,7 @@ class AgentsRequestContext:
     project_id: str
     request_id: str
     trace_id: Optional[str] = None
-    run_id: Optional[str] = None
+    run_id: str = field(default_factory=lambda: "") # Made required-ish but defaulted for migration
     step_id: Optional[str] = None
     user_id: Optional[str] = None
     actor_id: Optional[str] = None
@@ -40,11 +40,13 @@ class AgentsRequestContext:
             "X-Tenant-Id": self.tenant_id,
             "X-Mode": self.mode.value,
         }
+        if self.run_id:
+             headers["X-Run-Id"] = self.run_id
+             
         optional_fields = {
             "X-Project-Id": self.project_id,
             "X-Request-Id": self.request_id,
             "X-Trace-Id": self.trace_id,
-            "X-Run-Id": self.run_id,
             "X-Step-Id": self.step_id,
             "X-User-Id": self.user_id,
             "X-Actor-Id": self.actor_id,
@@ -61,7 +63,7 @@ class AgentsRequestContext:
 class RunContext:
     logger: StructuredLogger
     artifact_store: ArtifactStore
-    blackboard: Blackboard
+    # blackboard: Blackboard <- REMOVED GLOBAL STATE
     cancellation_token: CancellationToken
     secret_provider: Optional[SecretProvider] = None
     pii_strategy: Optional[PIIStrategy] = None
@@ -72,6 +74,8 @@ class RunContext:
     ] = None  # Renamed to avoid conflict
     audit_emitter: AuditEmitter = field(default_factory=ConsoleAuditEmitter)
     nexus_client: NexusClient = field(default_factory=NoOpNexusClient)
+    # Phase 6: Memory Isolation
+    memory_gateway: Optional[Any] = None # MemoryGateway type (avoid circular import)
     # Phase 11: Gateway Wiring
     llm_gateway: Optional[Any] = None  # LLMGateway type (avoid circular import)
     provider_config: Optional[Any] = None  # ProviderConfigCard

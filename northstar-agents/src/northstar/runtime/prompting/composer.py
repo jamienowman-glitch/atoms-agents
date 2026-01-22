@@ -6,7 +6,7 @@ from northstar.registry.schemas import PersonaCard, TaskCard
 def compose_messages(
     persona: PersonaCard, 
     task: TaskCard, 
-    inputs: Dict[str, Any],
+    inputs: Dict[str, Dict[str, Any]], # Namespaced by edge_id
     nexus_context: List[str] = None
 ) -> List[Dict[str, str]]:
     """
@@ -23,10 +23,6 @@ def compose_messages(
     system_content = "\n".join(system_parts)
     
     # User Message Construction
-    # Minimal separators, no "Goal:" or "Constraints:" headers if possible, 
-    # but the prompt requirements say "remove headings like Goal:/Constraints: from code".
-    # Just join content
-    
     user_parts = [task.goal] # Start with goal
     
     if task.acceptance_criteria:
@@ -36,7 +32,20 @@ def compose_messages(
         user_parts.extend([f"- {c}" for c in task.constraints])
         
     if inputs:
-        user_parts.append(json.dumps(inputs, indent=2))
+        # Inputs are now namespaced by edge_id
+        # We flatten them for the prompt but keep them somewhat organized
+        # or just merge them if keys don't collide.
+        # For safety/clarity, let's just dump the whole structure or flatten values
+        # Decision: Dump with edge labels might be noisy. Let's merge values.
+        # WARNING: Key collision risk. 
+        # Better approach: "Input from [edge_id]: {data}"
+        
+        user_parts.append("\nInputs:")
+        for edge_id, data in inputs.items():
+            # user_parts.append(f"From {edge_id}:") 
+            # In V1, we just dump the data dict. 
+            # The edge_id is internal plumbing, the agent cares about the content.
+            user_parts.append(json.dumps(data, indent=2))
         
     if nexus_context:
         user_parts.append("\nRelevant Context from Nexus:")

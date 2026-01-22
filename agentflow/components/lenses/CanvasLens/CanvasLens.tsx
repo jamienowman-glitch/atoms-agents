@@ -11,15 +11,7 @@ interface CanvasLensProps {
 }
 
 export const CanvasLens: React.FC<CanvasLensProps> = ({ activeCanvas }) => {
-    const transportContext = useMemo(() => ({
-        tenant_id: process.env.NEXT_PUBLIC_TENANT_ID || 't_demo',
-        project_id: process.env.NEXT_PUBLIC_PROJECT_ID || 'p_demo',
-        app_id: process.env.NEXT_PUBLIC_APP_ID || 'agentflow.ui',
-        surface_id: activeCanvas,
-        mode: (process.env.NEXT_PUBLIC_MODE as 'saas' | 'enterprise' | 'lab') || 'lab',
-        request_id: typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(),
-        user_id: process.env.NEXT_PUBLIC_USER_ID || undefined,
-    }), [activeCanvas]);
+    const transportContext = useMemo(() => ({ surface_id: activeCanvas }), [activeCanvas]);
 
     const transport: CanvasTransport | null = useWorkbenchTransport(`canvas-${activeCanvas}`, transportContext);
 

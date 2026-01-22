@@ -6,3 +6,9 @@
 3. **Assign Framework:** How to link an agent to a specific operational loop (e.g., ReAct, Plan-and-Solve).
 
 *Draft Content - Instructions to be added.*
+
+## Memory Isolation 
+When implementing new Skills or Agents:
+*   **DO NOT** use global variables or singleton state.
+*   **DO** use the `MemoryGateway` to persist state across steps.
+*   **DO** ensure all data exchange happens over typed Graph Edges.

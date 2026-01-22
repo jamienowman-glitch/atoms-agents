@@ -22,6 +22,9 @@ def _now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
+DEFAULT_EDGE_ID = "global"
+
+
 class VersionConflictError(Exception):
     """Raised when version check fails (optimistic concurrency conflict)."""
     pass
@@ -47,11 +50,19 @@ class FirestoreRunMemory:
             raise RuntimeError("GCP project is required for Firestore run memory")
         self._client = client or firestore.Client(project=self._project)
 
-    def _document_id(self, tenant_id: str, mode: str, project_id: str, run_id: str, key: str) -> str:
+    def _document_id(
+        self,
+        tenant_id: str,
+        mode: str,
+        project_id: str,
+        run_id: str,
+        edge_id: str,
+        key: str,
+    ) -> str:
         """Generate document ID from scope."""
         project = project_id or "shared"
-        return f"{tenant_id}#{mode}#{project}#{run_id}#{key}"
-
+        return f"{tenant_id}#{mode}#{project}#{run_id}#{edge_id}#{key}"
+    
     def write(
         self,
         key: str,
@@ -59,6 +70,7 @@ class FirestoreRunMemory:
         context: RequestContext,
         run_id: str,
         expected_version: Optional[int] = None,
+        edge_id: str = DEFAULT_EDGE_ID,
     ) -> Dict[str, Any]:
         """Write a value to run memory with optimistic concurrency.
 
@@ -68,6 +80,7 @@ class FirestoreRunMemory:
             context: request context
             run_id: provenance identifier
             expected_version: if provided, only write if current version matches
+            edge_id: logical edge identifier (defaults to global)
 
         Returns: dict with key, value, version, created_by, created_at, updated_by, updated_at
         Raises: VersionConflictError if version mismatch
@@ -77,7 +90,14 @@ class FirestoreRunMemory:
         if not context.user_id:
             raise ValueError("user_id is required (from context)")
 
-        doc_id = self._document_id(context.tenant_id, context.mode, context.project_id, run_id, key)
+        doc_id = self._document_id(
+            context.tenant_id,
+            context.mode,
+            context.project_id,
+            run_id,
+            edge_id,
+            key,
+        )
 
         # Read current document to check version
         try:
@@ -112,11 +132,14 @@ class FirestoreRunMemory:
                 "mode": context.mode,
                 "project_id": context.project_id,
                 "run_id": run_id,
+                "edge_id": edge_id,
                 "version": new_version,
                 "created_by": created_by,
                 "created_at": created_at,
                 "updated_by": context.user_id,
                 "updated_at": now,
+                "modified_by_user_id": context.user_id,
+                "modified_at": now,
             }
 
             self._client.collection(self._collection).document(doc_id).set(doc_data)
@@ -129,6 +152,8 @@ class FirestoreRunMemory:
                 "created_at": created_at,
                 "updated_by": context.user_id,
                 "updated_at": now,
+                "modified_by_user_id": context.user_id,
+                "modified_at": now,
             }
         except VersionConflictError:
             raise
@@ -142,16 +167,25 @@ class FirestoreRunMemory:
         context: RequestContext,
         run_id: str,
         version: Optional[int] = None,
+        edge_id: str = DEFAULT_EDGE_ID,
     ) -> Optional[Dict[str, Any]]:
         """Read a value from run memory (latest or specific version).
 
         Returns dict with: value, version, created_by, created_at, updated_by, updated_at
         Returns None if not found.
+        edge_id: Logical edge identifier scope (global by default)
         """
         if not key or not run_id:
             raise ValueError("key and run_id are required")
 
-        doc_id = self._document_id(context.tenant_id, context.mode, context.project_id, run_id, key)
+        doc_id = self._document_id(
+            context.tenant_id,
+            context.mode,
+            context.project_id,
+            run_id,
+            edge_id,
+            key,
+        )
 
         try:
             doc = self._client.collection(self._collection).document(doc_id).get()
@@ -173,6 +207,8 @@ class FirestoreRunMemory:
                 "created_at": data.get("created_at"),
                 "updated_by": data.get("updated_by"),
                 "updated_at": data.get("updated_at"),
+                "modified_by_user_id": data.get("modified_by_user_id"),
+                "modified_at": data.get("modified_at"),
             }
         except Exception as exc:
             logger.error(f"Failed to read run memory key '{key}': {exc}")
@@ -182,14 +218,16 @@ class FirestoreRunMemory:
         self,
         context: RequestContext,
         run_id: str,
+        edge_id: str = DEFAULT_EDGE_ID,
     ) -> List[str]:
-        """List all keys in run memory for a run."""
+        """List all keys in run memory for a run and edge."""
         try:
             docs = (
                 self._client.collection(self._collection)
                 .where("tenant_id", "==", context.tenant_id)
                 .where("mode", "==", context.mode)
                 .where("run_id", "==", run_id)
+                .where("edge_id", "==", edge_id)
             )
 
             if context.project_id:
@@ -231,10 +269,10 @@ class DynamoDBRunMemory:
         """Generate partition key."""
         return f"{tenant_id}#{mode}#{run_id}"
 
-    def _sk(self, project_id: Optional[str], key: str) -> str:
+    def _sk(self, project_id: Optional[str], key: str, edge_id: str) -> str:
         """Generate sort key."""
         project = project_id or "shared"
-        return f"{project}#{key}"
+        return f"{project}#{edge_id}#{key}"
 
     def write(
         self,
@@ -243,6 +281,7 @@ class DynamoDBRunMemory:
         context: RequestContext,
         run_id: str,
         expected_version: Optional[int] = None,
+        edge_id: str = DEFAULT_EDGE_ID,
     ) -> Dict[str, Any]:
         """Write a value to run memory with optimistic concurrency."""
         if not key or not run_id:
@@ -251,7 +290,7 @@ class DynamoDBRunMemory:
             raise ValueError("user_id is required (from context)")
 
         pk = self._pk(context.tenant_id, context.mode, run_id)
-        sk = self._sk(context.project_id, key)
+        sk = self._sk(context.project_id, key, edge_id)
 
         try:
             # Read current version
@@ -284,11 +323,14 @@ class DynamoDBRunMemory:
                 "mode": context.mode,
                 "project_id": context.project_id or "shared",
                 "run_id": run_id,
+                "edge_id": edge_id,
                 "version": new_version,
                 "created_by": created_by,
                 "created_at": created_at,
                 "updated_by": context.user_id,
                 "updated_at": now,
+                "modified_by_user_id": context.user_id,
+                "modified_at": now,
             }
 
             self._table.put_item(Item=item)
@@ -301,6 +343,8 @@ class DynamoDBRunMemory:
                 "created_at": created_at,
                 "updated_by": context.user_id,
                 "updated_at": now,
+                "modified_by_user_id": context.user_id,
+                "modified_at": now,
             }
         except VersionConflictError:
             raise
@@ -314,13 +358,14 @@ class DynamoDBRunMemory:
         context: RequestContext,
         run_id: str,
         version: Optional[int] = None,
+        edge_id: str = DEFAULT_EDGE_ID,
     ) -> Optional[Dict[str, Any]]:
         """Read a value from run memory (latest or specific version)."""
         if not key or not run_id:
             raise ValueError("key and run_id are required")
 
         pk = self._pk(context.tenant_id, context.mode, run_id)
-        sk = self._sk(context.project_id, key)
+        sk = self._sk(context.project_id, key, edge_id)
 
         try:
             response = self._table.get_item(Key={"pk": pk, "sk": sk})
@@ -350,6 +395,8 @@ class DynamoDBRunMemory:
                 "created_at": item.get("created_at"),
                 "updated_by": item.get("updated_by"),
                 "updated_at": item.get("updated_at"),
+                "modified_by_user_id": item.get("modified_by_user_id"),
+                "modified_at": item.get("modified_at"),
             }
         except Exception as exc:
             logger.error(f"Failed to read run memory key '{key}': {exc}")
@@ -359,16 +406,19 @@ class DynamoDBRunMemory:
         self,
         context: RequestContext,
         run_id: str,
+        edge_id: str = DEFAULT_EDGE_ID,
     ) -> List[str]:
         """List all keys in run memory for a run."""
         try:
             pk = self._pk(context.tenant_id, context.mode, run_id)
 
+            from boto3.dynamodb.conditions import Attr
+
             response = self._table.query(
                 KeyConditionExpression="pk = :pk",
                 ExpressionAttributeValues={":pk": pk},
+                FilterExpression=Attr("edge_id").eq(edge_id),
             )
-
             keys = []
             for item in response.get("Items", []):
                 key = item.get("key")
@@ -399,10 +449,18 @@ class CosmosRunMemory:
         except Exception as exc:
             raise RuntimeError(f"Failed to initialize Cosmos client: {exc}") from exc
 
-    def _document_id(self, tenant_id: str, mode: str, project_id: str, run_id: str, key: str) -> str:
+    def _document_id(
+        self,
+        tenant_id: str,
+        mode: str,
+        project_id: str,
+        run_id: str,
+        edge_id: str,
+        key: str,
+    ) -> str:
         """Generate document ID from scope."""
         project = project_id or "shared"
-        return f"{tenant_id}#{mode}#{project}#{run_id}#{key}"
+        return f"{tenant_id}#{mode}#{project}#{run_id}#{edge_id}#{key}"
 
     def write(
         self,
@@ -411,6 +469,7 @@ class CosmosRunMemory:
         context: RequestContext,
         run_id: str,
         expected_version: Optional[int] = None,
+        edge_id: str = DEFAULT_EDGE_ID,
     ) -> Dict[str, Any]:
         """Write a value to run memory with optimistic concurrency."""
         if not key or not run_id:
@@ -418,7 +477,14 @@ class CosmosRunMemory:
         if not context.user_id:
             raise ValueError("user_id is required (from context)")
 
-        doc_id = self._document_id(context.tenant_id, context.mode, context.project_id, run_id, key)
+        doc_id = self._document_id(
+            context.tenant_id,
+            context.mode,
+            context.project_id,
+            run_id,
+            edge_id,
+            key,
+        )
 
         try:
             # Try to read current document
@@ -455,11 +521,14 @@ class CosmosRunMemory:
                 "mode": context.mode,
                 "project_id": context.project_id,
                 "run_id": run_id,
+                "edge_id": edge_id,
                 "version": new_version,
                 "created_by": created_by,
                 "created_at": created_at,
                 "updated_by": context.user_id,
                 "updated_at": now,
+                "modified_by_user_id": context.user_id,
+                "modified_at": now,
             }
 
             self._container.upsert_item(body=doc_data)
@@ -485,12 +554,20 @@ class CosmosRunMemory:
         context: RequestContext,
         run_id: str,
         version: Optional[int] = None,
+        edge_id: str = DEFAULT_EDGE_ID,
     ) -> Optional[Dict[str, Any]]:
         """Read a value from run memory (latest or specific version)."""
         if not key or not run_id:
             raise ValueError("key and run_id are required")
 
-        doc_id = self._document_id(context.tenant_id, context.mode, context.project_id, run_id, key)
+        doc_id = self._document_id(
+            context.tenant_id,
+            context.mode,
+            context.project_id,
+            run_id,
+            edge_id,
+            key,
+        )
 
         try:
             doc = self._container.read_item(item=doc_id, partition_key=run_id)
@@ -507,6 +584,8 @@ class CosmosRunMemory:
                 "created_at": doc.get("created_at"),
                 "updated_by": doc.get("updated_by"),
                 "updated_at": doc.get("updated_at"),
+                "modified_by_user_id": doc.get("modified_by_user_id"),
+                "modified_at": doc.get("modified_at"),
             }
         except:
             return None
@@ -515,6 +594,7 @@ class CosmosRunMemory:
         self,
         context: RequestContext,
         run_id: str,
+        edge_id: str = DEFAULT_EDGE_ID,
     ) -> List[str]:
         """List all keys in run memory for a run."""
         try:
@@ -524,6 +604,8 @@ class CosmosRunMemory:
             if context.tenant_id:
                 query += " AND c.tenant_id = @tenant_id"
                 params.append({"name": "@tenant_id", "value": context.tenant_id})
+            query += " AND c.edge_id = @edge_id"
+            params.append({"name": "@edge_id", "value": edge_id})
 
             keys = []
             for item in self._container.query_items(query=query, parameters=params):

@@ -7,7 +7,7 @@ except ImportError:
 
 class DAGValidator:
     @staticmethod
-    def validate_dag(nodes: List[str], edges: List[Dict[str, str]], entry_node: str, exit_nodes: List[str]) -> List[str]:
+    def validate_dag(nodes: List[str], edges: List[Any], entry_node: str, exit_nodes: List[str]) -> List[str]:
         node_set = set(nodes)
         
         # 1. Validate Nodes Exist
@@ -21,7 +21,10 @@ class DAGValidator:
         # 2. Build Adjacency List
         adj: Dict[str, Set[str]] = {n: set() for n in nodes}
         for edge in edges:
-            u, v = edge['from'], edge['to']
+            if isinstance(edge, dict):
+                 u, v = edge['from'], edge['to']
+            else:
+                 u, v = edge.source, edge.target
             if u not in node_set:
                 raise ValueError(f"Edge source '{u}' not found in nodes list.")
             if v not in node_set:

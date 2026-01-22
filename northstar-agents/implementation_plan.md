@@ -1,52 +1,59 @@
-# Implementation Plan - Registry Refactor (GraphLens)
+# Memory Isolation Implementation Plan
 
-# Goal
-Refactor the Registry to support the "GraphLens" architecture. This involves moving from a "Typed Node" (Inheritance) model to a "Neutral Node" (Composition) model, where Lenses (Context, View, Safety) are layered onto the graph.
+## Goal Description
+Implement strict memory isolation protocols to prevent data leakage between agent steps. This involves enforcing edge-specific blackboards (whiteboards/blackboards) accessed via a deterministic `edge_id`, and removing all reliance on global state dictionaries.
 
 ## User Review Required
 > [!IMPORTANT]
-> **Breaking Change**: The existing `NodeCard` will be effectively deprecated. While we won't delete it immediately (Quarantine), new flows should use `NeutralNodeCard` + Components.
-> **Terminology**: "Tools" are being replaced/clarified as "Connectors" (SaaS) or "Capabilities" (Native).
+> This is a breaking change for the Runtime. Any existing flows without `edge_id`s in their definition will fail validation until migrated.
+> Global `run_context` usage will be removed.
 
 ## Proposed Changes
 
-### Registry Schemas
+### Registry & Schema
+#### [MODIFY] [flows.py](file:///Users/jaynowman/dev/northstar-agents/src/northstar/registry/schemas/flows.py)
+- Update `FlowEdge` schema to include `edge_id` (required), `source_handle`, `target_handle`, `connection_handle`.
 
-#### [NEW] [neutral.py](file:///Users/jaynowman/dev/northstar-agents/src/northstar/registry/schemas/neutral.py)
-- `NeutralNodeCard`: Defines a structural node with `id`, `position`, and `components: List[ComponentRef]`.
-- `ComponentRef`: Typed reference to an Agent, Framework, or Connector.
+#### [MODIFY] [parsers.py](file:///Users/jaynowman/dev/northstar-agents/src/northstar/registry/parsers.py)
+- Validate presence of `edge_id`.
+- Validate `edge_id` matches deterministic hash of (source, target, handles).
 
-#### [NEW] [lenses.py](file:///Users/jaynowman/dev/northstar-agents/src/northstar/registry/schemas/lenses.py)
-- `ContextLayerCard`: Defines deep context (style, brand, data links).
-- `TokenMapCard`: Defines variable/token visibility scopes.
-- `SafetyProfileCard`: Defines safety tiers.
-- `LogPolicyCard`: Defines audit logging rules.
-- `InteractionStateCard`: Defines chat modes (Recap, Debate, etc.).
+#### [NEW] [identifiers.py](file:///Users/jaynowman/dev/northstar-agents/src/northstar/core/identifiers.py)
+- Implement `generate_deterministic_edge_id(source_node, source_handle, target_node, target_handle)`.
 
-#### [NEW] [graph.py](file:///Users/jaynowman/dev/northstar-agents/src/northstar/registry/schemas/graph.py)
-- `GraphDefinitionCard`: The "Flow Pack" container that bundles Nodes + Edges + Lens Layers.
+### Memory Gateway
+#### [NEW] [memory_gateway.py](file:///Users/jaynowman/dev/northstar-agents/src/northstar/runtime/memory_gateway.py)
+- Define `MemoryGateway` Protocol.
+- Define `MemoryRecord` TypedDict.
+- Implement `HttpMemoryGateway` using `EnginesBoundaryClient`.
+  - methods: `read_whiteboard`, `write_blackboard`, `get_inbound_blackboards`.
 
-#### [MODIFY] [loader.py](file:///Users/jaynowman/dev/northstar-agents/src/northstar/registry/loader.py)
-- Update `RegistryLoader` to parse `neutral_node`, `lens_context`, `lens_token_map`, `graph_def` YAML types.
+### Runtime Wiring (The "Spine")
+#### [MODIFY] [context.py](file:///Users/jaynowman/dev/northstar-agents/src/northstar/runtime/context.py)
+- Add `memory_gateway: MemoryGateway` to `AgentsRequestContext`.
+- Add `run_id: str` to `AgentsRequestContext`.
 
-#### [MODIFY] [nodes.py](file:///Users/jaynowman/dev/northstar-agents/src/northstar/registry/schemas/nodes.py)
-- Add deprecation warning to `NodeCard` docstring.
+#### [MODIFY] [executor.py](file:///Users/jaynowman/dev/northstar-agents/src/northstar/runtime/executor.py)
+- In `execute_flow`:
+  - Compute inbound/outbound edges for each node step.
+  - Pass `edge_ids` to `NodeExecutor`.
+
+#### [MODIFY] [node_executor.py](file:///Users/jaynowman/dev/northstar-agents/src/northstar/runtime/node_executor.py)
+- Use `gateway.get_inbound_blackboards(edge_ids)` to fetch inputs.
+- Pass namespaced inputs to `Composer`.
+- Write outputs to `gateway` via `edge_id`.
+
+#### [MODIFY] [composer.py](file:///Users/jaynowman/dev/northstar-agents/src/northstar/runtime/prompting/composer.py)
+- Refactor variable resolution to look in namespaced `inbound_blackboards` instead of global context.
 
 ## Verification Plan
 
 ### Automated Tests
-1.  **Create Test Data**:
-    - `tests/test_data/graph_lens_demo.yaml`: A sample flow pack containing 1 neutral node, 1 context layer, and 1 token map.
-2.  **New Unit Test**:
-    - `tests/registry/test_neutral_graph.py`:
-        - Load the test data using `RegistryLoader`.
-        - Verify `NeutralNodeCard` has correct ID and component refs.
-        - Verify `ContextLayerCard` loaded correctly.
-        - Verify `GraphDefinitionCard` correctly references the node and lenses.
-3.  **Command**:
-    ```bash
-    pytest tests/registry/test_neutral_graph.py
-    ```
+- Create `tests/runtime/test_memory_isolation.py`:
+  - Verify deterministic ID generation.
+  - Verify `HttpMemoryGateway` calls correct endpoints.
+  - Verify `NodeExecutor` correctly reads/writes from gateway.
+- Run `pytest tests/runtime/test_memory_isolation.py`.
 
 ### Manual Verification
-- None required for this phase (Pure Schema Refactor).
+- Run a simple flow using the CLI and verify `edge_id`s are generated and data is passed.

@@ -7,6 +7,9 @@ Endpoints:
 - POST /board/{key} — Commit turn with distillation
 - GET /board/{key} — Read board state (full or summary)
 """
+import asyncio
+import logging
+
 from fastapi import APIRouter, Depends, HTTPException, Query, Body
 from pydantic import BaseModel, Field
 from typing import Optional, Dict, Any, List, Union
@@ -17,6 +20,7 @@ from engines.common.identity import (
 )
 from engines.common.error_envelope import error_response, missing_route_error
 from engines.identity.auth import get_auth_context, require_tenant_membership
+from engines.realtime.run_stream import publish_run_event
 from engines.blackboard_store.service_reject import (
     BlackboardStoreServiceRejectOnMissing,
     MissingBlackboardStoreRoute,
@@ -26,12 +30,14 @@ from engines.blackboard_store.cloud_blackboard_store import VersionConflictError
 from engines.blackboard_store.models import BlackboardState
 
 router = APIRouter(prefix="/api/v1", tags=["blackboard_store"])
+logger = logging.getLogger(__name__)
 
 
 # Request/Response Models
 class WriteBlackboardRequest(BaseModel):
     """Request to write versioned value to blackboard."""
     run_id: str = Field(..., description="Run identifier for provenance")
+    edge_id: str = Field(..., description="Edge identifier for this board write")
     key: str = Field(..., description="Unique identifier within run")
     value: Dict[str, Any] = Field(..., description="Value to store (must be JSON-serializable)")
     expected_version: Optional[int] = Field(None, description="Expected version; None = new key")
@@ -40,9 +46,12 @@ class WriteBlackboardRequest(BaseModel):
 class WriteBlackboardResponse(BaseModel):
     """Response after write."""
     key: str
+    edge_id: str
     version: int
     created_by: str
     created_at: str
+    modified_by_user_id: str
+    modified_at: str
     updated_by: str
     updated_at: str
     status: str = "written"
@@ -51,10 +60,13 @@ class WriteBlackboardResponse(BaseModel):
 class ReadBlackboardResponse(BaseModel):
     """Response from read."""
     key: str
+    edge_id: str
     value: Optional[Dict[str, Any]] = None
     version: Optional[int] = None
     created_by: Optional[str] = None
     created_at: Optional[str] = None
+    modified_by_user_id: Optional[str] = None
+    modified_at: Optional[str] = None
     updated_by: Optional[str] = None
     updated_at: Optional[str] = None
     found: bool = False
@@ -63,13 +75,43 @@ class ReadBlackboardResponse(BaseModel):
 class ListKeysResponse(BaseModel):
     """Response from list_keys."""
     run_id: str
+    edge_id: str
     keys: list[str]
     count: int
+
+
+async def _emit_blackboard_write_event(
+    context: RequestContext,
+    run_id: str,
+    edge_id: str,
+    key: str,
+    version: int,
+) -> None:
+    try:
+        await publish_run_event(
+            context,
+            run_id,
+            "blackboard.write",
+            {"key": key, "version": version, "edge_id": edge_id},
+        )
+    except Exception:
+        logger.warning("Failed to publish run event for blackboard %s/%s", run_id, edge_id)
+
+
+def _schedule_blackboard_event(
+    context: RequestContext,
+    run_id: str,
+    edge_id: str,
+    key: str,
+    version: int,
+) -> None:
+    asyncio.create_task(_emit_blackboard_write_event(context, run_id, edge_id, key, version))
 
 
 class CommitTurnRequest(BaseModel):
     """Request to commit a turn."""
     run_id: str = Field(..., description="Run identifier")
+    edge_id: str = Field(..., description="Edge identifier")
     data: Dict[str, Any] = Field(..., description="New raw data")
     active_agents: Optional[List[str]] = Field(None, description="List of active agents")
     auto_distill: bool = Field(True, description="Whether to run auto-distillation")
@@ -102,13 +144,23 @@ async def write_blackboard(
             value=payload.value,
             expected_version=payload.expected_version,
             run_id=payload.run_id,
+            edge_id=payload.edge_id,
         )
-        
+        _schedule_blackboard_event(
+            context,
+            payload.run_id,
+            payload.edge_id,
+            payload.key,
+            result.get("version"),
+        )
         return WriteBlackboardResponse(
             key=result.get("key"),
+            edge_id=payload.edge_id,
             version=result.get("version"),
             created_by=result.get("created_by"),
             created_at=result.get("created_at"),
+            modified_by_user_id=result.get("modified_by_user_id"),
+            modified_at=result.get("modified_at"),
             updated_by=result.get("updated_by"),
             updated_at=result.get("updated_at"),
         )
@@ -125,6 +177,7 @@ async def write_blackboard(
 @router.get("/blackboard/read", response_model=ReadBlackboardResponse)
 async def read_blackboard(
     run_id: str = Query(..., description="Run identifier"),
+    edge_id: str = Query(..., description="Edge identifier"),
     key: str = Query(..., description="Key to read"),
     version: Optional[int] = Query(None, description="Specific version"),
     context: RequestContext = Depends(get_request_context),
@@ -132,17 +185,20 @@ async def read_blackboard(
     """Read versioned value from blackboard."""
     try:
         svc = BlackboardStoreServiceRejectOnMissing(context)
-        result = svc.read(key=key, version=version, run_id=run_id)
-        
+        result = svc.read(key=key, run_id=run_id, edge_id=edge_id, version=version)
+
         if result is None:
-            return ReadBlackboardResponse(key=key, found=False)
+            return ReadBlackboardResponse(key=key, edge_id=edge_id, found=False)
         
         return ReadBlackboardResponse(
             key=result.get("key"),
+            edge_id=edge_id,
             value=result.get("value"),
             version=result.get("version"),
             created_by=result.get("created_by"),
             created_at=result.get("created_at"),
+            modified_by_user_id=result.get("modified_by_user_id"),
+            modified_at=result.get("modified_at"),
             updated_by=result.get("updated_by"),
             updated_at=result.get("updated_at"),
             found=True,
@@ -158,13 +214,14 @@ async def read_blackboard(
 @router.get("/blackboard/list-keys", response_model=ListKeysResponse)
 async def list_blackboard_keys(
     run_id: str = Query(..., description="Run identifier"),
+    edge_id: str = Query(..., description="Edge identifier"),
     context: RequestContext = Depends(get_request_context),
 ):
     """List all keys in blackboard for given run."""
     try:
         svc = BlackboardStoreServiceRejectOnMissing(context)
-        keys = svc.list_keys(run_id=run_id)
-        return ListKeysResponse(run_id=run_id, keys=keys, count=len(keys))
+        keys = svc.list_keys(run_id=run_id, edge_id=edge_id)
+        return ListKeysResponse(run_id=run_id, edge_id=edge_id, keys=keys, count=len(keys))
     except MissingBlackboardStoreRoute as e:
         missing_route_error(resource_kind="blackboard_store", tenant_id=context.tenant_id, env=context.env, status_code=503)
     except HTTPException:
@@ -192,15 +249,26 @@ async def commit_board_turn(
             key=key,
             data=payload.data,
             run_id=payload.run_id,
+            edge_id=payload.edge_id,
             auto_distill=payload.auto_distill,
             active_agents=payload.active_agents,
+        )
+        _schedule_blackboard_event(
+            context,
+            payload.run_id,
+            payload.edge_id,
+            key,
+            result.get("version"),
         )
 
         return WriteBlackboardResponse(
             key=result.get("key"),
+            edge_id=payload.edge_id,
             version=result.get("version"),
             created_by=result.get("created_by"),
             created_at=result.get("created_at"),
+            modified_by_user_id=result.get("modified_by_user_id"),
+            modified_at=result.get("modified_at"),
             updated_by=result.get("updated_by"),
             updated_at=result.get("updated_at"),
         )

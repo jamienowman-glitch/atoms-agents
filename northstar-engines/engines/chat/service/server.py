@@ -7,6 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from engines.chat.service.http_transport import app as http_app
 from engines.chat.service.ws_transport import router as ws_router
 from engines.chat.service.sse_transport import router as sse_router
+from engines.whiteboard_store.routes import router as whiteboard_router
 from engines.chat.service import routes as chat_routes
 from engines.bossman.routes import router as bossman_router
 from engines.media.service.routes import router as media_router
@@ -102,6 +103,7 @@ def create_app() -> FastAPI:
         app.include_router(ws_router)
         app.include_router(sse_router)
         app.include_router(chat_routes.router)
+        app.include_router(whiteboard_router)
         app.include_router(media_router)
         app.include_router(media_v2_router)
         app.include_router(maybes_router, tags=["maybes"])

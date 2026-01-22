@@ -11,8 +11,11 @@ from .schemas import (
     TaskCard,
     ArtifactSpecCard,
     NodeCard,
-    FlowCard
+    NodeCard,
+    FlowCard,
+    FlowEdge
 )
+from northstar.core.identifiers import generate_deterministic_edge_id
 
 def parse_mode(data: Dict[str, Any]) -> ModeCard:
     required = ["id", "framework", "official_name", "invoke_primitive", "entrypoint"]
@@ -221,12 +224,42 @@ def parse_flow(data: Dict[str, Any]) -> FlowCard:
         if r not in data:
             raise ValueError(f"FlowCard missing required field: {r}")
             
+    parsed_edges = []
+    for edge_data in data["edges"]:
+        if "edge_id" not in edge_data:
+            raise ValueError(f"FlowCard edge missing required field: edge_id. Data: {edge_data}")
+            
+        required_edge = ["source", "target"]
+        for r in required_edge:
+            if r not in edge_data:
+                 raise ValueError(f"FlowCard edge missing required field: {r}")
+        
+        # Validate deterministic ID
+        expected_id = generate_deterministic_edge_id(
+            edge_data["source"],
+            edge_data.get("source_handle", "default"),
+            edge_data["target"],
+            edge_data.get("target_handle", "default")
+        )
+        
+        if edge_data["edge_id"] != expected_id:
+             raise ValueError(f"Invalid edge_id '{edge_data['edge_id']}'. Expected deterministic ID: '{expected_id}'")
+
+        parsed_edges.append(FlowEdge(
+            edge_id=edge_data["edge_id"],
+            source=edge_data["source"],
+            target=edge_data["target"],
+            source_handle=edge_data.get("source_handle", "default"),
+            target_handle=edge_data.get("target_handle", "default"),
+            connection_handle=edge_data.get("connection_handle", "default")
+        ))
+
     return FlowCard(
         flow_id=data["flow_id"],
         name=data["name"],
         objective=data["objective"],
         nodes=data["nodes"],
-        edges=data["edges"],
+        edges=parsed_edges,
         entry_node=data["entry_node"],
         exit_nodes=data["exit_nodes"],
         defaults=data.get("defaults", {}),

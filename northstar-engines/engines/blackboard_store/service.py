@@ -82,6 +82,7 @@ class BlackboardStoreService:
         key: str,
         value: Any,
         run_id: str,
+        edge_id: str,
         expected_version: Optional[int] = None,
     ) -> Dict[str, Any]:
         """Write a value to shared blackboard with optimistic concurrency.
@@ -90,13 +91,23 @@ class BlackboardStoreService:
             key: blackboard key
             value: any serializable value
             run_id: provenance identifier
+            edge_id: edge identifier for the write scope
             expected_version: if provided, only write if current version matches
         
         Returns: dict with key, value, version, created_by, created_at, updated_by, updated_at
         Raises: VersionConflictError if version mismatch (concurrent update)
         """
+        if not edge_id:
+            raise ValueError("edge_id is required")
         try:
-            return self._adapter.write(key, value, self._context, run_id, expected_version)
+            return self._adapter.write(
+                key,
+                value,
+                self._context,
+                run_id,
+                expected_version,
+                edge_id=edge_id,
+            )
         except VersionConflictError:
             raise
         except Exception as exc:
@@ -107,23 +118,31 @@ class BlackboardStoreService:
         self,
         key: str,
         run_id: str,
+        edge_id: str,
         version: Optional[int] = None,
     ) -> Optional[Dict[str, Any]]:
         """Read a value from shared blackboard (latest or specific version).
+
+        Args:
+            edge_id: edge identifier for read scope
         
         Returns dict with: value, version, created_by, created_at, updated_by, updated_at
         Returns None if not found.
         """
+        if not edge_id:
+            raise ValueError("edge_id is required")
         try:
-            return self._adapter.read(key, self._context, run_id, version)
+            return self._adapter.read(key, self._context, run_id, version, edge_id=edge_id)
         except Exception as exc:
             logger.error(f"Blackboard read failed for key '{key}': {exc}")
             return None
     
-    def list_keys(self, run_id: str) -> List[str]:
-        """List all keys in blackboard for a run."""
+    def list_keys(self, run_id: str, edge_id: str) -> List[str]:
+        """List all keys in blackboard for a run and edge."""
+        if not edge_id:
+            raise ValueError("edge_id is required")
         try:
-            return self._adapter.list_keys(self._context, run_id)
+            return self._adapter.list_keys(self._context, run_id, edge_id=edge_id)
         except Exception as exc:
             logger.error(f"Blackboard list_keys failed for run {run_id}: {exc}")
             return []
@@ -133,6 +152,7 @@ class BlackboardStoreService:
         key: str,
         data: Dict[str, Any],
         run_id: str,
+        edge_id: str,
         auto_distill: bool = True,
         active_agents: Optional[List[str]] = None,
     ) -> Dict[str, Any]:
@@ -142,13 +162,14 @@ class BlackboardStoreService:
             key: blackboard key
             data: new raw data (replaces existing raw_data)
             run_id: provenance identifier
+            edge_id: edge identifier for this commit
             auto_distill: whether to run LLM distillation
             active_agents: list of active agents (updates existing if provided)
 
         Returns: result of write operation
         """
         # 1. Load current state
-        current_entry = self.read(key, run_id)
+        current_entry = self.read(key, run_id, edge_id)
         old_state: Optional[BlackboardState] = None
         expected_version: Optional[int] = None
 
@@ -204,4 +225,4 @@ class BlackboardStoreService:
         )
 
         # 4. Save to store
-        return self.write(key, new_state, run_id, expected_version)
+        return self.write(key, new_state, run_id, edge_id, expected_version)

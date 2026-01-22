@@ -1,5 +1,6 @@
 import { Multi21Designer } from "@/app/nx-marketing-agents/core/multi21/Multi21Designer";
-import { BuilderShell } from "@/app/nx-marketing-agents/core/multi21/BuilderShell";
+import { WorkbenchShell } from "@/components/workbench/WorkbenchShell";
+import { Multi21Cartridge } from "@/components/workbench/cartridges/multi21";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -9,8 +10,8 @@ export const metadata: Metadata = {
 
 export default function Multi21Page() {
     return (
-        <BuilderShell>
+        <WorkbenchShell cartridge={Multi21Cartridge}>
             <Multi21Designer />
-        </BuilderShell>
+        </WorkbenchShell>
     );
 }

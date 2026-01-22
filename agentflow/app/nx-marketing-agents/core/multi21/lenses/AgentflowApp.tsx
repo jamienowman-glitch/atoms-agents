@@ -5,6 +5,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { LensRegistry, GraphFlow, GraphNode, NodeType, GraphEdge, Lens, createDefaultNode } from '../../../../../lib/LensRegistry';
+import { generateEdgeId } from '../../../../../lib/utils/edge-id';
 import { NodeViewRegistry } from '../../../../../lib/multi21/NodeViewRegistry';
 import { GraphTokenEditor } from './GraphTokenEditor';
 
@@ -24,6 +25,7 @@ export const AgentflowApp: React.FC<LensGraphViewProps> = ({ deviceMode = 'deskt
     const [currentLensId, setCurrentLensId] = useState('agent_flow');
     const [flow, setFlow] = useState<GraphFlow | null>(null);
     const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
+    const [selectedEdgeId, setSelectedEdgeId] = useState<string | null>(null);
     const [selectedFramework, setSelectedFramework] = useState<GraphNode | null>(null);
     const [lenses, setLenses] = useState<Lens[]>([]);
     const [catalog, setCatalog] = useState<any[]>([]);
@@ -202,6 +204,7 @@ export const AgentflowApp: React.FC<LensGraphViewProps> = ({ deviceMode = 'deskt
         e.stopPropagation();
         if (!e.isPrimary || e.button !== 0) return;
         setSelectedNodeId(nodeId);
+        setSelectedEdgeId(null);
         setDraggingNodeId(nodeId);
         lastPoint.current = { x: e.clientX, y: e.clientY };
     };
@@ -218,10 +221,14 @@ export const AgentflowApp: React.FC<LensGraphViewProps> = ({ deviceMode = 'deskt
         if (deviceMode === 'mobile') return;
         e.stopPropagation();
         if (connectingStart && connectingStart.nodeId !== nodeId) {
+            const deterministicId = generateEdgeId(connectingStart.nodeId, nodeId, connectingStart.portType, type);
             const newEdge: GraphEdge = {
-                id: "e-" + crypto.randomUUID().split('-')[0],
+                id: deterministicId,
+                edge_id: deterministicId, // Deterministic Hash
                 source: connectingStart.nodeId,
-                target: nodeId
+                target: nodeId,
+                sourceHandle: connectingStart.portType,
+                targetHandle: type
             };
             setFlow(prev => prev ? { ...prev, edges: [...prev.edges, newEdge] } : null);
         }
@@ -337,7 +344,15 @@ export const AgentflowApp: React.FC<LensGraphViewProps> = ({ deviceMode = 'deskt
                                     if (!source || !target) return null;
                                     const s = getPortPos(source, 'out');
                                     const t = getPortPos(target, 'in');
-                                    return <path key={edge.id} d={`M ${s.x} ${s.y} C ${s.x + 50} ${s.y}, ${t.x - 50} ${t.y}, ${t.x} ${t.y}`} stroke="#999" strokeWidth="2" fill="none" />;
+                                    const isSelected = selectedEdgeId === edge.id;
+                                    return (
+                                        <g key={edge.id} onClick={(e) => { e.stopPropagation(); setSelectedEdgeId(edge.id); setSelectedNodeId(null); }} style={{ cursor: 'pointer' }}>
+                                            {/* Hit Area */}
+                                            <path d={`M ${s.x} ${s.y} C ${s.x + 50} ${s.y}, ${t.x - 50} ${t.y}, ${t.x} ${t.y}`} stroke="transparent" strokeWidth="15" fill="none" />
+                                            {/* Visible Line */}
+                                            <path d={`M ${s.x} ${s.y} C ${s.x + 50} ${s.y}, ${t.x - 50} ${t.y}, ${t.x} ${t.y}`} stroke={isSelected ? "#2196F3" : "#999"} strokeWidth={isSelected ? "3" : "2"} fill="none" />
+                                        </g>
+                                    );
                                 })}
                                 {connectingStart && connectingMouse && (
                                     <path d={`M ${connectingStart.x} ${connectingStart.y} L ${connectingMouse.x} ${connectingMouse.y}`} stroke="#2196F3" strokeWidth="2" strokeDasharray="5,5" />
@@ -377,13 +392,17 @@ export const AgentflowApp: React.FC<LensGraphViewProps> = ({ deviceMode = 'deskt
                 </div>
 
                 {/* Inspector - Shared */}
-                {selectedNodeId && deviceMode === 'desktop' && (
+                {(selectedNodeId || selectedEdgeId) && deviceMode === 'desktop' && (
                     <div style={{ width: '300px', borderLeft: '1px solid #eee', background: 'white', padding: '16px' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
                             <h4 className="font-bold text-sm">Inspector</h4>
-                            <button onClick={() => setSelectedNodeId(null)}>×</button>
+                            <button onClick={() => { setSelectedNodeId(null); setSelectedEdgeId(null); }}>×</button>
                         </div>
-                        <GraphTokenEditor tokens={flow.nodes.find(n => n.id === selectedNodeId)?.data} />
+                        <GraphTokenEditor
+                            tokens={selectedNodeId ? flow.nodes.find(n => n.id === selectedNodeId)?.data : {}}
+                            edgeId={selectedEdgeId}
+                            edge={selectedEdgeId ? flow.edges.find(e => e.id === selectedEdgeId) : undefined}
+                        />
                     </div>
                 )}
             </div>

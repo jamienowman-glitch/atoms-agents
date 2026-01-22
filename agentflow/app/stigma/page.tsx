@@ -3,14 +3,13 @@
 
 import React from 'react';
 import StigmaCanvas from '@/components/canvases/StigmaCanvas';
-import { ToolControlProvider } from '@/context/ToolControlContext';
+import { WorkbenchShell } from '@/components/workbench/WorkbenchShell';
+import { StigmaCartridge } from '@/components/workbench/cartridges/stigma';
 
 export default function StigmaPage() {
     return (
-        <ToolControlProvider>
-            <div className="w-screen h-screen">
-                <StigmaCanvas canvasId="mobile-test-session" />
-            </div>
-        </ToolControlProvider>
+        <WorkbenchShell cartridge={StigmaCartridge}>
+            <StigmaCanvas canvasId="mobile-test-session" />
+        </WorkbenchShell>
     );
 }

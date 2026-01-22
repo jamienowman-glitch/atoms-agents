@@ -11,6 +11,8 @@ from northstar.nexus.client import NexusClient, NoOpNexusClient
 from northstar.runtime.context import AgentsRequestContext  # Type hint
 from northstar.runtime.gateway_resolution import resolve_gateway
 from northstar.runtime.canvas_mirror import CanvasMirror
+from northstar.runtime.memory_gateway import MemoryGateway, HttpMemoryGateway
+from northstar.engines_boundary.client import EnginesBoundaryClient
 
 
 class NodeExecutor:
@@ -30,10 +32,11 @@ class NodeExecutor:
         self,
         node: Any, # Can be NodeCard (Legacy) or NeutralNodeCard (New)
         profile: RunProfileCard,
-        blackboard: Dict[str, Any],
         request_context: Optional[AgentsRequestContext] = None,
         provider_override: Optional[str] = None,
         model_override: Optional[str] = None,
+        inbound_edge_ids: Optional[List[str]] = None,
+        outbound_edge_ids: Optional[List[str]] = None,
     ) -> NodeRunResult:
         start_ts = time.time()
         events: List[Dict[str, Any]] = []
@@ -63,6 +66,18 @@ class NodeExecutor:
             "surface_id": request_context.surface_id,
             "actor": request_context.actor_id or request_context.user_id,
         }
+
+        if not inbound_edge_ids: inbound_edge_ids = []
+        if not outbound_edge_ids: outbound_edge_ids = []
+
+        # Initialize Gateway
+        # In a real DI system this is injected, for now we lazy load if not in context
+        memory_gateway = None
+        # Check RunContext if available (todo: pass RunContext instead of just Profile)
+        # For now, we instantiate a gateway if we have a request context
+        if request_context:
+            client = EnginesBoundaryClient() # Default localhost
+            memory_gateway = HttpMemoryGateway(client, request_context)
 
         self.audit_emitter.emit(
             AuditEvent(
@@ -95,7 +110,9 @@ class NodeExecutor:
                 
                 # Run the first component as the primary actor
                 primary_comp = node.components[0]
-                result = runner.run_component(primary_comp, blackboard, request_context)
+                # Blackboard is replaced by request_context state or separate fetch (TODO)
+                # For now just passing empty dict for component runner signature
+                result = runner.run_component(primary_comp, {}, request_context)
                 
                 # Write Blackboard Outputs (if defined in component config or node)
                 # For now, simplistic passing
@@ -140,6 +157,11 @@ class NodeExecutor:
                 from northstar.runtime.gateway import CapabilityToggleRequest
                 toggles = [CapabilityToggleRequest(capability_id=c) for c in node.capability_ids or []]
                 
+                # 2a. Fetch Inbound Memory (The "Read" Step)
+                inbound_blackboards = {}
+                if memory_gateway:
+                    inbound_blackboards = memory_gateway.get_inbound_blackboards(inbound_edge_ids)
+                
                 # --- SPINE-SYNC: CANVAS TOOL INGESTION ---
                 if self.canvas_mirror:
                      canvas_tools = self.canvas_mirror.get_tools()
@@ -169,10 +191,15 @@ class NodeExecutor:
                 nexus_context = self._fetch_nexus_context(task, events)
                 
                 from northstar.runtime.prompting.composer import compose_messages
-                messages = compose_messages(persona, task, blackboard, nexus_context=nexus_context)
+                messages = compose_messages(
+                    persona, 
+                    task, 
+                    inbound_blackboards, # Was blackboard
+                    nexus_context=nexus_context
+                )
                 
                 response = self._invoke_gateway(
-                    node, gateway, messages, model_id, provider_id, events, request_context, toggles
+                    node, gateway, messages, model_id, provider_id, events, request_context
                 )
                 
                 if response.get("status") == "FAIL":
@@ -183,7 +210,14 @@ class NodeExecutor:
                     return self._fail(node, run_id, "Empty response", start_ts, events, ctx_args)
 
                 # 5. Outputs
-                artifacts_written, writes = self._write_outputs(node, content, blackboard)
+                artifacts_written, writes = self._write_outputs(node, content)
+                
+                # Write to Memory Gateway (The "Write" Step)
+                if memory_gateway and outbound_edge_ids:
+                    for edge_id in outbound_edge_ids:
+                        # We write the same output to all outbound edges (broadcast)
+                        # Or we could filter based on connection handles if we parsed that far
+                        memory_gateway.write_blackboard(edge_id, writes)
                 
                 # End
                 self.audit_emitter.emit(
@@ -267,7 +301,7 @@ class NodeExecutor:
         """Attach a CanvasMirror for downstream lenses to read."""
         self.canvas_mirror = mirror
 
-    def _write_outputs(self, node: NodeCard, content: str, blackboard: Dict[str, Any]) -> tuple[List[str], Dict[str, Any]]:
+    def _write_outputs(self, node: NodeCard, content: str) -> tuple[List[str], Dict[str, Any]]:
         from northstar.runtime.artifact_writer import ArtifactWriter
         specs = [self.registry.artifact_specs.get(aid) for aid in node.artifact_outputs]
         specs = [s for s in specs if s] # Filter None
@@ -281,5 +315,5 @@ class NodeExecutor:
         for key in node.blackboard_writes:
             val = f"See artifact: {paths[0] if paths else 'No artifact'}"
             writes[key] = val
-            blackboard[key] = val
+            # blackboard[key] = val # REMOVED GLOBAL WRITE
         return paths, writes

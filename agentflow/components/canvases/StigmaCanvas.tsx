@@ -1,9 +1,6 @@
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useWorkbenchTransport } from '../workbench/useWorkbenchTransport';
-import { TopPill } from '@/app/nx-marketing-agents/core/multi21/headers/TopPill';
-import { ChatRailShell } from '@/components/chat/ChatRailShell';
-import { ToolControlProvider } from '@/context/ToolControlContext';
 
 // --- Types ---
 
@@ -45,7 +42,7 @@ function useDebounce<T>(value: T, delay: number): T {
 
 const useAutoSave = (atoms: Atom[], canvasId: string) => {
     const debouncedAtoms = useDebounce(atoms, 1000);
-    const transport = useWorkbenchTransport(canvasId, {});
+    const transport = useWorkbenchTransport(canvasId);
 
     useEffect(() => {
         if (debouncedAtoms.length > 0) {
@@ -137,13 +134,9 @@ const StigmaCanvas: React.FC<{ canvasId?: string }> = ({ canvasId = 'stigma-demo
     const [showGrid, setShowGrid] = useState(true);
     const [atoms, setAtoms] = useState<Atom[]>([]);
 
-    // UI State for ChatRail
-    const [showTools, setShowTools] = useState(false);
-    const [chatMode, setChatMode] = useState<'nano' | 'micro' | 'standard' | 'full'>('standard');
-
     // Auto-Save
     const debouncedAtoms = useDebounce(atoms, 1000);
-    const transport = useWorkbenchTransport(canvasId, {});
+    const transport = useWorkbenchTransport(canvasId);
 
     useEffect(() => {
         if (debouncedAtoms.length > 0) {
@@ -241,28 +234,11 @@ const StigmaCanvas: React.FC<{ canvasId?: string }> = ({ canvasId = 'stigma-demo
                 onChange={handleFileUpload}
             />
 
-            {/* UI LAYER: Top Pill (Fixed) */}
-            <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50">
-                <TopPill />
-            </div>
-
             {/* UI LAYER: Side Toolbar */}
             <SideToolbar
                 onSpawn={(t) => spawnAtom(t)}
                 onUpload={() => fileInputRef.current?.click()}
             />
-
-            {/* UI LAYER: Chat Rail (Fixed Right) */}
-            <div className="fixed top-0 right-0 h-full z-50 pointer-events-none">
-                <div className="pointer-events-auto h-full">
-                    <ChatRailShell
-                        showTools={showTools}
-                        onToggleTools={() => setShowTools(!showTools)}
-                        mode={chatMode}
-                        onModeChange={setChatMode}
-                    />
-                </div>
-            </div>
 
             {/* SCALED WORKSPACE */}
             <div className="w-full h-full flex justify-center items-start pt-10 pl-20">

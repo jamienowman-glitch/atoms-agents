@@ -47,12 +47,15 @@ class PersistenceFactory:
 
     @staticmethod
     def get_blackboard(profile: RunProfileCard, base_path: str) -> Blackboard:
+        # DEPRECATED: Runtime now uses edge-scoped MemoryGateway. 
+        # This remains only for legacy local testing or sidecar tools not yet migrated.
         if profile.blackboard_backend == "local":
             return LocalBlackboard(base_path)
         elif profile.blackboard_backend == "infra":
-            if profile.allow_local_fallback:
-                return LocalBlackboard(base_path)
-            raise RuntimeError("Infra blackboard requested but not available. No fallback allowed for this profile.")
+            # STRICT: No fallback allowed for infra blackboard.
+            # The Runtime should be using MemoryGateway, so this path implies
+            # a misconfiguration or a legacy path that MUST fail in prod.
+            raise RuntimeError("Infra blackboard requested. Global blackboard is deprecated in favor of MemoryGateway. No fallback allowed.")
         else:
             raise ValueError(f"Unknown blackboard backend: {profile.blackboard_backend}")
 

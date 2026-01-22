@@ -98,11 +98,7 @@ class BlackboardStoreServiceRejectOnMissing:
                 f"Routing registry error: {str(e)}. "
                 f"Ensure routing service is running and configured."
             )
-            if self._context.mode == "lab":
-                logger.warning(f"[LAB MODE] Routing error: {message}")
-                return None
-            else:
-                raise MissingBlackboardStoreRoute(message=message)
+            raise MissingBlackboardStoreRoute(message=message)
         
         if route is None:
             message = (
@@ -110,14 +106,7 @@ class BlackboardStoreServiceRejectOnMissing:
                 f"env={self._context.env}, mode={self._context.mode}. "
                 f"Configure via /routing/routes with backend_type (firestore|dynamodb|cosmos)."
             )
-            
-            if self._context.mode == "lab":
-                # Lab mode: warn but continue (debug tolerance)
-                logger.warning(f"[LAB MODE] Blackboard route missing: {message}")
-                return None  # Will be handled in individual methods
-            else:
-                # Production: reject hard
-                raise MissingBlackboardStoreRoute(message=message)
+            raise MissingBlackboardStoreRoute(message=message)
         
         # Instantiate correct backend
         try:
@@ -149,8 +138,9 @@ class BlackboardStoreServiceRejectOnMissing:
         self,
         key: str,
         value: Dict[str, Any],
-        expected_version: Optional[int] = None,
         run_id: Optional[str] = None,
+        edge_id: Optional[str] = None,
+        expected_version: Optional[int] = None,
     ) -> Dict[str, Any]:
         """Write versioned value to blackboard.
         
@@ -175,7 +165,9 @@ class BlackboardStoreServiceRejectOnMissing:
         
         if run_id is None:
             raise ValueError("run_id is required")
-        
+        if not edge_id:
+            raise ValueError("edge_id is required")
+
         try:
             result = self._adapter.write(
                 key=key,
@@ -183,6 +175,7 @@ class BlackboardStoreServiceRejectOnMissing:
                 context=self._context,
                 run_id=run_id,
                 expected_version=expected_version,
+                edge_id=edge_id,
             )
             return result
         except VersionConflictError:
@@ -190,7 +183,13 @@ class BlackboardStoreServiceRejectOnMissing:
         except Exception as e:
             raise RuntimeError(f"Blackboard write failed: {str(e)}")
     
-    def read(self, key: str, version: Optional[int] = None, run_id: Optional[str] = None) -> Dict[str, Any]:
+    def read(
+        self,
+        key: str,
+        run_id: Optional[str] = None,
+        edge_id: Optional[str] = None,
+        version: Optional[int] = None,
+    ) -> Dict[str, Any]:
         """Read versioned value from blackboard.
         
         Args:
@@ -213,19 +212,22 @@ class BlackboardStoreServiceRejectOnMissing:
         
         if run_id is None:
             raise ValueError("run_id is required")
-        
+        if not edge_id:
+            raise ValueError("edge_id is required")
+
         try:
             result = self._adapter.read(
                 key=key,
                 context=self._context,
                 run_id=run_id,
                 version=version,
+                edge_id=edge_id,
             )
             return result
         except Exception as e:
             raise RuntimeError(f"Blackboard read failed: {str(e)}")
     
-    def list_keys(self, run_id: str) -> list[str]:
+    def list_keys(self, run_id: str, edge_id: Optional[str] = None) -> list[str]:
         """List all keys in this blackboard.
         
         Args:
@@ -243,10 +245,13 @@ class BlackboardStoreServiceRejectOnMissing:
                 "Blackboard list_keys failed: route not configured and mode is not lab"
             )
         
+        if not edge_id:
+            raise ValueError("edge_id is required")
         try:
             result = self._adapter.list_keys(
                 context=self._context,
                 run_id=run_id,
+                edge_id=edge_id,
             )
             return result
         except Exception as e:

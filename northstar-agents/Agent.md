@@ -22,5 +22,10 @@
 *   **Handshake**: On mount, every canvas emits a `CANVAS_READY` event containing its Tool Manifest. This tells the Agent what "buttons" it can press.
 
 ## 3. DATA FLOW PROTOCOL
+### MEMORY LAWS (NON-NEGOTIABLE)
+1. **No Global State**: Agents must NEVER rely on a global `run_context` dictionary for task data.
+2. **Deterministic Edges**: All data flows across `edge_id`s. An agent reads from Inbound Blackboards and writes to Outbound Blackboards using the `MemoryGateway`.
+3. **Traceability**: Every memory write is stamped with a `run_id` and `user_id`.
+
 *   **Transport**: WebSocket is the primary bi-directional rail. SSE is the secondary broadcast rail.
 *   **Multimodal**: Media (Screenshots/Audio) is handled via Sidecars. The Event Envelope carries a reference/URL; the model fetches the blob separately.

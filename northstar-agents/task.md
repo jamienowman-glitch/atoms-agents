@@ -1,4 +1,28 @@
+- [ ] Phase 6: Memory Isolation Protocols <!-- id: 28 -->
+    - [ ] Graph Schema and Parsing <!-- id: 29 -->
+        - [ ] Extend Flow edge schema in `flows.py` <!-- id: 30 -->
+        - [ ] Update `parsers.py` to require edge_id <!-- id: 31 -->
+        - [ ] Add deterministic edge_id helper <!-- id: 32 -->
+        - [ ] Update example flow YAML <!-- id: 33 -->
+    - [ ] Memory Gateway <!-- id: 34 -->
+        - [ ] Add MemoryGateway protocol and MemoryRecord types <!-- id: 35 -->
+        - [ ] Implement HttpMemoryGateway <!-- id: 36 -->
+        - [ ] Add get_inbound_blackboards <!-- id: 37 -->
+    - [ ] Runtime Wiring <!-- id: 38 -->
+        - [ ] Extend `context.py` to include memory gateway <!-- id: 39 -->
+        - [ ] Update `profiles.py` to honor infra blackboard <!-- id: 40 -->
+        - [ ] Update `executor.py` to compute inbound/outbound edges <!-- id: 41 -->
+        - [ ] Update `node_executor.py` to accept inbound blackboards <!-- id: 42 -->
+        - [ ] Update `composer.py` to accept namespaced inputs <!-- id: 43 -->
+        - [ ] Remove global blackboard dict usage <!-- id: 44 -->
+    - [ ] Entry Points and Tests <!-- id: 45 -->
+        - [ ] Ensure server API uses a single run_id <!-- id: 46 -->
+        - [ ] Update CLI runner <!-- id: 47 -->
+        - [ ] Add tests for edge_id validation <!-- id: 48 -->
+        - [ ] Update `Agent.md` and `Skill.md` <!-- id: 49 -->
+
 # GraphLens Architecture Refactor
+
 
 - [x] Phase 1: Planning & Schema Definition <!-- id: 0 -->
     - [x] Gap Analysis & Vision Alignment (`graphlens_gap_analysis.md`) <!-- id: 1 -->

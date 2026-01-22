@@ -9,6 +9,11 @@ from northstar.registry.schemas import FlowCard, NodeCard
 from northstar.runtime.node_executor import NodeExecutor
 
 @dataclass
+class EdgeMap:
+    inbound_edges: List[str] # edge_ids
+    outbound_edges: List[str] # edge_ids
+
+@dataclass
 class FlowRunResult:
     flow_id: str
     status: str
@@ -49,7 +54,7 @@ class FlowExecutor:
             print(f"[FlowExecutor] Execution Order: {execution_order}")
             
             # 2. Execute Nodes
-            blackboard: Dict[str, Any] = {} # Shared state
+            # blackboard: Dict[str, Any] = {} # REMOVED: Global state
             
             # Get profile
             profile = self.ctx.profiles.get(profile_id)
@@ -68,7 +73,24 @@ class FlowExecutor:
                 print(f"[FlowExecutor] Executing Node: {node_id}")
                 
                 # Execute
-                node_res_obj = self.node_executor.execute_node(node, profile, blackboard)
+                # Calculate specific edges for this node
+                # TODO: This could be pre-calculated for O(1) lookup
+                inbound = [
+                    e.edge_id for e in flow.edges 
+                    if e.target == node_id
+                ]
+                outbound = [
+                    e.edge_id for e in flow.edges 
+                    if e.source == node_id
+                ]
+                
+                # Execute with strict edge boundries
+                node_res_obj = self.node_executor.execute_node(
+                    node, 
+                    profile, 
+                    inbound_edge_ids=inbound,
+                    outbound_edge_ids=outbound
+                )
                 
                 # Convert to dict for report
                 node_res_dict = {

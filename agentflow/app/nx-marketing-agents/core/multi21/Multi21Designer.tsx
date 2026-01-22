@@ -31,7 +31,6 @@ import { useToolControl } from '../../../../context/ToolControlContext';
 import { SortableBlockWrapper } from './SortableBlockWrapper';
 import { Multi21_PopupWrapper } from './Multi21_PopupWrapper';
 import { HiddenAttributionFields } from './HiddenAttributionFields';
-import { BuilderShell } from './BuilderShell';
 import { AgentflowApp } from './lenses/AgentflowApp';
 
 // --- Types ---
@@ -86,11 +85,7 @@ export function Multi21Designer({ userRole = 'tenant' }: Multi21DesignerProps) {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [devMode]);
 
-    return (
-        <BuilderShell showGraphControls={effectiveRole === 'architect'}>
-            <Multi21DesignerContent effectiveRole={effectiveRole} />
-        </BuilderShell>
-    );
+    return <Multi21DesignerContent effectiveRole={effectiveRole} />;
 }
 
 function Multi21DesignerContent({ effectiveRole }: { effectiveRole: 'tenant' | 'architect' }) {
@@ -525,7 +520,7 @@ function Multi21DesignerContent({ effectiveRole }: { effectiveRole: 'tenant' | '
     );
 
     return (
-        // BuilderShell removed from here as we are now inside it
+        // WorkbenchShell provides the frame.
         <>
             <HiddenAttributionFields />
 
