@@ -1,7 +1,22 @@
 from abc import ABC, abstractmethod
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, TypedDict
 from dataclasses import dataclass
 from enum import Enum
+
+
+class TokenUsage(TypedDict):
+    input_tokens: int
+    output_tokens: int
+    total_tokens: int
+
+
+class GenerationResult(TypedDict):
+    role: str
+    content: str
+    usage: TokenUsage
+    finish_reason: Optional[str]
+    model_id: str
+    cost_usd: float
 
 
 class ReadinessStatus(Enum):
@@ -39,8 +54,12 @@ class LLMGateway(ABC):
         capability_toggles: Optional[List[CapabilityToggleRequest]] = None,
         limits: Optional[Any] = None,  # RunLimits
         request_context: Optional[Any] = None,  # AgentsRequestContext (Optional for backward compatibility in signature, but implementations might use it)
-    ) -> Dict[str, Any]:  # Standardized result
+    ) -> GenerationResult:  # Standardized result
         pass
+
+    def list_models(self) -> List[str]:
+        """Return a list of available model IDs. Default is empty (static config only)."""
+        return []
 
     @abstractmethod
     def check_readiness(self) -> ReadinessResult:

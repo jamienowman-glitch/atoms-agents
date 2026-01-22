@@ -1,9 +1,11 @@
 """Budget usage service with cost/summary helpers."""
 from __future__ import annotations
 
+import json
 from datetime import datetime, timedelta, timezone
 from decimal import Decimal
-from typing import Dict, List, Optional
+from pathlib import Path
+from typing import Dict, List, Optional, Any
 
 from engines.budget.models import UsageEvent
 from engines.budget.repository import BudgetUsageRepository, budget_repo_from_env
@@ -130,3 +132,81 @@ def get_budget_service() -> BudgetService:
 def set_budget_service(service: BudgetService) -> None:
     global _default_service
     _default_service = service
+
+
+class TokenAccountingService:
+    def __init__(self, price_book_path: Optional[Path] = None):
+        if not price_book_path:
+            # Default location: northstar-engines/data/price_book.json
+            # We assume this code runs within the northstar-engines repo structure
+            try:
+                # Attempt to find relative to this file
+                # northstar-engines/engines/budget/service.py -> northstar-engines/data/price_book.json
+                # ../../data/price_book.json
+                root = Path(__file__).resolve().parent.parent.parent
+                price_book_path = root / "data" / "price_book.json"
+            except NameError:
+                # Fallback if __file__ is not defined
+                price_book_path = Path("data/price_book.json")
+
+        self.price_book_path = price_book_path
+        self.rates: Dict[str, Any] = {}
+        self.defaults = {"input_per_1m": 1.0, "output_per_1m": 1.0}
+        self.currency = "USD"
+        self._load_price_book()
+
+    def _load_price_book(self) -> None:
+        if not self.price_book_path.exists():
+            # Warn but don't crash, use defaults
+            # print(f"WARNING: Price book not found at {self.price_book_path}")
+            return
+
+        try:
+            with open(self.price_book_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                self.currency = data.get("currency", "USD")
+                self.rates = data.get("rates", {})
+                self.defaults = data.get("defaults", self.defaults)
+        except Exception:
+            # print(f"ERROR: Failed to load price book: {e}")
+            pass
+
+    def calculate_cost(self, provider: str, model: str, usage: Dict[str, Any]) -> Decimal:
+        """
+        Calculate cost in USD.
+        Usage dict must contain 'input_tokens' and 'output_tokens' (or 'input'/'output').
+        """
+        input_tokens = usage.get("input_tokens") or usage.get("input") or 0
+        output_tokens = usage.get("output_tokens") or usage.get("output") or 0
+
+        # Normalize keys for lookup
+        # Price book keys are "provider/model"
+        key = f"{provider}/{model}"
+
+        # Try exact match
+        rate = self.rates.get(key)
+
+        # Fallback: Try just model name if provider is redundant or omitted in key?
+        # For now, strict or default.
+
+        if not rate:
+            rate = self.defaults
+
+        input_rate = Decimal(str(rate.get("input_per_1m", self.defaults.get("input_per_1m", 1.0))))
+        output_rate = Decimal(str(rate.get("output_per_1m", self.defaults.get("output_per_1m", 1.0))))
+
+        # per 1M tokens
+        input_cost = (Decimal(input_tokens) / Decimal("1000000")) * input_rate
+        output_cost = (Decimal(output_tokens) / Decimal("1000000")) * output_rate
+
+        return input_cost + output_cost
+
+
+_default_accounting_service: Optional[TokenAccountingService] = None
+
+
+def get_token_accounting_service() -> TokenAccountingService:
+    global _default_accounting_service
+    if _default_accounting_service is None:
+        _default_accounting_service = TokenAccountingService()
+    return _default_accounting_service

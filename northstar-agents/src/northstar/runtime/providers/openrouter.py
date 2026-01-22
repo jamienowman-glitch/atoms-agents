@@ -47,16 +47,35 @@ class OpenRouterGateway(LLMGateway):
             
             choice = data["choices"][0]
             message = choice["message"]
-            usage = data.get("usage", {})
+            raw_usage = data.get("usage", {})
+
+            usage = {
+                "input_tokens": raw_usage.get("prompt_tokens", 0),
+                "output_tokens": raw_usage.get("completion_tokens", 0),
+                "total_tokens": raw_usage.get("total_tokens", 0)
+            }
             
             return {
                 "role": message["role"],
                 "content": message["content"],
-                "usage": usage
+                "usage": usage,
+                "finish_reason": choice.get("finish_reason"),
+                "model_id": data.get("model", model_card.official_id_or_deployment)
             }
             
         except Exception as e:
              return {"status": "FAIL", "reason": f"OpenRouter Error: {str(e)}", "error": str(e)}
+
+    def list_models(self) -> List[str]:
+        try:
+            headers = self._get_headers()
+            resp = requests.get(f"{self.BASE_URL}/models", headers=headers, timeout=10)
+            if resp.status_code == 200:
+                data = resp.json()
+                return [m["id"] for m in data.get("data", [])]
+        except Exception:
+            pass
+        return []
 
     def check_readiness(self) -> ReadinessResult:
         try:

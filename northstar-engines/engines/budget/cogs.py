@@ -11,7 +11,7 @@ from engines.budget.service import BudgetService, get_budget_service
 
 # Simple price tables (extendable). Values are USD per unit (token or flat).
 GCP_PRICE_TABLE = {
-    "vertex/gemini-1.5-flash-002": Decimal("0.0000015"),  # per token example
+    "vertex/gemini-2.0-flash-001": Decimal("0.0000001"),  # per token example
 }
 
 

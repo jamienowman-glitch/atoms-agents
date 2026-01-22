@@ -57,7 +57,7 @@ class ThreeWiseLLMClient:
         if self._completion_fn:
             return self._completion_fn(prompt, metadata)
         provider = (metadata.get("provider") or metadata.get("llm_provider") or "").lower()
-        model_name = metadata.get("model") or metadata.get("model_id") or os.getenv("VERTEX_MODEL", "gemini-1.5-flash-002")
+        model_name = metadata.get("model") or metadata.get("model_id") or os.getenv("VERTEX_MODEL", "gemini-2.0-flash-001")
         # Prefer Vertex if available; otherwise fall back to a deterministic local stub.
         try:
             from google.cloud import aiplatform  # type: ignore

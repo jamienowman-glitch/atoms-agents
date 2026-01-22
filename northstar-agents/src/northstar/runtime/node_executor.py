@@ -315,6 +315,20 @@ class NodeExecutor:
             limits=limits,
             request_context=request_context,
         )
+
+        # Commerce Hook
+        try:
+            from engines.budget.service import get_token_accounting_service
+            accounting = get_token_accounting_service()
+            # resp is GenerationResult (TypedDict), so we can treat as dict
+            usage = resp.get("usage", {})
+            cost = accounting.calculate_cost(provider_id, model_id, usage)
+            resp["cost_usd"] = float(cost)
+        except Exception as e:
+            # Fallback for lab/offline modes if engines not available
+            # print(f"Commerce Warning: {e}")
+            resp["cost_usd"] = 0.0
+
         self._log_event(events, "invocation_end")
         return dict(resp)
 
@@ -338,6 +352,12 @@ class NodeExecutor:
         model_id: str,
     ) -> None:
         payload: Dict[str, Any] = {"provider": provider_id, "model": model_id}
+
+        if "usage" in response:
+            payload["usage"] = response["usage"]
+        if "cost_usd" in response:
+            payload["cost_usd"] = response["cost_usd"]
+
         for key in ("content", "analysis", "reason", "status"):
             if key in response:
                 payload[key] = response[key]

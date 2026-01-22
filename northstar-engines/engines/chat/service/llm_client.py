@@ -42,7 +42,7 @@ def stream_chat(
     meta = f"[tenant:{tenant_id} thread:{thread_id} scope:{scope}]" if scope else f"[tenant:{tenant_id} thread:{thread_id}]"
     prompt = f"{meta}\n{history_text}\nassistant:"
 
-    model_name = os.getenv("VERTEX_MODEL", "gemini-1.5-flash-002")
+    model_name = os.getenv("VERTEX_MODEL", "gemini-2.0-flash-001")
     model = client.GenerativeModel(model_name)  # type: ignore[attr-defined]
     response = model.generate_content(prompt, stream=True)  # type: ignore[call-arg]
     for chunk in response:

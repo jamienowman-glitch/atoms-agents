@@ -56,13 +56,52 @@ class VertexGateway(LLMGateway):
 
         response = model.generate_content(last_msg, stream=stream)
 
+        usage = {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0
+        }
+
         if stream:
             full_text = ""
             for chunk in response:
-                full_text += chunk.text
-            return {"role": "assistant", "content": full_text}
+                try:
+                    full_text += chunk.text
+                except ValueError:
+                    pass
+
+                # Vertex stream usage is usually in the last chunk
+                if hasattr(chunk, "usage_metadata") and chunk.usage_metadata:
+                    usage["input_tokens"] = chunk.usage_metadata.prompt_token_count
+                    usage["output_tokens"] = chunk.usage_metadata.candidates_token_count
+                    usage["total_tokens"] = chunk.usage_metadata.total_token_count
+
+            return {
+                "role": "assistant",
+                "content": full_text,
+                "usage": usage,
+                "finish_reason": "stop",
+                "model_id": model_card.official_id_or_deployment
+            }
         else:
-            return {"role": "assistant", "content": response.text}
+            if hasattr(response, "usage_metadata") and response.usage_metadata:
+                usage["input_tokens"] = response.usage_metadata.prompt_token_count
+                usage["output_tokens"] = response.usage_metadata.candidates_token_count
+                usage["total_tokens"] = response.usage_metadata.total_token_count
+
+            return {
+                "role": "assistant",
+                "content": response.text,
+                "usage": usage,
+                "finish_reason": str(response.candidates[0].finish_reason) if response.candidates else None,
+                "model_id": model_card.official_id_or_deployment
+            }
+
+    def list_models(self) -> List[str]:
+        return [
+            "gemini-2.0-flash-001",
+            "gemini-2.0-pro-exp-02-05",
+        ]
 
     def check_readiness(self) -> Any:
         from northstar.runtime.gateway import ReadinessResult, ReadinessStatus
