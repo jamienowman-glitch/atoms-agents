@@ -45,3 +45,19 @@ Every UI Atom you build must adhere to the **Dual Magnifier** flow:
 * **Video Family (`Aftertime`):** Focus on Time-based linearity (4:3 default).
 
 > **VERIFICATION:** Before marking a task complete, ask: "Did I modify the Workbench Frame?" If yes, **REVERT IMMEDIATELY.**
+
+## 5. Wireframe Patterns
+To support the Wireframe Builder capabilities, adhere to these patterns:
+
+### 5.1 The Geometry Switch
+* **Desktop:** Use `flex-row`. The `GraphLens` is an infinite SVG/HTML canvas.
+* **Mobile:** Use `flex-col`. The `GraphLens` is a vertical card list. The **Right Magnifier** triggers a horizontal carousel to switch between Graph, Context, and Token views.
+
+### 5.2 Atomic Pickers
+* Never hardcode toolbars.
+* Use `AtomPicker<T>` components that fetch data from `RegistryService` (to be built).
+* Pickers must support: Frameworks, Personas, and Capabilities.
+
+### 5.3 Persistence
+* The State is ephemeral; the File is eternal.
+* Always provide a "Save Flow" (`.agentflow` JSON) and "Load Flow" mechanism in the Workbench.

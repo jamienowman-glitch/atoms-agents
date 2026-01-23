@@ -58,6 +58,9 @@ We do not "build agents" in code. We assemble them from Atomic Cards.
 * **UI Foundry:** `agentflow/docs/skills/ui-foundry/SKILL.md`
 * **Skill Authoring:** `docs/skills/skill-authoring/SKILL.md`
 
+## 🎨 UI & SURFACES
+* **THE BUILDER PROTOCOL:** The agentflow surface is the designated Wireframe Builder. It must support `.agentflow` file export/import.
+
 ## 🎨 UI FOUNDRY SKILL ( REQUIRED FOR GUI TASKS )
 * **Location:** `agentflow/docs/skills/ui-foundry/SKILL.md`
 * **Protocol:** Any agent working on UI, Canvas, or Components within `agentflow` MUST ingest this skill file before modifying the Workbench.

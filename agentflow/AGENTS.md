@@ -16,7 +16,12 @@
 ## Surface Laws
 - **Stable tools are protected:** Font, Type, Colour, magnifiers, and core tool registry wiring are stable unless explicitly authorized to change.
 - **Atom flow boundaries:** Follow the read/write scopes defined in `docs/atom_flow/AGENTS.md`.
-- **Wiring first:** Toolpop and tool wiring must follow `docs/toolpop_spec.md` and `docs/toolmap.md`.
+# 🛑 PROTOCOL: UI GEOMETRY & PERSISTENCE
+
+- **THE GEOMETRY LAW:** Desktop = Horizontal Graph (Infinite Canvas). Mobile = Vertical Graph (Infinite Scroll) + Haptic Carousel.
+- **FILE ATOMICITY:** The UI must support exporting/loading `.agentflow` files (JSON). Never hardcode a single graph.
+- **IMMUTABLE FRAME:** Do not alter the visual aesthetic (Roboto/Tailwind/Colors). We are wiring mechanics, not pixels.
+
 # 🛑 ATOMS FAM: NON-NEGOTIABLE PRESERVATION PROTOCOLS
 
 > **CRITICAL INSTRUCTION:** You are working inside a high-precision **Orchestration Factory**, not a simple App. The following architectural pillars are **INVIOLATE**. You must NEVER collapse, summarize, or hardcode over these structures.
