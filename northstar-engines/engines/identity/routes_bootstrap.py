@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Header, HTTPException, Depends
+from fastapi import APIRouter, Header, HTTPException
 from typing import Optional
 from engines.identity.state import identity_repo
 from engines.identity.models import User, Tenant, Surface
@@ -12,10 +12,7 @@ async def bootstrap(x_user_id: Optional[str] = Header(None, alias="X-User-ID")):
 
     user = identity_repo.get_user(x_user_id)
     if not user:
-        # Phase 6 Mock: If user doesn't exist, we can't bootstrap.
-        # The prompt implies trust, but if the record isn't in DB, we can't return it.
-        # Assuming the caller has provisioned the user or we should mock a return if specifically requested.
-        # For now, strict 401 if user not found in repo.
+        # Phase 7: Strict check for valid user
         raise HTTPException(status_code=401, detail="User not found")
 
     # Get Tenants
@@ -32,10 +29,14 @@ async def bootstrap(x_user_id: Optional[str] = Header(None, alias="X-User-ID")):
     if not tenant:
         raise HTTPException(status_code=404, detail="Tenant not found")
 
-    # Console / Surface Logic (Mocked)
-    # We look for a surface named 'console' or similar, else default.
+    # Console / Surface Logic
+    # We look for a surface named 'console' or 'default'
     surfaces = identity_repo.list_surfaces_for_tenant(tenant.id)
-    console_surface = next((s for s in surfaces if s.name.lower() in ["console", "default"]), None)
+
+    # Priority: "console" -> "default" -> First Available
+    console_surface = next((s for s in surfaces if s.name.lower() == "console"), None)
+    if not console_surface:
+        console_surface = next((s for s in surfaces if s.name.lower() == "default"), None)
 
     if console_surface:
          console_data = {
@@ -45,7 +46,7 @@ async def bootstrap(x_user_id: Optional[str] = Header(None, alias="X-User-ID")):
             "surface_id": console_surface.id
         }
     else:
-        # Fallback Mock
+        # Phase 7: Fallback Mock (The "Northstar Console" default)
         console_data = {
             "id": "agnx_console_default",
             "name": "Northstar Console",
