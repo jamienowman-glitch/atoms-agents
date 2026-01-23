@@ -119,8 +119,6 @@ class GeminiGateway(LLMGateway):
                 
             contents.append({"role": role, "parts": parts})
 
-        payload = {
-            "contents": contents,
         gen_config = {
             "temperature": 0.7,
             "maxOutputTokens": 2048
@@ -155,16 +153,41 @@ class GeminiGateway(LLMGateway):
                 
                 # Extract usage
                 usage_meta = data.get("usageMetadata", {})
+
+                # Normalize to TokenUsage (input_tokens, output_tokens)
+                input_tokens = usage_meta.get("promptTokenCount", 0)
+                output_tokens = usage_meta.get("candidatesTokenCount", 0)
+                total_tokens = usage_meta.get("totalTokenCount", 0)
+
                 usage = {
-                    "total_tokens": usage_meta.get("totalTokenCount", 0),
-                    "prompt_tokens": usage_meta.get("promptTokenCount", 0),
-                    "completion_tokens": usage_meta.get("candidatesTokenCount", 0)
+                    "input_tokens": input_tokens,
+                    "output_tokens": output_tokens,
+                    "total_tokens": total_tokens
                 }
-                
+
+                # Calculate Cost
+                cost_usd = 0.0
+                try:
+                    # Lazy import to avoid circularity if any, or just import
+                    from engines.budget.token_accounting import TokenAccountingService
+                    acc = TokenAccountingService()
+                    # Gemini is usually "google/gemini-..." or just "gemini-..."
+                    # The model_id passed here is official_id e.g. "gemini-1.5-pro-latest"
+                    # We should pass "google" as provider if we know it, or rely on internal logic.
+                    # The gateway is GeminiGateway, so provider is likely "google" or "vertex" or "gemini"
+                    # Price book has "google/gemini-..." keys.
+                    cost_usd = acc.calculate_cost("google", model_id, usage)
+                except ImportError:
+                    print("Warning: TokenAccountingService not found.")
+                except Exception as e:
+                    print(f"Cost calc error: {e}")
+
                 return {
                     "role": "assistant",
                     "content": text,
-                    "usage": usage
+                    "usage": usage,
+                    "model_id": model_id,
+                    "cost_usd": cost_usd
                 }
             else:
                  return {"status": "FAIL", "reason": "No candidates returned"}
