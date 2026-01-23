@@ -20,6 +20,11 @@
 - **NO GHOSTS:** Do not hardcode Model IDs. Use `list_models()` to fetch reality.
 - **THE TRUTH LOOP:** Verification is only valid if confirmed via the SSE Stream. Local logs are not proof.
 
+# 🛑 PROTOCOL: REGISTRY ATOMICITY
+
+- **THE SPLIT LAW:** Never use monolithic model IDs. All models must declare family, version, and reasoning_effort.
+- **FRAMEWORK HIERARCHY:** Frameworks are parents; Modes are children. Do not flatten them.
+
 # ARCHITECTURAL MANIFEST (Merged from Agent.md)
 
 ## 🛑 TRANSPORT & INTEGRITY PROTOCOLS

@@ -22,6 +22,11 @@
 - **FILE ATOMICITY:** The UI must support exporting/loading `.agentflow` files (JSON). Never hardcode a single graph.
 - **IMMUTABLE FRAME:** Do not alter the visual aesthetic (Roboto/Tailwind/Colors). We are wiring mechanics, not pixels.
 
+# 🛑 PROTOCOL: WIREFRAME PHYSICS
+
+- **MAGNIFIER LAW:** The Left Magnifier selects Context (Provider/Family); The Right Magnifier tunes Value.
+- **HIVE LAW:** Frameworks are Hexagons. On mobile, they 'explode' to reveal agents.
+
 # 🛑 ATOMS FAM: NON-NEGOTIABLE PRESERVATION PROTOCOLS
 
 > **CRITICAL INSTRUCTION:** You are working inside a high-precision **Orchestration Factory**, not a simple App. The following architectural pillars are **INVIOLATE**. You must NEVER collapse, summarize, or hardcode over these structures.

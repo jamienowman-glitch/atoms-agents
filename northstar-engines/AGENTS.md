@@ -16,6 +16,10 @@
 - **THE LEDGER LAW:** Every LLM generation MUST return `input_tokens` and `output_tokens`. No exceptions.
 - **THE PRICE BOOK:** Hardcoded pricing is forbidden. All costs must be calculated dynamically from `data/price_book.json`.
 
+# 🛑 PROTOCOL: COMMERCE
+
+- **THE RECEIPT LAW:** Every generation must return TokenUsage. 'Unknown' cost is a bug.
+
 ## Non-Negotiable Laws (Backend)
 - **GateChain first:** Any state mutation or external tool call must pass GateChain with a full `RequestContext`.
 - **Durable realtime:** SSE/WS must be replayable and tenant-isolated; no in-memory-only streams in sellable modes.
