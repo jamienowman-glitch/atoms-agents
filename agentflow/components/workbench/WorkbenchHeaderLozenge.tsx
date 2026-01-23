@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { useConsole } from '../../context/ConsoleContext';
 
 interface WorkbenchHeaderLozengeProps {
     previewMode: 'desktop' | 'mobile';
@@ -6,6 +7,7 @@ interface WorkbenchHeaderLozengeProps {
 }
 
 export const WorkbenchHeaderLozenge: React.FC<WorkbenchHeaderLozengeProps> = ({ previewMode, setPreviewMode }) => {
+    const { identity } = useConsole();
     const [isExpanded, setIsExpanded] = useState(false);
     const [positionX, setPositionX] = useState(0);
     const [isDragging, setIsDragging] = useState(false);
@@ -96,13 +98,19 @@ export const WorkbenchHeaderLozenge: React.FC<WorkbenchHeaderLozengeProps> = ({ 
             <div className={`
                 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-xl rounded-full 
                 transition-all duration-300 ease-out flex items-center overflow-hidden
-                ${isExpanded ? 'px-2 py-2 gap-3 h-12' : 'px-2 py-2 h-10 w-10 justify-center'}
+                ${isExpanded ? 'px-2 py-2 gap-3 h-12' : 'px-3 py-2 h-10 min-w-[2.5rem] justify-center gap-2'}
             `}>
 
-                {/* --- COLLAPSED STATE: Active Icon Only --- */}
+                {/* --- COLLAPSED STATE: Identity + Icon --- */}
                 {!isExpanded && (
-                    <div className="text-neutral-900 dark:text-white animate-in fade-in duration-200">
+                    <div className="flex items-center gap-2 text-neutral-900 dark:text-white animate-in fade-in duration-200">
                         {previewMode === 'mobile' ? <MobileIcon /> : <DesktopIcon />}
+
+                        {identity && (
+                            <span className="text-xs font-medium tracking-wide whitespace-nowrap">
+                                {identity.console.name}
+                            </span>
+                        )}
                     </div>
                 )}
 
