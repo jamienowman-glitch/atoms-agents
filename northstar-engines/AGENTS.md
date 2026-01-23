@@ -20,6 +20,11 @@
 
 - **THE RECEIPT LAW:** Every generation must return TokenUsage. 'Unknown' cost is a bug.
 
+# 🛑 PROTOCOL: THE OS LAYER
+
+- **THE BOOTSTRAP LAW:** All UI sessions start here (GET /api/v1/bootstrap). Engines define Identity and Tenancy.
+- **THE BRAIN IMPORT:** Engines treat northstar-agents as a library. Import it, run it, log it.
+
 ## Non-Negotiable Laws (Backend)
 - **GateChain first:** Any state mutation or external tool call must pass GateChain with a full `RequestContext`.
 - **Durable realtime:** SSE/WS must be replayable and tenant-isolated; no in-memory-only streams in sellable modes.

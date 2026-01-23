@@ -25,6 +25,10 @@
 - **THE SPLIT LAW:** Never use monolithic model IDs. All models must declare family, version, and reasoning_effort.
 - **FRAMEWORK HIERARCHY:** Frameworks are parents; Modes are children. Do not flatten them.
 
+# 🛑 PROTOCOL: STATELESS BRAIN
+
+- **NO INFRASTRUCTURE:** Agents do not know about Tenants or Routing. They just execute the Request they are given.
+
 # ARCHITECTURAL MANIFEST (Merged from Agent.md)
 
 ## 🛑 TRANSPORT & INTEGRITY PROTOCOLS
