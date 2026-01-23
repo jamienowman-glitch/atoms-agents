@@ -58,6 +58,21 @@ We do not "build agents" in code. We assemble them from Atomic Cards.
 * **UI Foundry:** `agentflow/docs/skills/ui-foundry/SKILL.md`
 * **Skill Authoring:** `docs/skills/skill-authoring/SKILL.md`
 
+## 🌍 GLOBAL PROTOCOLS (Federated)
+These laws are enforced at the sub-repo level but apply to any agent crossing boundaries.
+
+### 🏛️ REGISTRY (Northstar-Agents)
+* **The Split Law:** Models are Atomic (Family/Version/Variant). No monolithic IDs.
+* **Stateless Brain:** Agents are infrastructure-agnostic. They do not know about Tenants.
+
+### 💰 COMMERCE (Northstar-Engines)
+* **The Receipt Law:** No Ghost usage. Every generation must return `TokenUsage` and map to `price_book.json`.
+* **The OS Layer:** Engines are the host. Agents are the guest library.
+
+### 📐 PHYSICS (Agentflow)
+* **Geometry Law:** Mobile = Vertical + Hive (Exploding Hexagons). Desktop = Horizontal (Infinite Canvas).
+* **Magnifier Law:** Left = Context. Right = Value.
+
 ## 🎨 UI & SURFACES
 * **THE BUILDER PROTOCOL:** The agentflow surface is the designated Wireframe Builder. It must support `.agentflow` file export/import.
 
