@@ -1,11 +1,13 @@
+card_type: model
 model_id: molmo-2-free
 provider_id: openrouter
-friendly_name: Molmo 2 (8B Free)
-official_id_or_deployment: allenai/molmo-2-8b:free
+official_id: allenai/molmo-2-8b:free
+family_id: allenai.molmo
+version: "2"
+variant: "8b-free"
+reasoning_effort: "medium"
 context_window: 8192
-supports_streaming: true
-description: >
+streaming_support: token
+notes: >
   Spatial grounding specialist (Pointing & Boxes).
   NOTE: Primary model for Video Agent Lead Editing (VALE) workflows.
-default_capabilities:
-  - spatial_grounding

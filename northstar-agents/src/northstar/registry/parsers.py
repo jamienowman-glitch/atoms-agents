@@ -1,16 +1,17 @@
 from typing import Any, Dict
 from .schemas import (
     ModeCard, 
-    FrameworkAdapterCard, 
+    FrameworkAdapterCard,
+    FrameworkCard,
     RunProfileCard, 
     ProviderConfigCard, 
     ModelCard,
+    ModelFamilyCard,
     CapabilityCard,
     CapabilityBindingCard,
     PersonaCard,
     TaskCard,
     ArtifactSpecCard,
-    NodeCard,
     NodeCard,
     FlowCard,
     FlowEdge
@@ -46,6 +47,17 @@ def parse_framework(data: Dict[str, Any]) -> FrameworkAdapterCard:
         adapter_import_path=data["adapter_import_path"]
     )
 
+def parse_framework_card(data: Dict[str, Any]) -> FrameworkCard:
+    if "framework_id" not in data or "name" not in data:
+        raise ValueError("FrameworkCard missing required fields")
+
+    return FrameworkCard(
+        framework_id=data["framework_id"],
+        name=data["name"],
+        description=data.get("description", ""),
+        supported_modes=data.get("supported_modes", [])
+    )
+
 def parse_profile(data: Dict[str, Any]) -> RunProfileCard:
     if "profile_id" not in data or "persistence_backend" not in data:
         raise ValueError("RunProfileCard missing required fields")
@@ -73,8 +85,19 @@ def parse_provider(data: Dict[str, Any]) -> ProviderConfigCard:
         notes=data.get("notes", "")
     )
 
+def parse_model_family(data: Dict[str, Any]) -> ModelFamilyCard:
+    if "family_id" not in data or "name" not in data:
+        raise ValueError("ModelFamilyCard missing required fields")
+
+    return ModelFamilyCard(
+        family_id=data["family_id"],
+        name=data["name"],
+        description=data.get("description", ""),
+        provider_ids=data.get("provider_ids", [])
+    )
+
 def parse_model(data: Dict[str, Any]) -> ModelCard:
-    official_id = data.get("model_or_deployment_id") or data.get("official_id_or_deployment")
+    official_id = data.get("official_id") or data.get("model_or_deployment_id") or data.get("official_id_or_deployment")
     
     if "model_id" not in data or "provider_id" not in data or not official_id:
         raise ValueError("ModelCard missing required fields")
@@ -82,7 +105,12 @@ def parse_model(data: Dict[str, Any]) -> ModelCard:
     return ModelCard(
         model_id=data["model_id"],
         provider_id=data["provider_id"],
-        model_or_deployment_id=official_id,
+        official_id=official_id,
+        family_id=data.get("family_id", ""),
+        version=data.get("version", ""),
+        variant=data.get("variant", ""),
+        reasoning_effort=data.get("reasoning_effort", "medium"),
+        context_window=data.get("context_window", 0),
         platform_api_surface=data.get("platform_api_surface", ""),
         invocation_primitive=data.get("invocation_primitive", ""),
         request_shape_minimal=data.get("request_shape_minimal", ""),
@@ -109,6 +137,10 @@ def parse_capability(data: Dict[str, Any]) -> CapabilityCard:
 
 def parse_capability_binding(data: Dict[str, Any]) -> CapabilityBindingCard:
     if "binding_id" not in data or "provider_id" not in data or "model_or_deployment_id" not in data or "capability_id" not in data:
+        # Fallback for old key in bindings if necessary, but binding card didn't change schema in plan?
+        # The plan didn't mention updating CapabilityBindingCard, but it references model_or_deployment_id.
+        # CapabilityBindingCard schema update wasn't explicitly requested, but I should probably check if it needs update.
+        # But let's stick to the plan for now. The plan focuses on ModelCard and FrameworkCard.
         raise ValueError("CapabilityBindingCard missing required fields")
 
     return CapabilityBindingCard(

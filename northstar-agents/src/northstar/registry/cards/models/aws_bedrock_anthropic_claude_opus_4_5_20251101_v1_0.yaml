@@ -1,7 +1,12 @@
 card_type: model
 model_id: aws_bedrock_anthropic_claude_opus_4_5_20251101_v1_0
 provider_id: aws_bedrock
-model_or_deployment_id: anthropic.claude-opus-4-5-20251101-v1:0
+official_id: anthropic.claude-opus-4-5-20251101-v1:0
+family_id: anthropic.claude
+version: "4.5"
+variant: "opus"
+reasoning_effort: "high"
+context_window: 200000
 platform_api_surface: Bedrock Runtime
 invocation_primitive: bedrock-runtime.converse
 request_shape_minimal: '{"messages": [{"role": "user", "content": [{"text": "Hello"}]}]}'

@@ -1,9 +1,11 @@
+card_type: model
 model_id: deepseek-reasoner
 provider_id: openrouter
-friendly_name: DeepSeek R1 (Reasoning)
-official_id_or_deployment: deepseek/deepseek-r1
+official_id: deepseek/deepseek-r1
+family_id: deepseek
+version: "r1"
+variant: "default"
+reasoning_effort: "o1-level"
 context_window: 64000
-supports_streaming: true
-description: Reasoning-optimized model (Chain of Thought).
-default_capabilities:
-  - reasoning_trace
+streaming_support: token
+notes: Reasoning-optimized model (Chain of Thought).

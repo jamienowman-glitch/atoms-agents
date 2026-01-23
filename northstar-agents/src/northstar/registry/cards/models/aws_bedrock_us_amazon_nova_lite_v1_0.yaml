@@ -1,7 +1,12 @@
 card_type: model
 model_id: aws_bedrock_us_amazon_nova_lite_v1_0
 provider_id: aws_bedrock
-model_or_deployment_id: us.amazon.nova-lite-v1:0
+official_id: us.amazon.nova-lite-v1:0
+family_id: amazon.nova
+version: "1.0"
+variant: "lite"
+reasoning_effort: "low"
+context_window: 300000
 platform_api_surface: Bedrock Runtime
 invocation_primitive: bedrock-runtime.converse
 request_shape_minimal: '{"messages": [{"role": "user", "content": [{"text": "Hello"}]}]}'

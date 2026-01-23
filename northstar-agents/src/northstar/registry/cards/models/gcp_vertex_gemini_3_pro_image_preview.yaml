@@ -1,7 +1,12 @@
 card_type: model
 model_id: gcp_vertex_gemini_3_pro_image_preview
 provider_id: gcp_vertex
-model_or_deployment_id: gemini-3-pro-image-preview
+official_id: gemini-3-pro-image-preview
+family_id: google.gemini
+version: "3"
+variant: "pro-image-preview"
+reasoning_effort: "high"
+context_window: 2000000
 platform_api_surface: Vertex AI API
 invocation_primitive: vertexai.GenerativeModel.generate_content
 request_shape_minimal: '{"contents": [{"parts": [{"text": "Hello"}]}]}'

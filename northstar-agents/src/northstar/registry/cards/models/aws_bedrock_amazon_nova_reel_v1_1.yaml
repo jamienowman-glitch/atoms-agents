@@ -1,7 +1,12 @@
 card_type: model
 model_id: aws_bedrock_amazon_nova_reel_v1_1
 provider_id: aws_bedrock
-model_or_deployment_id: amazon.nova-reel-v1:1
+official_id: amazon.nova-reel-v1:1
+family_id: amazon.nova
+version: "1.1"
+variant: "reel"
+reasoning_effort: "low"
+context_window: 0
 platform_api_surface: Bedrock Runtime
 invocation_primitive: bedrock-runtime.invoke_model
 request_shape_minimal: '{"text": "A movie", "videoConfig": {}}'

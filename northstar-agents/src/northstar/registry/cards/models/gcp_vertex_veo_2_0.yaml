@@ -1,7 +1,12 @@
 card_type: model
 model_id: gcp_vertex_veo_2_0
 provider_id: gcp_vertex
-model_or_deployment_id: veo-2.0
+official_id: veo-2.0
+family_id: google.veo
+version: "2.0"
+variant: "default"
+reasoning_effort: "low"
+context_window: 0
 platform_api_surface: Vertex AI API
 invocation_primitive: (Vertex Video API Endpoint)
 request_shape_minimal: '{"prompt": "video"}'

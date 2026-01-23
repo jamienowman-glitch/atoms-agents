@@ -1,9 +1,12 @@
+card_type: model
 model_id: alpamayo-r1-10b
 provider_id: nvidia
-friendly_name: Alpamayo R1 (Biomechanics)
-official_id_or_deployment: nvidia/Alpamayo-R1-10B
+official_id: nvidia/Alpamayo-R1-10B
+family_id: alpamayo
+version: "1"
+variant: "r1-10b"
+reasoning_effort: "high"
 context_window: 4096
-supports_streaming: true
-description: Reasoning VLA for Action Analysis (e.g. Gait, Swim structure).
-default_capabilities:
-  - reasoning_trace
+streaming_support: token
+confidence: experimental
+notes: Reasoning VLA for Action Analysis (e.g. Gait, Swim structure).

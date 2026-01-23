@@ -1,5 +1,10 @@
 card_type: model
 model_id: azure_default
 provider_id: azure_openai
-official_id_or_deployment: gpt-35-turbo
+official_id: gpt-35-turbo
+family_id: openai.gpt
+version: "3.5"
+variant: "turbo"
+reasoning_effort: "low"
+context_window: 4096
 notes: Standard GPT 3.5 deployment

@@ -1,10 +1,11 @@
+card_type: model
 model_id: gemini-3-flash
 provider_id: gemini
-friendly_name: Gemini 3 Flash Preview
-official_id_or_deployment: gemini-2.0-flash-thinking-exp
+official_id: gemini-2.0-flash-thinking-exp
+family_id: google.gemini
+version: "3"
+variant: "flash"
+reasoning_effort: "high"
 context_window: 1000000
-supports_streaming: true
-description: Low-latency multimodal model with Thinking capability.
-default_capabilities:
-  - thinking_high
-  - json_mode
+streaming_support: token
+notes: Low-latency multimodal model with Thinking capability.
