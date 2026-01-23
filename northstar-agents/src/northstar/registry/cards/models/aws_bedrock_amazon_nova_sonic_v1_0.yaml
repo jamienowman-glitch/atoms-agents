@@ -1,7 +1,12 @@
 card_type: model
 model_id: aws_bedrock_amazon_nova_sonic_v1_0
 provider_id: aws_bedrock
-model_or_deployment_id: amazon.nova-sonic-v1:0
+official_id: amazon.nova-sonic-v1:0
+family_id: amazon.nova
+version: "1.0"
+variant: "sonic"
+reasoning_effort: "low"
+context_window: 128000
 platform_api_surface: Bedrock Runtime
 invocation_primitive: bedrock-runtime.converse_stream
 request_shape_minimal: (Bidirectional Stream JSON)

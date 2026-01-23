@@ -4,8 +4,11 @@ from typing import List, Any, Dict
 from dataclasses import dataclass
 from northstar.registry.schemas import (
     ModeCard, 
+    FrameworkAdapterCard,
+    FrameworkCard,
     ProviderConfigCard, 
     ModelCard, 
+    ModelFamilyCard,
     CapabilityCard, 
     CapabilityBindingCard, 
     PersonaCard, 
@@ -36,8 +39,10 @@ from northstar.registry.schemas.graph import GraphDefinitionCard
 class RegistryContext:
     loader: "RegistryLoader"
     modes: Dict[str, ModeCard]
+    frameworks: Dict[str, FrameworkCard] # New
     profiles: Dict[str, RunProfileCard]
     providers: Dict[str, ProviderConfigCard]
+    families: Dict[str, ModelFamilyCard] # New
     models: Dict[str, ModelCard]
     capabilities: Dict[str, CapabilityCard]
     bindings: Dict[str, CapabilityBindingCard]
@@ -66,55 +71,38 @@ class RegistryLoader:
         self.root_path = root_path
 
     def load_context(self) -> RegistryContext:
-        try:
-            cards_modes = self.load_cards_from_dir("framework_modes")
-            cards_profiles = self.load_cards_from_dir("profiles")
-            cards_providers = self.load_cards_from_dir("providers")
-            cards_models = self.load_cards_from_dir("models")
-            cards_capabilities = self.load_cards_from_dir("capabilities")
-            cards_bindings = self.load_cards_from_dir("capability_bindings")
-            cards_personas = self.load_cards_from_dir("personas")
-            cards_tasks = self.load_cards_from_dir("tasks")
-            cards_artifact_specs = self.load_cards_from_dir("artifact_specs")
-            cards_nodes = self.load_cards_from_dir("nodes")
-            cards_flows = self.load_cards_from_dir("flows")
-            cards_overlays = self.load_cards_from_dir("overlays")
-            cards_tenants = self.load_cards_from_dir("tenants")
-            cards_policies = self.load_cards_from_dir("policy_packs")
-            cards_budgets = self.load_cards_from_dir("budgets")
-            cards_nexus_profiles = self.load_cards_from_dir("nexus_profiles")
-            
-            # GraphLens Directories
-            cards_neutral = self.load_cards_from_dir("neutral_nodes")
-            cards_lenses = self.load_cards_from_dir("lenses")
-            cards_graphs = self.load_cards_from_dir("graphs")
-        except Exception as e:
-            print(f"Error loading registry: {e}")
-            cards_modes = []
-            cards_profiles = []
-            cards_providers = []
-            cards_models = []
-            cards_capabilities = []
-            cards_bindings = []
-            cards_personas = []
-            cards_tasks = []
-            cards_artifact_specs = []
-            cards_nodes = []
-            cards_flows = []
-            cards_overlays = []
-            cards_tenants = []
-            cards_policies = []
-            cards_budgets = []
-            cards_nexus_profiles = []
-            cards_neutral = []
-            cards_lenses = []
-            cards_graphs = []
+        # Load directories independently so one failure doesn't kill the whole registry
+        cards_frameworks = self.load_cards_from_dir("frameworks")
+        cards_modes = self.load_cards_from_dir("framework_modes")
+        cards_profiles = self.load_cards_from_dir("profiles")
+        cards_providers = self.load_cards_from_dir("providers")
+        cards_families = self.load_cards_from_dir("families")
+        cards_models = self.load_cards_from_dir("models")
+        cards_capabilities = self.load_cards_from_dir("capabilities")
+        cards_bindings = self.load_cards_from_dir("capability_bindings")
+        cards_personas = self.load_cards_from_dir("personas")
+        cards_tasks = self.load_cards_from_dir("tasks")
+        cards_artifact_specs = self.load_cards_from_dir("artifact_specs")
+        cards_nodes = self.load_cards_from_dir("nodes")
+        cards_flows = self.load_cards_from_dir("flows")
+        cards_overlays = self.load_cards_from_dir("overlays")
+        cards_tenants = self.load_cards_from_dir("tenants")
+        cards_policies = self.load_cards_from_dir("policy_packs")
+        cards_budgets = self.load_cards_from_dir("budgets")
+        cards_nexus_profiles = self.load_cards_from_dir("nexus_profiles")
+
+        # GraphLens Directories
+        cards_neutral = self.load_cards_from_dir("neutral_nodes")
+        cards_lenses = self.load_cards_from_dir("lenses")
+        cards_graphs = self.load_cards_from_dir("graphs")
 
         return RegistryContext(
             loader=self,
+            frameworks={c.framework_id: c for c in cards_frameworks if isinstance(c, FrameworkCard)},
             modes={c.id: c for c in cards_modes if isinstance(c, ModeCard)},
             profiles={c.profile_id: c for c in cards_profiles if isinstance(c, RunProfileCard)},
             providers={c.provider_id: c for c in cards_providers if isinstance(c, ProviderConfigCard)},
+            families={c.family_id: c for c in cards_families if isinstance(c, ModelFamilyCard)},
             models={c.model_id: c for c in cards_models if isinstance(c, ModelCard)},
             capabilities={c.capability_id: c for c in cards_capabilities if isinstance(c, CapabilityCard)},
             bindings={c.binding_id: c for c in cards_bindings if isinstance(c, CapabilityBindingCard)},
@@ -150,39 +138,50 @@ class RegistryLoader:
             for file in files:
                 if file.endswith((".yaml", ".yml")):
                     filepath = os.path.join(root, file)
-                    cards.extend(self._load_file(filepath))
+                    try:
+                        cards.extend(self._load_file(filepath))
+                    except Exception as e:
+                        # Log error but don't stop loading other files
+                        print(f"Error loading {filepath}: {e}")
         return cards
 
     
     def _load_file(self, filepath: str) -> List[Any]:
         loaded: List[Any] = []
-        try:
-            with open(filepath, "r", encoding="utf-8") as f:
-                docs = list(yaml.safe_load_all(f))
-                
-            from .parsers import (
-                parse_mode, parse_framework, parse_profile, 
-                parse_provider, parse_model, parse_capability, 
-                parse_capability_binding, parse_persona, 
-                parse_task, parse_artifact_spec,
-                parse_node, parse_flow
-            )
+        # We don't catch here anymore, let load_cards_from_dir handle it individually
+        # But for robustness inside the file (bad yaml vs bad schema), we rely on parsers raising errors.
+
+        with open(filepath, "r", encoding="utf-8") as f:
+            docs = list(yaml.safe_load_all(f))
             
-            for doc in docs:
-                if not doc or not isinstance(doc, dict):
-                    continue
-                
-                card_type = doc.get("card_type")
+        from .parsers import (
+            parse_mode, parse_framework, parse_framework_card, parse_profile,
+            parse_provider, parse_model, parse_model_family, parse_capability,
+            parse_capability_binding, parse_persona,
+            parse_task, parse_artifact_spec,
+            parse_node, parse_flow
+        )
+
+        for doc in docs:
+            if not doc or not isinstance(doc, dict):
+                continue
+
+            card_type = doc.get("card_type")
+            try:
                 if card_type == "mode":
                     loaded.append(parse_mode(doc))
                 elif card_type == "framework_adapter":
                     loaded.append(parse_framework(doc))
+                elif card_type == "framework":
+                    loaded.append(parse_framework_card(doc))
                 elif card_type == "profile":
                     loaded.append(parse_profile(doc))
                 elif card_type == "provider":
                     loaded.append(parse_provider(doc))
                 elif card_type == "model":
                     loaded.append(parse_model(doc))
+                elif card_type == "model_family":
+                    loaded.append(parse_model_family(doc))
                 elif card_type == "capability":
                     loaded.append(parse_capability(doc))
                 elif card_type == "capability_binding":
@@ -198,89 +197,51 @@ class RegistryLoader:
                 elif card_type == "flow":
                     loaded.append(parse_flow(doc))
                 elif card_type == "tenant":
-                    # Simple dataclass instantiation
-                    # Filter out non-field keys if necessary, or assume schema compliance
-                    # For now, strict:
-                    try:
-                        c = TenantCard(**{k: v for k, v in doc.items() if k != "card_type"})
-                        loaded.append(c)
-                    except Exception as e:
-                         print(f"Error parsing TenantCard: {e}")
+                    c = TenantCard(**{k: v for k, v in doc.items() if k != "card_type"})
+                    loaded.append(c)
                 elif card_type == "policy_pack":
-                    # Nested parsing for rules
                     rules_data = doc.get("rules", [])
                     from northstar.registry.schemas.tenancy import PolicyRule
                     rules = [PolicyRule(**r) for r in rules_data]
                     doc["rules"] = rules
-                    try:
-                        c = PolicyPackCard(**{k: v for k, v in doc.items() if k != "card_type"})
-                        loaded.append(c)
-                    except Exception as e:
-                         print(f"Error parsing PolicyPackCard: {e}")
+                    c = PolicyPackCard(**{k: v for k, v in doc.items() if k != "card_type"})
+                    loaded.append(c)
                 elif card_type == "budget":
-                    try:
-                        c = BudgetCard(**{k: v for k, v in doc.items() if k != "card_type"})
-                        loaded.append(c)
-                    except Exception as e:
-                         print(f"Error parsing BudgetCard: {e}")
+                    c = BudgetCard(**{k: v for k, v in doc.items() if k != "card_type"})
+                    loaded.append(c)
                 elif card_type == "nexus_profile":
-                    try:
-                        c = NexusProfileCard(**{k: v for k, v in doc.items() if k != "card_type"})
-                        loaded.append(c)
-                    except Exception as e:
-                         print(f"Error parsing NexusProfileCard: {e}")
+                    c = NexusProfileCard(**{k: v for k, v in doc.items() if k != "card_type"})
+                    loaded.append(c)
                 
                 # --- GraphLens Parsers ---
                 elif card_type == "neutral_node":
-                    try:
-                        # Manual parsing of component refs might be needed if they are dicts
-                        components_data = doc.get("components", [])
-                        components = [ComponentRef(**c) if isinstance(c, dict) else c for c in components_data]
-                        doc["components"] = components
-                        loaded.append(NeutralNodeCard(**{k: v for k, v in doc.items() if k != "card_type"}))
-                    except Exception as e:
-                        print(f"Error parsing NeutralNodeCard: {e}")
+                    components_data = doc.get("components", [])
+                    components = [ComponentRef(**c) if isinstance(c, dict) else c for c in components_data]
+                    doc["components"] = components
+                    loaded.append(NeutralNodeCard(**{k: v for k, v in doc.items() if k != "card_type"}))
 
                 elif card_type == "lens_context":
-                    try:
-                        loaded.append(ContextLayerCard(**{k: v for k, v in doc.items() if k != "card_type"}))
-                    except Exception as e:
-                        print(f"Error parsing ContextLayerCard: {e}")
+                    loaded.append(ContextLayerCard(**{k: v for k, v in doc.items() if k != "card_type"}))
 
                 elif card_type == "lens_token_map":
-                    try:
-                        loaded.append(TokenMapCard(**{k: v for k, v in doc.items() if k != "card_type"}))
-                    except Exception as e:
-                        print(f"Error parsing TokenMapCard: {e}")
+                    loaded.append(TokenMapCard(**{k: v for k, v in doc.items() if k != "card_type"}))
                         
                 elif card_type == "lens_safety":
-                    try:
-                        loaded.append(SafetyProfileCard(**{k: v for k, v in doc.items() if k != "card_type"}))
-                    except Exception as e:
-                        print(f"Error parsing SafetyProfileCard: {e}")
+                    loaded.append(SafetyProfileCard(**{k: v for k, v in doc.items() if k != "card_type"}))
 
                 elif card_type == "lens_log":
-                    try:
-                        loaded.append(LogPolicyCard(**{k: v for k, v in doc.items() if k != "card_type"}))
-                    except Exception as e:
-                        print(f"Error parsing LogPolicyCard: {e}")
+                    loaded.append(LogPolicyCard(**{k: v for k, v in doc.items() if k != "card_type"}))
                         
                 elif card_type == "lens_interaction":
-                    try:
-                        loaded.append(InteractionStateCard(**{k: v for k, v in doc.items() if k != "card_type"}))
-                    except Exception as e:
-                        print(f"Error parsing InteractionStateCard: {e}")
+                    loaded.append(InteractionStateCard(**{k: v for k, v in doc.items() if k != "card_type"}))
                         
                 elif card_type == "graph_def":
-                    try:
-                        # GraphDefinition definition handles edge parsing in post_init
-                        loaded.append(GraphDefinitionCard(**{k: v for k, v in doc.items() if k != "card_type"}))
-                    except Exception as e:
-                        print(f"Error parsing GraphDefinitionCard: {e}")
+                    loaded.append(GraphDefinitionCard(**{k: v for k, v in doc.items() if k != "card_type"}))
                 else:
                     print(f"Warning: Unknown card_type '{card_type}' in {filepath}")
-                    
-        except Exception as e:
-            raise ValueError(f"Error loading {filepath}: {e}")
+            except Exception as e:
+                # If a single card in a file fails, we might want to skip it or fail the whole file?
+                # For now let's raise so the file fails, but other files load.
+                raise ValueError(f"Error parsing card in {filepath}: {e}")
             
         return loaded

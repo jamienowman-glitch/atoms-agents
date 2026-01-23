@@ -35,6 +35,6 @@ def test_loader_skips_invalid_yaml(tmp_path):
     (modes_dir / "bad.yaml").write_text("Likely invalid: [ unclosed list", encoding="utf-8")
     
     loader = RegistryLoader(str(registry_root))
-    # It should raise ValueError per implementation
-    with pytest.raises(ValueError):
-        loader.load_cards_from_dir("modes")
+    # It should NOT raise ValueError, but skip the file
+    cards = loader.load_cards_from_dir("modes")
+    assert len(cards) == 0

@@ -1,7 +1,12 @@
 card_type: model
 model_id: gcp_vertex_gemini_2_5_computer_use_preview_10_2025
 provider_id: gcp_vertex
-model_or_deployment_id: gemini-2.5-computer-use-preview-10-2025
+official_id: gemini-2.5-computer-use-preview-10-2025
+family_id: google.gemini
+version: "2.5"
+variant: "computer-use-preview"
+reasoning_effort: "high"
+context_window: 1000000
 platform_api_surface: Vertex AI API
 invocation_primitive: vertexai.GenerativeModel.generate_content
 request_shape_minimal: '{"contents": [{"parts": [{"text": "Task"}]}]}'

@@ -1,8 +1,11 @@
+card_type: model
 model_id: gencast-ensemble
 provider_id: gencast
-friendly_name: GenCast (Ensemble)
-official_id_or_deployment: gencast
+official_id: gencast
+family_id: google.deepmind.gencast
+version: "1.0"
+variant: "ensemble"
+reasoning_effort: "low"
 context_window: 0
-supports_streaming: true
-description: Probabilistic 14-day Forecasting Model.
-default_capabilities: []
+streaming_support: token
+notes: Probabilistic 14-day Forecasting Model.

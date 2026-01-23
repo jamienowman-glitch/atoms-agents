@@ -1,7 +1,12 @@
 card_type: model
 model_id: gcp_vertex_gemini_2_5_pro
 provider_id: gcp_vertex
-model_or_deployment_id: gemini-2.5-pro
+official_id: gemini-2.5-pro
+family_id: google.gemini
+version: "2.5"
+variant: "pro"
+reasoning_effort: "high"
+context_window: 2000000
 platform_api_surface: Vertex AI API
 invocation_primitive: vertexai.GenerativeModel.generate_content
 request_shape_minimal: '{"contents": [{"parts": [{"text": "Hello"}]}]}'
