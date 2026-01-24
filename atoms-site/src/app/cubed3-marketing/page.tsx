@@ -6,6 +6,7 @@ export default function Cubed3Marketing() {
     return (
         <main className="bg-white min-h-screen text-black pb-20">
             <MicrositeHeader
+                initialTemp={333}
                 bgColor="bg-black"
                 textColor="text-red-600"
                 borderColor="border-red-600"
@@ -15,13 +16,15 @@ export default function Cubed3Marketing() {
                         CUBED<sup className="text-2xl top-[-0.5em]">3</sup>
                     </h1>
                 }
+                subhead={
+                    <h2 className="text-sm md:text-base tracking-[0.2em]" style={{ fontFamily: 'var(--font-roboto-flex)', fontVariationSettings: '"wght" 200, "slnt" -10', fontStyle: 'italic' }}>
+                        MARKETING IN THE THIRD
+                    </h2>
+                }
             />
 
             {/* Hero Section */}
-            <section className="flex flex-col items-center pt-2 pb-12">
-                <h2 className="text-sm md:text-base tracking-[0.2em] mb-12 text-center" style={{ fontFamily: 'var(--font-roboto-flex)', fontVariationSettings: '"wght" 200, "slnt" -10', fontStyle: 'italic' }}>
-                    MARKETING IN THE THIRD
-                </h2>
+            <section className="flex flex-col items-center pt-12 pb-12">
 
                 <AutoCarousel />
 
