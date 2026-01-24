@@ -1,0 +1,9 @@
+- id: aws_infra
+  name: "AWS Infrastructure"
+  status: detected
+  notes: "Core cloud provider."
+
+- id: cloudflare_infra
+  name: "Cloudflare"
+  status: detected
+  notes: "Edge and Security."

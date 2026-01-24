@@ -1,0 +1,9 @@
+id: marketing_console
+name: "AGNˣ (Marketing Agents)"
+entry_point: "/agnx"
+flows:
+  - id: campaign_manager
+    canvases:
+      - canvas_id: timeline_editor
+        tools: ["cutter", "splicer", "text_overlay"]
+        muscle_link: ["video_render_v1", "video_text_v1"]
