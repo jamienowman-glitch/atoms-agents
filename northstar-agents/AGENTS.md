@@ -14,6 +14,7 @@
 ## Reference Sources
 - `/Users/jaynowman/dev/northstar-agents/src/northstar/registry/cards/README.md`
 - **Skill Authoring:** `/Users/jaynowman/dev/docs/skills/skill-authoring/SKILL.md`
+- **Northstar Vision:** `/Users/jaynowman/dev/northstar-agents/ATOMS_FAM_NORTHSTAR.MD`
 
 # 🛑 PROTOCOL: COMMERCE & VERIFICATION
 

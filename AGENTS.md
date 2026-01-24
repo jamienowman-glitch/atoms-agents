@@ -15,6 +15,9 @@
 ## Quarantine
 - `_quarantine/` is the only authorized location for deprecated files.
 - Do not create or use `/_archive/`.
+
+## Northstar Vision (Work In Progress)
+- **The Blueprint:** `/Users/jaynowman/dev/ATOMS_FAM_NORTHSTAR.MD` (Atoms-Fam Orchestration System V2.1)
 # 🛑 ATOMS FAM: NON-NEGOTIABLE PRESERVATION PROTOCOLS
 
 > **CRITICAL INSTRUCTION:** You are working inside a high-precision **Orchestration Factory**, not a simple App. The following architectural pillars are **INVIOLATE**. You must NEVER collapse, summarize, or hardcode over these structures.

@@ -39,6 +39,7 @@
 - `/Users/jaynowman/dev/ROUTING_EVENT_INFRASTRUCTURE_INVENTORY.md` (routing/event spine reality map)
 - `/Users/jaynowman/dev/northstar-engines/MUSCLE_HEALTH.md` (muscle durability status)
 - **Skill Authoring:** `/Users/jaynowman/dev/docs/skills/skill-authoring/SKILL.md`
+- **Northstar Vision:** `/Users/jaynowman/dev/northstar-engines/ATOMS_FAM_NORTHSTAR.MD`
 
 # ARCHITECTURAL MANIFEST (Merged from Agent.md)
 

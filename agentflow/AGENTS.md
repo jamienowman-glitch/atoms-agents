@@ -8,6 +8,7 @@
   - `/Users/jaynowman/dev/agentflow/docs/atom_flow/AGENTS.md` (Atom Flow safety rules)
   - `/Users/jaynowman/dev/agentflow/docs/production_line.md` (stable tools and production workflow)
   - `/Users/jaynowman/dev/agentflow/docs/toolmap.md` (tool wiring reference)
+  - **Northstar Vision:** `/Users/jaynowman/dev/agentflow/ATOMS_FAM_NORTHSTAR.MD`
 
 ## Plans Location
 - The canonical location for plans in this repo is `/Users/jaynowman/dev/agentflow/docs/plans/`.
