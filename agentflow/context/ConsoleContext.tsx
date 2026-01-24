@@ -40,7 +40,7 @@ interface ConsoleContextType {
     identity: ConsoleIdentity | null;
 }
 
-const ConsoleContext = createContext<ConsoleContextType>({
+export const ConsoleContext = createContext<ConsoleContextType>({
     events: [],
     isConnected: false,
     lastEvent: null,

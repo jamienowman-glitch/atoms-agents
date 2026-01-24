@@ -9,7 +9,7 @@ const Multi21Logo = (
 );
 
 export const Multi21Cartridge: CanvasCartridge = {
-    id: 'multi21',
+    id: 'multi21.designer',
     logoIcon: Multi21Logo,
     ToolMap: Object.values(TOOL_REGISTRY),
     enablePagePanels: true,

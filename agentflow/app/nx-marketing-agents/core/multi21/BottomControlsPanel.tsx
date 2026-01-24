@@ -91,7 +91,7 @@ export function BottomControlsPanel({ settingsContent, activeBlockId, activeBloc
     const { useToolState } = useToolControl();
 
     // 1. Visibility & State
-    const [isVisible, setIsVisible] = useToolState<boolean>({ target: { surfaceId: 'multi21.shell', toolId: 'ui.show_tools' }, defaultValue: false });
+    const [isVisible, setIsVisible] = useToolState<boolean>({ target: { surfaceId: 'multi21.designer', toolId: 'ui.show_tools' }, defaultValue: false });
     const [previewMode] = useToolState<'desktop' | 'mobile'>({ target: { surfaceId: 'multi21.designer', toolId: 'previewMode' }, defaultValue: 'desktop' });
     const isMobileView = previewMode === 'mobile';
 

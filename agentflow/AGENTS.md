@@ -38,6 +38,28 @@
 - **MAGNIFIER LAW:** The Left Magnifier selects Context (Provider/Family); The Right Magnifier tunes Value.
 - **HIVE LAW:** Frameworks are Hexagons. On mobile, they 'explode' to reveal agents.
 
+# 🛑 PROTOCOL: THE CANVAS STANDARD (CSP)
+
+> **IMMUTABLE LAW:** All Surfaces/Canvases MUST use the "Standard Harness." You are prohibited from building custom shells, custom rails, or custom toolbars.
+
+### 1. THE 4 PILLARS OF THE HARNESS
+Every Page must implement these 4 UI Components. No exceptions.
+1.  **The AgentFax (ChatRailShell):** The bottom communication rail. It MUST be present.
+2.  **The ToolPop (Context):** It lives inside the ChatRail. It MUST react to `activeEntityId`.
+3.  **The ToolPill (FloatingControlsDock):** The floating action pill. It MUST be present.
+4.  **The TopLozenge (WorkbenchHeader):** The global status indicator.
+
+### 2. THE WIRING STANDARD (REAL-TIME)
+* **Transport is Mandatory:** Every Canvas Component MUST accept `transport: CanvasTransport`.
+* **ToolControl is Mandatory:** Every Canvas MUST use `useToolControl()` to listen for signals.
+* **GraphLens Compliance:** You must map your tools (Magnifiers, Sliders) to the standard `ToolRegistry`. You do not invent new sliders; you map the Standard Sliders to your Canvas variables.
+
+### 3. THE CARTRIDGE ARCHITECTURE
+* We do not build "Apps". We build **Cartridges**.
+* **The Cartridge:** The specific React Logic (e.g., `StigmaCanvas`, `VideoCanvas`).
+* **The Gun:** The `WorkbenchShell` that holds the 4 Pillars.
+* **The Rule:** You only build the Cartridge. You import the Gun.
+
 # 🛑 ATOMS FAM: NON-NEGOTIABLE PRESERVATION PROTOCOLS
 
 > **CRITICAL INSTRUCTION:** You are working inside a high-precision **Orchestration Factory**, not a simple App. The following architectural pillars are **INVIOLATE**. You must NEVER collapse, summarize, or hardcode over these structures.

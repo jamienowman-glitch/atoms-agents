@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
+import { Roboto, Roboto_Flex } from "next/font/google"; // Import Roboto_Flex
 import "./globals.css";
 
 const roboto = Roboto({
@@ -8,12 +8,16 @@ const roboto = Roboto({
   variable: "--font-roboto",
 });
 
+const robotoFlex = Roboto_Flex({
+  subsets: ["latin"],
+  variable: "--font-roboto-flex",
+  axes: ["opsz", "slnt", "wdth", "GRAD", "XTRA", "YOPQ", "YTAS", "YTDE", "YTFI", "YTLC", "YTUC"],
+});
+
 export const metadata: Metadata = {
   title: "Atoms Site",
   description: "Automated. Atomic. Agents.",
 };
-
-export const runtime = 'edge';
 
 export default function RootLayout({
   children,
@@ -23,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${roboto.variable} antialiased`}
+        className={`${roboto.variable} ${robotoFlex.variable} antialiased`}
       >
         {children}
       </body>

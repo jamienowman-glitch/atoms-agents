@@ -7,72 +7,107 @@ import { ChatRailShell } from '../chat/ChatRailShell';
 import { PageSettingsPanel } from '../../app/nx-marketing-agents/core/multi21/PageSettingsPanel';
 import { ExportPanel } from '../../app/nx-marketing-agents/core/multi21/ExportPanel';
 import { WorkbenchHeader } from './WorkbenchHeader';
+import { FloatingControlsDock } from './FloatingControlsDock';
 import { ConsoleProvider } from './ConsoleContext';
+import { useWorkbenchTransport } from './useWorkbenchTransport';
 import type { CanvasCartridge } from './types';
+
+// Types needed for coordination
+type ChatMode = 'nano' | 'micro' | 'standard' | 'full';
+type PreviewMode = 'desktop' | 'mobile';
+type Align = 'left' | 'center' | 'right';
+type Aspect = 'square' | 'portrait' | 'landscape';
+type Variant = 'generic' | 'product' | 'kpi' | 'text';
+
+// Support both Legacy and CSP modes
+type WorkbenchShellProps =
+    | {
+        cartridge: CanvasCartridge;
+        children: React.ReactNode;
+        surfaceId?: never;
+        toolMap?: never;
+        canvas?: never;
+    }
+    | {
+        surfaceId: string;
+        toolMap?: Record<string, string>;
+        canvas: (transport: any) => React.ReactNode;
+        children?: never;
+        cartridge?: never;
+    };
 
 const initialToolState = {
     'multi21.designer:global:global:grid.cols_desktop': 6,
     'multi21.designer:global:global:grid.cols_mobile': 2,
     'multi21.designer:global:global:grid.gap_x': 16,
-    'multi21.designer:global:global:grid.tile_radius': 8,
-    'multi21.designer:global:global:feed.query.limit': 12,
-    'multi21.designer:global:global:align': 'center',
-    'multi21.designer:global:global:tile.variant': 'generic',
-    'multi21.designer:global:global:grid.aspect_ratio': '16:9',
     'multi21.designer:global:global:previewMode': 'desktop',
-    'multi21.designer:global:global:tile.show_title': true,
-    'multi21.designer:global:global:tile.show_meta': true,
-    'multi21.designer:global:global:tile.show_badge': true,
-    'multi21.designer:global:global:tile.show_cta_label': true,
-    'multi21.designer:global:global:tile.show_cta_arrow': true,
-    'multi21.shell:global:global:chat.mode': 'nano',
     'multi21.designer:global:global:show_registry': false,
+    // Standard Floating Dock States
+    'global:dock:align': 'center',
+    'global:dock:aspect': 'landscape',
+    'global:dock:variant': 'generic',
+    'global:dock:show_title': true,
+    'global:dock:show_meta': true,
+    'global:dock:show_badge': true,
+    'global:dock:show_cta_label': true,
+    'global:dock:show_cta_arrow': true,
 };
 
-// Types needed for coordination
-type ChatMode = 'nano' | 'micro' | 'standard' | 'full';
-
-export function WorkbenchShell({ children, cartridge }: { children: React.ReactNode; cartridge: CanvasCartridge }) {
+export function WorkbenchShell(props: WorkbenchShellProps) {
     return (
         <ConsoleProvider>
             <ToolControlProvider initialState={initialToolState}>
                 <PageControlProvider>
-                    <WorkbenchShellInner cartridge={cartridge}>
-                        {children}
-                    </WorkbenchShellInner>
+                    <WorkbenchShellInner {...props} />
                 </PageControlProvider>
             </ToolControlProvider>
         </ConsoleProvider>
     );
 }
 
-function WorkbenchShellInner({ children, cartridge }: { children: React.ReactNode; cartridge: CanvasCartridge }) {
+function WorkbenchShellInner(props: WorkbenchShellProps) {
     const { useToolState } = useToolControl();
     const { design, setSettingsOpen, setExportOpen } = usePageControl();
+    const transport = useWorkbenchTransport();
+
+    // Determine Identity
+    const surfaceId = props.surfaceId || props.cartridge?.id || 'unknown.surface';
 
     // Global Preview Mode
-    const [previewMode] = useToolState<'desktop' | 'mobile'>({ target: { surfaceId: 'multi21.designer', toolId: 'previewMode' }, defaultValue: 'desktop' });
+    const [previewMode, setPreviewMode] = useToolState<PreviewMode>({
+        target: { surfaceId, toolId: 'previewMode' },
+        defaultValue: 'desktop'
+    });
 
-    // 1. Manual State Wiring (Visibility)
-    // Connecting to Global Tool State so Multi21Designer can read it
-    const [showTools, setShowTools] = useToolState<boolean>({ target: { surfaceId: 'multi21.shell', toolId: 'ui.show_tools' }, defaultValue: false });
-    const toggleTools = () => {
-        console.log('[WorkbenchShell] Toggling Tools:', !showTools);
-        setShowTools(!showTools);
-    };
+    // Standard Dock States (Mapped to Surface)
+    const [align, setAlign] = useToolState<Align>({ target: { surfaceId, toolId: 'align' }, defaultValue: 'center' });
+    const [aspect, setAspect] = useToolState<Aspect>({ target: { surfaceId, toolId: 'aspect' }, defaultValue: 'landscape' });
+    const [variant, setVariant] = useToolState<Variant>({ target: { surfaceId, toolId: 'variant' }, defaultValue: 'generic' });
 
-    // 2. Manual Layout Wiring (Positioning)
-    // Lifting 'chatMode' state so both the Rail (Height) and Panel (Bottom Position) update synchronously.
+    // Visibility States
+    const [showTitle, setShowTitle] = useToolState<boolean>({ target: { surfaceId, toolId: 'show_title' }, defaultValue: true });
+    const [showMeta, setShowMeta] = useToolState<boolean>({ target: { surfaceId, toolId: 'show_meta' }, defaultValue: true });
+    const [showBadge, setShowBadge] = useToolState<boolean>({ target: { surfaceId, toolId: 'show_badge' }, defaultValue: true });
+    const [showCtaLabel, setShowCtaLabel] = useToolState<boolean>({ target: { surfaceId, toolId: 'show_cta_label' }, defaultValue: true });
+    const [showCtaArrow, setShowCtaArrow] = useToolState<boolean>({ target: { surfaceId, toolId: 'show_cta_arrow' }, defaultValue: true });
+
+    // Manual State Wiring (Visibility)
+    const [showTools, setShowTools] = useToolState<boolean>({ target: { surfaceId, toolId: 'ui.show_tools' }, defaultValue: false });
+    const toggleTools = () => setShowTools(!showTools);
+
+    // Chat Mode
     const [chatMode, setChatMode] = useState<ChatMode>('nano');
 
-    const enablePagePanels = cartridge.enablePagePanels ?? true;
-    const rightControls = cartridge.TopControls ? <cartridge.TopControls /> : undefined;
+    // Legacy Support
+    const enablePagePanels = props.cartridge?.enablePagePanels ?? true;
+    const rightControls = props.cartridge?.TopControls ? <props.cartridge.TopControls /> : undefined;
+    const logoIcon = props.cartridge?.logoIcon;
 
     return (
         <React.Fragment>
-            {/* 1. Global Controls (Command Center) */}
+            {/* 1. Global Controls (Command Center) - TopLozenge */}
             <WorkbenchHeader
-                logoIcon={cartridge.logoIcon}
+                logoIcon={logoIcon}
                 RightControls={rightControls}
                 setIsRightPanelOpen={enablePagePanels ? setSettingsOpen : undefined}
                 setIsExportOpen={enablePagePanels ? setExportOpen : undefined}
@@ -82,8 +117,29 @@ function WorkbenchShellInner({ children, cartridge }: { children: React.ReactNod
             {enablePagePanels && <PageSettingsPanel />}
             {enablePagePanels && <ExportPanel />}
 
-            {/* 4. Chat Rail Shell (Bottom Fixed) */}
-            {/* Manual Wiring: Passed toggle function and CONTROLLED mode */}
+            {/* 3. The ToolPill (FloatingControlsDock) */}
+            <FloatingControlsDock
+                previewMode={previewMode}
+                setPreviewMode={setPreviewMode}
+                align={align}
+                setAlign={setAlign}
+                aspectRatio={aspect}
+                setAspectRatio={setAspect}
+                tileVariant={variant}
+                setTileVariant={setVariant}
+                showTitle={showTitle}
+                setShowTitle={setShowTitle}
+                showMeta={showMeta}
+                setShowMeta={setShowMeta}
+                showBadge={showBadge}
+                setShowBadge={setShowBadge}
+                showCtaLabel={showCtaLabel}
+                setShowCtaLabel={setShowCtaLabel}
+                showCtaArrow={showCtaArrow}
+                setShowCtaArrow={setShowCtaArrow}
+            />
+
+            {/* 4. The AgentFax (ChatRailShell) - Includes ToolPop inside */}
             <ChatRailShell
                 showTools={showTools}
                 onToggleTools={toggleTools}
@@ -92,17 +148,17 @@ function WorkbenchShellInner({ children, cartridge }: { children: React.ReactNod
             />
 
             {/* Main Content Area (Layout Inheritor) */}
-            {/* We apply global CSS variables here for the Cascade */}
             <div
                 className={`min-h-screen transition-all duration-300 ${previewMode === 'mobile' ? 'bg-neutral-100/50 dark:bg-neutral-900/50' : ''}`}
                 style={{
                     // @ts-ignore
                     '--page-bg': design.backgroundColor,
                     '--global-funk': design.accentColor,
-                    backgroundColor: previewMode === 'desktop' ? design.backgroundColor : undefined // Apply mainly in desktop/full mode
+                    backgroundColor: previewMode === 'desktop' ? design.backgroundColor : undefined
                 }}
             >
-                {children}
+                {/* Render Legacy Children OR New Canvas Function */}
+                {props.children ? props.children : props.canvas?.(transport)}
             </div>
         </React.Fragment>
     );
