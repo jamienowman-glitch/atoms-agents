@@ -1,21 +1,28 @@
-# AGENTS.md — Atoms Muscle (The Power)
+# AGENTS.md
 
-## 🏗️ CONTEXT: THE FLEET OF 7
-*   **atoms-core:** The OS (Identity, Routing, Safety).
-*   **atoms-agents:** The Brain (Logic, Personas).
-*   **atoms-flow:** The UI (Console).
-*   **atoms-muscle:** The Power (GPU, Video). **[YOU ARE HERE]**
-*   **atoms-connectors:** The Tools (MCP Servers).
-*   **atoms-site:** The Face (Marketing).
-*   **atoms-tuning:** The Lab (Optimization).
+## 🛑 The Law of the Muscle
 
-## Mission
-The Heavy Lifter (GPU/Factory).
+**This is a Dumb Factory.**
 
-## The Stack
-- **Language:** Python
-- **Core:** FFMPEG, PyTorch, CUDA
+1.  **NO Auth Checks.**
+    *   This environment assumes the request is already authorized by the Core / Orchestrator.
+    *   Do not import `engines.identity`, `engines.auth`, or `engines.common.identity`.
+    *   Do not check `tenant_id` membership.
 
-## 🛑 THE LAW
-1.  **Pure Compute:** Do not put business logic here. You receive a Job, you process the pixels, you return the result.
-2.  **Dumb Execution:** Do not check permissions here. Core does that.
+2.  **NO Database Calls (Direct).**
+    *   This environment processes inputs and returns outputs.
+    *   It does not query the User DB, the Tenant DB, or the Billing DB.
+    *   It receives all necessary context (URLs, paths, configuration) in the Job payload.
+
+3.  **Pure Input/Output.**
+    *   Input: Job Description + Assets (S3 URLs / Local Paths).
+    *   Process: Heavy Compute (FFmpeg, Rendering, Inference).
+    *   Output: Result (S3 URL / Local Path) + Metadata.
+
+4.  **Hardware Aware.**
+    *   Code must check for GPU availability.
+    *   Gracefully degrade to CPU if necessary (or fail fast if GPU is mandatory).
+
+5.  **Clean Dependencies.**
+    *   Do not import `northstar_engines` code.
+    *   This repository is standalone.
