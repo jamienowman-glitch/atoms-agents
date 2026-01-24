@@ -4,6 +4,15 @@
 - This is the local law for `/Users/jaynowman/dev/northstar-engines`.
 - It extends the monorepo `AGENTS.md` with backend-specific rules.
 
+## 🏗️ CONTEXT: THE FLEET OF 7
+*   **atoms-core:** The OS (Identity, Routing, Safety). **[YOU ARE HERE]** (Legacy Name: northstar-engines)
+*   **atoms-agents:** The Brain (Logic, Personas).
+*   **atoms-flow:** The UI (Console).
+*   **atoms-muscle:** The Power (GPU, Video).
+*   **atoms-connectors:** The Tools (MCP Servers).
+*   **atoms-site:** The Face (Marketing).
+*   **atoms-tuning:** The Lab (Optimization).
+
 ## Mission
 - Build and harden the Backend Engine Factory: routing, safety, realtime, event spine, storage, and muscle engines.
 

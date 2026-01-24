@@ -1,0 +1,5 @@
+fastapi>=0.128.0
+pydantic-settings>=2.12.0
+python-multipart>=0.0.21
+supabase>=2.27.2
+uvicorn>=0.40.0

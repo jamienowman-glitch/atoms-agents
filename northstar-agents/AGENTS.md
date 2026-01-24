@@ -4,6 +4,15 @@
 - This is the local law for `/Users/jaynowman/dev/northstar-agents`.
 - It extends the monorepo `AGENTS.md` with repo-specific guidance.
 
+## 🏗️ CONTEXT: THE FLEET OF 7
+*   **atoms-core:** The OS (Identity, Routing, Safety).
+*   **atoms-agents:** The Brain (Logic, Personas). **[YOU ARE HERE]** (Legacy Name: northstar-agents)
+*   **atoms-flow:** The UI (Console). (Legacy Name: agentflow)
+*   **atoms-muscle:** The Power (GPU, Video).
+*   **atoms-connectors:** The Tools (MCP Servers).
+*   **atoms-site:** The Face (Marketing).
+*   **atoms-tuning:** The Lab (Optimization).
+
 ## Mission
 - Maintain the agent framework, registry cards, and runtime configuration for the agent layer.
 

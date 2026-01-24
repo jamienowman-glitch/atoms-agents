@@ -3,12 +3,22 @@
 ## Scope & Authority
 - This is the local law for `/Users/jaynowman/dev/agentflow`.
 - It extends the monorepo `AGENTS.md` with UI-specific boundaries.
+- It extends the monorepo `AGENTS.md` with UI-specific boundaries.
 - The following documents are authoritative and must be treated as the source of truth:
   - `/Users/jaynowman/dev/agentflow/docs/toolpop_spec.md` (Toolpop interaction model)
   - `/Users/jaynowman/dev/agentflow/docs/atom_flow/AGENTS.md` (Atom Flow safety rules)
   - `/Users/jaynowman/dev/agentflow/docs/production_line.md` (stable tools and production workflow)
   - `/Users/jaynowman/dev/agentflow/docs/toolmap.md` (tool wiring reference)
   - **Northstar Vision:** `/Users/jaynowman/dev/agentflow/ATOMS_FAM_NORTHSTAR.MD`
+
+## 🏗️ CONTEXT: THE FLEET OF 7
+*   **atoms-core:** The OS (Identity, Routing, Safety).
+*   **atoms-agents:** The Brain (Logic, Personas).
+*   **atoms-flow:** The UI (Console). **[YOU ARE HERE]** (Legacy Name: agentflow)
+*   **atoms-muscle:** The Power (GPU, Video).
+*   **atoms-connectors:** The Tools (MCP Servers).
+*   **atoms-site:** The Face (Marketing).
+*   **atoms-tuning:** The Lab (Optimization).
 
 ## Plans Location
 - The canonical location for plans in this repo is `/Users/jaynowman/dev/agentflow/docs/plans/`.

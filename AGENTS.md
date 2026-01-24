@@ -18,6 +18,23 @@
 
 ## Northstar Vision (Work In Progress)
 - **The Blueprint:** `/Users/jaynowman/dev/ATOMS_FAM_NORTHSTAR.MD` (Atoms-Fam Orchestration System V2.1)
+
+## 🏗️ ARCHITECTURAL MANIFEST: THE FLEET OF 7
+*   **atoms-core:** The OS (Identity, Routing, Safety). **Status:** ALIVE.
+*   **atoms-agents:** The Brain (Logic, Personas). **Status:** LEGACY/ACTIVE.
+*   **atoms-flow:** The UI (Console). **Status:** LEGACY/ACTIVE.
+*   **atoms-muscle:** The Power (GPU, Video). **Status:** INITIALIZING.
+*   **atoms-connectors:** The Tools (MCP Servers). **Status:** PLANNED.
+*   **atoms-site:** The Face (Marketing). **Status:** SCAFFOLDED.
+*   **atoms-tuning:** The Lab (Optimization). **Status:** INITIALIZING.
+
+> **CRITICAL RULE:** Agents working in `atoms-core` must **NOT** import from `northstar-engines`.
+
+## 🔐 SECURITY CONSTITUTION: THE VAULT LAW
+*   **NO .ENV FILES:** Explicitly forbidden. Do not create them.
+*   **THE VAULT PATTERN:** All Secrets must be loaded via `VaultLoader` in `src/core/config.py` which reads absolute paths from `/Users/jaynowman/northstar-keys/`.
+*   **ZERO DRIFT:** Configuration is immutable. If a key changes, the system restarts. No flags.
+
 # 🛑 ATOMS FAM: NON-NEGOTIABLE PRESERVATION PROTOCOLS
 
 > **CRITICAL INSTRUCTION:** You are working inside a high-precision **Orchestration Factory**, not a simple App. The following architectural pillars are **INVIOLATE**. You must NEVER collapse, summarize, or hardcode over these structures.

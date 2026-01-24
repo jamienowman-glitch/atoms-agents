@@ -7,9 +7,31 @@ app = FastAPI(title="Atoms Core")
 # Register Middleware
 app.add_middleware(IdentityMiddleware)
 
+
 @app.get("/health")
 async def health():
     return {"status": "ok"}
+
+@app.get("/api/v1/config/status")
+async def config_status():
+    """
+    Returns the status of the configuration loader.
+    Masks secrets for security.
+    """
+    from src.core.config import get_settings
+    settings = get_settings()
+    
+    def mask(s: str) -> str:
+        if len(s) < 8: return "****"
+        return f"LOADED (ends in ...{s[-4:]})"
+
+    return {
+        "SUPABASE_URL": mask(settings.SUPABASE_URL),
+        "SUPABASE_ANON_KEY": mask(settings.SUPABASE_ANON_KEY),
+        "OPENAI_API_KEY": mask(settings.OPENAI_API_KEY),
+        "SYSTEM_KEY": mask(settings.SYSTEM_KEY),
+        "GSM_CONNECTED": settings.GSM_CONNECTED
+    }
 
 async def require_auth(request: Request):
     """Dependency to ensure user is authenticated."""

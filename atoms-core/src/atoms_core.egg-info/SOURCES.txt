@@ -1,0 +1,16 @@
+README.md
+pyproject.toml
+src/atoms_core.egg-info/PKG-INFO
+src/atoms_core.egg-info/SOURCES.txt
+src/atoms_core.egg-info/dependency_links.txt
+src/atoms_core.egg-info/requires.txt
+src/atoms_core.egg-info/top_level.txt
+src/core/__init__.py
+src/core/config.py
+src/core/main.py
+src/core/identity/__init__.py
+src/core/identity/constants.py
+src/core/identity/middleware.py
+src/core/identity/models.py
+src/core/routing/__init__.py
+tests/test_api.py
