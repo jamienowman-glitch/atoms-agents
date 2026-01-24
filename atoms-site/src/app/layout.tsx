@@ -13,6 +13,8 @@ export const metadata: Metadata = {
   description: "Automated. Atomic. Agents.",
 };
 
+export const runtime = 'edge';
+
 export default function RootLayout({
   children,
 }: Readonly<{
