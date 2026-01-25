@@ -1,0 +1,78 @@
+- id: video_render_v1
+  name: "Video Render Engine"
+  status: live
+  quality_tier: 1080p
+  path: "engines/muscle/video_render"
+  capabilities:
+    - h264
+    - proxy_gen
+    - timeline_orchestration
+  requirements: ["ffmpeg"]
+
+- id: video_slowmo_v1
+  name: "Video Slowmo (Optical Flow)"
+  status: detected
+  quality_tier: experimental
+  path: "engines/muscle/video_slowmo"
+  capabilities:
+    - minterpolate
+    - optical_flow
+  notes: "Uses MCI. Fast motion causes artifacts."
+
+- id: video_anonymise_v1
+  name: "Video Anonymise (Face Blur)"
+  status: detected
+  quality_tier: experimental
+  path: "engines/muscle/video_anonymise"
+  capabilities:
+    - face_detection
+    - region_blur
+  notes: "Relies on video_regions. Default strength 1.0."
+
+- id: video_regions_v1
+  name: "Video Regions (Detector)"
+  status: detected
+  quality_tier: experimental
+  path: "engines/muscle/video_regions"
+  capabilities:
+    - dlib_face
+    - opencv_face
+  notes: "CPU backend slow for 4K."
+
+- id: video_focus_automation_v1
+  name: "Video Focus Automation (Smart Crop)"
+  status: detected
+  quality_tier: experimental
+  path: "engines/muscle/video_focus_automation"
+  capabilities:
+    - smart_crop
+    - speaker_tracking
+  notes: "Uses audio and visual meta."
+
+- id: video_stabilise_v1
+  name: "Video Stabilise (2-Pass)"
+  status: detected
+  quality_tier: high
+  path: "engines/muscle/video_stabilise"
+  capabilities:
+    - vidstabdetect
+    - vidstabtransform
+  notes: "High CPU usage. Needs caching."
+
+- id: video_multicam_v1
+  name: "Video Multicam Sync"
+  status: detected
+  quality_tier: experimental
+  path: "engines/muscle/video_multicam"
+  capabilities:
+    - audio_waveform_sync
+  notes: "Requires clear audio on all tracks."
+
+- id: video_360_v1
+  name: "Video 360 Projection"
+  status: detected
+  quality_tier: experimental
+  path: "engines/muscle/video_360"
+  capabilities:
+    - equirectangular_to_rectilinear
+  notes: "Uses lerp for V1 interpolation."

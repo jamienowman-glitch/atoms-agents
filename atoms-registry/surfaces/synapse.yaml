@@ -1,0 +1,9 @@
+id: synapse_console
+name: "Synapse (Health & Energy)"
+entry_point: "/synapse"
+flows:
+  - id: daily_checkin
+    canvases:
+      - canvas_id: biometrics_graph
+        tools: ["magnifier", "slider", "date_picker"]
+        muscle_link: ["video_slowmo_v1"]
