@@ -24,6 +24,18 @@ export default function MegaMenu({ isOpen, onClose, theme = "light" }: MegaMenuP
         { label: "=MC²", sub: "PERSONAL ENERGY AGENTS", href: "/mc2-personal-energy", branding: "font-semibold italic" },
         { label: "P²", sub: "WEALTH CREATION AGENTS", href: "/p2-wealth-creation", branding: "font-normal" },
         { label: "CUBED³", sub: "MARKETING IN THE THIRD", href: "/cubed3-marketing", branding: "font-bold" },
+        {
+            label: (
+                <span>
+                    <span className="font-semibold">MANY</span>
+                    <span className="font-normal">Ψ</span>
+                    <span className="font-extralight italic">ORLDS</span>
+                </span>
+            ),
+            sub: "AGENTIC QUANTUM RESEARCH",
+            href: "/many-worlds",
+            branding: ""
+        },
     ];
 
     return (
@@ -39,7 +51,7 @@ export default function MegaMenu({ isOpen, onClose, theme = "light" }: MegaMenuP
             <nav className="flex flex-col gap-0">
                 {NAV_ITEMS.map((item, index) => (
                     <Link
-                        key={item.label}
+                        key={typeof item.label === 'string' ? item.label : index}
                         href={item.href}
                         onClick={onClose}
                         className={`group flex flex-col py-6 border-b first:border-t-0 ${borderClass}`}

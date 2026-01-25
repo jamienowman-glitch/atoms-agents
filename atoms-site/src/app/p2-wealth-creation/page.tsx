@@ -11,15 +11,16 @@ export default function P2WealthCreation() {
                         P<sup className="text-2xl top-[-0.5em]">2</sup>
                     </h1>
                 }
+                subhead={
+                    <div className="text-sm md:text-base tracking-[0.2em]" style={{ fontFamily: 'var(--font-roboto-flex)', fontVariationSettings: '"wght" 200, "slnt" -10', fontStyle: 'italic' }}>
+                        WEALTH CREATION AGENTS
+                    </div>
+                }
             />
 
             {/* Hero Section */}
             <section className="flex flex-col items-center pt-2 pb-12">
-                <h2 className="text-sm md:text-base tracking-[0.2em] mb-12 text-center" style={{ fontFamily: 'var(--font-roboto-flex)', fontVariationSettings: '"wght" 200, "slnt" -10', fontStyle: 'italic' }}>
-                    WEALTH CREATION AGENTS
-                </h2>
 
-                <AutoCarousel />
 
                 <div className="mt-8 text-center px-6">
                     <p className="text-xs text-gray-400 uppercase tracking-widest mb-2">Automated Optimization</p>

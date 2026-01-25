@@ -4,7 +4,7 @@ import InteractivePills from "@/components/agnx/InteractivePills";
 
 export default function Cubed3Marketing() {
     return (
-        <main className="bg-white min-h-screen text-black pb-20">
+        <main className="bg-black min-h-screen text-white pb-20">
             <MicrositeHeader
                 initialTemp={333}
                 bgColor="bg-black"
@@ -17,31 +17,45 @@ export default function Cubed3Marketing() {
                     </h1>
                 }
                 subhead={
-                    <h2 className="text-sm md:text-base tracking-[0.2em]" style={{ fontFamily: 'var(--font-roboto-flex)', fontVariationSettings: '"wght" 200, "slnt" -10', fontStyle: 'italic' }}>
+                    <div className="text-sm md:text-base tracking-[0.2em]" style={{ fontFamily: 'var(--font-roboto-flex)', fontVariationSettings: '"wght" 200, "slnt" -10', fontStyle: 'italic' }}>
                         MARKETING IN THE THIRD
-                    </h2>
+                    </div>
                 }
             />
 
             {/* Hero Section */}
-            <section className="flex flex-col items-center pt-12 pb-12">
-
-                <AutoCarousel />
+            <section className="flex flex-col items-center pt-2 pb-12">
+                <AutoCarousel tiles={[
+                    {
+                        id: 1,
+                        type: 'image',
+                        src: '/mynx-cad-pricing-agents.png',
+                        href: '/cubed3-marketing/mynx-cad-pricing-agent',
+                        alt: 'Mynx CAD Pricing Agent',
+                        headline: 'Mynx Agent',
+                        description: 'Intelligent CAD Pricing. Engineering economy.',
+                        ctaLabel: 'View App'
+                    },
+                    { id: 2, type: 'text', label: 'Feature Extraction', headline: 'CAD Features', description: 'Geometry analysis engine.', ctaLabel: 'View Specs' },
+                    { id: 3, type: 'text', label: 'BOM Optimization', headline: 'Smart BOM', description: 'Automated sourcing logic.', ctaLabel: 'Optimize' },
+                    { id: 4, type: 'text', label: 'Cost Analysis', headline: 'Cost Analysis', description: 'Real-time pricing models.', ctaLabel: 'Calculate' },
+                    { id: 5, type: 'text', label: 'Supply Chain', headline: 'Supply Chain', description: 'Logistics integration.', ctaLabel: 'COMING SOON' },
+                ]} />
 
                 <div className="mt-8 text-center px-6">
-                    <p className="text-xs text-gray-400 uppercase tracking-widest mb-2">Automated Optimization</p>
-                    <p className="text-sm max-w-md mx-auto">
+                    <p className="text-xs text-red-500 uppercase tracking-widest mb-2">Automated Optimization</p>
+                    <p className="text-sm max-w-md mx-auto text-gray-400">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                     </p>
                 </div>
             </section>
 
             {/* Tagline Section */}
-            <section className="py-20 px-6 text-center bg-gray-50">
+            <section className="py-20 px-6 text-center bg-white/5 border-y border-white/10">
                 <h2 className="text-3xl md:text-5xl font-black mb-8 tracking-tighter">
                     ANALYSE. AMPLIFY. ADAPT.
                 </h2>
-                <p className="max-w-2xl mx-auto text-gray-600 leading-relaxed">
+                <p className="max-w-2xl mx-auto text-gray-400 leading-relaxed">
                     Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
                 </p>
             </section>
