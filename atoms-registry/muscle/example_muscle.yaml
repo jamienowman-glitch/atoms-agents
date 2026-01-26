@@ -1,0 +1,9 @@
+id: muscles::example_muscle
+namespace: muscles
+key: example_muscle
+name: Example Muscle
+summary: ''
+config: {}
+enabled: true
+maturity: experimental
+origin_path: atoms-muscle/src/muscle/legacy/muscles/_template/mcp/spec.yaml

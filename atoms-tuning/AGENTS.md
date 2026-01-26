@@ -1,16 +1,13 @@
 # AGENTS.md — Atoms Tuning (The Lab)
 
-## 🏗️ CONTEXT: THE FLEET OF 7
-*   **atoms-core:** The OS (Identity, Routing, Safety).
-*   **atoms-agents:** The Brain (Logic, Personas).
-*   **atoms-flow:** The UI (Console).
-*   **atoms-muscle:** The Power (GPU, Video).
-*   **atoms-connectors:** The Tools (MCP Servers).
-*   **atoms-site:** The Face (Marketing).
-*   **atoms-tuning:** The Lab (Optimization). **[YOU ARE HERE]**
+> **The Northstar**: "We are creating Shopify, Klaviyo, Photoshop, CapCut... all run by Agents and Humans on collaborative Canvases."
 
-## Mission
-The Optimization Lab (IP Creation).
+## 🛑 THE ATOMIC MANDATE
+1.  **Metric Driven**: We do not guess. We measure.
+2.  **Registry First**: Optimization results update the Registry configuration.
+3.  **Atomic Scope**: We verify one atom at a time.
 
-## 🛑 THE LAW
-1.  **The Feedback Loop:** Watch Agent performance -> Tune Manifests -> Update Registry.
+## 🏗️ CONTEXT
+This repository holds the **Evaluation & Tuning** scripts:
+-   **Datasets**: Golden sets for testing.
+-   **Evals**: LLM-as-a-Judge scripts.

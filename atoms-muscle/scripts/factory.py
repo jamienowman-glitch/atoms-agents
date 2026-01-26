@@ -101,21 +101,39 @@ def wrap_muscle(muscle_path: str):
     else:
         print(f"   ⏩ SKILL.md exists")
 
-def main():
-    root = Path("../src/muscle")
-    # If arg provided, just wrap that one
-    if len(sys.argv) > 1:
-        target = sys.argv[1]
-        wrap_muscle(target)
+def scan_directory(path: Path):
+    print(f"🏭 Scanning {path}...")
+    # Check if the path itself is a muscle (has service.py)
+    if (path / "service.py").exists():
+        wrap_muscle(str(path))
         return
 
-    # Else, scan all
-    print(f"🏭 Scanning {root}...")
-    for category in root.iterdir():
-        if category.is_dir() and not category.name.startswith("_") and category.name != "legacy":
-            for muscle in category.iterdir():
-                if muscle.is_dir() and not muscle.name.startswith("_"):
-                    wrap_muscle(str(muscle))
+    # Otherwise scan children
+    for item in path.iterdir():
+        if item.is_dir() and not item.name.startswith("_") and item.name != "legacy":
+            # Check if this child is a muscle
+            if (item / "service.py").exists():
+                 wrap_muscle(str(item))
+            # Or if it's a category containing muscles (recurse one level)
+            else:
+                for subitem in item.iterdir():
+                    if subitem.is_dir() and (subitem / "service.py").exists():
+                         wrap_muscle(str(subitem))
+
+def main():
+    root = Path("../src/muscle")
+    
+    # If arg provided, scan it as a root
+    if len(sys.argv) > 1:
+        target = Path(sys.argv[1])
+        if not target.exists():
+             print(f"❌ Target not found: {target}")
+             return
+        scan_directory(target)
+        return
+
+    # Default: Scan src/muscle
+    scan_directory(root)
 
 if __name__ == "__main__":
     main()

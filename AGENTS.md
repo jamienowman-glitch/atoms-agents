@@ -31,9 +31,10 @@
 > **CRITICAL RULE:** Agents working in `atoms-core` must **NOT** import from `northstar-engines`.
 
 ## 🔐 SECURITY CONSTITUTION: THE VAULT LAW
-*   **NO .ENV FILES:** Explicitly forbidden. Do not create them.
-*   **THE VAULT PATTERN:** All Secrets must be loaded via `VaultLoader` in `src/core/config.py` which reads absolute paths from `/Users/jaynowman/northstar-keys/`.
+*   **NO .ENV FILES:** Explicitly forbidden. Do not create them. Delete them on sight.
+*   **THE VAULT PATTERN:** All Secrets must be loaded via `VaultLoader` which reads absolute paths from `/Users/jaynowman/northstar-keys/`.
 *   **ZERO DRIFT:** Configuration is immutable. If a key changes, the system restarts. No flags.
+*   **AUDIT:** Agents must verify `/Users/jaynowman/northstar-keys/` exists before assuming access.
 
 # 🛑 ATOMS FAM: NON-NEGOTIABLE PRESERVATION PROTOCOLS
 
@@ -77,17 +78,22 @@ We do not "build agents" in code. We assemble them from Atomic Cards.
 * **Frontend Craftsmanship:** `agentflow/docs/skills/frontend-craftsmanship/SKILL.md`
 * **UI Foundry:** `agentflow/docs/skills/ui-foundry/SKILL.md`
 * **Skill Authoring:** `docs/skills/skill-authoring/SKILL.md`
+*   **Agent Assembly:** `northstar-agents/docs/skills/agent-assembly/SKILL.md`
+*   **Connectivity Protocol:** `northstar-agents/docs/skills/connectivity-protocol/SKILL.md`
+*   **Frontend Craftsmanship:** `agentflow/docs/skills/frontend-craftsmanship/SKILL.md`
+*   **UI Foundry:** `agentflow/docs/skills/ui-foundry/SKILL.md`
+*   **Skill Authoring:** `docs/skills/skill-authoring/SKILL.md`
 
 ## 🌍 GLOBAL PROTOCOLS (Federated)
 These laws are enforced at the sub-repo level but apply to any agent crossing boundaries.
 
 ### 🏛️ REGISTRY (Northstar-Agents)
-* **The Split Law:** Models are Atomic (Family/Version/Variant). No monolithic IDs.
-* **Stateless Brain:** Agents are infrastructure-agnostic. They do not know about Tenants.
+*   **The Split Law:** Models are Atomic (Family/Version/Variant). No monolithic IDs.
+*   **Stateless Brain:** Agents are infrastructure-agnostic. They do not know about Tenants.
 
 ### 💰 COMMERCE (Northstar-Engines)
-* **The Receipt Law:** No Ghost usage. Every generation must return `TokenUsage` and map to `price_book.json`.
-* **The OS Layer:** Engines are the host. Agents are the guest library.
+*   **The Receipt Law:** No Ghost usage. Every generation must return `TokenUsage` and map to `price_book.json`.
+*   **The OS Layer:** Engines are the host. Agents are the guest library.
 
 ### 📐 PHYSICS (Agentflow)
 * **Geometry Law:** Mobile = Vertical + Hive (Exploding Hexagons). Desktop = Horizontal (Infinite Canvas).

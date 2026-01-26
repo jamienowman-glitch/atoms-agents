@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 
+  MONOLITH DESTROYED.
+  Base styles only. Page-specific backgrounds should be handled in the page components.
+*/
+
+:root {
+    --foreground-rgb: 0, 0, 0;
+}
+
+body {
+    /* No global background color - let the page authorize it */
+    min-height: 100vh;
+}
+
+/* Optional Utilities */
+.bg-graph-paper {
+    background-color: #ffffff;
+    background-image:
+        linear-gradient(#e5e5e5 1px, transparent 1px),
+        linear-gradient(90deg, #e5e5e5 1px, transparent 1px);
+    background-size: 20px 20px;
+    color: black;
+}

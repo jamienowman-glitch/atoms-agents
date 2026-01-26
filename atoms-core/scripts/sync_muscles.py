@@ -26,53 +26,68 @@ async def sync_muscles():
     found_muscles = []
     
     # Iterate Categories (audio, video, vision, etc.)
-    for category in os.listdir(MUSCLE_ROOT):
-        cat_path = os.path.join(MUSCLE_ROOT, category)
-        if not os.path.isdir(cat_path) or category.startswith("__") or category == "legacy":
-            continue
-            
-        # Iterate Muscles (transcriber, extractor etc.)
-        for muscle_name in os.listdir(cat_path):
-            muscle_path = os.path.join(cat_path, muscle_name)
-            if not os.path.isdir(muscle_path) or muscle_name.startswith("__"):
+    
+    def scan_dir(base_path, category_prefix):
+        found = []
+        if not os.path.exists(base_path): return found
+        
+        for item_name in os.listdir(base_path):
+            item_path = os.path.join(base_path, item_name)
+            if not os.path.isdir(item_path) or item_name.startswith("__") or item_name == "legacy":
                 continue
 
-            # 2. Check for SKILL.md
-            skill_path = os.path.join(muscle_path, "SKILL.md")
-            key = f"muscle_{category}_{muscle_name}"
+            # Check if this IS a muscle (has service.py or is a folder in a category)
+            # In atoms-muscle/src/muscle: 
+            #   Category -> Muscle -> service.py
+            #   So verify if item_path is a Category
             
-            muscle_data = {
-                "key": key,
-                "name": f"{category.title()} {muscle_name.title()}",
-                "description": "Auto-detected muscle.",
-                "spec": {},
-                "status": "ready" # Assume ready if code exists
-            }
+            # If we are scanning "src/muscle", item IS a category.
+            if category_prefix == "":
+                 category = item_name
+                 for muscle_name in os.listdir(item_path):
+                     muscle_path = os.path.join(item_path, muscle_name)
+                     if os.path.isdir(muscle_path) and not muscle_name.startswith("__"):
+                         found.append(process_muscle(muscle_path, category, muscle_name))
+            
+            # If we are scanning "legacy/muscle", item IS a muscle.
+            elif category_prefix == "legacy":
+                 found.append(process_muscle(item_path, "legacy", item_name))
+        return found
 
-            if os.path.exists(skill_path):
-                print(f"   📜 Found SKILL.md for {key}")
-                try:
-                    with open(skill_path, "r") as f:
-                        # Simple frontmatter parser (reliable enough for this)
-                        content = f.read()
-                        if content.startswith("---"):
-                            end_metrics = content.find("---", 3)
-                            if end_metrics != -1:
-                                yaml_text = content[3:end_metrics]
-                                meta = yaml.safe_load(yaml_text)
-                                
-                                # Map Metadata
-                                if "metadata" in meta:
-                                    if "short-description" in meta["metadata"]:
-                                        muscle_data["description"] = meta["metadata"]["short-description"]
-                                    if "mcp-endpoint" in meta["metadata"]:
-                                        muscle_data["spec"]["mcp_endpoint"] = meta["metadata"]["mcp-endpoint"]
-                except Exception as e:
-                    print(f"   ⚠️ Error reading SKILL.md for {key}: {e}")
-            else:
-                 print(f"   ⚠️ No SKILL.md for {key}. Using defaults.")
+    def process_muscle(path, category, name):
+        key = f"muscle_{category}_{name}"
+        data = {
+            "key": key,
+            "name": f"{category.title()} {name.title()}",
+            "description": "Auto-detected muscle.",
+            "spec": {},
+            "status": "ready"
+        }
+        
+        skill_path = os.path.join(path, "SKILL.md")
+        if os.path.exists(skill_path):
+            try:
+                with open(skill_path, "r") as f:
+                    content = f.read()
+                    if content.startswith("---"):
+                        end = content.find("---", 3)
+                        if end != -1:
+                            meta = yaml.safe_load(content[3:end])
+                            if "metadata" in meta:
+                                if "short-description" in meta["metadata"]:
+                                    data["description"] = meta["metadata"]["short-description"]
+                                if "mcp-endpoint" in meta["metadata"]:
+                                    data["spec"]["mcp_endpoint"] = meta["metadata"]["mcp-endpoint"]
+            except: pass
+        else:
+             print(f"   ⚠️ No SKILL.md for {key}")
+        return data
 
-            found_muscles.append(muscle_data)
+    # 1. Scan Standard Categories
+    found_muscles.extend(scan_dir(MUSCLE_ROOT, ""))
+    
+    # 2. Scan Legacy
+    found_muscles.extend(scan_dir(os.path.join(MUSCLE_ROOT, "legacy/muscle"), "legacy"))
 
     # 3. Upsert to DB
     print(f"💪 Syncing {len(found_muscles)} Muscles to Registry...")
