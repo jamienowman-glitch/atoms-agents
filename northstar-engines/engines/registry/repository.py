@@ -86,10 +86,49 @@ class SystemRegistryRepository:
             ) from exc
 
     def list_entries(self, ctx: RequestContext, namespace: str) -> List[Dict[str, Any]]:
-        """List all entries for a given namespace."""
-        # Keys are stored as "{namespace}::{key}"
+        """List all entries for a given namespace (Tabular + External YAML)."""
+        # 1. Database Entries
         prefix = f"{namespace}::"
-        return self._tabular(ctx).list_by_prefix(self.SYSTEM_REGISTRY_TABLE, prefix)
+        db_entries = []
+        try:
+            db_entries = self._tabular(ctx).list_by_prefix(self.SYSTEM_REGISTRY_TABLE, prefix)
+        except Exception:
+            # If DB is down or unconfigured, we proceed to External (Failover)
+            pass
+        
+        # 2. External Registry Entries (The Bridge)
+        from engines.config.runtime_config import get_external_registry_path
+        ext_path = get_external_registry_path()
+        
+        if ext_path:
+            import os
+            import yaml
+            import glob
+            
+            # Map "muscles" -> "muscle" directory per our harvest script
+            dir_name = namespace
+            if namespace == "muscles": dir_name = "muscle"
+            
+            target_dir = os.path.join(ext_path, dir_name)
+            if os.path.exists(target_dir):
+                yaml_files = glob.glob(os.path.join(target_dir, "*.yaml"))
+                for yf in yaml_files:
+                    try:
+                        with open(yf, 'r') as f:
+                            data = yaml.safe_load(f)
+                            # Ensure system fields
+                            if not data.get('tenant_id'):
+                                data['tenant_id'] = ctx.tenant_id # Default to current context or system?
+                            
+                            # ID Collision: External wins or DB wins? 
+                            # Let's say External is "Release" and DB is "Overrides". 
+                            # But since we want to see the new stuff, we append.
+                            # Usually we'd map by ID.
+                            db_entries.append(data)
+                    except Exception:
+                        pass
+                        
+        return db_entries
 
     def get_entry(self, ctx: RequestContext, namespace: str, key: str) -> Optional[Dict[str, Any]]:
         """Retrieve a single entry."""

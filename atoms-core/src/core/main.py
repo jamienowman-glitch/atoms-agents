@@ -66,3 +66,6 @@ async def bootstrap(identity = Depends(require_auth)):
         "tenant": tenant_id,
         "role": role
     }
+
+from src.core.nexus.routes import router as nexus_router
+app.include_router(nexus_router)

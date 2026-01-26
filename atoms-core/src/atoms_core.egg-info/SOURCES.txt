@@ -12,5 +12,10 @@ src/core/identity/__init__.py
 src/core/identity/constants.py
 src/core/identity/middleware.py
 src/core/identity/models.py
+src/core/nexus/__init__.py
+src/core/nexus/embedding_free.py
+src/core/nexus/service.py
+src/core/nexus/store.py
 src/core/routing/__init__.py
 tests/test_api.py
+tests/test_config.py

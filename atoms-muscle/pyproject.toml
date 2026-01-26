@@ -10,7 +10,12 @@ dependencies = [
     "ffmpeg-python",
     "numpy",
     "pydantic",
-    "python-multipart"
+    "python-multipart",
+    "boto3",
+    "faster-whisper",
+    "torch",
+    "open_clip_torch",
+    "mcp"
 ]
 
 [build-system]

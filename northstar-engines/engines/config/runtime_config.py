@@ -206,6 +206,10 @@ def get_braket_region() -> Optional[str]:
 
 
 
+def get_external_registry_path() -> Optional[str]:
+    return _get_env("NORTHSTAR_REGISTRY_PATH")
+
+
 def get_memory_backend() -> Optional[str]:
     return _get_env("MEMORY_BACKEND")
 

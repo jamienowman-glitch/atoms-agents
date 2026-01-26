@@ -1,11 +1,19 @@
-# AGENTS.md — Backend Engine Factory
+# AGENTS.md — Backend Engine Factory (LEGACY)
+
+> **⚠ DEPRECATION NOTICE**: This repo is being phased out in favor of `atoms-core` (OS) and `atoms-registry` (DB). Do not build new features here.
+
+> **The Northstar**: "We are creating Shopify, Klaviyo, Photoshop, CapCut... all run by Agents and Humans on collaborative Canvases."
+
+## 🛑 THE ATOMIC MANDATE
+1.  **Never Monolith**: Split concerns.
+2.  **Registry First**: Use the DB.
 
 ## Scope & Authority
 - This is the local law for `/Users/jaynowman/dev/northstar-engines`.
 - It extends the monorepo `AGENTS.md` with backend-specific rules.
 
 ## 🏗️ CONTEXT: THE FLEET OF 7
-*   **atoms-core:** The OS (Identity, Routing, Safety). **[YOU ARE HERE]** (Legacy Name: northstar-engines)
+*   **atoms-core:** The OS (Identity, Routing, Safety).
 *   **atoms-agents:** The Brain (Logic, Personas).
 *   **atoms-flow:** The UI (Console).
 *   **atoms-muscle:** The Power (GPU, Video).
