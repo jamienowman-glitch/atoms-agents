@@ -1,0 +1,5 @@
+card_type: reasoning_profile
+profile_id: rp_cot
+name: Chain of Thought
+description: Think step by step.
+method: cot

@@ -1,0 +1,15 @@
+
+card_type: artifact_spec
+artifact_spec_id: artifact_spec.landing_page_markdown_v1
+name: Landing Page Markdown
+artifact_kind: markdown
+mime_type: text/markdown
+required_fields:
+  - title
+  - hero_section
+  - cta
+max_bytes: 100000
+viewer_hints:
+  panel: preview
+  renderer: markdown
+notes: Standard web copy format.

@@ -1,0 +1,15 @@
+
+card_type: flow
+flow_id: flow.example_landing_page
+name: Landing Page Generation Flow
+objective: Create and audit a landing page.
+nodes:
+  - node.write_landing_page
+  - node.audit_flow_graph
+edges:
+  - from: node.write_landing_page
+    to: node.audit_flow_graph
+entry_node: node.write_landing_page
+exit_nodes:
+  - node.audit_flow_graph
+notes: Simple linear flow example.

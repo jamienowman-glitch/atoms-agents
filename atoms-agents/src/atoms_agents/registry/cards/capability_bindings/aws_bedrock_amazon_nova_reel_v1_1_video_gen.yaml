@@ -1,0 +1,13 @@
+card_type: capability_binding
+binding_id: aws_bedrock_amazon_nova_reel_v1_1_video_gen
+provider_id: aws_bedrock
+model_or_deployment_id: amazon.nova-reel-v1:1
+capability_id: video_gen
+toggle_mechanism: InvokeModel API
+minimal_toggle_snippet: '{"videoConfig": {...}}'
+streaming_support: none
+prereqs_or_allowlist: AWS SigV4
+docs_url: Dec 2025
+last_updated_or_version: High
+confidence: dedicated model.
+notes: null

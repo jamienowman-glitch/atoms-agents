@@ -1,0 +1,5 @@
+card_type: reasoning_profile
+profile_id: rp_direct
+name: Direct Answer
+description: Answer directly without fluff.
+method: direct
