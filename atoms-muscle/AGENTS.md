@@ -1,16 +1,13 @@
 # 🏋️ THE MUSCLE FACTORY: Production Line Standard
 > **Mission**: Build 100+ GPU-Accelerated Tools (Muscles) for Nexus and External Sale.
 
-## 🛑 THE GOLDEN RULE
-**A Muscle does not exist until it is:**
-1.  **Implemented** (Python)
-2.  **Exposed** (API)
-3.  **Registered** (Database)
-4.  **Packaged** (SKILL.md)
+## 🛑 THE LAW
+**All Muscles MUST obey the following mandates:**
+1.  **Location**: All Muscles must live in `src/muscle/{category}/{name}`.
+2.  **Components**: All Muscles must have `mcp.py`, `SKILL.md`, and `service.py`.
+3.  **Automation**: Use `scripts/factory.py` and `scripts/sentinel.py` for all new work.
 
----
-
-## 🏗️ THE 5-STEP PRODUCTION LINE
+## 🏗️ THE PRODUCTION LINE
 Any Agent building a Muscle MUST follow this exact sequence:
 
 ### STEP 1: THE CORE LOGIC (Python)
@@ -18,10 +15,10 @@ Create the implementation in `src/muscle/{category}/{name}/service.py`.
 *   **Style**: Pure Python. Class-based.
 *   **Deps**: Import `ffmpeg`, `torch`, `numpy` etc. locally.
 
-### STEP 2: THE API EXPOSURE (FastAPI)
-You MUST expose the logic in `src/muscle/main.py`.
-*   **Method**: `POST`.
-*   **Route**: `/muscle/{category}/{action}`.
+### STEP 2: THE MCP WRAPPER (mcp.py)
+You MUST wrap the logic using FastMCP in `src/muscle/{category}/{name}/mcp.py`.
+*   Use `scripts/factory.py` to auto-generate this if possible.
+*   Ensure it imports `service.py`.
 
 ### STEP 3: THE SKILL PACKAGING (SKILL.md)
 You MUST create a `SKILL.md` file in `src/muscle/{category}/{name}/SKILL.md`.
@@ -31,39 +28,22 @@ This allows Codex/Agents to "install" this muscle as a capability.
 ```markdown
 ---
 name: muscle-{category}-{name}
-description: [Short description for Implicit Invocation]
+description: [Short description]
 metadata:
-  short-description: [User Facing description]
-  mcp-endpoint: https://connect.atoms.fam/mcp/{name}
+  type: mcp
+  entrypoint: src/muscle/{category}/{name}/mcp.py
+  pricing: "compute-seconds"
+  auto_wrapped: true
 ---
-
-# Instructions
-How to use this muscle.
-1. Call API: `POST /muscle/{category}/{name}`
-2. Payload: `{ "bucket": "...", "key": "..." }`
+# Usage
+...
 ```
 
-### STEP 4: THE REGISTRY (Cash Register)
-You MUST create a SQL Migration (`atoms-core/sql/9XX_muscle_{name}.sql`) to register the tool in `public.muscles`.
-
-```sql
-INSERT INTO public.muscles (key, name, description_human, description_tech, mcp_endpoint, api_endpoint, status)
-VALUES (
-    'muscle_video_wobble',
-    'Video Wobble',
-    'Adds a dynamic wobble transition.',
-    'FFmpeg filter_complex "wobble".',
-    'https://connect.atoms.fam/mcp/video-wobble',
-    '/muscle/video/wobble',
-    'ready'
-) ON CONFLICT (key) DO UPDATE SET status = 'ready';
+### STEP 4: THE REGISTRY
+Run the sync script to register new muscles:
+```bash
+python3 scripts/sync_muscles.py
 ```
-
-### STEP 5: THE VERIFICATION
-1.  Run the Migration.
-2.  Check `http://localhost:3001/dashboard/infra/muscles`.
-
----
 
 ## 📋 STANDARD FOLDER STRUCTURE
 ```text
@@ -71,21 +51,20 @@ atoms-muscle/
 ├── src/
 │   ├── muscle/
 │   │   ├── video/
-│   │   │   ├── extractor/          # <--- Subfolder per Muscle
+│   │   │   ├── render/             # <--- Subfolder per Muscle
 │   │   │   │   ├── service.py      # Implementation
+│   │   │   │   ├── mcp.py          # MCP Wrapper
 │   │   │   │   └── SKILL.md        # Agent Definition
 │   │   ├── audio/
-│   │   ├── vision/
-│   │   └── main.py                 # The API Gateway
-├── pyproject.toml
+│   │   ├── image/
+│   │   ├── cad/
+│   │   ├── text/
+│   │   ├── media/
+│   │   ├── timeline/
+│   │   ├── construction/
+│   │   └── main.py                 # The API Gateway (Legacy/Optional)
+├── scripts/
+│   ├── factory.py
+│   ├── sentinel.py
+│   └── sync_muscles.py
 ```
-
-## 🧠 AGENT INSTRUCTION (Copy-Paste)
-> "You are a Muscle Builder. Your job is to create a new feature: **[FEATURE NAME]**.
-> 1. Write the Python logic in `src/muscle/{category}/{name}/service.py`.
-> 2. Create `SKILL.md` with semantic instructions.
-> 3. Expose it in `main.py`.
-> 4. Create the SQL Registry Entry.
-> 5. Verify it appears in the Dashboard.
->
-> GO."

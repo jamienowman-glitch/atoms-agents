@@ -56,8 +56,12 @@ def wrap_muscle(muscle_path: str):
     service_file = path / "service.py"
     
     if not service_file.exists():
-        print(f"⚠️  No service.py in {name}. Skipping.")
-        return
+        # Check for core/logic.py if service.py is missing or minimal
+        if (path / "core/logic.py").exists():
+             service_file = path / "core/logic.py"
+        else:
+             print(f"⚠️  No service.py in {name}. Skipping.")
+             return
 
     print(f"🏭 Wrapping {category}/{name}...")
 
@@ -66,13 +70,23 @@ def wrap_muscle(muscle_path: str):
     # in a real scenario, we'd use AST.
     class_name = "Service" # Default
     docstring = "Auto-generated description."
+    found_classes = []
     
     with open(service_file, "r") as f:
         content = f.read()
         for line in content.splitlines():
             if line.strip().startswith("class "):
-                class_name = line.strip().split(" ")[1].split("(")[0].strip(":")
-                break
+                cls = line.strip().split(" ")[1].split("(")[0].strip(":")
+                found_classes.append(cls)
+
+    # Heuristic: Prefer *Service, *Manager, *Engine
+    for cls in found_classes:
+        if cls.endswith("Service") or cls.endswith("Manager") or cls.endswith("Engine"):
+            class_name = cls
+            break
+    else:
+        if found_classes:
+            class_name = found_classes[0]
     
     # 2. Write mcp.py
     mcp_file = path / "mcp.py"
