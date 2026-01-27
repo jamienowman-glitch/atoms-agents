@@ -1,4 +1,4 @@
-# Tech Spec: The Canvas Forge Standardization
+# Tech Spec: The Canvas Contract Builder Standardization
 
 ## Objective
 Establish a rigourous, standardized, and automated workflow for creating new Canvases in `atoms-ui`. This ensures every new canvas (Video, Gantt, Planning) adheres strictly to the Harness/Atom architecture without manual boilerplate fatigue.
@@ -9,9 +9,9 @@ This document serves as the **Constitution** for Agents working in this repo.
 -   **Architecture**: Explains the `ToolControlContext` >> `ConnectedBlock` >> `Atom` flow.
 -   **Strict Rules**: e.g., "Atoms must optionally accept `style` props", "Harness must handle all state".
 
-## 2. The Worker (`atoms-ui/SKILL_CANVAS_FORGE.md`)
+## 2. The Worker (`atoms-ui/.agent/skills/canvas-forge/SKILL.md`)
 A strictly formatted Anthropic Agent Skill.
--   **Frontmatter**: `name: canvas-forge`, `description: Generates boilerplate for a new Canvas...`
+    -   **Frontmatter**: `name: canvas-contract-builder`, `description: Defines the contract and generates boilerplate for a new Canvas...`
 -   **Input**: `CanvasContract` (JSON/Markdown block).
 -   **Process**:
     1.  Parse Contract (Canvas Name, Atoms needed, Tools needed).

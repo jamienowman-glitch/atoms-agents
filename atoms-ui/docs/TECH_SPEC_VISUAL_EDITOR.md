@@ -20,7 +20,7 @@ Instead of a file-system loader, we implement an API Client.
 -   `fetchMuscles()`: Calls `/registries/entries` to get the menu of available capabilities.
 -   `fetchToolDefinitions()`: Calls `/tools/list` to get the technical input schema for the generated code.
 
-### C. The Visual Editor (`ForgeCanvas`)
+### C. The Visual Editor (`ForgeCanvas`) — Contract Builder
 -   **UI**: 3-Column Layout (Chat, Graph, Properties).
 -   **Library**: Populated by the `fetchMuscles()` API call.
 -   **Graph**: Nodes represent Atoms.
@@ -29,14 +29,14 @@ Instead of a file-system loader, we implement an API Client.
     -   The Property Panel auto-generates fields based on that Schema (JSON Schema Form).
 
 ## 3. The Production workflow
-1.  **Boot**: `ForgeCanvas` mounts.
+1.  **Boot**: `ForgeCanvas` mounts (Contract Builder UI).
     -   `useEffect(() => api.fetchMuscles())`.
 2.  **User Action**: Drag "Video Muscle" onto canvas.
 3.  **App Logic**:
     -   Fetch `/tools/list` to find `video_muscle` tool.
     -   Display its available scopes (e.g., `render_clip`, `transcribe`).
     -   User selects "Render Clip".
-4.  **Forge**: Agent generates code that calls `mcp.callTool('video_muscle', 'render_clip', ...)`.
+4.  **Build**: Agent generates code that calls `mcp.callTool('video_muscle', 'render_clip', ...)`.
 
 ## 4. Why This is Better
 -   **Single Truth**: The Editor sees exactly what the Backend sees.

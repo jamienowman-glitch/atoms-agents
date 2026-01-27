@@ -69,5 +69,7 @@ async def bootstrap(identity = Depends(require_auth)):
 
 from src.nexus.routes import router as nexus_router
 from src.vault.routes import router as vault_router
+from src.budget.routes import router as budget_router
 app.include_router(nexus_router)
 app.include_router(vault_router)
+app.include_router(budget_router)

@@ -131,7 +131,7 @@ export default function NexusUploader() {
                     domain: "general", // Default or select
                     surface: "dashboard",
                     modality: "video",
-                    file_path: key # Send the S3 Key
+                    file_path: key // Send the S3 Key
                 })
             });
 

@@ -1,7 +1,7 @@
 # Tech Spec: Atoms App (The Console)
 
 ## 1. Objective
-A clean, lightweight "Application Shell" to host the Console, User Flows, and the Forge.
+A clean, lightweight "Application Shell" to host the Console, User Flows, and the Contract Builder.
 -   **Role**: The container for `atoms-ui` components.
 -   **Contrast**: `atoms-site` = Marketing (Public). `atoms-app` = Console (Private/Auth).
 
@@ -13,8 +13,8 @@ A clean, lightweight "Application Shell" to host the Console, User Flows, and th
     -   `/forge`: The Visual Contract Editor.
     -   `/flow/{id}`: An active canvas/agent session.
 
-## 3. The Forge Route
-We will mount the `ForgeCanvas` from `atoms-ui` at `/forge`.
+## 3. The Contract Builder Route
+We will mount the `ForgeCanvas` from `atoms-ui` at `/forge` (legacy route name).
 -   It will interpret `atoms-ui/canvases/forge/ForgeCanvas.tsx`.
 -   It will use `atoms-ui/harness/context/ToolControlContext`.
 

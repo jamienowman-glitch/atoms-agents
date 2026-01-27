@@ -18,7 +18,7 @@
 
 ## 1. The Skills (Agent Capabilities)
 Agents must check `.agent/skills/` for specialized instruction sets.
--   **Canvas Forge** (`.agent/skills/canvas-forge`): How to build new Canvases.
+-   **Canvas Contract Builder** (`.agent/skills/canvas-forge`): How to build new Canvases from a contract (no "Forge" naming).
 -   **Console Extend** (`.agent/skills/console-extend`): How to add tools to the Dashboard.
 -   **Realtime Harness** (`.agent/skills/realtime-harness`): How to build Harness/Canvas realtime (SSE truth, sidecars, no new routes).
 
@@ -109,12 +109,12 @@ To bridge the gap between `northstar-engines` (Legacy) and `atoms-ui` (New World
 1.  **(Deprecated)** The old harvest/mount flow wrote YAML into `atoms-registry` and exposed it via the legacy Engine.
 2.  **(Current)** `atoms-ui` should consume registries via DB-backed APIs (Supabase / `atoms-core`) with proper auth and tenant isolation.
 
-## Law of the Forge (Persistence)
--   The **Visual Contract Editor** IS the authoring tool.
+## Law of the Contract Builder (Persistence)
+-   The **Contract Builder** IS the authoring tool.
 -   **Save Target**: Contracts are saved to the DB registry (Supabase).
 -   **Generation**: The Agent reads the saved DB contract (or exported snapshot) to generate React code.
 -   **Loop**:
-    1.  User edits Form in Forge -> Saves to DB registry.
+    1.  User edits Form in Contract Builder -> Saves to DB registry.
     2.  User asks Agent "Update Code" -> Agent reads DB contract -> Updates `atoms-ui/canvases`.
 
 

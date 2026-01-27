@@ -110,7 +110,7 @@ export default function Dashboard() {
                     <div className="hidden md:block border-l-2 border-black/10 pl-12 pt-2">
                         <p className="font-mono text-sm text-neutral-500 uppercase tracking-widest mb-4">Context info</p>
                         <div className="text-lg font-medium leading-relaxed">
-                            Welcome to the Mainframe. Configure registries, forge surfaces, and manage the OS.
+                            Welcome to the Mainframe. Configure registries, build surfaces, and manage the OS.
                         </div>
                     </div>
                 </div>

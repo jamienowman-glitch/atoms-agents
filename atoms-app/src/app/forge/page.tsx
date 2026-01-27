@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import { ToolControlProvider } from 'atoms-ui/harness/context/ToolControlContext';
 
 // Dynamic Import to avoid SSR issues with Transport/Window
-const ForgeCanvas = dynamic(
+const ContractBuilderCanvas = dynamic(
     () => import('atoms-ui/canvases/forge/ForgeCanvas'),
     { ssr: false }
 );
@@ -13,7 +13,7 @@ const ForgeCanvas = dynamic(
 export default function ForgePage() {
     return (
         <ToolControlProvider>
-            <ForgeCanvas />
+            <ContractBuilderCanvas />
         </ToolControlProvider>
     );
 }

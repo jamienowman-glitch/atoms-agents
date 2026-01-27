@@ -9,7 +9,18 @@ type UsageMetric = {
     unit?: string | null;
 };
 
-type ProviderSummary = {
+type ModelUsage = {
+    model_id: string;
+    provider_id: string;
+    official_id?: string | null;
+    input_tokens: number;
+    output_tokens: number;
+    requests: number;
+    cost_gbp: number;
+    cost_no_free_gbp: number;
+};
+
+type ModelProviderSummary = {
     id: string;
     label: string;
     configured: boolean;
@@ -27,14 +38,15 @@ type ProviderSummary = {
     ltd_gross_margin_no_free_pct: number | null;
     breakdown_available: boolean;
     notes: string[];
+    models: ModelUsage[];
 };
 
-type BudgetSummary = {
+type ModelBudgetSummary = {
     as_of: string;
     currency: string;
     fx_rate: number;
     fx_source: string;
-    providers: ProviderSummary[];
+    providers: ModelProviderSummary[];
 };
 
 const money = (value: number | null | undefined) => {
@@ -61,9 +73,9 @@ const usageBlock = (items: UsageMetric[]) => {
     );
 };
 
-export default function CostDashboard() {
+export default function ModelCostDashboard() {
     const router = useRouter();
-    const [summary, setSummary] = useState<BudgetSummary | null>(null);
+    const [summary, setSummary] = useState<ModelBudgetSummary | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -71,7 +83,7 @@ export default function CostDashboard() {
         const load = async () => {
             try {
                 setLoading(true);
-                const res = await fetch('/api/god/cogs', { cache: 'no-store' });
+                const res = await fetch('/api/god/model-cogs', { cache: 'no-store' });
                 if (!res.ok) {
                     setError(await res.text());
                     return;
@@ -92,16 +104,14 @@ export default function CostDashboard() {
     return (
         <div className="min-h-screen bg-neutral-100 flex items-center justify-center p-4 md:p-12 font-sans text-black">
             <div className="w-full max-w-7xl min-h-[90vh] bg-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex flex-col relative">
-
-                {/* HEAD */}
-                <header className="p-12 border-b-4 border-black bg-emerald-50 flex justify-between items-center">
+                <header className="p-12 border-b-4 border-black bg-indigo-50 flex justify-between items-center">
                     <div>
-                        <h1 className="text-6xl font-black uppercase tracking-tighter mb-2">LIVE COST (COGS)</h1>
-                        <p className="font-mono text-sm uppercase tracking-widest opacity-60">MTD Spend • Free Tier Tracking • Unit Economics</p>
+                        <h1 className="text-6xl font-black uppercase tracking-tighter mb-2">MODEL COST (AI)</h1>
+                        <p className="font-mono text-sm uppercase tracking-widest opacity-60">Providers • Models • Token Economics</p>
                     </div>
                     <div className="text-right">
                         <div className="text-sm font-bold uppercase opacity-50">Month to Date</div>
-                        <div className="text-5xl font-black text-emerald-600">
+                        <div className="text-5xl font-black text-indigo-700">
                             £{totalMtd.toFixed(2)}
                         </div>
                         {summary && (
@@ -109,57 +119,16 @@ export default function CostDashboard() {
                                 FX: {summary.fx_rate} ({summary.fx_source}) • {summary.as_of}
                             </div>
                         )}
-                        <div className="mt-3">
-                            <button
-                                onClick={() => router.push('/dashboard/models/cost')}
-                                className="font-bold uppercase tracking-widest hover:underline text-xs"
-                            >
-                                View Model COGS →
-                            </button>
-                        </div>
                     </div>
                 </header>
 
                 <div className="flex-1 p-12 overflow-x-auto space-y-8">
-                    <div className="border-4 border-black bg-yellow-50 p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)]">
-                        <div className="flex flex-col lg:flex-row items-start justify-between gap-6">
-                            <div>
-                                <div className="text-xs font-black uppercase tracking-widest mb-2">Action Needed • Azure Billing</div>
-                                <p className="font-mono text-sm leading-relaxed">
-                                    Azure billing access is paused because the subscription is disabled. Re‑enable the subscription in the Azure Portal,
-                                    then run the CLI blocks below and paste the JSON output into the plan note so we can wire live spend.
-                                </p>
-                            </div>
-                            <button
-                                onClick={() => router.push('/dashboard/infra/free-tiers/azure')}
-                                className="font-bold uppercase tracking-widest hover:underline text-xs"
-                            >
-                                View Azure Free Tier →
-                            </button>
-                        </div>
-                        <div className="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
-                            <div className="border-2 border-black bg-white p-4">
-                                <div className="text-xs font-bold uppercase mb-2">Step 1: Set Subscription</div>
-                                <pre className="font-mono text-xs whitespace-pre-wrap">
-{`az account set --subscription 64cce95c-7395-41e4-87c4-0141783036b9`}
-                                </pre>
-                            </div>
-                            <div className="border-2 border-black bg-white p-4">
-                                <div className="text-xs font-bold uppercase mb-2">Step 2: Create Billing SP</div>
-                                <pre className="font-mono text-xs whitespace-pre-wrap">
-{`az ad sp create-for-rbac \\
-  --name "northstar-billing" \\
-  --role "Cost Management Reader" \\
-  --scopes /subscriptions/64cce95c-7395-41e4-87c4-0141783036b9`}
-                                </pre>
-                            </div>
-                        </div>
-                        <div className="mt-4 text-xs font-mono opacity-70">
-                            Paste the JSON output into `docs/plans/2026-01-27_azure-billing-reenable.md`.
-                        </div>
-                    </div>
-                    {loading && <div className="font-mono text-xs opacity-60">Loading live spend…</div>}
+                    {loading && <div className="font-mono text-xs opacity-60">Loading model spend…</div>}
                     {error && <div className="font-mono text-xs text-red-600">Error: {error}</div>}
+
+                    <div className="border-2 border-black p-4 bg-white text-xs font-mono opacity-70">
+                        Registry source: `northstar-agents` cards (Supabase registry hookup pending).
+                    </div>
 
                     {summary?.providers.map((provider) => (
                         <div key={provider.id} className="border-4 border-black bg-white">
@@ -167,27 +136,24 @@ export default function CostDashboard() {
                                 <div className="flex items-center gap-4">
                                     <h2 className="text-3xl font-black uppercase">{provider.label}</h2>
                                     <span className={`text-xs font-bold px-2 py-1 border border-black ${provider.configured ? 'bg-emerald-300' : 'bg-red-300'}`}>
-                                        {provider.configured ? 'CONNECTED' : 'MISSING KEYS'}
+                                        {provider.configured ? 'REGISTERED' : 'MISSING CARD'}
                                     </span>
                                 </div>
-                                {provider.id === 'gcp' && provider.breakdown_available && (
-                                    <button
-                                        onClick={() => router.push('/dashboard/infra/cost/gcp')}
-                                        className="font-bold uppercase tracking-widest hover:underline text-xs"
-                                    >
-                                        View GCP Breakdown →
-                                    </button>
-                                )}
+                                <button
+                                    onClick={() => router.push(`/dashboard/models/cost/${provider.id}`)}
+                                    className="font-bold uppercase tracking-widest hover:underline text-xs"
+                                >
+                                    View Provider →
+                                </button>
                             </div>
 
-                            {/* ROW 1 */}
                             <div className="grid grid-cols-1 md:grid-cols-3 border-b-2 border-black">
                                 <div className="p-4 border-r-2 border-black">
                                     <div className="text-xs font-bold uppercase opacity-60 mb-2">MTD Usage</div>
                                     {usageBlock(provider.mtd_usage)}
                                 </div>
                                 <div className="p-4 border-r-2 border-black">
-                                    <div className="text-xs font-bold uppercase opacity-60 mb-2">Free Tier Allowance Left</div>
+                                    <div className="text-xs font-bold uppercase opacity-60 mb-2">Free Tier / Credits</div>
                                     {usageBlock(provider.free_tier_remaining)}
                                 </div>
                                 <div className="p-4">
@@ -196,14 +162,13 @@ export default function CostDashboard() {
                                 </div>
                             </div>
 
-                            {/* ROW 2 */}
                             <div className="grid grid-cols-1 md:grid-cols-3 border-b-2 border-black">
                                 <div className="p-4 border-r-2 border-black">
-                                    <div className="text-xs font-bold uppercase opacity-60 mb-2">£ MTD Cost (With Free Tier)</div>
+                                    <div className="text-xs font-bold uppercase opacity-60 mb-2">£ MTD Cost (With Credits)</div>
                                     <div className="text-2xl font-black">{money(provider.mtd_cost_gbp)}</div>
                                 </div>
                                 <div className="p-4 border-r-2 border-black">
-                                    <div className="text-xs font-bold uppercase opacity-60 mb-2">£ MTD Cost (No Free Tier)</div>
+                                    <div className="text-xs font-bold uppercase opacity-60 mb-2">£ MTD Cost (No Credits)</div>
                                     <div className="text-2xl font-black">{money(provider.mtd_cost_no_free_gbp)}</div>
                                 </div>
                                 <div className="p-4">
@@ -212,7 +177,6 @@ export default function CostDashboard() {
                                 </div>
                             </div>
 
-                            {/* ROW 3 */}
                             <div className="grid grid-cols-1 md:grid-cols-3 border-b-2 border-black">
                                 <div className="p-4 border-r-2 border-black">
                                     <div className="text-xs font-bold uppercase opacity-60 mb-2">Launch-to-Date Turnover</div>
@@ -228,38 +192,73 @@ export default function CostDashboard() {
                                 </div>
                             </div>
 
-                            {/* ROW 4 */}
-                            <div className="grid grid-cols-1 md:grid-cols-3">
+                            <div className="grid grid-cols-1 md:grid-cols-3 border-b-2 border-black">
                                 <div className="p-4 border-r-2 border-black">
-                                    <div className="text-xs font-bold uppercase opacity-60 mb-2">LTD Turnover (No Free Tier)</div>
+                                    <div className="text-xs font-bold uppercase opacity-60 mb-2">LTD Turnover (No Credits)</div>
                                     <div className="text-xl font-black">{money(provider.ltd_revenue_no_free_gbp)}</div>
                                 </div>
                                 <div className="p-4 border-r-2 border-black">
-                                    <div className="text-xs font-bold uppercase opacity-60 mb-2">LTD Gross Profit (No Free Tier)</div>
+                                    <div className="text-xs font-bold uppercase opacity-60 mb-2">LTD Gross Profit (No Credits)</div>
                                     <div className="text-xl font-black">{money(provider.ltd_gross_profit_no_free_gbp)}</div>
                                 </div>
                                 <div className="p-4">
-                                    <div className="text-xs font-bold uppercase opacity-60 mb-2">LTD Gross Margin (No Free Tier)</div>
+                                    <div className="text-xs font-bold uppercase opacity-60 mb-2">LTD Gross Margin (No Credits)</div>
                                     <div className="text-xl font-black">{pct(provider.ltd_gross_margin_no_free_pct)}</div>
                                 </div>
                             </div>
 
-                            {provider.notes?.length > 0 && (
-                                <div className="p-4 border-t-2 border-black bg-neutral-50 text-xs font-mono opacity-70">
-                                    {provider.notes.join(' • ')}
+                            <div className="p-6 border-b-2 border-black">
+                                <div className="text-xs font-bold uppercase opacity-60 mb-3">Model Breakdown</div>
+                                <table className="w-full border-2 border-black text-left border-collapse text-xs font-mono">
+                                    <thead>
+                                        <tr className="bg-black text-white uppercase text-[10px]">
+                                            <th className="p-3 border-r border-white/20">Model</th>
+                                            <th className="p-3 border-r border-white/20">Official ID</th>
+                                            <th className="p-3 border-r border-white/20">Input Tokens</th>
+                                            <th className="p-3 border-r border-white/20">Output Tokens</th>
+                                            <th className="p-3 border-r border-white/20">Calls</th>
+                                            <th className="p-3 border-r border-white/20">£ Cost</th>
+                                            <th className="p-3">£ Cost (No Credits)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {provider.models.map((model, idx) => (
+                                            <tr key={model.model_id} className={idx % 2 === 0 ? 'bg-white' : 'bg-neutral-50'}>
+                                                <td className="p-3 border-r border-black font-bold">{model.model_id}</td>
+                                                <td className="p-3 border-r border-black">{model.official_id || '—'}</td>
+                                                <td className="p-3 border-r border-black">{model.input_tokens.toLocaleString()}</td>
+                                                <td className="p-3 border-r border-black">{model.output_tokens.toLocaleString()}</td>
+                                                <td className="p-3 border-r border-black">{model.requests.toLocaleString()}</td>
+                                                <td className="p-3 border-r border-black">{money(model.cost_gbp)}</td>
+                                                <td className="p-3">{money(model.cost_no_free_gbp)}</td>
+                                            </tr>
+                                        ))}
+                                        {provider.models.length === 0 && (
+                                            <tr>
+                                                <td className="p-4 text-center opacity-50" colSpan={7}>No model usage recorded yet.</td>
+                                            </tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            {provider.notes.length > 0 && (
+                                <div className="p-6 text-xs font-mono opacity-70">
+                                    {provider.notes.map((note) => (
+                                        <div key={note}>• {note}</div>
+                                    ))}
                                 </div>
                             )}
                         </div>
                     ))}
                 </div>
 
-                {/* FOOTER */}
                 <div className="p-8 border-t-4 border-black bg-white flex justify-between">
-                    <button onClick={() => router.push('/dashboard/infra')} className="font-bold uppercase tracking-widest hover:underline">
-                        ← Back to Infrastructure
+                    <button onClick={() => router.push('/dashboard/infra/cost')} className="font-bold uppercase tracking-widest hover:underline">
+                        ← Back to Infra COGS
                     </button>
-                    <button onClick={() => router.push('/dashboard/infra/free-tiers')} className="font-bold uppercase tracking-widest hover:underline text-xs opacity-50">
-                        View Free Tier Registry
+                    <button onClick={() => router.push('/dashboard')} className="font-bold uppercase tracking-widest hover:underline text-xs opacity-60">
+                        Main Dashboard
                     </button>
                 </div>
             </div>

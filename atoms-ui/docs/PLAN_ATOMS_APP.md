@@ -7,9 +7,9 @@
 - [ ] **Dependencies**: Install `next`, `react`, `react-dom`.
 - [ ] **Config**: Setup `next.config.mjs` (ESM) to allow transpiling `atoms-ui`.
 
-## Phase 2: The Forge Route
+## Phase 2: The Contract Builder Route
 - [ ] **Create `src/app/forge/page.tsx`**:
-    -   Import `atoms-ui/canvases/forge/ForgeCanvas`.
+    -   Import `atoms-ui/canvases/forge/ForgeCanvas` (legacy route name).
     -   Wrap in `ToolControlProvider`.
 
 ## Phase 3: Verification

@@ -10,7 +10,7 @@ import { isGodUser } from '@/lib/god';
 const GOD_TOOLS = [
     {
         id: 'forge',
-        title: 'The Forge',
+        title: 'Contract Builder',
         description: 'Visual Contract Editor. Build and Modify Canvases.',
         path: '/forge',
         locked: false

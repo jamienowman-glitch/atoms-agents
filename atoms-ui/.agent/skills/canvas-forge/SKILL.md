@@ -1,21 +1,21 @@
 ---
-name: canvas-forge
-description: Generates the specialized boilerplate for a new Agentic Canvas based on a "Canvas Contract".
+name: canvas-contract-builder
+description: Defines the Canvas Contract schema and how to generate a new Agentic Canvas from it (no "Forge" naming).
 version: 1.0.0
 ---
 
-# Canvas Forge Skill
+# Canvas Contract Builder Skill
 
-This skill allows an Agent to function as a "Canvas Factory". It takes a structured definition (Contract) and outputs the necessary file structure following the `atoms-ui/agents.md` Law.
+This skill allows an Agent to function as a **Canvas Contract Builder**. It takes a structured definition (Contract) and outputs the necessary file structure following the `atoms-ui/agents.md` Law.
 
 ## usage
 To use this skill, provide a `CanvasContract` JSON object.
 
 ## format
-The `CanvasContract` schema (V2 VARIO STANDARD):
+The `CanvasContract` schema (V2.1 VARIO STANDARD — backward compatible with 2.0.0):
 ```json
 {
-  "contract_version": "2.0.0",
+  "contract_version": "2.1.0",
   "meta": {
     "name": "Infinite Whiteboard",
     "description": "A free-form Vario canvas with dual-magnifier control."
@@ -27,8 +27,9 @@ The `CanvasContract` schema (V2 VARIO STANDARD):
   },
   "harness": {
     "top_pill": {
-      "left": ["surface_switcher", "chat_toggle"],
-      "right": ["view_mode", "export", "settings"]
+      "left": ["space_switcher", "surface_switcher", "chat_toggle"],
+      "right": ["view_mode", "export", "settings"],
+      "left_locked": true
     },
     "chat_rail": {
       "enabled": true,
@@ -39,15 +40,41 @@ The `CanvasContract` schema (V2 VARIO STANDARD):
       "enabled": true,
       "position": "bottom",
       "magnifiers": {
-        "left": { "type": "category_selector", "default": "layout" }, // The "Wheel"
-        "right": { "type": "tool_selector", "default": "density" }    // The "Sub-wheel"
+        "left": { "type": "category_selector", "default": "layout" },
+        "right": { "type": "tool_selector", "default": "density" }
       },
-      "sliders": {
-        "layout": ["grid.cols", "grid.gap", "grid.radius"],
-        "font": ["typo.size", "typo.weight", "typo.width"],
-        "type": ["typo.tracking", "typo.leading"],
-        "color": ["style.opacity", "style.blur"]
+      "left_categories": [
+        { "id": "context_atom", "label": "Contextual Atom", "locked": true, "ui_atom_ref": "ui_atom.example" },
+        { "id": "layout", "label": "Layout" },
+        { "id": "font", "label": "Font" },
+        { "id": "type", "label": "Type" },
+        { "id": "color", "label": "Color" }
+      ],
+      "right_controls_by_category": {
+        "layout": [
+          { "name": "grid.cols", "control_type": "slider", "min": 1, "max": 12, "step": 1, "token": "grid.cols" }
+        ],
+        "font": [
+          { "name": "typo.size", "control_type": "slider", "min": 8, "max": 120, "step": 1, "token": "typo.size" }
+        ],
+        "type": [
+          { "name": "typo.tracking", "control_type": "slider", "min": -4, "max": 10, "step": 0.1, "token": "typo.tracking" }
+        ],
+        "color": [
+          { "name": "style.opacity", "control_type": "slider", "min": 0, "max": 100, "step": 1, "token": "style.opacity" }
+        ]
+      },
+      "settings_notes": ""
+    },
+    "tool_pill": {
+      "enabled": true,
+      "long_press_map": {
+        "text": ["jumbo", "headline", "quote"]
       }
+    },
+    "atom_flip": {
+      "enabled": false,
+      "notes": ""
     }
   },
   "atoms": [
@@ -81,11 +108,9 @@ When invoked with a Contract, you must generate the following artifacts.
 
 ### 3. The Controller (`blocks/Connected{Name}.tsx`)
 -   **Hook Wiring**: You MUST use `useToolState` to bind the UI to the Harness.
--   **Slider Mapping**: Map the specific tool IDs (e.g., `typo.weight`) defined in `harness.tool_pop.sliders`.
+-   **Control Mapping**: Map tool IDs using `harness.tool_pop.right_controls_by_category` tokens.
 -   **Magnifier logic**: Ensure `activeMode` (Left Magnifier) switches the `activeTool` (Right Magnifier).
 
 ### 4. The Entry (`{Name}Canvas.tsx`)
 -   **Viewport**: If `viewport.type === 'infinite'`, wrap in `<InfiniteCanvas>`. If `fixed`, wrap in `<FixedFrame>`.
 -   **Harness**: Inject `<ToolPop>`, `<ChatRail>`, and `<TopPill>` as defined in the contract.
-
-

@@ -49,23 +49,50 @@ export default function MegaMenu({ isOpen, onClose, theme = "light" }: MegaMenuP
             </div>
 
             {/* Menu Items */}
-            <nav className="flex flex-col gap-0">
-                {NAV_ITEMS.map((item, index) => (
+            <nav className="flex-1 overflow-y-auto flex flex-col gap-0">
+                {[
+                    { label: "THE HOUSE", href: "/" },
+                    { label: "THE STORY", href: "/the-story" },
+                    { label: "THE HISTORY", href: "/the-history" },
+                    { label: "THE BENEFITS", href: "/the-benefits" },
+                    { label: "THE KNOWLEDGE", href: "/the-knowledge" },
+                    { label: "THE PROOF", href: "/the-proof" },
+                ].map((item, index) => (
                     <Link
-                        key={typeof item.label === 'string' ? item.label : index}
+                        key={index}
                         href={item.href}
                         onClick={onClose}
-                        className={`group flex flex-col py-6 border-b first:border-t-0 ${borderClass}`}
+                        className={`group flex items-center py-4 border-b first:border-t-0 ${borderClass}`}
                     >
-                        <span className={`text-4xl md:text-6xl mb-2 ${item.branding}`} style={{ fontFamily: 'var(--font-roboto-flex)' }}>
+                        <span className="text-3xl md:text-5xl font-black tracking-tighter hover:text-red-500 transition-colors" style={{ fontFamily: 'var(--font-roboto-flex)' }}>
                             {item.label}
-                        </span>
-                        <span className={`text-sm md:text-base tracking-widest font-light italic transition-colors ${subTextClass}`}>
-                            {item.sub}
                         </span>
                     </Link>
                 ))}
             </nav>
+
+            {/* Bottom: AGENTFlows Slider */}
+            <div className="mt-auto pt-8">
+                <h3 className="text-xl mb-4" style={{ fontFamily: 'var(--font-roboto-flex)' }}>
+                    <span className="font-semibold">AGENT</span>
+                    <span className="font-extralight italic">Flows</span>
+                </h3>
+
+                <div className="flex gap-4 overflow-x-auto no-scrollbar pb-4" style={{ WebkitOverflowScrolling: 'touch' }}>
+                    {[
+                        { title: "AGNˣ", img: "/aftertime-agent-video-editing.png", href: "/agnx-marketing-agents" },
+                        { title: "=MC²", img: "/vo2-agent-endurance-coach.jpeg", href: "/mc2-personal-energy" },
+                        { title: "CUBED³", img: "/mynx-cad-pricing-agents.png", href: "/cubed3-marketing" }
+                    ].map((flow, i) => (
+                        <Link key={i} href={flow.href} onClick={onClose} className="flex-none w-24 h-24 relative bg-gray-800 rounded-lg overflow-hidden border border-white/20">
+                            <img src={flow.img} alt={flow.title} className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity" />
+                            <div className="absolute inset-0 flex items-center justify-center text-white font-black text-xs drop-shadow-md">
+                                {flow.title}
+                            </div>
+                        </Link>
+                    ))}
+                </div>
+            </div>
         </div>
     );
 }

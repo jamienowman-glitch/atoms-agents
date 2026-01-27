@@ -15,7 +15,7 @@
 > 2.  **TopPill (Top-Right)**: Global View/Export.
 > 3.  **ToolPop (Bottom)**: Contextual "Dynamic Island" with Dual Magnifiers & Sliders.
 
-> **Execution**: Use the `canvas-forge` skill to scaffold from JSON Contract.
+> **Execution**: Use the `canvas-contract-builder` skill to scaffold from JSON Contract (no "Forge" naming).
 > **Reference**: `atoms-ui/.agent/skills/canvas-forge/SKILL.md`
 
 ## 🔁 REALTIME CONSUMPTION CONTRACT (V1)

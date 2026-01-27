@@ -24,7 +24,7 @@ const MENU_ITEMS = [
 
     // 4. DESIGN SYSTEM
     { id: 'canvases', label: 'CANVASES (FORGE)', action: 'navigate', path: '/god/config/canvases' },
-    { id: 'typography', label: 'TYPOGRAPHY (LEGACY)', action: 'navigate', path: '/dashboard/typography' }, // Restored
+    { id: 'typography', label: 'TYPOGRAPHY', action: 'navigate', path: '/dashboard/typography' }, // Restored
     { id: 'ui_atoms', label: 'UI ATOMS (WIP)', action: 'locked', path: '#' },
 
     // 5. EDITORS
