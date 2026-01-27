@@ -1,23 +1,36 @@
 import os
 import asyncio
 import yaml # Requires PyYAML
+from pathlib import Path
 from supabase import create_client, Client
 
 # Vault Config
-VAULT_PATH = "/Users/jaynowman/northstar-keys/"
+VAULT_PATH = os.environ.get("NORTHSTAR_KEYS_PATH", "/Users/jaynowman/northstar-keys/")
 def read_vault(filename):
     try:
         with open(os.path.join(VAULT_PATH, filename), "r") as f:
             return f.read().strip()
     except FileNotFoundError:
         print(f"❌ FATAL: Missing Key in Vault: {filename}")
+        # Allow running without keys for verifying scanning logic
+        if os.environ.get("DRY_RUN"):
+            return "mock_key"
         exit(1)
 
-SUPABASE_URL = read_vault("supabase-url.txt")
-SUPABASE_KEY = read_vault("supabase-service-key.txt")
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+# Allow dry run if keys missing
+if os.environ.get("DRY_RUN"):
+    SUPABASE_URL = "https://mock.supabase.co"
+    SUPABASE_KEY = "mock_key"
+    supabase = None
+else:
+    SUPABASE_URL = read_vault("supabase-url.txt")
+    SUPABASE_KEY = read_vault("supabase-service-key.txt")
+    supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-MUSCLE_ROOT = "/Users/jaynowman/dev/atoms-muscle/src/muscle"
+# Relative path from atoms-core/scripts/ to atoms-muscle/src/muscle
+# Script is in atoms-core/scripts/
+ROOT_DIR = Path(__file__).parent.parent.parent
+MUSCLE_ROOT = ROOT_DIR / "atoms-muscle/src/muscle"
 
 async def sync_muscles():
     print(f"🏋️ Scanning Muscles at {MUSCLE_ROOT}...")
@@ -86,11 +99,15 @@ async def sync_muscles():
     # 1. Scan Standard Categories
     found_muscles.extend(scan_dir(MUSCLE_ROOT, ""))
     
-    # 2. Scan Legacy
-    found_muscles.extend(scan_dir(os.path.join(MUSCLE_ROOT, "legacy/muscle"), "legacy"))
-
     # 3. Upsert to DB
     print(f"💪 Syncing {len(found_muscles)} Muscles to Registry...")
+
+    if supabase is None:
+         print("⚠️  Dry Run / No Database Connection. Skipping DB Ops.")
+         for m in found_muscles:
+             print(f"   [DRY] Would sync: {m['key']}")
+         return
+
     for muscle in found_muscles:
         # Check Exists
         existing = supabase.table("muscles").select("id").eq("key", muscle["key"]).execute()
