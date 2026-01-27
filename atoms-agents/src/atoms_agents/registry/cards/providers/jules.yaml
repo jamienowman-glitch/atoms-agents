@@ -1,0 +1,5 @@
+card_type: provider
+provider_id: jules
+name: Jules System
+required_fields: []
+notes: Virtual provider for system capabilities.

@@ -1,0 +1,6 @@
+capability_id: spatial_grounding
+name: Spatial Grounding
+description: Enables point/box XML tagging output for object localization.
+parameters:
+  syntax: xml_tags
+  temperature_clamp: 0.1

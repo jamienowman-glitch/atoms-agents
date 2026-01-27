@@ -1,0 +1,5 @@
+capability_id: thinking_high
+name: High Thinking Level
+description: Unlocks deep reasoning/thinking traces in models like Gemini.
+parameters:
+  level: HIGH

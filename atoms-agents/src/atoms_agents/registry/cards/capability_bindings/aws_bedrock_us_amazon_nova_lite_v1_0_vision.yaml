@@ -1,0 +1,13 @@
+card_type: capability_binding
+binding_id: aws_bedrock_us_amazon_nova_lite_v1_0_vision
+provider_id: aws_bedrock
+model_or_deployment_id: us.amazon.nova-lite-v1:0
+capability_id: vision
+toggle_mechanism: Add image block
+minimal_toggle_snippet: '{"messages": [{"content": [{"image": {...}}]}]}'
+streaming_support: token
+prereqs_or_allowlist: AWS SigV4
+docs_url: Dec 2025
+last_updated_or_version: High
+confidence: ''
+notes: null

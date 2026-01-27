@@ -1,0 +1,5 @@
+card_type: capability
+capability_id: video_gen
+capability_name: Video Generation
+embedded_or_separate: EMBEDDED
+description: Enables Video Generation

@@ -1,0 +1,12 @@
+card_type: model
+model_id: alpamayo-r1-10b
+provider_id: nvidia
+official_id: nvidia/Alpamayo-R1-10B
+family_id: alpamayo
+version: "1"
+variant: "r1-10b"
+reasoning_effort: "high"
+context_window: 4096
+streaming_support: token
+confidence: experimental
+notes: Reasoning VLA for Action Analysis (e.g. Gait, Swim structure).

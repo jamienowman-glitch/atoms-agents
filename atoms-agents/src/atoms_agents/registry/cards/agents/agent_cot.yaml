@@ -1,0 +1,7 @@
+card_type: agent
+agent_id: agent_cot
+name: COT Agent
+description: Agent using COT.
+model_id: mock_model
+persona_id: persona.assistant
+reasoning_profile_id: rp_cot

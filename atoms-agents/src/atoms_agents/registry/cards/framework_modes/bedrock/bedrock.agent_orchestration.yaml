@@ -1,0 +1,17 @@
+card_type: mode
+id: bedrock.agent_orchestration
+framework: bedrock
+official_name: Agent Orchestration
+invoke_primitive: update_agent
+entrypoint: northstar.runtime.modes.bedrock.bedrock_agent_orchestration.run
+params:
+  official_name: Orchestration Settings (Custom)
+  official_options: agentId, agentName, orchestrationType, customOrchestration
+  minimal_snippet: client = boto3.client("agentsforbedrock"); client.update_agent(agentId="id",
+    agentName="name", orchestrationType="CUSTOM_ORCHESTRATION", customOrchestration={'executor':{'lambda':lambda_arn}})
+streaming_support: false
+docs_urls:
+- https://docs.aws.amazon.com/bedrock-agent/latest/APIReference/API_UpdateAgent.html
+pinned_version: boto3>=1.34.0
+confidence: high
+notes: AWS Bedrock Agents supports custom orchestration via UpdateAgent with orchestrationType=CUSTOM_ORCHESTRATION

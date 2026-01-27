@@ -1,0 +1,20 @@
+card_type: mode
+id: crewai.flow_hybrid
+framework: crewai
+official_name: Flow Hybrid
+invoke_primitive: ''
+entrypoint: northstar.runtime.modes.crewai.crewai_flow_hybrid.run
+params:
+  official_name: UNKNOWN
+  official_options: ''
+  minimal_snippet: ''
+streaming_support: false
+docs_urls:
+- https://docs.crewai.com/en/concepts/flows
+- (no
+- "\u201Chybrid\u201D"
+- term)
+pinned_version: crewai 0.30.0
+confidence: low
+notes: "No specific \u201Chybrid\u201D flow described (likely example in docs, not\
+  \ a separate class)"

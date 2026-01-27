@@ -1,0 +1,9 @@
+card_type: profile
+profile_id: dev_local
+name: Development Local
+persistence_backend: local
+blackboard_backend: local
+pii_strategy: passthrough
+nexus_strategy: disabled
+allow_local_fallback: true
+notes: "Default profile for local development. Uses local filesystem storage."

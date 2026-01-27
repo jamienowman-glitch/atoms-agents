@@ -1,0 +1,16 @@
+card_type: mode
+id: crewai.sequential
+framework: crewai
+official_name: Sequential Process
+invoke_primitive: Process.sequential
+entrypoint: northstar.runtime.modes.crewai.crewai_sequential.run
+params:
+  official_name: Sequential Process
+  official_options: "\u2013"
+  minimal_snippet: crew = Crew(..., process=Process.sequential)
+streaming_support: false
+docs_urls:
+- https://docs.crewai.com/en/concepts/tasks#task-execution-flow
+pinned_version: crewai 0.30.0
+confidence: high
+notes: Same as crew_sequential (Process.sequential)
