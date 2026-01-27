@@ -1,0 +1,7 @@
+name: "Free Tier"
+key: "free_tier"
+price_cents: 0
+credits_monthly: 100
+features:
+  analytics: basic
+  projects: 1

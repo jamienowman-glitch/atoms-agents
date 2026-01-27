@@ -1,0 +1,8 @@
+name: "Primary Button"
+key: "button_primary"
+category: "form"
+status: "live"
+props_schema:
+  label: string
+  onClick: function
+  disabled: boolean

@@ -6,7 +6,7 @@ with open('/Users/jaynowman/northstar-keys/supabase-db-url.txt', 'r') as f:
     DB_URL = f.read().strip()
 
 # 2. Load Migration SQL
-MIGRATION_FILE = '/Users/jaynowman/dev/atoms-core/sql/009_add_muscle_status.sql'
+MIGRATION_FILE = '/Users/jaynowman/dev/atoms-core/sql/011_complete_registry.sql'
 with open(MIGRATION_FILE, 'r') as f:
     SQL = f.read()
 

@@ -1,5 +1,0 @@
-- id: node_graph_editor
-  name: "Node Graph Editor"
-  type: graph
-  status: live
-  default_tools: ["add_node", "connect", "delete"]

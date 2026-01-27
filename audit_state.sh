@@ -2,6 +2,10 @@
 REPO_ROOT="${REPO_ROOT:-$(pwd)}"
 echo "== AUDIT START =="
 
+if [ -f "$REPO_ROOT/scripts/guard_no_env_files.sh" ]; then
+  bash "$REPO_ROOT/scripts/guard_no_env_files.sh"
+fi
+
 find "$REPO_ROOT" -maxdepth 3 -type d -name ".git" -print0 | while IFS= read -r -d '' GITDIR; do
   REPO="$(dirname "$GITDIR")"
   echo ""

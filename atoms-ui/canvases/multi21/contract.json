@@ -1,0 +1,54 @@
+{
+    "contract_version": "2.0.0",
+    "meta": {
+        "name": "Multi21 Agent Factory",
+        "description": "The Wireframe Builder for Agent Flows. Features infinite canvas and node-based graph editor.",
+        "key": "multi21"
+    },
+    "viewport": {
+        "type": "infinite",
+        "bg_color": "#f0f0f0"
+    },
+    "harness": {
+        "top_pill": {
+            "left": [
+                "home",
+                "project_selector"
+            ],
+            "right": [
+                "view_mode",
+                "deploy",
+                "share"
+            ]
+        },
+        "chat_rail": {
+            "enabled": true,
+            "position": "left",
+            "width": 320
+        },
+        "tool_pop": {
+            "enabled": true,
+            "position": "bottom",
+            "magnifiers": {
+                "left": {
+                    "type": "category_selector",
+                    "default": "nodes"
+                },
+                "right": {
+                    "type": "tool_selector",
+                    "default": "agent"
+                }
+            },
+            "sliders": {
+                "layout": [
+                    "grid.snap",
+                    "zoom.level"
+                ],
+                "nodes": [
+                    "node.size",
+                    "connection.curvature"
+                ]
+            }
+        }
+    }
+}

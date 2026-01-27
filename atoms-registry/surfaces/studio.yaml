@@ -1,9 +1,0 @@
-id: studio_console
-name: "The Studio (Builder)"
-entry_point: "/studio"
-flows:
-  - id: agent_builder
-    canvases:
-      - canvas_id: node_graph_editor
-        tools: ["add_node", "connect_edge", "inspect"]
-        muscle_link: []

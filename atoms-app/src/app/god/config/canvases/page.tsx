@@ -4,12 +4,65 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase';
 
-// Helper to provide a starter template for structure
+// Full V2 Canvas Contract (The "Vario" Standard)
 const DEFAULT_STRUCTURE = {
-    contract_version: "1.0.0",
-    layout: "infinite_canvas",
-    tools: ["pointer", "text", "media"],
-    atoms: []
+    contract_version: "2.0.0",
+    meta: {
+        name: "Infinite Whiteboard",
+        description: "A free-form Vario canvas with dual-magnifier control."
+    },
+    viewport: {
+        type: "infinite", // or "fixed"
+        preset: "1080x1080", // for fixed
+        bg_color: "#f5f5f5"
+    },
+    harness: {
+        top_pill: {
+            left: ["surface_switcher", "chat_toggle"],
+            right: ["view_mode", "export", "settings"]
+        },
+        chat_rail: {
+            enabled: true,
+            position: "left",
+            width: 320
+        },
+        tool_pop: {
+            enabled: true,
+            position: "bottom",
+            magnifiers: {
+                left: {
+                    type: "category_selector", // The "Wheel" (Layout, Font, Type, Color)
+                    default: "layout"
+                },
+                right: {
+                    type: "tool_selector", // The "Sub-wheel" (Density, Spacing, Shape)
+                    default: "density"
+                }
+            },
+            sliders: {
+                layout: ["grid.cols", "grid.gap", "grid.radius"],
+                font: ["typo.size", "typo.weight", "typo.width"],
+                type: ["typo.tracking", "typo.leading"],
+                color: ["style.opacity", "style.blur"]
+            }
+        }
+    },
+    atoms: [
+        {
+            name: "Tile",
+            props: {
+                title: { type: "string", default: "Untitled" },
+                variant: { type: "select", options: ["generic", "product", "video"] }
+            },
+            vario: {
+                axes: ["weight", "width", "slant", "casual"],
+                mappings: {
+                    "weight": "font-variation-settings: 'wght' var(--v-weight)",
+                    "width": "font-variation-settings: 'wdth' var(--v-width)"
+                }
+            }
+        }
+    ]
 };
 
 export default function CanvasesConfigPage() {

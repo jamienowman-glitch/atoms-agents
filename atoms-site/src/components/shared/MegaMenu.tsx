@@ -36,6 +36,7 @@ export default function MegaMenu({ isOpen, onClose, theme = "light" }: MegaMenuP
             href: "/many-worlds",
             branding: ""
         },
+        { label: "THE 12 WORLDS", sub: "FULL ECOSYSTEM DIRECTORY", href: "/the-links", branding: "font-black text-red-600" },
     ];
 
     return (

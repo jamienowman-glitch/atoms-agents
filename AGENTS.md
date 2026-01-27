@@ -36,6 +36,16 @@
 *   **ZERO DRIFT:** Configuration is immutable. If a key changes, the system restarts. No flags.
 *   **AUDIT:** Agents must verify `/Users/jaynowman/northstar-keys/` exists before assuming access.
 
+## 🔁 REALTIME + COLLABORATIVE CANVAS CONTRACT (V1)
+**Canonical Doc:** `docs/plans/2026-01-27_realtime-collab-contract-and-atomic-task-plan.md`
+
+*   **SSE = Downstream Truth:** State/tokens/logs/chat tokens/snapshot refs flow to humans + agents via SSE.
+*   **WS = Ephemeral Only:** Presence/cursors/gestures only (optional).
+*   **No DOM Streaming:** Never stream browser DOM/HTML; stream canonical state model (`token_patch` / `state_patch`).
+*   **Media = Sidecar Only:** Heavy assets live in S3; events carry `artifact_id`/`uri` refs only (no base64).
+*   **One Transport:** `atoms-ui` owns the single shared `CanvasTransport`. No copy/paste transports.
+*   **Anti‑Monolith:** Canvases render + emit commands; they do not own execution/persistence/logging/realtime servers.
+
 # 🛑 ATOMS FAM: NON-NEGOTIABLE PRESERVATION PROTOCOLS
 
 > **CRITICAL INSTRUCTION:** You are working inside a high-precision **Orchestration Factory**, not a simple App. The following architectural pillars are **INVIOLATE**. You must NEVER collapse, summarize, or hardcode over these structures.

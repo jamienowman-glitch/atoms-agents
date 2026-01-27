@@ -1,9 +1,11 @@
 # Tech Spec: MCP-Powered Visual Editor
 
+> **Note (2026-01-27)**: The legacy file-based `atoms-registry/` directory is deprecated/quarantined. Treat any references to file YAML registries as historical; the authoritative source is the DB registry (Supabase / `atoms-core` APIs).
+
 ## 1. Objective
 Build a Visual Contract Editor that consumes Muscles as **MCP Connectors** via the real `northstar-engines` API.
 -   **No Mocks**: Data comes from `/tools/list` (MCP Gateway) or `/registries/entries` (System Registry).
--   **Muscles as Tools**: Each Muscle in `atoms-registry` is an MCP Server/Scope that agents can pay to use.
+-   **Muscles as Tools**: Each Muscle in the DB registry is an MCP Server/Scope that agents can pay to use.
 
 ## 2. Architecture
 The `atoms-ui` Harness connects to the Engine Factory via the existing `CanvasTransport` (HTTP/SSE).

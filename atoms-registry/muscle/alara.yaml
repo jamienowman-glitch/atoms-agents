@@ -1,9 +1,0 @@
-- id: alara_renderer_v1
-  name: "Alara Core Renderer"
-  status: detected
-  quality_tier: 1080p
-  path: "engines/muscle/video_render"
-  capabilities:
-    - timeline_orchestration
-    - ffmpeg_command_gen
-  notes: "The central rendering engine orchestrating timeline to output."

@@ -1,9 +1,0 @@
-id: muscles::video_timeline
-namespace: muscles
-key: video_timeline
-name: Video Timeline Muscle
-summary: ''
-config: {}
-enabled: true
-maturity: experimental
-origin_path: atoms-muscle/src/muscle/legacy/muscles/video_timeline/mcp/spec.yaml

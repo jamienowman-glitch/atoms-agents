@@ -1,5 +1,7 @@
 # Tech Spec: Registry Migration to Supabase
 
+> **Status (2026-01-27)**: File-based `atoms-registry/` is deprecated/quarantined. This document is retained for architectural rationale and as a record of the migration.
+
 ## 1. Objective
 Migrate the "Source of Truth" for System Configuration (Surfaces, Canvases, Muscles) from the file system (`atoms-registry`) to the Database (`Supabase`).
 **Goal**: Enable "God Mode" editing in the Console and remove dependency on `northstar-engines` for registry serving.

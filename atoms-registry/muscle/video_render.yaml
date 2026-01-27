@@ -1,9 +1,0 @@
-id: muscles::video_render
-namespace: muscles
-key: video_render
-name: Video Render
-summary: ''
-config: {}
-enabled: true
-maturity: experimental
-origin_path: atoms-muscle/src/muscle/legacy/muscle/video_render/spec.yaml

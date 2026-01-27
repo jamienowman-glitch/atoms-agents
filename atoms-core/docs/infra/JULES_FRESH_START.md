@@ -1,61 +1,60 @@
-# 🤖 JULES: FRESH START PROTOCOL
-> **Mission**: Wrap 61 "Legacy" Muscles into MCP Servers.
-> **Repo**: `atoms-muscle`
+# 🤖 JULES: THE MUSCLE REFINE PROTOCOL
+> **Mission**: Wrap, Flatten, and Register the Legacy Muscle Fleet.
+> **Context**: We have a "Legacy" folder (`atoms-muscle/src/muscle/legacy/muscle`) with 61 raw Python tools. We need to modernize them into standard, flat, MCP-compliant Muscles.
 
-## 📂 The Critical Paths (Verify These First)
-Jules, before you start, verify you see these files. If you do not, **pull the repo** (The human may have just pushed them).
+## 🟢 PHASE 1: THE FACTORY (Wrap)
+We have built an automation script to do the heavy lifting.
 
-1.  ** The Factory Script**:
-    *   Path: `atoms-muscle/scripts/factory.py`
-    *   *If missing*: The repo is out of sync.
+1.  **Locate the Target**:
+    *   Verify you see `atoms-muscle/src/muscle/legacy/muscle/`.
+    *   It contains ~61 folders (`video_render`, `audio_separation`, etc.).
 
-2.  **The Targets (Legacy Muscles)**:
-    *   Path: `atoms-muscle/src/muscle/legacy/muscle/`
-    *   *Context*: This folder contains **61 folders** (e.g., `video_render`, `audio_separation`).
-    *   *Note*: Ignore the nesting. It is technical debt. WRAP THEM WHERE THEY ARE.
+2.  **Run the Automation**:
+    ```bash
+    cd atoms-muscle/scripts
+    # This script recursively scans the folder and generates 'mcp.py' and 'SKILL.md'
+    python3 factory.py ../src/muscle/legacy/muscle
+    ```
 
-3.  **Dependency**:
-    *   Check `atoms-muscle/pyproject.toml` for `"mcp"`.
-    *   *Action*: If missing, add it.
+3.  **Verify**:
+    *   Check `src/muscle/legacy/muscle/video_render/`.
+    *   Does it have `mcp.py`? Does it have `SKILL.md`?
 
 ---
 
-## 🏭 THE TASKS
+## 🟡 PHASE 2: THE FLATTENING (Move)
+Nesting is forbidden. We must move them to the top level.
 
-### 1. Run The Factory
-We have automated the boilerplate.
-```bash
-# Go to the script folder
-cd atoms-muscle/scripts
+1.  **The Rules**:
+    *   `src/muscle/legacy/muscle/video_render` -> `src/muscle/video/video_render`
+    *   `src/muscle/legacy/muscle/audio_separation` -> `src/muscle/audio/audio_separation`
+    *   (Use your best judgment for other categories: `image`, `cad`, `text`).
 
-# Run the factory on the LEGACY folder
-python3 factory.py ../src/muscle/legacy/muscle
-```
+2.  **Action**:
+    *   Move the folders.
+    *   **Delete** the empty `legacy` folder when done.
 
-**Expected Output**:
-*   It should scan all 61 folders.
-*   It should generate `mcp.py` and `SKILL.md` in each one.
-*   *If it says "Path not found"*, you are likely at the wrong relative path. Double check `pwd`.
+3.  **Fix Imports**:
+    *   Opening `mcp.py` in the new location might break imports like `from .service`.
+    *   Ensure the code still runs.
 
-### 2. Verify Key Muscles (Manual check)
-The factory is dumb. You are smart. Check these critical muscles:
-*   `src/muscle/legacy/muscle/video_render/mcp.py`
-*   `src/muscle/legacy/muscle/audio_separation/mcp.py`
+---
 
-**Check**:
-*   Does the import work? (`from .service import Service` vs `from .service import VideoRenderService`).
-*   Fix any import errors manually.
+## 🔴 PHASE 3: THE LAW (Docs)
+Update `atoms-muscle/AGENTS.md` to establish the new order.
+*   **Mandate**: "All Muscles must live in `src/muscle/{category}/{name}`."
+*   **Mandate**: "All Muscles must have `mcp.py` and `SKILL.md`."
+*   **Mandate**: "Use `scripts/factory.py` and `scripts/sentinel.py` for all new work."
 
-### 3. Sync to Registry (The "Boom")
-Once verified, run the registry sync to tell the database about them.
+---
+
+## 🔵 PHASE 4: THE SYNC (Registry)
+Tell the Database about the new world.
 ```bash
 cd ../../atoms-core/scripts
 python3 sync_muscles.py
 ```
-*   This will populate the `/god/config/muscles` UI.
+*   This will scan the NEW locations and register them in Supabase.
+*   Check `/god/config/muscles` to confirm they are online.
 
----
-
-## ❓ Troubleshooting
-*   **"I can't find `legacy/muscle`"**: You are likely on an old commit. Ask for a PUSH.
-*   **"Import Error in mcp.py"**: The `service.py` might have a weird class name. Open the file and fix the class name in `mcp.py`.
+**Go.**

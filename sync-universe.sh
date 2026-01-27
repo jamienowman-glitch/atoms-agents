@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Guardrail: .env files are forbidden (Vault Law)
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+if [ -f "$SCRIPT_DIR/scripts/guard_no_env_files.sh" ]; then
+  bash "$SCRIPT_DIR/scripts/guard_no_env_files.sh"
+fi
+
 # Configuration
 # Directories to iterate through. 
 # Make sure these are relative paths from where the script is run (the root).

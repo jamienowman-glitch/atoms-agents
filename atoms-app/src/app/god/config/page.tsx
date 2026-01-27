@@ -7,15 +7,29 @@ import { isGodUser } from '@/lib/god';
 
 // NAVIGATION ITEMS (Atoms-Fam V1)
 const MENU_ITEMS = [
-    { id: 'infra', label: 'INFRASTRUCTURE', action: 'navigate', path: '/god/config/infra' }, // Placeholder
-    { id: 'cogs', label: 'COGS', action: 'navigate', path: '/god/config/cogs' }, // Placeholder
-    { id: 'surfaces', label: 'SURFACES', action: 'navigate', path: '/god/config/surfaces' },
-    { id: 'canvases', label: 'CANVASES', action: 'navigate', path: '/god/config/canvases' },
-    { id: 'muscles', label: 'MUSCLES', action: 'navigate', path: '/god/config/muscles' },
-    { id: 'typography', label: 'TYPOGRAPHY', action: 'navigate', path: '/god/config/typography' },
-    { id: 'ui_atoms', label: 'UI ATOMS', action: 'navigate', path: '/god/config/ui-atoms' }, // Placeholder
+    // 1. SYSTEM HIERARCHY (V2)
+    { id: 'spaces', label: '1. SPACES', action: 'navigate', path: '/god/config/spaces' },
+    { id: 'surfaces', label: '2. SURFACES', action: 'navigate', path: '/god/config/surfaces' },
+    { id: 'muscles', label: '3. MUSCLES', action: 'navigate', path: '/god/config/muscles' },
+
+    // 2. THE BRAIN (Legacy/Recovered)
+    { id: 'memory', label: 'MEMORY (NEXUS)', action: 'navigate', path: '/dashboard/memory' },
+
+    // 3. FINANCE & INFRA (Legacy/Recovered)
+    { id: 'pricing', label: 'PRICING (SNAX)', action: 'navigate', path: '/god/config/pricing' },
+    { id: 'cogs', label: 'LIVE COST (COGS)', action: 'navigate', path: '/dashboard/infra/cost' },
+    { id: 'registries', label: 'REGISTRIES (SQL)', action: 'navigate', path: '/dashboard/infra/registries' },
+    { id: 'storage', label: 'STORAGE BUCKETS', action: 'navigate', path: '/dashboard/infra/storage' }, // Restored
+    { id: 'freetier', label: 'FREE TIER REGISTRY', action: 'navigate', path: '/dashboard/infra/free-tiers' }, // Restored
+
+    // 4. DESIGN SYSTEM
+    { id: 'canvases', label: 'CANVASES (FORGE)', action: 'navigate', path: '/god/config/canvases' },
+    { id: 'typography', label: 'TYPOGRAPHY (LEGACY)', action: 'navigate', path: '/dashboard/typography' }, // Restored
+    { id: 'ui_atoms', label: 'UI ATOMS (WIP)', action: 'locked', path: '#' },
+
+    // 5. EDITORS
     { id: 'domain', label: 'DOMAIN', action: 'editor', configType: 'domain' },
-    { id: 'email', label: 'EMAIL', action: 'editor', configType: 'domain' } // Aliased to domain for now as they are in same file
+    { id: 'email', label: 'EMAIL', action: 'editor', configType: 'domain' }
 ];
 
 export default function GodConfigHub() {
@@ -40,6 +54,7 @@ export default function GodConfigHub() {
     }, []);
 
     const handleAction = async (item: any) => {
+        if (item.action === 'locked') return;
         if (item.action === 'navigate') {
             router.push(item.path);
         } else if (item.action === 'editor') {
@@ -97,7 +112,7 @@ export default function GodConfigHub() {
                         <li key={item.id} className="flex flex-col">
                             <button
                                 onClick={() => handleAction(item)}
-                                className="text-left text-xl font-medium hover:font-black tracking-tight uppercase transition-all flex items-center gap-2 group"
+                                className={`text-left text-xl tracking-tight uppercase transition-all flex items-center gap-2 group ${item.action === 'locked' ? 'text-neutral-300 cursor-not-allowed' : 'font-medium hover:font-black'}`}
                             >
                                 {item.label}
                                 {item.action === 'navigate' && <span className="opacity-0 group-hover:opacity-100 transition-opacity">→</span>}

@@ -9,14 +9,15 @@ from pathlib import Path
 DEV_ROOT = Path(__file__).parent.parent.parent.resolve()
 ATOMS_MUSCLE = DEV_ROOT / "atoms-muscle"
 ATOMS_UI = DEV_ROOT / "atoms-ui"
-ATOMS_REGISTRY = DEV_ROOT / "atoms-registry"
+ATOMS_REGISTRY = DEV_ROOT / "_quarantine" / "atoms-registry"
 
 def ensure_dir(path: Path):
     path.mkdir(parents=True, exist_ok=True)
 
 def harvest_muscles():
-    """Scans atoms-muscle for spec.yaml and writes to atoms-registry/muscle"""
+    """Scans atoms-muscle for spec.yaml and writes to the quarantined file registry (legacy)."""
     print(f"🌾 Harvesting Muscles from {ATOMS_MUSCLE}...")
+    print("⚠️  NOTE: File-based atoms-registry is deprecated; prefer DB-backed registries (Supabase).")
     dest_dir = ATOMS_REGISTRY / "muscle"
     ensure_dir(dest_dir)
     
@@ -55,7 +56,7 @@ def harvest_muscles():
             print(f"❌ Error harvesting {spec_path}: {e}")
 
 def harvest_canvases():
-    """Scans atoms-registry/canvases (or atoms-ui in future) for Canvas definitions"""
+    """Scans the quarantined file registry for Canvas definitions (legacy)."""
     print(f"🌾 Harvesting Canvases from {ATOMS_REGISTRY}/canvases...")
     # Currently we might just be re-formatting them or validating them.
     # If atoms-ui has source-of-truth canvases, we'd scan there.

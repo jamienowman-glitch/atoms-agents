@@ -1,6 +1,7 @@
 # AGENTS.md — Backend Engine Factory (LEGACY)
 
-> **⚠ DEPRECATION NOTICE**: This repo is being phased out in favor of `atoms-core` (OS) and `atoms-registry` (DB). Do not build new features here.
+> **🛑 SHUTDOWN NOTICE**: This repository is being dismantled. We are lifting working components into `atoms-*` repositories. DO NOT BUILD NEW FEATURES HERE.
+
 
 > **The Northstar**: "We are creating Shopify, Klaviyo, Photoshop, CapCut... all run by Agents and Humans on collaborative Canvases."
 
@@ -20,6 +21,13 @@
 *   **atoms-connectors:** The Tools (MCP Servers).
 *   **atoms-site:** The Face (Marketing).
 *   **atoms-tuning:** The Lab (Optimization).
+
+## 🎨 UI FOUNDRY (V2 STANDARD)
+> **The Law**: All new Canvases must use the **V2 Contract** and **Vario Harness**.
+> **The 3 Surfaces**:
+> 1.  **ChatRail (Left)**: Communication & Stream.
+> 2.  **TopPill (Top-Right)**: Global View/Export.
+> 3.  **ToolPop (Bottom)**: Contextual "Dynamic Island" with Dual Magnifiers & Sliders.
 
 ## Mission
 - Build and harden the Backend Engine Factory: routing, safety, realtime, event spine, storage, and muscle engines.

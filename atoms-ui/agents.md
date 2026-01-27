@@ -20,6 +20,16 @@
 Agents must check `.agent/skills/` for specialized instruction sets.
 -   **Canvas Forge** (`.agent/skills/canvas-forge`): How to build new Canvases.
 -   **Console Extend** (`.agent/skills/console-extend`): How to add tools to the Dashboard.
+-   **Realtime Harness** (`.agent/skills/realtime-harness`): How to build Harness/Canvas realtime (SSE truth, sidecars, no new routes).
+
+## 🔁 REALTIME + HARNESS CONTRACT (V1)
+**Canonical Doc:** `docs/plans/2026-01-27_realtime-collab-contract-and-atomic-task-plan.md`
+
+*   **One Transport:** Reuse the shared `CanvasTransport` (do not create a second transport).
+*   **No New Routes:** Harnesses/canvases never invent backend routes; they only consume the canonical `atoms-core` gateway.
+*   **No DOM Streaming:** Stream canonical state (`token_patch` / `state_patch`), not browser DOM/HTML.
+*   **Sidecars Only:** Image/video/audio are refs (S3 `artifact_id`/`uri`) and are permission-gated.
+*   **Lens Naming:** Runtime lenses (policy) ≠ UI lens slots (panels) ≠ CanvasLens (view selector).
 
 ## 2. The Hierarchy
 We follow a strict separation of concerns, inspired by Atomic Design but tailored for AI-Driven Tooling.
@@ -85,28 +95,27 @@ canvases/{name}/
 
 # 3. The Registry (The Source of Truth)
 
-> **Context**: We are migrating from legacy internal JSONs to a distributed `atoms-registry` repo.
+> **Context**: The Registry is now **DB-first** (Supabase). The legacy file-based `atoms-registry` directory has been **deprecated and quarantined** to prevent drift.
 
 ## Multi-Registry Architecture
 The Registry is not a single list. It is a Federation of verified assets:
-1.  **Muscles** (`atoms-registry/muscle/*.yaml`): Backend Capabilities (Video, Audio, CAD).
-2.  **Canvases** (`atoms-registry/canvases/*.yaml`): UI Templates (VideoEditor, GanttChart).
-3.  **Atoms** (`atoms-registry/atoms/*.yaml`): Reusable UI Components (ClipTile, ScrubBar).
-4.  **Connectors** (`atoms-registry/connectors/*.yaml`): External APIs (Shopify, YouTube).
+1.  **Muscles** (DB-backed): Backend Capabilities (Video, Audio, CAD).
+2.  **Canvases** (DB-backed): UI Templates (VideoEditor, GanttChart).
+3.  **UI Atoms** (DB-backed): Reusable UI Components (ClipTile, ScrubBar).
+4.  **Connectors** (DB-backed): External APIs (Shopify, YouTube).
 
 ## The Hybrid Bridge (Migration Strategy)
 To bridge the gap between `northstar-engines` (Legacy) and `atoms-ui` (New World):
-1.  **Harvest**: A script (`harvest_registry.py`) scans code Repos (`atoms-muscle`, `atoms-ui`) and generates YAML metadata in `atoms-registry`.
-2.  **Mount**: `northstar-engines` mounts the `atoms-registry` directory and serves it via `GET /registries/entries`.
-3.  **Consume**: `atoms-ui` consumes the registry via the Engine API, ensuring production-grade access control and billing.
+1.  **(Deprecated)** The old harvest/mount flow wrote YAML into `atoms-registry` and exposed it via the legacy Engine.
+2.  **(Current)** `atoms-ui` should consume registries via DB-backed APIs (Supabase / `atoms-core`) with proper auth and tenant isolation.
 
 ## Law of the Forge (Persistence)
 -   The **Visual Contract Editor** IS the authoring tool.
--   **Save Path**: Contracts are saved as YAML/JSON to `atoms-registry/canvases/`.
--   **Generation**: The Agent reads the saved `atoms-registry` file to generate the React Code.
+-   **Save Target**: Contracts are saved to the DB registry (Supabase).
+-   **Generation**: The Agent reads the saved DB contract (or exported snapshot) to generate React code.
 -   **Loop**:
-    1.  User edits Form in Forge -> Saves to Registry.
-    2.  User asks Agent "Update Code" -> Agent reads Registry -> Updates `atoms-ui/canvases`.
+    1.  User edits Form in Forge -> Saves to DB registry.
+    2.  User asks Agent "Update Code" -> Agent reads DB contract -> Updates `atoms-ui/canvases`.
 
 
 ```

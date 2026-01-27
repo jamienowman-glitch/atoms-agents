@@ -12,87 +12,80 @@ This skill allows an Agent to function as a "Canvas Factory". It takes a structu
 To use this skill, provide a `CanvasContract` JSON object.
 
 ## format
-The `CanvasContract` schema:
+The `CanvasContract` schema (V2 VARIO STANDARD):
 ```json
 {
-  "name": "VideoTimeline", // PascalCase
-  "description": "A non-linear video editing timeline.",
-  "tools": {
-    "magnifier_left": { "label": "Zoom", "id": "zoom_level", "type": "slider" },
-    "magnifier_right": { "label": "Export", "id": "export_fmt", "type": "select" }
+  "contract_version": "2.0.0",
+  "meta": {
+    "name": "Infinite Whiteboard",
+    "description": "A free-form Vario canvas with dual-magnifier control."
   },
-  "atom": {
-    "name": "Clip",
-    "props": [
-      { "name": "startTime", "type": "number" },
-      { "name": "duration", "type": "number" },
-      { "name": "color", "type": "string" }
-    ]
+  "viewport": {
+    "type": "infinite", // or "fixed"
+    "preset": "1080x1080", // if fixed
+    "bg_color": "#f5f5f5"
   },
-  "molecule": {
-    "name": "TimelineGrid",
-    "layout": "flex-row" // or "grid"
-  }
+  "harness": {
+    "top_pill": {
+      "left": ["surface_switcher", "chat_toggle"],
+      "right": ["view_mode", "export", "settings"]
+    },
+    "chat_rail": {
+      "enabled": true,
+      "position": "left",
+      "width": 320
+    },
+    "tool_pop": {
+      "enabled": true,
+      "position": "bottom",
+      "magnifiers": {
+        "left": { "type": "category_selector", "default": "layout" }, // The "Wheel"
+        "right": { "type": "tool_selector", "default": "density" }    // The "Sub-wheel"
+      },
+      "sliders": {
+        "layout": ["grid.cols", "grid.gap", "grid.radius"],
+        "font": ["typo.size", "typo.weight", "typo.width"],
+        "type": ["typo.tracking", "typo.leading"],
+        "color": ["style.opacity", "style.blur"]
+      }
+    }
+  },
+  "atoms": [
+    {
+      "name": "Tile",
+      "props": {
+        "title": { "type": "string", "default": "Untitled" },
+        "variant": { "type": "select", "options": ["generic", "product", "video"] }
+      },
+      "vario": {
+        "axes": ["weight", "width", "slant", "casual"],
+        "mappings": {
+          "weight": "font-variation-settings: 'wght' var(--v-weight)",
+          "width": "font-variation-settings: 'wdth' var(--v-width)"
+        }
+      }
+    }
+  ]
 }
 ```
 
 ## instructions
-When invoked with a Contract, you must generate the following artifacts. Do not ask for clarification, just build them.
+When invoked with a Contract, you must generate the following artifacts.
 
 ### 1. The Atom (`atoms/{AtomName}.tsx`)
-Generate a pure React component.
--   Use `interface {AtomName}Props`.
--   Include `useVarioEngine` support by default (even if not explicitly requested, standardise it).
--   Render a placeholder UI based on the props.
+-   **Vario-First**: Must accept CSS variables for axes defined in `vario.mappings`.
+-   **Props**: Standard React props based on the `props` definition.
 
 ### 2. The Molecule (`molecules/{MoleculeName}.tsx`)
-Generate the Container.
--   Accept `items: {AtomName}Props[]`.
--   Map over items and render the Atom.
--   Inject standard CSS variables (`--style-bg`, `--style-accent`) into the container `style`.
+-   **Layout**: Respect `grid.cols` and `grid.gap` from the `ToolControlContext`.
 
 ### 3. The Controller (`blocks/Connected{Name}.tsx`)
-Generate the Harness Controller.
--   **Imports**: Must import `useToolControl` from harness.
--   **Strict Layout**:
-    -   Must place GLOBAL tools (Settings, Zoom) in `<ToolPill />` (Top/Right) or `<TopPill />`.
-    -   Must place CONTEXT tools (Selection actions) in `<ToolPop />` (Bottom).
-    -   Must place CHAT in `<ChatRail />` (Left).
--   **Transport**: Ensure any event handlers (onClick, onDrag) use `transport.sendCommand` via the Context, NOT local state or raw fetch.
--   **State**: Setup `useToolState` for standard Vario axes (weight, width, slant).
-
-### 4. Persistence (The Registry)
-The contract is the Source of Truth.
--   **Save**: Using `northstar-engines`, write the JSON Contract to `atoms-registry/canvases/{name}.yaml`.
--   **Load**: The Forge reads this YAML to re-hydrate the Form.
-
+-   **Hook Wiring**: You MUST use `useToolState` to bind the UI to the Harness.
+-   **Slider Mapping**: Map the specific tool IDs (e.g., `typo.weight`) defined in `harness.tool_pop.sliders`.
+-   **Magnifier logic**: Ensure `activeMode` (Left Magnifier) switches the `activeTool` (Right Magnifier).
 
 ### 4. The Entry (`{Name}Canvas.tsx`)
-Generate the main Canvas wrapper.
--   Should be a Client Component.
--   Wraps the Controller.
+-   **Viewport**: If `viewport.type === 'infinite'`, wrap in `<InfiniteCanvas>`. If `fixed`, wrap in `<FixedFrame>`.
+-   **Harness**: Inject `<ToolPop>`, `<ChatRail>`, and `<TopPill>` as defined in the contract.
 
-## example operation
-
-**User**: "Forge a 'Gantt' canvas with a 'Task' atom."
-
-**Agent Action**:
-1.  **Contract**: `atoms-registry/canvases/gantt.yaml`
-    ```yaml
-    name: Gantt
-    description: Project timeline view.
-    tools:
-      zoom: { id: zoom, type: slider }
-    atom:
-      name: Task
-      props: [{name: start, type: number}, {name: duration, type: number}]
-    molecule:
-      name: GanttGrid
-      layout: flex-row
-    ```
-2.  **Generate**:
-    -   `atoms-ui/canvases/gantt/GanttCanvas.tsx`
-    -   `atoms-ui/canvases/gantt/blocks/ConnectedGantt.tsx` (With `useToolState('zoom')`)
-    -   `atoms-ui/canvases/gantt/molecules/GanttGrid.tsx`
-    -   `atoms-ui/canvases/gantt/atoms/TaskTile.tsx`
 

@@ -1,5 +1,7 @@
 # Atomic Plan: Domain-Driven Registry Migration
 
+> **Status (2026-01-27)**: File-based `atoms-registry/` has been deprecated/quarantined. Treat any YAML-seeding steps as historical or one-off migration notes.
+
 ## Phase 1: Schema Definition (SQL)
 - [ ] **Create System Tables**:
     -   `surfaces`, `canvases`, `muscles`, `agents`.

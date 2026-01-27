@@ -2,6 +2,8 @@
 
 **Objective**: Bridge the gap between the Legacy Engine (`northstar-engines`) and the New World (`atoms-registry`, `atoms-muscle`) without breaking production.
 
+> **Status (2026-01-27)**: The system is moving to DB-first registries (Supabase). The legacy file-based `atoms-registry/` directory is deprecated and quarantined; treat the remainder of this doc as historical context.
+
 ## 1. The Conflict
 -   **Engine**: `northstar-engines` currently looks at its internal `engines/registry` JSON files.
 -   **Data**: The new muscles live in `atoms-muscle/src/.../spec.yaml`.

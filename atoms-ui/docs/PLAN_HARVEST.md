@@ -2,6 +2,8 @@
 
 **Objective**: Populate `atoms-registry` and make `northstar-engines` serve it.
 
+> **Status (2026-01-27)**: Deprecated. Registries are DB-first (Supabase) and the legacy `atoms-registry/` directory is quarantined.
+
 ## Phase 1: The Harvester (Populate Registry)
 - [ ] **Create `scripts/harvest_muscles.py`** (in `northstar-engines`):
     -   Scan `../atoms-muscle/src/**/spec.yaml`.

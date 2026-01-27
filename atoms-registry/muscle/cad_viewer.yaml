@@ -1,9 +1,0 @@
-id: muscles::cad_viewer
-namespace: muscles
-key: cad_viewer
-name: CAD Viewer
-summary: ''
-config: {}
-enabled: true
-maturity: experimental
-origin_path: atoms-muscle/src/muscle/legacy/muscle/cad_viewer/spec.yaml

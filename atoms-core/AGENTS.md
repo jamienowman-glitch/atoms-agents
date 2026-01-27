@@ -1,12 +1,36 @@
 # AGENTS.md — Atoms Core (The OS)
 
-## 🗺️ Strategic Infrastructure & Auth
-> **CRITICAL**: These documents define The Law for Auth, Infrastructure, and Nexus Architecture. Read them before planning any changes.
+## 🗺️ Strategic Infrastructure (V2 VISION)
+> **The Hierarchy**: Tenant (Org) -> Space (Context) -> Surface (Flow).
+> **The 4 Spaces**: `Health`, `Marketing`, `Quantum`, `Tuning`.
+
+*   **Space**: The Shared Nexus (Memory & Config). Multiple Surfaces share ONE Space.
+*   **Surface**: The Flow Container (Not an App). It runs on a Domain (URL).
+*   **Tenant**: The Billing Unit.
 
 *   [Auth & Key Playbook (GCP/AWS)](docs/infra/NORTHSTAR_AUTH_SETUP.md)
-*   [Nexus Architecture (Domains & Isolation)](docs/infra/NEXUS_ARCHITECTURE.md)
+*   [Nexus Architecture (Spaces & Domains)](docs/infra/NEXUS_ARCHITECTURE.md)
+
+## 🎨 UI FOUNDRY (V2 STANDARD)
+> **The Law**: All new Canvases must use the **V2 Contract** and **Vario Harness**.
+> **The 3 Surfaces**:
+> 1.  **ChatRail (Left)**: Communication & Stream.
+> 2.  **TopPill (Top-Right)**: Global View/Export.
+> 3.  **ToolPop (Bottom)**: Contextual "Dynamic Island" with Dual Magnifiers & Sliders.
+
+> **Execution**: Use the `canvas-forge` skill to scaffold from JSON Contract.
+> **Reference**: `atoms-ui/.agent/skills/canvas-forge/SKILL.md`
 
 > **The Atoms-Fam**: "We are creating Shopify, Klaviyo, Photoshop, CapCut... all run by Agents and Humans on collaborative Canvases."
+
+## 🔁 REALTIME GATEWAY CONTRACT (V1)
+**Canonical Doc:** `docs/plans/2026-01-27_realtime-collab-contract-and-atomic-task-plan.md`
+
+`atoms-core` is the **single backend truth spine** for collaborative canvases:
+*   **Realtime Gateway:** SSE downstream truth; WS upstream ephemeral (optional).
+*   **Command Ingestion:** Typed commands only; idempotent; identity-enforced.
+*   **Artifacts:** Presign uploads; emit sidecar refs (never inline media).
+*   **Identity:** All routes must be tenant/mode/project/surface/app scoped.
 
 ## 🛑 THE ATOMIC MANDATE
 1.  **Never Monolith**: Every concern must be its own "Atom" (Table, Component, Service, Site).
@@ -14,9 +38,10 @@
 3.  **Atomic Expansion**: One OS, many Microsites.
 4.  **NO GHOST ASSETS**: All fonts/assets must be in `atoms-app` and registered in `supabase`. `agentflow` is dead to us.
 5.  **Config Driven**: Use the `/dashboard/config` UI to manage resources. Do not hardcode files.
-6.  **Auto-Registry**: **ALL** Registries must auto-populate. If a file exists in the correct folder, it must exist in the DB.
-    *   Surfaces: `seed_registry.py` (Manual Scan -> DB)
-    *   Muscles: `scan_muscles.py` (Auto Scan -> DB)
+6.  **DB-First Registry**: The database is the source of truth for all registries.
+    *   **Authoring**: Use the `/dashboard/config` UI (God mode) or dedicated admin APIs.
+    *   **Auto-Registration**: Muscles are auto-registered from code (`atoms-muscle/src/muscle/*/service.py` -> DB).
+    *   **Legacy**: The old file-based `atoms-registry/` directory is deprecated and quarantined (do not recreate it).
 
 ## 🏗️ CONTEXT: THE FLEET OF 7
 *   **atoms-core:** The OS (Identity, Routing, Safety). **[YOU ARE HERE]**
@@ -26,6 +51,9 @@
 *   **atoms-connectors:** The Tools (MCP Servers).
 *   **atoms-site:** The Face (Marketing).
 *   **atoms-tuning:** The Lab (Optimization).
+
+> [!CAUTION]
+> **DEPRECATION WARNING**: `northstar-engines` is deprecated. Do not write new code there. All OS logic belongs in `atoms-core`.
 
 ## Mission
 This is the Operating System. High stability, zero hallucinations.
@@ -38,7 +66,14 @@ This is the Operating System. High stability, zero hallucinations.
 ## 🛑 THE LAWS
 1.  **Identity is King:** All routes must pass `IdentityMiddleware`.
 2.  **God Mode:** `t_system` is hardcoded in constants; do not query DB for it.
-3.  **No Heavy Lifting:** If it requires a GPU (ffmpeg, whisper, torch), send it to `atoms-muscle`. **DO NOT** write heavy logic in `atoms-core`.
+4.  **No Deep Nesting (The "Burying" Rule)**: Do not nest modules inside generic folders like `core/` or `utils/`.
+    *   **BAD**: `src/core/vault`
+    *   **GOOD**: `src/vault`
+    *   **Mandate**: All primary modules must live at `src/{module_name}`.
+5.  **Vault Only (No .env)**:
+    *   **FORBIDDEN**: `.env`, `os.environ.get("KEY")`.
+    *   **REQUIRED**: Use `src/vault` API.
+    *   **Reason**: Cloud Agents cannot read local `.env` files. They must call the API.
 
 ## 🧠 MEMORY ARCHITECTURE
 > **Philosophy**: "Context is money. Don't waste it."
@@ -147,7 +182,7 @@ The Console is the **Launcher**.
 4.  User interacts with Flows/Canvases specific to that Surface.
 
 ### Registry Manifest
-Surfaces are defined in `atoms-registry/surfaces/*.yaml`. The Console uses this registry to render the App Switcher.
+Surfaces are defined in the DB registry (Supabase). The Console uses DB-backed registries to render the App Switcher.
 
 ### Typography Registry (`public.font_families`)
 *   **Source**: `/atoms-app/public/fonts` (Variable Fonts Only).
