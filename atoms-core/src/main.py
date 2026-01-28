@@ -80,6 +80,10 @@ from src.realtime.ws import router as ws_router
 app.include_router(sse_router)
 app.include_router(ws_router)
 
+# Temperature
+from src.temperature.routes import router as temperature_router
+app.include_router(temperature_router)
+
 # Maybes
 from src.maybes.routes import router as maybes_router
 app.include_router(maybes_router)
