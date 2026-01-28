@@ -46,7 +46,7 @@
 5.  **Config Driven**: Use the `/dashboard/config` UI to manage resources. Do not hardcode files.
 6.  **DB-First Registry**: The database is the source of truth for all registries.
     *   **Authoring**: Use the `/dashboard/config` UI (God mode) or dedicated admin APIs.
-    *   **Auto-Registration**: Muscles are auto-registered from code (`atoms-muscle/src/muscle/*/service.py` -> DB).
+    *   **Auto-Registration**: Muscles are auto-registered from code (`atoms-muscle/src/{category}/{name}/service.py` -> DB).
     *   **Legacy**: The old file-based `atoms-registry/` directory is deprecated and quarantined (do not recreate it).
 7.  **Tenant Compute First (Production)**: Interactive rendering must default to **client device CPU/GPU**. Server render only for explicit export/offline requests. **No local fallbacks** in production.
 
@@ -135,9 +135,15 @@ We maintain a strict "Scale-to-Zero" policy.
 > **Mechanism**: **Auto-Populated** via `sentinel.py` (Watchdog) or `sync_muscles.py`.
 > **Role**: Catalog of heavy tools available for internal use AND external sale (MCP).
 
+**Architecture Law (Muscle as Service):**
+* `atoms-core` is the **library** (pure logic/models).
+* `atoms-muscle` is the **runtime/service** (MCP wrappers, API routes, billing decorators).
+* **Never** merge namespaces at runtime. `atoms-muscle` must import explicitly from `atoms-core`.
+* **Rescue Protocol:** Port dependency logic from `northstar-engines` into `atoms-core` first. `atoms-muscle` must never import `northstar-engines`.
+
 **For Agents (Building Muscles)**:
 1.  **Start Sentinel**: `python3 atoms-muscle/scripts/sentinel.py`
-2.  **Write Code**: Create `src/muscle/{category}/{name}/service.py`.
+2.  **Write Code**: Create `src/{category}/{name}/service.py`.
 3.  **Done**: The sentinel auto-generates `SKILL.md` + `mcp.py` and registers it in Supabase.
 
 

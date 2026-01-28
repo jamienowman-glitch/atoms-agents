@@ -9,6 +9,9 @@ Rescue and productionize audio_separation + audio_mastering (or closest availabl
 - Tests under the above paths
 
 ## Hard Laws (Do Not Break)
+- **Service vs Library:** `atoms-core` is the library; `atoms-muscle` is the runtime/service.
+- **Namespace Rule:** Never merge namespaces at runtime. Import explicitly from `atoms-core`.
+- **Rescue Protocol:** Port dependency logic from `northstar-engines` into `atoms-core` first.
 - **No northstar-engines imports** in final code.
 - **No .env** files; Vault loader only.
 - Keep modules shallow inside `atoms-core/src/`.
@@ -20,12 +23,12 @@ Rescue and productionize audio_separation + audio_mastering (or closest availabl
    - Record the exact target paths in this plan file before coding.
 
 2. **Rescue Core Logic into atoms-core**
-   - Move the needed logic from `northstar-engines/engines/audio*` into `atoms-core/src/audio/`.
+   - Port the needed logic from `northstar-engines/engines/audio*` into `atoms-core/src/audio/`.
    - Refactor to stateless utilities/classes.
-   - Update imports to `from src.audio...`.
+   - Update imports to `from src.audio...` in atoms-core, and **explicit imports** from atoms-core inside atoms-muscle.
 
 3. **Update atoms-muscle Services**
-   - Replace any northstar import paths with `src.audio.*` (atoms-core).
+   - Replace any northstar import paths with explicit atoms-core imports (e.g., `from atoms_core.src.audio.models import ...`).
    - Remove stubs; ensure real execution flow.
 
 4. **MCP Wrapper (Non‑Stub)**

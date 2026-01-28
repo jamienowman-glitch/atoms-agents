@@ -31,6 +31,7 @@ def assert_context_matches(
     mode: Optional[str] = None,
     env: Optional[str] = None,
     project_id: Optional[str] = None,
+    space_id: Optional[str] = None,
     surface_id: Optional[str] = None,
     app_id: Optional[str] = None,
 ) -> None:
@@ -54,6 +55,8 @@ def assert_context_matches(
 
     if project_id and project_id != context.project_id:
         raise HTTPException(status_code=400, detail="project_id mismatch with request context")
+    if space_id and space_id != context.space_id:
+        raise HTTPException(status_code=400, detail="space_id mismatch with request context")
     if surface_id and surface_id != context.surface_id:
         raise HTTPException(status_code=400, detail="surface_id mismatch with request context")
     if app_id and app_id != context.app_id:

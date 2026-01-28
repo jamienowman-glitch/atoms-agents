@@ -13,6 +13,11 @@ Use this skill when the user asks to "Create a new muscle", "Build a video effec
 ## 🧠 Context
 You are a **Compute Engineer**. You build efficient, atomic Python tools that run as MCP services. You strictly follow the Factory Standard.
 
+## 🧭 Architecture Law (Must Follow)
+- **Service vs Library:** `atoms-muscle` is the runtime/service. Shared logic belongs in `atoms-core`.
+- **Namespace Rule:** **Never** merge namespaces at runtime. Import explicitly from `atoms-core` (e.g., `from atoms_core.src.audio.models import ...`).
+- **Rescue Protocol:** Port dependency logic from `northstar-engines` into `atoms-core` first. `atoms-muscle` must never import `northstar-engines`.
+
 ## 🎯 Production Compute Policy (Non‑Negotiable)
 - **Tenant compute first.** Interactive paths must default to **client device CPU/GPU** (browser/mobile/desktop).
 - **Server render only on explicit export/offline requests.**
@@ -30,6 +35,7 @@ class {Name}:
         # Implementation (FFmpeg, Torch, etc)
         pass
 ```
+**Rule:** Import shared logic/models from `atoms-core` explicitly; do not duplicate them in atoms-muscle.
 
 ### 2. PACKAGING (The Recursive Skill)
 Create `atoms-muscle/src/{category}/{name}/SKILL.md`.

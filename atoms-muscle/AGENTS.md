@@ -12,6 +12,9 @@
 2.  **Components**: All Muscles must have `mcp.py`, `SKILL.md`, and `service.py` and the MCP wrapper must be complete (no stub `service.run(...)`).
 3.  **Automation**: Use `scripts/factory.py` and `scripts/sentinel.py` for all new work.
 4.  **Tenant Compute First (Production)**: Default interactive paths to **client device CPU/GPU**. Server render is **only** for explicit export/offline requests. **No local fallbacks** in production.
+5.  **Service vs Library**: `atoms-muscle` is the **runtime/service**. Shared logic lives in `atoms-core` and must be imported explicitly.
+6.  **Namespace Rule**: **Never** merge namespaces at runtime. Import from `atoms-core` explicitly (e.g., `from atoms_core.src.audio.models import ...`).
+7.  **Rescue Protocol**: Port dependency logic from `northstar-engines` into `atoms-core` first. `atoms-muscle` must never import `northstar-engines`.
 
 ## 🏗️ THE PRODUCTION LINE
 Any Agent building a Muscle MUST follow this exact sequence:
@@ -20,6 +23,7 @@ Any Agent building a Muscle MUST follow this exact sequence:
 Create the implementation in `src/{category}/{name}/service.py`.
 *   **Style**: Pure Python. Class-based.
 *   **Deps**: Import `ffmpeg`, `torch`, `numpy` etc. locally.
+*   **Imports**: Use explicit imports from `atoms-core` for shared logic/models.
 
 ### STEP 2: THE MCP WRAPPER (mcp.py)
 You MUST wrap the logic using FastMCP in `src/{category}/{name}/mcp.py`.

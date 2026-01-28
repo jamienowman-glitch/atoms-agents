@@ -13,6 +13,7 @@ Make the God Config dashboard reflect the live Supabase state for muscles + pric
 - **Do not refactor UI logic** beyond the required changes.
 - **No new backend routes** for canvases/harnesses; stay in God Config scope.
 - **No northstar-engines usage**.
+- **Service vs Library:** `atoms-core` is the library; `atoms-muscle` is the standalone runtime/service.
 
 ## Tasks (Atomic)
 1. **Resolve Muscles Schema Conflict**
@@ -24,6 +25,7 @@ Make the God Config dashboard reflect the live Supabase state for muscles + pric
    - Replace the current card list with a Data Grid for `public.muscles`.
    - Required columns: Name, Price (Snax), Status, Active Toggle.
    - Actions: Edit Exchange Rate (writes to `system_config`).
+   - Ensure the grid reflects **standalone services** (runtime = atoms-muscle) rather than merged namespaces.
 
 3. **Wire to Supabase**
    - Use existing `createClient()`.

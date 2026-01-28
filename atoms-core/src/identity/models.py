@@ -57,6 +57,7 @@ class RequestContext(BaseModel):
     
     # Optional Hierarchy
     surface_id: Optional[str] = None
+    space_id: Optional[str] = None
     app_id: Optional[str] = None
     user_id: Optional[str] = None
     membership_role: Optional[str] = None

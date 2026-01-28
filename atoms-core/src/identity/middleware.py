@@ -29,6 +29,7 @@ class IdentityMiddleware(BaseHTTPMiddleware):
         request.state.user_id = None
         request.state.tenant_id = None
         request.state.role = None
+        request.state.space_id = None
 
         # 1. System Key Check (God Mode)
         system_key = request.headers.get(SYSTEM_KEY_HEADER)
@@ -54,6 +55,8 @@ class IdentityMiddleware(BaseHTTPMiddleware):
                             request.state.tenant_id = tenant_id
                             # Role would typically be fetched from DB based on (user, tenant).
                             # For Phase 1, we leave it None or assume 'member'.
+                        if space_id := request.headers.get("X-Space-Id"):
+                            request.state.space_id = space_id
 
                 except Exception as e:
                     # Token invalid or expired.

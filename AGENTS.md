@@ -6,3 +6,8 @@
 ## Muscle Build Law (Global)
 - **Location:** All new muscles must live in `atoms-muscle/src/{category}/{name}` (no `src/muscle` nesting).
 - **MCP:** Every muscle must include a complete `mcp.py` wrapper (no stub `service.run(...)`).
+
+## Muscle Architecture Law (Global)
+- **Service vs Library:** `atoms-core` is the shared **library** (pure logic/models). `atoms-muscle` is the **runtime/service** (MCP wrappers, API routes, billing decorators).
+- **Namespace Rule:** **Never** merge namespaces at runtime. `atoms-muscle` must import explicitly from `atoms-core` (e.g., `from atoms_core.src.audio.models import ...`).
+- **Rescue Protocol:** Port dependency logic from `northstar-engines` into `atoms-core` first. `atoms-muscle` must never import `northstar-engines`.

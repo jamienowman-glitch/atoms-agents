@@ -10,6 +10,9 @@ Rescue video_render + animation_kernel into atoms-core and enforce Brain/Brawn s
 - Tests under the above paths
 
 ## Hard Laws (Do Not Break)
+- **Service vs Library:** `atoms-core` is the library; `atoms-muscle` is the runtime/service.
+- **Namespace Rule:** Never merge namespaces at runtime. Import explicitly from `atoms-core`.
+- **Rescue Protocol:** Port dependency logic from `northstar-engines` into `atoms-core` first.
 - **No northstar-engines imports**.
 - **No .env**; Vault loader only.
 - **No server-side rendering**; return CLI instructions only.
@@ -17,7 +20,7 @@ Rescue video_render + animation_kernel into atoms-core and enforce Brain/Brawn s
 ## Tasks (Atomic)
 1. **Un‑nest + Rescue Core Logic**
    - Move any existing code from `atoms-muscle/src/muscle/...` into `atoms-muscle/src/{category}/{name}`.
-   - Move required logic from `northstar-engines/engines/video*` and `engines/animation_kernel` into `atoms-core/src/video/`.
+   - Port required logic from `northstar-engines/engines/video*` and `engines/animation_kernel` into `atoms-core/src/video/` and `atoms-core/src/animation/` as appropriate.
    - Refactor to stateless helpers.
 
 2. **Brain vs Brawn Refactor**
@@ -25,7 +28,7 @@ Rescue video_render + animation_kernel into atoms-core and enforce Brain/Brawn s
    - Do not invoke GPU rendering on the server.
 
 3. **Update atoms-muscle Services**
-   - Replace imports with `src.video.*`.
+   - Replace imports with explicit atoms-core imports (e.g., `from atoms_core.src.video...`).
    - Ensure service methods return structured plans (command string + args + notes).
 
 4. **MCP Wrapper (Non‑Stub)**
