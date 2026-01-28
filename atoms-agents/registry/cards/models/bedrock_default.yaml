@@ -1,0 +1,10 @@
+card_type: model
+model_id: bedrock_default
+provider_id: bedrock
+official_id: anthropic.claude-3-haiku-20240307-v1:0
+family_id: anthropic.claude
+version: "3"
+variant: "haiku"
+reasoning_effort: "medium"
+context_window: 200000
+notes: Standard Haiku model on Bedrock

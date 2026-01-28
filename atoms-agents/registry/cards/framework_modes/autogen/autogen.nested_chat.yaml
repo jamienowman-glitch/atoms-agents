@@ -1,0 +1,17 @@
+card_type: mode
+id: autogen.nested_chat
+framework: autogen
+official_name: Nested Chat
+invoke_primitive: RoundRobinGroupChat(participants, termination_condition)
+entrypoint: northstar.runtime.modes.autogen.autogen_nested_chat.run
+params:
+  official_name: RoundRobinGroupChat
+  official_options: participants, termination_condition
+  minimal_snippet: team = RoundRobinGroupChat([assistant, reviewer])
+streaming_support: true
+docs_urls:
+- https://microsoft.github.io/autogen/agentchat/teams#roundrobin
+pinned_version: AutoGen v0.4.0
+confidence: med
+notes: "Nested chat can be implemented via a RoundRobinGroupChat of agents (no distinct\
+  \ \u201CNestedChat\u201D class in docs)"

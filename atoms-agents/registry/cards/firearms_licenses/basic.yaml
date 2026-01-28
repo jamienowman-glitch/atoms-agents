@@ -1,0 +1,8 @@
+card_type: firearms_license
+license_id: license.basic
+name: Basic License
+description: "Allows basic text interactions only."
+allows_tools: false
+allows_code_execution: false
+allows_web_grounding: false
+allows_vision: false

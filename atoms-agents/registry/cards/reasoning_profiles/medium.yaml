@@ -1,0 +1,6 @@
+card_type: reasoning_profile
+reasoning_id: reasoning.medium
+name: Medium Reasoning
+description: "Balanced reasoning effort."
+request_overrides:
+  reasoning_effort: "medium"

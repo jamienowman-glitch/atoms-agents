@@ -1,0 +1,8 @@
+provider_id: openrouter
+name: OpenRouter
+provider_type: api
+api_base_url: https://openrouter.ai/api/v1
+description: OpenRouter Gateway for DeepSeek, Molmo, and other models.
+python_module: northstar.runtime.providers.openrouter
+env_var_keys:
+  - OPENROUTER_API_KEY

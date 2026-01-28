@@ -1,0 +1,5 @@
+card_type: capability
+capability_id: vision
+capability_name: Vision (Image Input)
+embedded_or_separate: EMBEDDED
+description: Enables Vision (Image Input)
