@@ -146,7 +146,23 @@ class ParameterAutomation(Timestamped):
     user_id: Optional[str] = None
     target_type: Literal["clip", "track", "sequence"]
     target_id: str
-    property: Literal["position_x", "position_y", "scale", "opacity", "volume_db", "crop_x", "crop_y"]
+    property: Literal[
+        "position_x",
+        "position_y",
+        "scale",
+        "opacity",
+        "volume_db",
+        "crop_x",
+        "crop_y",
+        "camera_x",
+        "camera_y",
+        "camera_z",
+        "look_at_x",
+        "look_at_y",
+        "look_at_z",
+        "roll",
+        "heading",
+    ]
     keyframes: List[Keyframe] = Field(default_factory=list)
 
 # Valid filter types:

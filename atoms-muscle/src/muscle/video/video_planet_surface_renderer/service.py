@@ -112,10 +112,10 @@ class PlanetSurfaceRendererService:
         return hasher.hexdigest()
 
     def run(self, input_path: str, **kwargs: Any) -> dict[str, Any]:
-        \"\"\"Skill entry point: proxies legacy MCP signature to `render`. \"\"\"
-        surface_params = kwargs.get(\"surface_params\", {})
-        duration_ms = int(kwargs.get(\"duration_ms\", kwargs.get(\"duration\", 1000)))
-        return self.render(surface_params, duration_ms, frame_rate=kwargs.get(\"frame_rate\"))
+        """Skill entry point: proxies legacy MCP signature to `render`. """
+        surface_params = kwargs.get("surface_params", {})
+        duration_ms = int(kwargs.get("duration_ms", kwargs.get("duration", 1000)))
+        return self.render(surface_params, duration_ms, frame_rate=kwargs.get("frame_rate"))
 
 
 if __name__ == "__main__":

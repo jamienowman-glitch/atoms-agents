@@ -87,7 +87,9 @@ class PlanetPreviewService:
             {
                 "type": "timeline_sync",
                 "target": "video_timeline",
-                "payload": {"keyframes": run_metadata.get("keyframes", [])},
+                "payload": {
+                    "automations": self._adapt_runner_to_automation(run_metadata.get("keyframes", []))
+                },
             },
             {
                 "type": "focus",
@@ -97,6 +99,40 @@ class PlanetPreviewService:
                     "duration_ms": run_metadata.get("run_duration_ms", 60000),
                 },
             },
+        ]
+
+    def _adapt_runner_to_automation(self, keyframes: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        """Transforms runner 3D keyframes into video_timeline scalar automation properties."""
+        if not keyframes:
+            return []
+
+        # Containers for each property track
+        tracks: dict[str, list[dict[str, Any]]] = {
+            "camera_x": [], "camera_y": [], "camera_z": [],
+            "look_at_x": [], "look_at_y": [], "look_at_z": [],
+            "heading": []
+        }
+
+        for frame in keyframes:
+            t = frame["timestamp_ms"]
+            pos = frame.get("position", {})
+            fwd = frame.get("forward", {})
+
+            tracks["camera_x"].append({"time_ms": t, "value": pos.get("x", 0.0)})
+            tracks["camera_y"].append({"time_ms": t, "value": pos.get("y", 0.0)})
+            tracks["camera_z"].append({"time_ms": t, "value": pos.get("z", 0.0)})
+
+            tracks["look_at_x"].append({"time_ms": t, "value": fwd.get("x", 0.0)})
+            tracks["look_at_y"].append({"time_ms": t, "value": fwd.get("y", 0.0)})
+            tracks["look_at_z"].append({"time_ms": t, "value": fwd.get("z", 0.0)})
+
+            tracks["heading"].append({"time_ms": t, "value": frame.get("heading_deg", 0.0)})
+
+        # Convert to list of automation objects
+        return [
+            {"property": prop, "keyframes": kfs}
+            for prop, kfs in tracks.items()
+            if kfs
         ]
 
     def run(self, input_path: str, **kwargs: Any) -> dict[str, Any]:
