@@ -79,3 +79,7 @@ from src.realtime.sse import router as sse_router
 from src.realtime.ws import router as ws_router
 app.include_router(sse_router)
 app.include_router(ws_router)
+
+# Maybes
+from src.maybes.routes import router as maybes_router
+app.include_router(maybes_router)
