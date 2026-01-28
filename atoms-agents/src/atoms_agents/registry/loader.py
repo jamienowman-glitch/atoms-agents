@@ -16,9 +16,11 @@ from atoms_agents.registry.schemas import (
     ArtifactSpecCard,
     NodeCard,
     FlowCard,
-    NodeCard,
-    FlowCard,
-    RunProfileCard
+    RunProfileCard,
+    ManifestCard,
+    FirearmsLicenseCard,
+    ReasoningProfileCard,
+    AgentCard
 )
 from atoms_agents.registry.schemas.overlays import LensOverlayCard
 from atoms_agents.registry.schemas.tenancy import TenantCard, PolicyPackCard, BudgetCard
@@ -39,10 +41,10 @@ from atoms_agents.registry.schemas.graph import GraphDefinitionCard
 class RegistryContext:
     loader: "RegistryLoader"
     modes: Dict[str, ModeCard]
-    frameworks: Dict[str, FrameworkCard] # New
+    frameworks: Dict[str, FrameworkCard]
     profiles: Dict[str, RunProfileCard]
     providers: Dict[str, ProviderConfigCard]
-    families: Dict[str, ModelFamilyCard] # New
+    families: Dict[str, ModelFamilyCard]
     models: Dict[str, ModelCard]
     capabilities: Dict[str, CapabilityCard]
     bindings: Dict[str, CapabilityBindingCard]
@@ -56,6 +58,12 @@ class RegistryContext:
     policy_packs: Dict[str, PolicyPackCard]
     budgets: Dict[str, BudgetCard]
     nexus_profiles: Dict[str, NexusProfileCard]
+
+    # New Cards
+    manifests: Dict[str, ManifestCard]
+    firearms_licenses: Dict[str, FirearmsLicenseCard]
+    reasoning_profiles: Dict[str, ReasoningProfileCard]
+    agents: Dict[str, AgentCard]
 
     # GraphLens Architecture
     neutral_nodes: Dict[str, Any]
@@ -71,7 +79,7 @@ class RegistryLoader:
         self.root_path = root_path
 
     def load_context(self) -> RegistryContext:
-        # Load directories independently so one failure doesn't kill the whole registry
+        # Load directories independently
         cards_frameworks = self.load_cards_from_dir("frameworks")
         cards_modes = self.load_cards_from_dir("framework_modes")
         cards_profiles = self.load_cards_from_dir("profiles")
@@ -90,6 +98,12 @@ class RegistryLoader:
         cards_policies = self.load_cards_from_dir("policy_packs")
         cards_budgets = self.load_cards_from_dir("budgets")
         cards_nexus_profiles = self.load_cards_from_dir("nexus_profiles")
+
+        # New directories
+        cards_manifests = self.load_cards_from_dir("manifests")
+        cards_firearms = self.load_cards_from_dir("firearms_licenses")
+        cards_reasoning = self.load_cards_from_dir("reasoning_profiles")
+        cards_agents = self.load_cards_from_dir("agents")
 
         # GraphLens Directories
         cards_neutral = self.load_cards_from_dir("neutral_nodes")
@@ -117,6 +131,12 @@ class RegistryLoader:
             budgets={c.budget_id: c for c in cards_budgets if isinstance(c, BudgetCard)},
             nexus_profiles={c.nexus_profile_id: c for c in cards_nexus_profiles if isinstance(c, NexusProfileCard)},
 
+            # New Cards
+            manifests={c.manifest_id: c for c in cards_manifests if isinstance(c, ManifestCard)},
+            firearms_licenses={c.license_id: c for c in cards_firearms if isinstance(c, FirearmsLicenseCard)},
+            reasoning_profiles={c.reasoning_id: c for c in cards_reasoning if isinstance(c, ReasoningProfileCard)},
+            agents={c.agent_id: c for c in cards_agents if isinstance(c, AgentCard)},
+
             # GraphLens
             neutral_nodes={c.node_id: c for c in cards_neutral if hasattr(c, 'node_id')},
             lens_contexts={c.context_id: c for c in cards_lenses if hasattr(c, 'context_id')},
@@ -141,15 +161,12 @@ class RegistryLoader:
                     try:
                         cards.extend(self._load_file(filepath))
                     except Exception as e:
-                        # Log error but don't stop loading other files
                         print(f"Error loading {filepath}: {e}")
         return cards
 
 
     def _load_file(self, filepath: str) -> List[Any]:
         loaded: List[Any] = []
-        # We don't catch here anymore, let load_cards_from_dir handle it individually
-        # But for robustness inside the file (bad yaml vs bad schema), we rely on parsers raising errors.
 
         with open(filepath, "r", encoding="utf-8") as f:
             docs = list(yaml.safe_load_all(f))
@@ -159,7 +176,8 @@ class RegistryLoader:
             parse_provider, parse_model, parse_model_family, parse_capability,
             parse_capability_binding, parse_persona,
             parse_task, parse_artifact_spec,
-            parse_node, parse_flow
+            parse_node, parse_flow,
+            parse_manifest, parse_firearms_license, parse_reasoning_profile, parse_agent
         )
 
         for doc in docs:
@@ -196,6 +214,17 @@ class RegistryLoader:
                     loaded.append(parse_node(doc))
                 elif card_type == "flow":
                     loaded.append(parse_flow(doc))
+
+                # New Card Types
+                elif card_type == "manifest":
+                    loaded.append(parse_manifest(doc))
+                elif card_type == "firearms_license":
+                    loaded.append(parse_firearms_license(doc))
+                elif card_type == "reasoning_profile":
+                    loaded.append(parse_reasoning_profile(doc))
+                elif card_type == "agent":
+                    loaded.append(parse_agent(doc))
+
                 elif card_type == "tenant":
                     c = TenantCard(**{k: v for k, v in doc.items() if k != "card_type"})
                     loaded.append(c)
@@ -240,8 +269,6 @@ class RegistryLoader:
                 else:
                     print(f"Warning: Unknown card_type '{card_type}' in {filepath}")
             except Exception as e:
-                # If a single card in a file fails, we might want to skip it or fail the whole file?
-                # For now let's raise so the file fails, but other files load.
                 raise ValueError(f"Error parsing card in {filepath}: {e}")
 
         return loaded

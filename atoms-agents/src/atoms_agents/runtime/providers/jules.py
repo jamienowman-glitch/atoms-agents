@@ -4,6 +4,7 @@ from atoms_agents.runtime.gateway import LLMGateway, CapabilityToggleRequest, Re
 from atoms_agents.runtime.auth_loader import require_key
 
 class JulesClient:
+    """REST Client for Jules API with API Key Auth fallback logic."""
     BASE_URL = "https://jules.googleapis.com/v1alpha"
 
     def __init__(self, api_key: str):
