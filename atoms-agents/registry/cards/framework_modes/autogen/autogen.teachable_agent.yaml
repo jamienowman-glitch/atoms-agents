@@ -1,0 +1,19 @@
+card_type: mode
+id: autogen.teachable_agent
+framework: autogen
+official_name: Teachable Agent
+invoke_primitive: ''
+entrypoint: northstar.runtime.modes.autogen.autogen_teachable_agent.run
+params:
+  official_name: UNKNOWN
+  official_options: ''
+  minimal_snippet: ''
+streaming_support: false
+docs_urls:
+- (no
+- reference
+- in
+- docs)
+pinned_version: AutoGen v0.4.0
+confidence: low
+notes: Teachable agent concept not documented separately

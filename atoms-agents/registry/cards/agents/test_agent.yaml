@@ -1,0 +1,10 @@
+card_type: agent
+agent_id: agent.test
+name: Test Agent
+description: "A test agent for the workbench."
+manifest_ref: manifest.default
+persona_ref: persona.default
+task_ref: task.default
+model_ref: model.jules_default
+reasoning_ref: reasoning.medium
+firearms_license_ref: license.basic

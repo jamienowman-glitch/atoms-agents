@@ -1,0 +1,14 @@
+from typing import Dict, Any
+from atoms_agents.runtime.context import RunContext
+from atoms_agents.runtime.exceptions import SkipMode
+from atoms_agents.runtime.frameworks.crewai import adapter
+
+def run(input_json: Dict[str, Any], ctx: RunContext) -> Dict[str, Any]:
+    try:
+        # Atomic runner for mode: crewai.knowledge_web
+        # Calls framework adapter smoke test
+        return adapter.minimal_smoke("crewai.knowledge_web", input_json, ctx)
+    except SkipMode as e:
+        return { "status": "SKIPPED", "reason": str(e), "mode_id": "crewai.knowledge_web" }
+    except Exception as e:
+        return { "status": "FAIL", "mode_id": "crewai.knowledge_web", "error": str(e) }

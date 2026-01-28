@@ -1,0 +1,4 @@
+card_type: task
+task_id: task.default
+name: Default Task
+goal: "Help the user."

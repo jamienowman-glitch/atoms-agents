@@ -1,0 +1,5 @@
+card_type: persona
+persona_id: persona.default
+name: Default Persona
+description: "A default persona."
+style_tags: ["helpful", "concise"]

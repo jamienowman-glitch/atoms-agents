@@ -1,0 +1,22 @@
+card_type: routing
+routing_id: routing.dev_free_tier_hunter
+name: Dev Free Tier Hunter
+description: "Prioritizes free/low-cost tiers for development. Falls back to slightly more capable but still cheap models."
+strategy: "cost_optimized"
+rules:
+  - attempt:
+      provider: groq
+      model: llama3-70b-8192
+      reason: "Fastest free tier inference"
+  - on_error:
+      types: ["RateLimitError", "QuotaExceeded"]
+      fallback:
+        provider: vertex_ai
+        model: gemini-2.0-flash
+        reason: "Reliable low-cost fallback"
+  - on_error:
+      types: ["*"]
+      fallback:
+        provider: bedrock
+        model: anthropic.claude-3-haiku-20240307-v1:0
+        reason: "Final safety net"

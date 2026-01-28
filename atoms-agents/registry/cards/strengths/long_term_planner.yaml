@@ -1,0 +1,13 @@
+card_type: strength
+strength_id: strength.long_term_planner
+name: Long Term Planner
+description: "Forces a methodical 5-step planning process before execution."
+enforcement: "pre_execution"
+instruction: |
+  Before executing any task, you MUST outline exactly 5 distinct steps.
+  Do not proceed until you have listed these steps.
+  1. Analysis
+  2. Strategy
+  3. Resource Check
+  4. Execution Plan
+  5. Verification

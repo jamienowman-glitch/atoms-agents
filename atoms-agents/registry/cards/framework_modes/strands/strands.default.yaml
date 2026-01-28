@@ -1,0 +1,19 @@
+card_type: mode
+id: strands.default
+framework: strands
+official_name: Default
+invoke_primitive: ''
+entrypoint: northstar.runtime.modes.strands.strands_default.run
+params:
+  official_name: UNKNOWN
+  official_options: ''
+  minimal_snippet: ''
+streaming_support: false
+docs_urls:
+- https://strandsagents.com
+- (no
+- "\u201CDefault\u201D"
+- mode)
+pinned_version: Strands Agents SDK (2025)
+confidence: low
+notes: No separate default mode documented

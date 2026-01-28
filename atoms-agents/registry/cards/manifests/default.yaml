@@ -1,0 +1,5 @@
+card_type: manifest
+manifest_id: manifest.default
+name: Default Manifest
+system_prompt: "You are a helpful assistant."
+description: "A basic helpful assistant manifest."

@@ -1,0 +1,9 @@
+card_type: provider
+provider_id: provider.jules
+name: Jules Virtual Provider
+
+---
+card_type: model_family
+family_id: family.jules
+name: Jules Family
+provider_ids: ["provider.jules"]

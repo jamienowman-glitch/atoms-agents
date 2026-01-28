@@ -1,0 +1,18 @@
+card_type: mode
+id: crewai.planning_demo
+framework: crewai
+official_name: Planning Demo
+invoke_primitive: ''
+entrypoint: northstar.runtime.modes.crewai.crewai_planning_demo.run
+params:
+  official_name: UNKNOWN
+  official_options: ''
+  minimal_snippet: ''
+streaming_support: false
+docs_urls:
+- https://docs.crewai.com
+- (demo
+- example)
+pinned_version: crewai 0.30.0
+confidence: low
+notes: Example/demo mode, not an official feature

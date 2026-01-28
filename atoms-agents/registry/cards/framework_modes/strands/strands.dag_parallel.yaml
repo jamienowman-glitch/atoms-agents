@@ -1,0 +1,16 @@
+card_type: mode
+id: strands.dag_parallel
+framework: strands
+official_name: DAG Parallel
+invoke_primitive: GraphBuilder
+entrypoint: northstar.runtime.modes.strands.strands_dag_parallel.run
+params:
+  official_name: Graph (GraphBuilder)
+  official_options: add_node, add_edge, set_entry_point
+  minimal_snippet: from strands.multiagent import GraphBuilder ...
+streaming_support: false
+docs_urls:
+- https://strandsagents.com/latest/documentation/docs/user-guide/concepts/multi-agent/graph#creating-a-graph
+pinned_version: Strands Agents SDK (2025)
+confidence: high
+notes: Strands uses GraphBuilder to build DAG workflows

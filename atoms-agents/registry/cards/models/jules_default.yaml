@@ -1,0 +1,8 @@
+card_type: model
+model_id: model.jules_default
+provider_id: provider.jules
+official_id: jules_default
+family_id: family.jules
+name: Jules Default
+description: "Virtual model for binding checks."
+context_window: 4096

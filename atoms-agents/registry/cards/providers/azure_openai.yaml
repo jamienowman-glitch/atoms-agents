@@ -1,0 +1,7 @@
+card_type: provider
+provider_id: azure_openai
+name: Azure OpenAI Service
+required_fields:
+  - azure_endpoint
+  - azure_deployment
+notes: Uses DefaultAzureCredential (no API keys in registry)
