@@ -23,10 +23,11 @@ class AirCanvas:
         if not os.path.exists(input_path):
              raise FileNotFoundError(f"Input path not found: {input_path}")
 
-        # Default target (Neon Green approx) if not provided
+        # Default target (Bright Orange) if not provided
+        # Orange is typically around Hue 10-25.
         if hsv_target is None:
-             lower_bound = np.array([30, 100, 100])
-             upper_bound = np.array([50, 255, 255])
+             lower_bound = np.array([10, 150, 150])
+             upper_bound = np.array([25, 255, 255])
         else:
              lower_bound = np.array(hsv_target['lower'])
              upper_bound = np.array(hsv_target['upper'])

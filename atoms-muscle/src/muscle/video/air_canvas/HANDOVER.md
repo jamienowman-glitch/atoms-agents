@@ -9,7 +9,8 @@
 The development environment lacked `ffmpeg` binaries and `atoms-core` Vault secrets. The following steps require a full environment:
 
 1.  **Integration Test (Real Video)**:
-    *   Run `service.py` with a real `.mp4` file containing a neon object.
+    *   Run `service.py` with a real `.mp4` file containing a **Bright Orange** object (e.g., Tennis Ball, Orange Fruit, Post-it).
+    *   **Default Color**: The code is now tuned for Orange (Hue 10-25).
     *   Ensure `ffmpeg` / `cv2.VideoWriter` output works correctly (audio/video muxing might be needed if audio preservation is required, currently uses `cv2` mp4v which is silent).
     *   **Verify Compositing**: Check if the "black" background of the canvas correctly becomes transparent over the video. The current logic uses `frame[mask] = canvas[mask]`, which is opaque. If blending is desired, switch to `cv2.addWeighted`.
 
