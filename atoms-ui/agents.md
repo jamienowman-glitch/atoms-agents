@@ -25,6 +25,7 @@ Agents must check `.agent/skills/` for specialized instruction sets.
 
 ## 🔁 REALTIME + HARNESS CONTRACT (V1)
 **Canonical Doc:** `docs/plans/2026-01-27_realtime-collab-contract-and-atomic-task-plan.md`
+**Alignment Retrofit:** `docs/plans/2026-01-28_realtime-retrofit-alignment.md`
 
 *   **One Transport:** Reuse the shared `CanvasTransport` (do not create a second transport).
 *   **No New Routes:** Harnesses/canvases never invent backend routes; they only consume the canonical `atoms-core` gateway.

@@ -20,6 +20,7 @@
 
 ## 🔁 REALTIME CONSUMPTION CONTRACT (V1)
 **Canonical Doc:** `docs/plans/2026-01-27_realtime-collab-contract-and-atomic-task-plan.md`
+**Alignment Retrofit:** `docs/plans/2026-01-28_realtime-retrofit-alignment.md`
 
 `atoms-app` is a **surface/console consumer**:
 *   Use the shared `CanvasTransport` from `atoms-ui` (no bespoke transport here).

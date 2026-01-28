@@ -40,3 +40,36 @@ class TenantMembership(BaseModel):
     status: Literal["active", "pending", "revoked"] = "active"
     created_at: datetime = Field(default_factory=_now)
     updated_at: datetime = Field(default_factory=_now)
+
+
+class RequestContext(BaseModel):
+    """
+    Standard request context for multi-tenant isolation.
+    Ported from northstar-engines.
+    """
+    tenant_id: str = Field(..., pattern=r"^t_[a-z0-9_-]+$")
+    mode: Literal["saas", "enterprise", "lab"]
+    project_id: str
+    request_id: str = Field(default_factory=lambda: uuid4().hex)
+    
+    # Environment (derived from mode/env)
+    env: str = "dev"
+    
+    # Optional Hierarchy
+    surface_id: Optional[str] = None
+    app_id: Optional[str] = None
+    user_id: Optional[str] = None
+    membership_role: Optional[str] = None
+    
+    # Tracing
+    trace_id: Optional[str] = None
+    run_id: Optional[str] = None
+    step_id: Optional[str] = None
+    
+    # Actor / Session
+    actor_id: Optional[str] = None
+    session_id: Optional[str] = None
+
+    @property
+    def is_system(self) -> bool:
+        return self.user_id == "system"

@@ -73,3 +73,9 @@ from src.budget.routes import router as budget_router
 app.include_router(nexus_router)
 app.include_router(vault_router)
 app.include_router(budget_router)
+
+# Realtime
+from src.realtime.sse import router as sse_router
+from src.realtime.ws import router as ws_router
+app.include_router(sse_router)
+app.include_router(ws_router)

@@ -25,6 +25,7 @@
 
 ## 🔁 REALTIME GATEWAY CONTRACT (V1)
 **Canonical Doc:** `docs/plans/2026-01-27_realtime-collab-contract-and-atomic-task-plan.md`
+**Alignment Retrofit:** `docs/plans/2026-01-28_realtime-retrofit-alignment.md`
 
 `atoms-core` is the **single backend truth spine** for collaborative canvases:
 *   **Realtime Gateway:** SSE downstream truth; WS upstream ephemeral (optional).

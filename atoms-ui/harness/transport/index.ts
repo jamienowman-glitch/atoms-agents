@@ -5,6 +5,9 @@ import {
     StreamEvent,
     GestureEvent,
     StreamEnvelopeBase,
+    EventType,
+    RoutingKeys,
+    validateMediaSidecar,
 } from './contracts';
 
 export interface RequestContext {
@@ -23,8 +26,7 @@ export interface TransportConfig {
     wsHost: string;
     token: string;
     context: RequestContext;
-    wsAuthMode?: 'legacy_query' | 'hello_handshake';
-    useFetchSSE?: boolean;
+    threadId: string; // Canonical stream identifier
 }
 
 export interface SafetyDecisionSummary {
@@ -53,6 +55,9 @@ export class CanvasTransport {
     private sse: EventSource | null = null;
     private ws: WebSocket | null = null;
     private canvasId: string | null = null;
+    private threadId: string;
+    private ticket: string | null = null;
+    private ticketExpiry: number = 0;
     private handlers: Set<StreamHandler> = new Set();
     private safetyDecisions: Map<string, SafetyDecisionSummary> = new Map();
 
@@ -64,8 +69,8 @@ export class CanvasTransport {
     private abortController: AbortController | null = null;
 
     constructor(config: TransportConfig) {
-        // Config validation...
         this.config = config;
+        this.threadId = config.threadId;
     }
 
     // --- Helpers ---
@@ -85,13 +90,43 @@ export class CanvasTransport {
     }
 
     async connect(canvasId: string, lastEventId?: string) {
-        if (this.canvasId === canvasId && (this.sseStatus === 'connected' || this.sseStatus === 'connecting')) return;
         this.canvasId = canvasId;
         if (lastEventId) this.lastEventId = lastEventId;
 
-        // Simplify to Fetch SSE for modern browsers
+        // Fetch ticket before connecting
+        await this.ensureTicket();
+
+        // Connect SSE and WS
         this.connectSSE_Fetch();
         this.connectWS();
+    }
+
+    private async ensureTicket() {
+        const now = Date.now();
+        if (this.ticket && this.ticketExpiry > now) return;
+
+        try {
+            const res = await fetch(`${this.config.httpHost}/api/v1/ticket`, {
+                method: 'POST',
+                headers: this.getHeaders({ 'Content-Type': 'application/json' }) as any,
+                body: JSON.stringify({
+                    tenant_id: this.config.context.tenant_id,
+                    mode: this.config.context.mode,
+                    project_id: this.config.context.project_id,
+                    surface_id: this.config.context.surface_id,
+                    app_id: this.config.context.app_id,
+                    user_id: this.config.context.user_id,
+                })
+            });
+            if (!res.ok) throw new Error(`Ticket fetch failed: ${res.status}`);
+            const data = await res.json();
+            this.ticket = data.ticket;
+            // Tickets expire in 5 minutes, refresh after 4
+            this.ticketExpiry = now + (4 * 60 * 1000);
+        } catch (e) {
+            console.error('Failed to fetch ticket', e);
+            throw e;
+        }
     }
 
     disconnect() {
@@ -122,16 +157,17 @@ export class CanvasTransport {
         this.dispatch(event);
     }
 
-    // --- SSE ---
+    // --- SSE (REALTIME_SPEC_V1: downstream truth) ---
     private async connectSSE_Fetch() {
-        if (!this.canvasId) return;
+        if (!this.threadId) return;
         this.sseStatus = 'connecting';
         this.abortController = new AbortController();
         const signal = this.abortController.signal;
 
         try {
-            const url = `${this.config.httpHost}/sse/canvas/${this.canvasId}`;
-            const headers = this.getHeaders({ 'Accept': 'text/event-stream' }) as Record<string, string>;
+            // Use /sse/chat/{threadId} endpoint with ticket
+            const url = `${this.config.httpHost}/sse/chat/${this.threadId}?ticket=${this.ticket}`;
+            const headers = { 'Accept': 'text/event-stream' } as Record<string, string>;
             if (this.lastEventId) headers['Last-Event-ID'] = this.lastEventId;
 
             const response = await fetch(url, { method: 'GET', headers, signal });
@@ -173,22 +209,46 @@ export class CanvasTransport {
         }
     }
 
-    // --- WS ---
+    // --- WS (REALTIME_SPEC_V1: ephemeral only) ---
     private async connectWS() {
-        // Simplified WS connection
+        if (!this.threadId || !this.ticket) return;
+
         try {
-            // Need ticket fetch logic here usually, stubbing for simplicity of this artifact
-            const ticket = 'mock_ticket';
-            const url = `${this.config.wsHost}/msg/ws?ticket=${ticket}`;
+            // Use /ws/chat/{threadId} endpoint with ticket query param
+            const url = `${this.config.wsHost}/ws/chat/${this.threadId}?ticket=${this.ticket}`;
             this.ws = new WebSocket(url);
-            this.ws.onopen = () => { this.wsStatus = 'connected'; };
+
+            this.ws.onopen = () => {
+                this.wsStatus = 'connected';
+
+                // Send hello handshake (REALTIME_SPEC_V1)
+                const hello = {
+                    type: 'hello',
+                    context: {
+                        tenant_id: this.config.context.tenant_id,
+                        mode: this.config.context.mode,
+                        project_id: this.config.context.project_id,
+                        surface_id: this.config.context.surface_id,
+                        app_id: this.config.context.app_id,
+                        user_id: this.config.context.user_id,
+                    },
+                    ticket: this.ticket,
+                    last_event_id: this.lastEventId,
+                };
+                this.ws?.send(JSON.stringify(hello));
+            };
+
             this.ws.onmessage = (msg) => {
                 try {
                     const event = JSON.parse(msg.data);
                     this.processEvent(event);
                 } catch (e) { }
             };
-            this.ws.onclose = () => { this.wsStatus = 'disconnected'; setTimeout(() => this.connectWS(), 2000); };
+
+            this.ws.onclose = () => {
+                this.wsStatus = 'disconnected';
+                setTimeout(() => this.connectWS(), 2000);
+            };
         } catch (e) {
             this.wsStatus = 'disconnected';
         }
@@ -205,9 +265,19 @@ export class CanvasTransport {
         return await res.json();
     }
 
+    // WS: Only gestures and presence (REALTIME_SPEC_V1 §1.3)
     sendGesture(gesture: GestureEvent['data']) {
         if (this.ws?.readyState === WebSocket.OPEN) {
-            this.ws.send(JSON.stringify({ type: 'gesture', data: gesture }));
+            this.ws.send(JSON.stringify({ type: EventType.GESTURE, data: gesture }));
+        }
+    }
+
+    sendPresence(status: 'active' | 'idle' | 'away') {
+        if (this.ws?.readyState === WebSocket.OPEN) {
+            this.ws.send(JSON.stringify({
+                type: 'presence_ping',
+                data: { status }
+            }));
         }
     }
 
@@ -226,17 +296,21 @@ export class CanvasTransport {
         return await res.json();
     }
 
-    // --- Chat ---
+    // --- Chat (SSE POST for truth, REALTIME_SPEC_V1 §1.3) ---
     async postMessage(threadId: string, text: string) {
-        // Should match engines/chat/service/sse_transport.py endpoint
-        const res = await fetch(`${this.config.httpHost}/sse/chat/${threadId}`, {
+        const res = await fetch(`${this.config.httpHost}/sse/chat/${threadId}?ticket=${this.ticket}`, {
             method: 'POST',
-            headers: this.getHeaders({ 'Content-Type': 'application/json' }) as any,
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 text,
                 sender: { id: this.config.context.user_id }
             })
         });
         return await res.json();
+    }
+
+    // --- Sidecar Helpers ---
+    validateSidecar(sidecar: any) {
+        validateMediaSidecar(sidecar);
     }
 }

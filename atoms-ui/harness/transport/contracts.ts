@@ -3,6 +3,59 @@ export type CanvasId = string;
 export type ActorId = string;
 export type Revision = number;
 
+// --- Event Type Constants (REALTIME_SPEC_V1) ---
+
+export const EventType = {
+    // Downstream (SSE)
+    CANVAS_READY: 'CANVAS_READY',
+    TOKEN_PATCH: 'token_patch',
+    STATE_PATCH: 'state_patch',
+    CANVAS_COMMIT: 'canvas_commit',
+    SNAPSHOT_CREATED: 'snapshot_created',
+    CHAT_TOKEN: 'chat_token',
+    LOG_LINE: 'log_line',
+
+    // Presence/Ephemeral
+    PRESENCE_STATE: 'presence_state',
+    GESTURE: 'gesture',
+
+    // Legacy/Chat
+    USER_MESSAGE: 'user_message',
+    AGENT_MESSAGE: 'agent_message',
+    RESUME_CURSOR: 'resume_cursor',
+} as const;
+
+export type EventTypeValue = typeof EventType[keyof typeof EventType];
+
+// --- Routing Keys ---
+
+export type ActorType = 'human' | 'agent' | 'system';
+
+export interface RoutingKeys {
+    tenant_id: string;
+    mode?: string;
+    env?: 'dev' | 'staging' | 'prod' | 'stage';
+    workspace_id?: string;
+    project_id: string;
+    app_id?: string;
+    surface_id?: string;
+    canvas_id?: string;
+    projection_id?: string;
+    panel_id?: string;
+    thread_id?: string;
+    actor_id: string;
+    actor_type: ActorType;
+    session_id?: string;
+    device_id?: string;
+}
+
+export interface EventIds {
+    request_id?: string;
+    correlation_id?: string;
+    run_id?: string;
+    step_id?: string;
+}
+
 // --- Atoms & Tokens ---
 
 export type PrimitiveValue = string | number | boolean | null;
@@ -163,6 +216,25 @@ export interface MediaSidecar {
     size_bytes?: number;
     checksum?: string;
     metadata?: Record<string, unknown>;
+}
+
+/**
+ * Validate MediaSidecar (client-side check).
+ * Rejects data: URIs and base64 content per REALTIME_SPEC_V1 §1.5.
+ */
+export function validateMediaSidecar(sidecar: MediaSidecar): void {
+    if (!sidecar.uri && !sidecar.object_id && !sidecar.artifact_id) {
+        throw new Error('MediaSidecar requires uri, object_id, or artifact_id');
+    }
+
+    if (sidecar.uri) {
+        if (sidecar.uri.startsWith('data:')) {
+            throw new Error('data: URIs are forbidden in media sidecars; use durable references (s3://, artifact_id, etc.)');
+        }
+        if (sidecar.uri.includes('base64')) {
+            throw new Error('base64-encoded content is forbidden in media sidecars');
+        }
+    }
 }
 
 export interface MediaPayload {
