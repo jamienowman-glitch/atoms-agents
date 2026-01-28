@@ -2,168 +2,205 @@ import cv2
 import numpy as np
 from collections import deque
 import os
-import sys
+import logging
+from typing import Optional, Dict, List, TypedDict, Any
+
+# Configure Logger
+logger = logging.getLogger(__name__)
+if not logger.hasHandlers():
+    handler = logging.StreamHandler()
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    logger.setLevel(logging.INFO)
+
+class HSVBounds(TypedDict):
+    lower: List[int]
+    upper: List[int]
+
+class AirCanvasResult(TypedDict):
+    output_path: str
+    metadata: Dict[str, int]
+
+class VideoProcessingError(Exception):
+    """Custom exception for video processing failures."""
+    pass
 
 class AirCanvas:
     """
-    Processes a video file to overlay a virtual 'chalkboard' drawing based on the movement of a specific colored object.
+    Production-grade AirCanvas processor.
+    Tracks a colored object to draw on video frames.
     """
 
-    def run(self, input_path: str, hsv_target: dict = None, gesture_threshold: int = 500, thickness: int = 5) -> dict:
+    # Default: Bright Orange (Hue ~10-25)
+    DEFAULT_HSV: HSVBounds = {
+        "lower": [10, 150, 150],
+        "upper": [25, 255, 255]
+    }
+
+    def run(self,
+            input_path: str,
+            hsv_target: Optional[Dict[str, List[int]]] = None,
+            gesture_threshold: int = 500,
+            thickness: int = 5) -> AirCanvasResult:
         """
+        Processes the video to overlay drawings.
+
         Args:
-            input_path: Path to source video.
-            hsv_target: Dict with 'lower' and 'upper' HSV bounds (lists of 3 ints).
-            gesture_threshold: Velocity threshold (px/sec) for clear gesture.
-            thickness: Brush thickness.
+            input_path: Path to the source mp4/avi file.
+            hsv_target: Optional override for color tracking.
+                        Format: {"lower": [h,s,v], "upper": [h,s,v]}
+            gesture_threshold: X-axis velocity (px/s) to trigger clear.
+            thickness: Brush thickness in pixels.
 
         Returns:
-            Dict containing output_path and metadata.
+            Dictionary with output path and stats.
+
+        Raises:
+            FileNotFoundError: If input does not exist.
+            VideoProcessingError: If opencv fails to read/write.
         """
+
+        # 1. Validation
         if not os.path.exists(input_path):
-             raise FileNotFoundError(f"Input path not found: {input_path}")
+            logger.error(f"Input file not found: {input_path}")
+            raise FileNotFoundError(f"Input path not found: {input_path}")
 
-        # Default target (Bright Orange) if not provided
-        # Orange is typically around Hue 10-25.
-        if hsv_target is None:
-             lower_bound = np.array([10, 150, 150])
-             upper_bound = np.array([25, 255, 255])
-        else:
-             lower_bound = np.array(hsv_target['lower'])
-             upper_bound = np.array(hsv_target['upper'])
+        # 2. Config Setup
+        target_color = hsv_target if hsv_target else self.DEFAULT_HSV
+        try:
+            lower_bound = np.array(target_color['lower'], dtype=np.uint8)
+            upper_bound = np.array(target_color['upper'], dtype=np.uint8)
+        except (KeyError, ValueError) as e:
+            logger.error(f"Invalid HSV target format: {e}")
+            raise ValueError("hsv_target must contain 'lower' and 'upper' lists of 3 integers.")
 
+        logger.info(f"Starting AirCanvas on {input_path} (Target: {target_color})")
+
+        # 3. Resource Management
         cap = cv2.VideoCapture(input_path)
         if not cap.isOpened():
-             raise ValueError(f"Could not open video file: {input_path}")
+            logger.error(f"Failed to open video source: {input_path}")
+            raise VideoProcessingError(f"Could not open video file: {input_path}")
 
-        width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-        height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-        fps = cap.get(cv2.CAP_PROP_FPS)
-        if fps <= 0: fps = 30.0
+        try:
+            width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+            height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+            fps = cap.get(cv2.CAP_PROP_FPS)
+            if fps <= 0:
+                fps = 30.0
+                logger.warning("FPS detection failed, defaulting to 30.0")
 
-        # Output setup
-        base_name = os.path.splitext(input_path)[0]
-        output_path = f"{base_name}_aircanvas.mp4"
+            base_name = os.path.splitext(input_path)[0]
+            output_path = f"{base_name}_aircanvas.mp4"
 
-        fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-        out = cv2.VideoWriter(output_path, fourcc, fps, (width, height))
+            # 'mp4v' is widely supported for .mp4 containers
+            fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+            out = cv2.VideoWriter(output_path, fourcc, fps, (width, height))
+            if not out.isOpened():
+                raise VideoProcessingError("Failed to initialize VideoWriter.")
 
-        # Persistent Canvas Layer (Black background)
-        canvas = np.zeros((height, width, 3), dtype=np.uint8)
+            # 4. Processing Loop
+            canvas = np.zeros((height, width, 3), dtype=np.uint8)
+            points_buffer: deque = deque(maxlen=8)
+            gesture_buffer: deque = deque(maxlen=16)
 
-        # State
-        points_buffer = deque(maxlen=8) # Short buffer for smoothing
-        gesture_buffer = deque(maxlen=16) # Buffer for velocity calculation
+            draw_events = 0
+            clear_events = 0
 
-        draw_events = 0
-        clear_events = 0
+            prev_point = None
+            is_drawing = False
+            frame_count = 0
 
-        prev_point = None
-        is_drawing = False
+            while True:
+                ret, frame = cap.read()
+                if not ret:
+                    break
 
-        while True:
-            ret, frame = cap.read()
-            if not ret:
-                break
+                frame_count += 1
 
-            # 1. Color Masking
-            hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-            mask = cv2.inRange(hsv, lower_bound, upper_bound)
+                # Logic: Color Masking
+                hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+                mask = cv2.inRange(hsv, lower_bound, upper_bound)
+                mask = cv2.erode(mask, None, iterations=2)
+                mask = cv2.dilate(mask, None, iterations=2)
 
-            # Noise reduction
-            mask = cv2.erode(mask, None, iterations=2)
-            mask = cv2.dilate(mask, None, iterations=2)
+                cnts, _ = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+                current_center = None
 
-            cnts, _ = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+                if len(cnts) > 0:
+                    c = max(cnts, key=cv2.contourArea)
+                    ((_, _), radius) = cv2.minEnclosingCircle(c)
 
-            current_center = None
+                    if radius > 10:
+                        M = cv2.moments(c)
+                        if M["m00"] > 0:
+                            center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
+                            points_buffer.append(center)
 
-            if len(cnts) > 0:
-                # Largest contour
-                c = max(cnts, key=cv2.contourArea)
-                ((_, _), radius) = cv2.minEnclosingCircle(c)
+                            # Smoothing
+                            avg_x = int(sum(p[0] for p in points_buffer) / len(points_buffer))
+                            avg_y = int(sum(p[1] for p in points_buffer) / len(points_buffer))
+                            current_center = (avg_x, avg_y)
 
-                # Filter small contours to avoid noise
-                if radius > 10:
-                    M = cv2.moments(c)
-                    if M["m00"] > 0:
-                        center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
+                # Logic: Gesture (Right-to-Left Swipe)
+                frame_time = cap.get(cv2.CAP_PROP_POS_MSEC) / 1000.0
+                # Fallback if timestamp is 0 (some containers)
+                if frame_time == 0.0:
+                    frame_time = frame_count / fps
 
-                        # 2. Centroid Smoothing
-                        points_buffer.append(center)
+                if current_center:
+                    gesture_buffer.append((current_center[0], frame_time))
+                    if len(gesture_buffer) > 4:
+                        x_new, t_new = gesture_buffer[-1]
+                        x_old, t_old = gesture_buffer[0]
 
-                        # Average of points in buffer
-                        avg_x = int(sum(p[0] for p in points_buffer) / len(points_buffer))
-                        avg_y = int(sum(p[1] for p in points_buffer) / len(points_buffer))
-                        current_center = (avg_x, avg_y)
+                        if t_new > t_old:
+                            velocity = (x_new - x_old) / (t_new - t_old)
+                            if velocity < -gesture_threshold:
+                                logger.info(f"Gesture detected (Clear) at {frame_time:.2f}s. Velocity: {velocity:.0f}px/s")
+                                canvas[:] = 0
+                                clear_events += 1
+                                gesture_buffer.clear()
+                                points_buffer.clear()
+                                prev_point = None
+                                current_center = None
+                else:
+                    gesture_buffer.clear()
 
-            # 3. Gesture Control
-            # Check for Right-to-Left swipe (X decreasing rapidly)
-            # Use frame timestamp approximation
-            frame_time = cap.get(cv2.CAP_PROP_POS_MSEC) / 1000.0
+                # Logic: Drawing
+                if current_center:
+                    if not is_drawing:
+                        draw_events += 1
+                        is_drawing = True
 
-            if current_center:
-                gesture_buffer.append((current_center[0], frame_time))
+                    if prev_point:
+                        # Draw Neon Green line on canvas
+                        cv2.line(canvas, prev_point, current_center, (0, 255, 0), thickness)
+                    prev_point = current_center
+                else:
+                    prev_point = None
+                    points_buffer.clear()
+                    is_drawing = False
 
-                # We need enough points to calculate velocity
-                if len(gesture_buffer) > 4:
-                    # Look at a window of time (~0.2s or last N frames)
-                    x_new, t_new = gesture_buffer[-1]
-                    x_old, t_old = gesture_buffer[0]
+                # Logic: Compositing
+                canvas_mask = np.any(canvas > 0, axis=-1)
+                frame[canvas_mask] = canvas[canvas_mask]
+                out.write(frame)
 
-                    if t_new > t_old:
-                        velocity = (x_new - x_old) / (t_new - t_old) # px/sec
+            out.release()
+            logger.info(f"Processing complete. Output: {output_path}")
 
-                        # Right to Left implies negative velocity
-                        if velocity < -gesture_threshold:
-                            # Trigger CLEAR
-                            canvas[:] = 0 # Efficient clear
-                            clear_events += 1
-                            gesture_buffer.clear()
-                            points_buffer.clear()
-                            prev_point = None
-                            current_center = None # Stop drawing for this frame
-            else:
-                # If we lost the object, clear gesture buffer partially or fully?
-                # Usually fully to reset gesture detection
-                gesture_buffer.clear()
-
-            # 4. Drawing Logic
-            if current_center:
-                if not is_drawing:
-                    draw_events += 1
-                    is_drawing = True
-
-                if prev_point:
-                    # Draw on canvas
-                    # Using a fixed color (Neon Green: 0, 255, 0)
-                    cv2.line(canvas, prev_point, current_center, (0, 255, 0), thickness)
-
-                prev_point = current_center
-            else:
-                prev_point = None
-                points_buffer.clear()
-                is_drawing = False
-
-            # 5. Compositing
-            # Efficient NumPy overlay
-            # Identify pixels drawn on canvas
-            # We can check sum of channels or just one channel if we know color
-            # General way: any pixel not black
-            canvas_mask = np.any(canvas > 0, axis=-1)
-
-            # Apply canvas to frame where canvas is drawn
-            frame[canvas_mask] = canvas[canvas_mask]
-
-            out.write(frame)
-
-        cap.release()
-        out.release()
-
-        return {
-            "output_path": output_path,
-            "metadata": {
-                "draw_events": draw_events,
-                "clear_events": clear_events
+            return {
+                "output_path": output_path,
+                "metadata": {
+                    "draw_events": draw_events,
+                    "clear_events": clear_events
+                }
             }
-        }
+
+        except cv2.error as e:
+            logger.exception("OpenCV internal error")
+            raise VideoProcessingError(f"OpenCV Error: {e}")
+        finally:
+            cap.release()
