@@ -39,9 +39,16 @@ def load_from_vault() -> dict:
                 raise ValueError(f"CRITICAL: Secret file is empty: {path}")
             secrets[key] = val
 
-    # 2. System Key (Dev Override or Load)
-    # Ideally this would also be in the vault, but per instructions we can generate/hardcode a dev one.
-    secrets["SYSTEM_KEY"] = "test_system_key"
+    # 2. System Key (Vault Preferred)
+    system_key_path = VAULT_DIR / "system-key.txt"
+    if system_key_path.exists():
+        with open(system_key_path, "r") as f:
+            system_key = f.read().strip()
+            if not system_key:
+                raise ValueError(f"CRITICAL: Secret file is empty: {system_key_path}")
+            secrets["SYSTEM_KEY"] = system_key
+    else:
+        secrets["SYSTEM_KEY"] = "test_system_key"
 
     return secrets
 

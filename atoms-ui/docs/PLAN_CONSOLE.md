@@ -7,7 +7,7 @@
 - [ ] **Env**: Configure `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
 - [ ] **Create `src/lib/supabase.ts`**: Client initialization.
 - [ ] **Create `src/app/login/page.tsx`**: Simple Email/Password or Magic Link form.
-- [ ] **Middleware**: Protect `/` and `/forge` routes (redirect to `/login`).
+- [ ] **Middleware**: Protect `/` and `/contract-builder` routes (redirect to `/login`) — `/contract-builder` is the Contract Builder route.
 
 ## Phase 2: Registry Client Update
 - [ ] **Update `harness/registry/client.ts`** (atoms-ui):

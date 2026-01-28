@@ -1,0 +1,13 @@
+card_type: capability_binding
+binding_id: gcp_vertex_gemini_2_5_flash_web_grounding
+provider_id: gcp_vertex
+model_or_deployment_id: gemini-2.5-flash
+capability_id: web_grounding
+toggle_mechanism: Add googleSearch tool
+minimal_toggle_snippet: '{"tools": [{"googleSearch": {}}]}'
+streaming_support: token
+prereqs_or_allowlist: GCP IAM
+docs_url: Dec 2025
+last_updated_or_version: High
+confidence: ''
+notes: null

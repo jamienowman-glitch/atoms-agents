@@ -1,0 +1,17 @@
+card_type: mode
+id: adk.tools_custom
+framework: adk
+official_name: Custom Tools
+invoke_primitive: tools parameter on Agent
+entrypoint: northstar.runtime.modes.adk.adk_tools_custom.run
+params:
+  official_name: Function Tools
+  official_options: tools=[function]
+  minimal_snippet: agent = LlmAgent(name="agent", model_client=client, tools=[my_tool])
+streaming_support: false
+docs_urls:
+- https://google.github.io/adk-docs/tools/
+pinned_version: ADK Python v0.1.0 (Dec 2025)
+confidence: med
+notes: ADK allows adding Python functions as tools; the example shows adding a function
+  to tools list

@@ -26,7 +26,7 @@ Run this once when a machine / repo is full of old auth junk:
 
 ```bash
 gcloud auth list
-gcloud auth revoke url-signer@squared2-forge.iam.gserviceaccount.com || true
+gcloud auth revoke url-signer@squared2-contract-builder.iam.gserviceaccount.com || true
 gcloud auth revoke jay@redpensquared.com || true
 gcloud auth revoke northstar-dev-engines@northstar-os-dev.iam.gserviceaccount.com || true
 
@@ -68,7 +68,7 @@ Open `.zshrc` and make sure it looks like this structure:
 source "$HOME/google-cloud-sdk/path.zsh.inc"
 source "$HOME/google-cloud-sdk/completion.zsh.inc"
 
-alias forgeup='cd ~/forge_agent && source .venv/bin/activate && python -m forge2_builder.main'
+alias contractbuilderup='cd ~/contract_builder_agent && source .venv/bin/activate && python -m contract_builder.main'
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"

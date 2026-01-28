@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase';
-import NexusUploader from '@/components/nexus/NexusUploader';
+import NexusUploader from '@/components/NexusUploader';
 
 export default function MemoryDashboard() {
     const router = useRouter();

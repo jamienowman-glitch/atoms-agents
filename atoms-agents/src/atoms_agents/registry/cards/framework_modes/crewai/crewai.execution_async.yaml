@@ -1,0 +1,20 @@
+card_type: mode
+id: crewai.execution_async
+framework: crewai
+official_name: Execution Async
+invoke_primitive: ''
+entrypoint: northstar.runtime.modes.crewai.crewai_execution_async.run
+params:
+  official_name: UNKNOWN
+  official_options: ''
+  minimal_snippet: ''
+streaming_support: false
+docs_urls:
+- https://docs.crewai.com
+- (no
+- explicit
+- async
+- info)
+pinned_version: crewai 0.30.0
+confidence: low
+notes: No explicit async mode in docs (stub)

@@ -51,15 +51,15 @@ export const LauncherGrid = ({ onLaunch }: { onLaunch: (slug: string) => void })
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl mx-auto p-6">
-            {/* Hardcoded Forge Card for Phase 10 access */}
+            {/* Hardcoded Contract Builder Card for Phase 10 access */}
             <div
-                onClick={() => onLaunch('forge')}
+                onClick={() => onLaunch('contract-builder')}
                 className="group relative aspect-[4/3] rounded-2xl overflow-hidden cursor-pointer border border-blue-500/30 hover:border-blue-500 transition-all duration-300 bg-blue-900/10"
             >
                 <div className="absolute inset-0 p-6 flex flex-col justify-between">
                     <div>
                         <div className="text-xs font-mono text-blue-400 mb-2 uppercase tracking-widest">System</div>
-                        <h3 className="text-2xl font-light text-white tracking-tight">The Forge</h3>
+                        <h3 className="text-2xl font-light text-white tracking-tight">Contract Builder</h3>
                     </div>
                     <p className="text-sm text-blue-200/60">Canvas Contract Editor</p>
                 </div>

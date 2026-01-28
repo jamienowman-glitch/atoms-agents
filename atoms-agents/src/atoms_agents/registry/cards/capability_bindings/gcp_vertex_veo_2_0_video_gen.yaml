@@ -1,0 +1,13 @@
+card_type: capability_binding
+binding_id: gcp_vertex_veo_2_0_video_gen
+provider_id: gcp_vertex
+model_or_deployment_id: veo-2.0
+capability_id: video_gen
+toggle_mechanism: Vertex Video API
+minimal_toggle_snippet: '{"prompt": "..."}'
+streaming_support: none
+prereqs_or_allowlist: GCP IAM
+docs_url: Oct 2025
+last_updated_or_version: High
+confidence: veo is separate api.
+notes: null

@@ -1,0 +1,16 @@
+card_type: mode
+id: crewai.hierarchical
+framework: crewai
+official_name: Hierarchical Process
+invoke_primitive: Process.hierarchical
+entrypoint: northstar.runtime.modes.crewai.crewai_hierarchical.run
+params:
+  official_name: Hierarchical Process
+  official_options: "\u2013"
+  minimal_snippet: crew = Crew(..., process=Process.hierarchical)
+streaming_support: false
+docs_urls:
+- https://docs.crewai.com/en/concepts/tasks#task-execution-flow
+pinned_version: crewai 0.30.0
+confidence: high
+notes: Same as crew_hierarchical (Process.hierarchical)

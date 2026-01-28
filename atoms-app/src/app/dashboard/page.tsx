@@ -7,13 +7,16 @@ import { isGodUser } from '@/lib/god';
 
 // NAVIGATION ITEMS (Updated for Hierarchy)
 const MENU_ITEMS = [
-    { id: 'surfaces', label: 'SURFACES', action: 'navigate', path: '/dashboard/surfaces' },
-    { id: 'canvases', label: 'CANVASES', action: 'navigate', path: '/dashboard/canvases' },
+    { id: 'subscriptions', label: 'SUBSCRIPTIONS', action: 'navigate', path: '/dashboard/subscriptions' },
+    { id: 'spaces', label: 'SPACES', action: 'navigate', path: '/god/config/spaces' },
+    { id: 'surfaces', label: 'SURFACES', action: 'navigate', path: '/god/config/surfaces' },
+    { id: 'canvases', label: 'CANVASES', action: 'navigate', path: '/god/config/canvases' },
+    { id: 'muscles', label: 'MUSCLES', action: 'navigate', path: '/god/config/muscles' },
     { id: 'typography', label: 'TYPOGRAPHY', action: 'navigate', path: '/dashboard/typography' },
     { id: 'infra', label: 'INFRASTRUCTURE', action: 'navigate', path: '/dashboard/infra' },
     { id: 'memory', label: 'MEMORY (NEXUS)', action: 'navigate', path: '/dashboard/memory' },
     { id: 'domain', label: 'DOMAIN', action: 'editor', configType: 'domain' },
-    { id: 'cogs', label: 'COGS', action: 'navigate', path: '/dashboard/cogs', disabled: true },
+    { id: 'cogs', label: 'COGS', action: 'navigate', path: '/dashboard/cogs' },
     { id: 'ui_atoms', label: 'UI ATOMS', action: 'navigate', path: '/dashboard/ui-atoms', disabled: true },
     { id: 'email', label: 'EMAIL', action: 'editor', configType: 'domain' }
 ];
@@ -110,7 +113,7 @@ export default function Dashboard() {
                     <div className="hidden md:block border-l-2 border-black/10 pl-12 pt-2">
                         <p className="font-mono text-sm text-neutral-500 uppercase tracking-widest mb-4">Context info</p>
                         <div className="text-lg font-medium leading-relaxed">
-                            Welcome to the Mainframe. Configure registries, forge surfaces, and manage the OS.
+                            Welcome to the Mainframe. Configure registries, build surfaces, and manage the OS.
                         </div>
                     </div>
                 </div>

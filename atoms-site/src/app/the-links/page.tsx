@@ -1,46 +1,76 @@
 import Link from "next/link";
 import MainSiteHeader from "@/components/MainSiteHeader";
 import SiteFooter from "@/components/SiteFooter";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Book, Github, ExternalLink } from "lucide-react";
 
 export default function TheLinks() {
-    const links = [
-        { label: "The House (Home)", href: "/" },
-        { label: "The Offers (Pricing)", href: "/the-offer" },
-        { label: "The Dream (Vision)", href: "/the-dream" },
-        { label: "The Knowledge (Docs)", href: "/the-knowledge" },
-        { label: "The Feeds (News)", href: "/the-feeds" },
-        { label: "Join Discord Community", href: "https://discord.gg" },
-        { label: "Follow on X", href: "https://x.com" },
-        { label: "Watch on YouTube", href: "https://youtube.com" }
+    const externalResources = [
+        {
+            category: "Research",
+            items: [
+                { label: "Attention Is All You Need (Paper)", href: "https://arxiv.org/abs/1706.03762" },
+                { label: "Generative Agents Simulation", href: "https://arxiv.org/abs/2304.03442" },
+                { label: "Chain-of-Thought Prompting", href: "https://arxiv.org/abs/2201.11903" }
+            ]
+        },
+        {
+            category: "The Stack",
+            items: [
+                { label: "Next.js Documentation", href: "https://nextjs.org" },
+                { label: "Tailwind CSS Configuration", href: "https://tailwindcss.com" },
+                { label: "Rust Language", href: "https://www.rust-lang.org" }
+            ]
+        },
+        {
+            category: "Inspiration",
+            items: [
+                { label: "Awwwards - Site of the Day", href: "https://www.awwwards.com" },
+                { label: "Godly - Web Design", href: "https://godly.website" },
+                { label: "Brutalist Websites", href: "https://brutalistwebsites.com" }
+            ]
+        }
     ];
 
     return (
-        <main className="bg-black min-h-screen text-white flex flex-col">
+        <main className="bg-black min-h-screen text-white">
             <MainSiteHeader />
 
-            <section className="flex-1 flex flex-col items-center justify-center py-32 px-6">
-                <div className="w-full max-w-md">
-                    <div className="text-center mb-12">
-                        <div className="w-24 h-24 bg-white rounded-full mx-auto mb-6 flex items-center justify-center text-black font-black text-3xl">
-                            A
-                        </div>
-                        <h1 className="text-2xl font-bold uppercase tracking-widest">Atoms Family</h1>
-                        <p className="text-gray-500">The Orchestration Layer</p>
-                    </div>
+            <section className="pt-32 pb-12 px-6 text-center border-b border-white/10">
+                <h1 className="text-5xl md:text-8xl font-black uppercase tracking-tighter mb-4">
+                    THE LINKS
+                </h1>
+                <p className="text-gray-500 uppercase tracking-widest text-sm max-w-xl mx-auto">
+                    Curated external signals. Resources, raw data, and inspiration from outside the simulation.
+                </p>
+            </section>
 
-                    <div className="space-y-4">
-                        {links.map((link, i) => (
-                            <Link
-                                key={i}
-                                href={link.href}
-                                className="block bg-zinc-900 border border-white/10 p-4 rounded-lg text-center font-bold uppercase hover:bg-white hover:text-black transition-all hover:scale-105 flex items-center justify-center gap-2 group"
-                            >
-                                {link.label}
-                                <ArrowUpRight size={16} className="opacity-0 group-hover:opacity-100 transition-opacity" />
-                            </Link>
-                        ))}
-                    </div>
+            <section className="container mx-auto px-6 py-24">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+                    {externalResources.map((section, i) => (
+                        <div key={i} className="space-y-6">
+                            <h2 className="text-xl font-bold uppercase text-red-600 tracking-widest border-b border-red-600/20 pb-2">
+                                {section.category}
+                            </h2>
+                            <ul className="space-y-4">
+                                {section.items.map((link, j) => (
+                                    <li key={j}>
+                                        <Link
+                                            href={link.href}
+                                            target="_blank"
+                                            className="group flex items-start gap-2 hover:text-gray-300 transition-colors"
+                                        >
+                                            <ArrowUpRight size={18} className="mt-1 text-gray-600 group-hover:text-white transition-colors" />
+                                            <div>
+                                                <span className="font-bold uppercase text-lg block leading-none mb-1 border-b border-transparent group-hover:border-white inline-block transition-all">
+                                                    {link.label}
+                                                </span>
+                                            </div>
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))}
                 </div>
             </section>
 

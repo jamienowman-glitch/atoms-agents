@@ -1,0 +1,5 @@
+card_type: provider
+provider_id: vertex
+name: Google Vertex AI
+required_fields: []
+notes: Uses google.auth.default (ADC)

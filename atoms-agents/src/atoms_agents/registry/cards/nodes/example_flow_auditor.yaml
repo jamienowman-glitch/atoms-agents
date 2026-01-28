@@ -1,0 +1,14 @@
+
+card_type: node
+node_id: node.audit_flow_graph
+name: Audit Flow Graph
+kind: agent
+persona_ref: persona.system_designer_v1
+task_ref: task.audit_flow_graph_v1
+artifact_outputs:
+  - artifact_spec.flow_audit_report_json_v1
+blackboard_reads:
+  - flow_graph_definition
+blackboard_writes:
+  - audit_report
+notes: Validates structure.

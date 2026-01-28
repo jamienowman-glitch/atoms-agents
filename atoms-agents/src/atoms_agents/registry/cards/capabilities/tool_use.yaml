@@ -1,0 +1,5 @@
+card_type: capability
+capability_id: tool_use
+capability_name: Tool Use
+embedded_or_separate: EMBEDDED
+description: Enables Tool Use

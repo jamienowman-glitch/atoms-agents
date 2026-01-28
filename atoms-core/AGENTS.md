@@ -18,8 +18,8 @@
 > 2.  **TopPill (Top-Right)**: Global View/Export.
 > 3.  **ToolPop (Bottom)**: Contextual "Dynamic Island" with Dual Magnifiers & Sliders.
 
-> **Execution**: Use the `canvas-forge` skill to scaffold from JSON Contract.
-> **Reference**: `atoms-ui/.agent/skills/canvas-forge/SKILL.md`
+> **Execution**: Use the `canvas-contract-builder` skill to scaffold from JSON Contract.
+> **Reference**: `atoms-ui/.agent/skills/canvas-contract-builder/SKILL.md`
 
 > **The Atoms-Fam**: "We are creating Shopify, Klaviyo, Photoshop, CapCut... all run by Agents and Humans on collaborative Canvases."
 
@@ -42,6 +42,7 @@
     *   **Authoring**: Use the `/dashboard/config` UI (God mode) or dedicated admin APIs.
     *   **Auto-Registration**: Muscles are auto-registered from code (`atoms-muscle/src/muscle/*/service.py` -> DB).
     *   **Legacy**: The old file-based `atoms-registry/` directory is deprecated and quarantined (do not recreate it).
+7.  **Tenant Compute First (Production)**: Interactive rendering must default to **client device CPU/GPU**. Server render only for explicit export/offline requests. **No local fallbacks** in production.
 
 ## 🏗️ CONTEXT: THE FLEET OF 7
 *   **atoms-core:** The OS (Identity, Routing, Safety). **[YOU ARE HERE]**

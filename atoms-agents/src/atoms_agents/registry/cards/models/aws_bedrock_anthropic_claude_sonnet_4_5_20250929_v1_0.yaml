@@ -1,0 +1,20 @@
+card_type: model
+model_id: aws_bedrock_anthropic_claude_sonnet_4_5_20250929_v1_0
+provider_id: aws_bedrock
+official_id: anthropic.claude-sonnet-4-5-20250929-v1:0
+family_id: anthropic.claude
+version: "4.5"
+variant: "sonnet"
+reasoning_effort: "high"
+context_window: 200000
+platform_api_surface: Bedrock Runtime
+invocation_primitive: bedrock-runtime.converse
+request_shape_minimal: '{"messages": [{"role": "user", "content": [{"text": "Hi"}]}]}'
+streaming_support: token
+credential_discovery: Boto3 default chain
+region_or_project_discovery: Env(AWS_REGION)
+default_creds_ok: true
+docs_url: ''
+last_updated_or_version: Sep 2025
+confidence: high
+notes: Deep Research Addition.

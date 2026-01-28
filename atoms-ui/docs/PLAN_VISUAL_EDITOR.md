@@ -1,6 +1,6 @@
 # Atomic Plan: MCP-Powered Visual Editor
 
-**Objective**: Build the Forge GUI using real API data.
+**Objective**: Build the Contract Builder GUI using real API data.
 
 ## Phase 1: The API Client
 - [ ] **Create `harness/registry/client.ts`**:
@@ -8,21 +8,21 @@
     -   Implement `getMcpTools()` -> POST `/tools/list`.
     -   Use `CanvasTransport` for auth headers.
 
-## Phase 2: The Forge Canvas
-- [ ] **Create `canvases/forge/ForgeCanvas.tsx`**:
+## Phase 2: The Contract Builder Canvas
+- [ ] **Create `canvases/contract_builder/ContractBuilderCanvas.tsx`**:
     -   Standard 3-column layout.
     -   Load data on mount via Client.
-- [ ] **Create `canvases/forge/components/MuscleLibrary.tsx`**:
+- [ ] **Create `canvases/contract_builder/components/MuscleLibrary.tsx`**:
     -   Render list of Muscles from API.
-- [ ] **Create `canvases/forge/components/PropertyPanel.tsx`**:
+- [ ] **Create `canvases/contract_builder/components/PropertyPanel.tsx`**:
     -   Render input form based on MCP Schema.
 
 ## Phase 3: The Integration
 - [ ] **Connect ChatRail**: Wire agent conversation to Contract state.
-- [ ] **Implement "Simulated Forge"**: Generate JSON contract that references real Tool IDs.
+- [ ] **Implement "Simulated Builder"**: Generate JSON contract that references real Tool IDs.
 
 ## Verification
 -   **Manual**:
     -   Ensure `northstar-engines` is running (Port 8000).
-    -   Open Forge.
+    -   Open Contract Builder.
     -   Verify "Muscles" list populates from the real backend.

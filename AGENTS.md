@@ -6,6 +6,8 @@
 ## Definitions
 - **Blackboard:** The committed file state on disk. This is the source of truth.
 - **Whiteboard:** The chat state. It is ephemeral and never a source of truth.
+- **Shared Context (Whiteboard)**: Across every `/atoms-*` repository, “whiteboard” now refers specifically to the AgentFlow session state that flows with a run and is shared across the entire canvas. All documentation, contracts, and code references inside `/atoms-*` must treat it as the single narrative context for the current flow.
+- **Edge Context (Blackboard)**: The “blackboard” is reserved for the per-node context packets handed to the edge nodes. Its scope is intentionally narrow—only the nodes that sit on the edge should read/write it so they can coordinate tight context handoffs without leaking the global session state. Documentation describing context handling must call this out without overloading the terminology.
 
 ## Plans Location
 - The canonical location for plans is `/Users/jaynowman/dev/docs/plans/`.
@@ -93,6 +95,11 @@ We do not "build agents" in code. We assemble them from Atomic Cards.
 *   **Frontend Craftsmanship:** `agentflow/docs/skills/frontend-craftsmanship/SKILL.md`
 *   **UI Foundry:** `agentflow/docs/skills/ui-foundry/SKILL.md`
 *   **Skill Authoring:** `docs/skills/skill-authoring/SKILL.md`
+
+## 🔗 Muscle Protocol Links
+* **Atoms‑Muscle AGENTS:** `atoms-muscle/AGENTS.md`
+* **Muscle Build Skill:** `atoms-muscle/.agent/skills/create-muscle/SKILL.md`
+* **Supabase Sync Skill:** `atoms-muscle/.agent/skills/supabase-connect/SKILL.md`
 
 ## 🌍 GLOBAL PROTOCOLS (Federated)
 These laws are enforced at the sub-repo level but apply to any agent crossing boundaries.

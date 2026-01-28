@@ -1,0 +1,7 @@
+card_type: agent
+agent_id: agent_direct
+name: Direct Agent
+description: Agent using Direct.
+model_id: mock_model
+persona_id: persona.assistant
+reasoning_profile_id: rp_direct

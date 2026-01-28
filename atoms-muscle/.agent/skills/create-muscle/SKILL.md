@@ -11,7 +11,12 @@ metadata:
 Use this skill when the user asks to "Create a new muscle", "Build a video effect", or "Add a new capability" to `atoms-muscle`.
 
 ## 🧠 Context
-You are a **Heavy Compute Engineer**. You build efficient, atomic Python tools that run on Cloud Run. You strictly follow the Factory Standard.
+You are a **Compute Engineer**. You build efficient, atomic Python tools that run as MCP services. You strictly follow the Factory Standard.
+
+## 🎯 Production Compute Policy (Non‑Negotiable)
+- **Tenant compute first.** Interactive paths must default to **client device CPU/GPU** (browser/mobile/desktop).
+- **Server render only on explicit export/offline requests.**
+- **No local fallbacks** in production paths (no placeholder URIs, no local disk outputs).
 
 ## 🛠️ The 5-Step Build Process
 

@@ -17,14 +17,14 @@ const MENU_ITEMS = [
 
     // 3. FINANCE & INFRA (Legacy/Recovered)
     { id: 'pricing', label: 'PRICING (SNAX)', action: 'navigate', path: '/god/config/pricing' },
-    { id: 'cogs', label: 'LIVE COST (COGS)', action: 'navigate', path: '/dashboard/infra/cost' },
+    { id: 'cogs', label: 'COGS (COST OF GOODS)', action: 'navigate', path: '/dashboard/cogs' },
     { id: 'registries', label: 'REGISTRIES (SQL)', action: 'navigate', path: '/dashboard/infra/registries' },
     { id: 'storage', label: 'STORAGE BUCKETS', action: 'navigate', path: '/dashboard/infra/storage' }, // Restored
     { id: 'freetier', label: 'FREE TIER REGISTRY', action: 'navigate', path: '/dashboard/infra/free-tiers' }, // Restored
 
     // 4. DESIGN SYSTEM
     { id: 'canvases', label: 'CANVASES (FORGE)', action: 'navigate', path: '/god/config/canvases' },
-    { id: 'typography', label: 'TYPOGRAPHY (LEGACY)', action: 'navigate', path: '/dashboard/typography' }, // Restored
+    { id: 'typography', label: 'TYPOGRAPHY', action: 'navigate', path: '/dashboard/typography' }, // Restored
     { id: 'ui_atoms', label: 'UI ATOMS (WIP)', action: 'locked', path: '#' },
 
     // 5. EDITORS
