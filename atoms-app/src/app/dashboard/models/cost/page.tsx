@@ -46,6 +46,14 @@ type ModelBudgetSummary = {
     currency: string;
     fx_rate: number;
     fx_source: string;
+    ltd_revenue_gbp: number | null;
+    ltd_discounts_gbp: number | null;
+    ltd_cogs_gbp: number | null;
+    ltd_cogs_no_free_gbp: number | null;
+    ltd_gross_profit_gbp: number | null;
+    ltd_gross_margin_pct: number | null;
+    ltd_gross_profit_no_free_gbp: number | null;
+    ltd_gross_margin_no_free_pct: number | null;
     providers: ModelProviderSummary[];
 };
 
@@ -104,29 +112,54 @@ export default function ModelCostDashboard() {
     return (
         <div className="min-h-screen bg-neutral-100 flex items-center justify-center p-4 md:p-12 font-sans text-black">
             <div className="w-full max-w-7xl min-h-[90vh] bg-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex flex-col relative">
-                <header className="p-12 border-b-4 border-black bg-indigo-50 flex justify-between items-center">
-                    <div>
-                        <h1 className="text-6xl font-black uppercase tracking-tighter mb-2">MODEL COST (AI)</h1>
-                        <p className="font-mono text-sm uppercase tracking-widest opacity-60">Providers • Models • Token Economics</p>
-                    </div>
-                    <div className="text-right">
-                        <div className="text-sm font-bold uppercase opacity-50">Month to Date</div>
-                        <div className="text-5xl font-black text-indigo-700">
-                            £{totalMtd.toFixed(2)}
+                <header className="p-10 border-b-4 border-black bg-indigo-50 flex flex-col items-center text-center gap-3">
+                    <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter">MODEL COST (AI)</h1>
+                    <p className="font-mono text-xs md:text-sm uppercase tracking-widest opacity-60">Providers • Models • Token Economics</p>
+                    {summary && (
+                        <div className="text-[10px] md:text-xs font-mono opacity-50">
+                            FX: {summary.fx_rate} ({summary.fx_source}) • {summary.as_of}
                         </div>
-                        {summary && (
-                            <div className="text-xs font-mono opacity-50 mt-2">
-                                FX: {summary.fx_rate} ({summary.fx_source}) • {summary.as_of}
-                            </div>
-                        )}
-                    </div>
+                    )}
                 </header>
 
                 <div className="flex-1 p-12 overflow-x-auto space-y-8">
+                    <div className="border-4 border-black bg-white p-6">
+                        <div className="text-xs font-black uppercase tracking-widest mb-4 text-center">MODEL COGS SUMMARY</div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                            <div className="border-2 border-black p-4">
+                                <div className="text-[10px] uppercase opacity-60 mb-2">MTD Cost (With Credits)</div>
+                                <div className="text-2xl font-black">{money(totalMtd)}</div>
+                            </div>
+                            <div className="border-2 border-black p-4">
+                                <div className="text-[10px] uppercase opacity-60 mb-2">MTD Cost (No Credits)</div>
+                                <div className="text-2xl font-black">{money(summary?.providers.reduce((acc, p) => acc + (p.mtd_cost_no_free_gbp || 0), 0) || 0)}</div>
+                            </div>
+                            <div className="border-2 border-black p-4">
+                                <div className="text-[10px] uppercase opacity-60 mb-2">Launch-to-Date Turnover</div>
+                                <div className="text-2xl font-black">{money(summary?.ltd_revenue_gbp)}</div>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center mt-4">
+                            <div className="border-2 border-black p-4">
+                                <div className="text-[10px] uppercase opacity-60 mb-2">LTD Gross Profit (With Credits)</div>
+                                <div className="text-2xl font-black">{money(summary?.ltd_gross_profit_gbp)}</div>
+                                <div className="text-[10px] opacity-60 mt-1">{pct(summary?.ltd_gross_margin_pct)}</div>
+                            </div>
+                            <div className="border-2 border-black p-4">
+                                <div className="text-[10px] uppercase opacity-60 mb-2">LTD Gross Profit (No Credits)</div>
+                                <div className="text-2xl font-black">{money(summary?.ltd_gross_profit_no_free_gbp)}</div>
+                                <div className="text-[10px] opacity-60 mt-1">{pct(summary?.ltd_gross_margin_no_free_pct)}</div>
+                            </div>
+                            <div className="border-2 border-black p-4">
+                                <div className="text-[10px] uppercase opacity-60 mb-2">Discounts (LTD)</div>
+                                <div className="text-2xl font-black">{money(summary?.ltd_discounts_gbp)}</div>
+                            </div>
+                        </div>
+                    </div>
                     {loading && <div className="font-mono text-xs opacity-60">Loading model spend…</div>}
                     {error && <div className="font-mono text-xs text-red-600">Error: {error}</div>}
 
-                    <div className="border-2 border-black p-4 bg-white text-xs font-mono opacity-70">
+                    <div className="border-2 border-black p-4 bg-white text-[10px] font-mono opacity-70">
                         Registry source: `northstar-agents` cards (Supabase registry hookup pending).
                     </div>
 

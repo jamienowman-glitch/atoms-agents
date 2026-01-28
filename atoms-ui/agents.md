@@ -7,6 +7,7 @@
 2.  **Collaborative Core**: The "Canvas" is the shared workspace for Humans and Agents.
 3.  **Atomic Expansion**: We will not have one central site. We will have many microsites targeting individual markets.
 4.  **Registry First**: "If we hit something new, we add it to the Registry."
+5.  **Tenant Compute First (Production)**: Interactive rendering must default to **client device CPU/GPU**. Server render only for explicit export/offline requests. **No local fallbacks** in production.
 
 ## 🗺️ Strategic Infrastructure & Auth
 > **CRITICAL**: These documents define The Law for Auth, Infrastructure, and Nexus Architecture. Read them before planning any changes.
@@ -18,7 +19,7 @@
 
 ## 1. The Skills (Agent Capabilities)
 Agents must check `.agent/skills/` for specialized instruction sets.
--   **Canvas Contract Builder** (`.agent/skills/canvas-forge`): How to build new Canvases from a contract (no "Forge" naming).
+-   **Canvas Contract Builder** (`.agent/skills/canvas-contract-builder`): How to build new Canvases from a contract.
 -   **Console Extend** (`.agent/skills/console-extend`): How to add tools to the Dashboard.
 -   **Realtime Harness** (`.agent/skills/realtime-harness`): How to build Harness/Canvas realtime (SSE truth, sidecars, no new routes).
 

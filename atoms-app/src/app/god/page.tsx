@@ -9,10 +9,10 @@ import { isGodUser } from '@/lib/god';
 // Definition of God Tools
 const GOD_TOOLS = [
     {
-        id: 'forge',
+        id: 'contract-builder',
         title: 'Contract Builder',
         description: 'Visual Contract Editor. Build and Modify Canvases.',
-        path: '/forge',
+        path: '/contract-builder',
         locked: false
     },
     {

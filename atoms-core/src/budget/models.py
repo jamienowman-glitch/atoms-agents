@@ -40,6 +40,14 @@ class BudgetSummary(BaseModel):
     currency: str = "GBP"
     fx_rate: float
     fx_source: str
+    ltd_revenue_gbp: Optional[float] = None
+    ltd_discounts_gbp: Optional[float] = None
+    ltd_cogs_gbp: Optional[float] = None
+    ltd_cogs_no_free_gbp: Optional[float] = None
+    ltd_gross_profit_gbp: Optional[float] = None
+    ltd_gross_margin_pct: Optional[float] = None
+    ltd_gross_profit_no_free_gbp: Optional[float] = None
+    ltd_gross_margin_no_free_pct: Optional[float] = None
     providers: list[ProviderSummary]
 
 
@@ -95,6 +103,14 @@ class ModelBudgetSummary(BaseModel):
     currency: str = "GBP"
     fx_rate: float
     fx_source: str
+    ltd_revenue_gbp: Optional[float] = None
+    ltd_discounts_gbp: Optional[float] = None
+    ltd_cogs_gbp: Optional[float] = None
+    ltd_cogs_no_free_gbp: Optional[float] = None
+    ltd_gross_profit_gbp: Optional[float] = None
+    ltd_gross_margin_pct: Optional[float] = None
+    ltd_gross_profit_no_free_gbp: Optional[float] = None
+    ltd_gross_margin_no_free_pct: Optional[float] = None
     providers: list[ModelProviderSummary]
 
 

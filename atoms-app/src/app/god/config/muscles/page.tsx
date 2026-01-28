@@ -86,6 +86,32 @@ export default function MusclesConfigPage() {
         alert("PROMPT COPIED TO CLIPBOARD");
     };
 
+    // Group by Category
+    const grouped = muscles.reduce((acc: any, m: any) => {
+        const cat = (m.spec?.category || m.category || 'Uncategorized').toUpperCase();
+        if (!acc[cat]) acc[cat] = [];
+        acc[cat].push(m);
+        return acc;
+    }, {});
+
+    const categories = Object.keys(grouped).sort();
+
+    // Toggle State
+    const [openCategories, setOpenCategories] = useState<Record<string, boolean>>({});
+
+    const toggle = (cat: string) => {
+        setOpenCategories(prev => ({ ...prev, [cat]: !prev[cat] }));
+    };
+
+    // Initialize all open on load
+    useEffect(() => {
+        if (categories.length > 0 && Object.keys(openCategories).length === 0) {
+            const initial: Record<string, boolean> = {};
+            categories.forEach(c => initial[c] = true);
+            setOpenCategories(initial);
+        }
+    }, [muscles]);
+
     return (
         <div className="min-h-screen bg-graph-paper p-12 font-sans">
             <div className="max-w-6xl mx-auto bg-white border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-8">
@@ -146,39 +172,52 @@ export default function MusclesConfigPage() {
                     )}
                 </div>
 
-                {/* TABLE */}
+                {/* CATEGORY DROP-DOWNS */}
                 {loading ? (
                     <div className="font-mono animate-pulse">LOADING MUSCLES...</div>
                 ) : (
-                    <div className="overflow-x-auto">
-                        <table className="w-full border-collapse text-left font-mono text-xs">
-                            <thead>
-                                <tr className="border-b-2 border-black bg-neutral-50">
-                                    <th className="p-3 uppercase">KEY</th>
-                                    <th className="p-3 uppercase">NAME</th>
-                                    <th className="p-3 uppercase">MCP STATUS</th>
-                                    <th className="p-3 uppercase">PRICING</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {muscles.map((m) => (
-                                    <tr key={m.id} className="border-b border-black/10 hover:bg-yellow-50 transition-colors">
-                                        <td className="p-3 font-bold">{m.key}</td>
-                                        <td className="p-3">{m.name}</td>
-                                        <td className="p-3">
-                                            {m.spec?.mcp_endpoint ? (
-                                                <span className="text-green-600 font-bold">● ONLINE</span>
-                                            ) : (
-                                                <span className="text-neutral-400">○ RAW</span>
-                                            )}
-                                        </td>
-                                        <td className="p-3 opacity-60">
-                                            {m.spec?.pricing || 'FREE'}
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                    <div className="space-y-4">
+                        {categories.map(cat => (
+                            <div key={cat} className="border-4 border-black">
+                                <button
+                                    onClick={() => toggle(cat)}
+                                    className="w-full flex justify-between items-center p-6 bg-black text-white hover:bg-neutral-900 transition-colors uppercase font-black tracking-tighter text-xl"
+                                >
+                                    <span>{cat}_CORE // {grouped[cat].length} UNITS</span>
+                                    <span>{openCategories[cat] ? '[-]' : '[+]'}</span>
+                                </button>
+
+                                {openCategories[cat] && (
+                                    <div className="bg-neutral-100 p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                        {grouped[cat].map((m: any) => (
+                                            <div key={m.id} className="bg-white border-2 border-black p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all flex flex-col justify-between h-full">
+                                                <div>
+                                                    <div className="flex justify-between items-start mb-4">
+                                                        <h3 className="font-black text-lg uppercase leading-tight">{m.name}</h3>
+                                                        {m.spec?.mcp_endpoint ? (
+                                                            <div className="w-3 h-3 bg-green-500 rounded-full border border-black animate-pulse" title="Online" />
+                                                        ) : (
+                                                            <div className="w-3 h-3 bg-neutral-300 rounded-full border border-black" title="Offline" />
+                                                        )}
+                                                    </div>
+
+                                                    <p className="font-mono text-xs leading-relaxed text-neutral-600 mb-6 border-l-2 border-neutral-300 pl-3">
+                                                        {m.spec?.description || 'Awaiting description override.'}
+                                                    </p>
+                                                </div>
+
+                                                <div className="mt-auto pt-4 border-t-2 border-dashed border-neutral-200">
+                                                    <div className="font-mono text-[10px] text-neutral-400 uppercase mb-1">MCP ENDPOINT</div>
+                                                    <code className="block bg-neutral-100 p-1 text-[10px] truncate select-all border border-neutral-200">
+                                                        {m.spec?.mcp_endpoint || 'N/A'}
+                                                    </code>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        ))}
                     </div>
                 )}
             </div>

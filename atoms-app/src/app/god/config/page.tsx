@@ -17,7 +17,7 @@ const MENU_ITEMS = [
 
     // 3. FINANCE & INFRA (Legacy/Recovered)
     { id: 'pricing', label: 'PRICING (SNAX)', action: 'navigate', path: '/god/config/pricing' },
-    { id: 'cogs', label: 'LIVE COST (COGS)', action: 'navigate', path: '/dashboard/infra/cost' },
+    { id: 'cogs', label: 'COGS (COST OF GOODS)', action: 'navigate', path: '/dashboard/cogs' },
     { id: 'registries', label: 'REGISTRIES (SQL)', action: 'navigate', path: '/dashboard/infra/registries' },
     { id: 'storage', label: 'STORAGE BUCKETS', action: 'navigate', path: '/dashboard/infra/storage' }, // Restored
     { id: 'freetier', label: 'FREE TIER REGISTRY', action: 'navigate', path: '/dashboard/infra/free-tiers' }, // Restored

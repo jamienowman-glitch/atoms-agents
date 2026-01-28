@@ -51,6 +51,8 @@ VAULT_KEYS = {
     "fx_usd_gbp": "fx-usd-gbp.txt",
     "ltd_revenue_gbp": "ltd-revenue-gbp.txt",
     "ltd_discounts_gbp": "ltd-discounts-gbp.txt",
+    "ltd_cogs_gbp": "ltd-cogs-gbp.txt",
+    "ltd_cogs_no_free_gbp": "ltd-cogs-no-free-gbp.txt",
 
     # Model Usage + Pricing
     "model_usage_mtd": "model-usage-mtd.json",
@@ -111,6 +113,19 @@ class BudgetService:
         except ValueError:
             discounts_val = 0.0
         return revenue_val, discounts_val
+
+    def _ltd_cogs_override(self) -> tuple[Optional[float], Optional[float]]:
+        cogs = self._read_text(VAULT_KEYS["ltd_cogs_gbp"])
+        cogs_no_free = self._read_text(VAULT_KEYS["ltd_cogs_no_free_gbp"])
+        try:
+            cogs_val = float(cogs) if cogs else None
+        except ValueError:
+            cogs_val = None
+        try:
+            cogs_no_free_val = float(cogs_no_free) if cogs_no_free else None
+        except ValueError:
+            cogs_no_free_val = None
+        return cogs_val, cogs_no_free_val
 
     # -------- AWS --------
     def _aws_costs(self) -> tuple[bool, str, list[dict[str, Any]]]:
@@ -383,6 +398,7 @@ class BudgetService:
     def get_mtd_summary(self) -> BudgetSummary:
         fx_rate, fx_source = self._fx_rate()
         revenue_ltd, discounts_ltd = self._ltd_revenue()
+        cogs_override, cogs_no_free_override = self._ltd_cogs_override()
 
         providers: list[ProviderSummary] = []
 
@@ -533,10 +549,35 @@ class BudgetService:
                 )
             )
 
+        total_mtd = sum(p.mtd_cost_gbp for p in providers)
+        total_mtd_no_free = sum(p.mtd_cost_no_free_gbp for p in providers)
+        ltd_cogs = cogs_override if cogs_override is not None else total_mtd
+        ltd_cogs_no_free = cogs_no_free_override if cogs_no_free_override is not None else total_mtd_no_free
+        ltd_gross_profit = (
+            (revenue_ltd - ltd_cogs - (discounts_ltd or 0.0)) if revenue_ltd is not None else None
+        )
+        ltd_gross_margin = (
+            (ltd_gross_profit / revenue_ltd) * 100 if revenue_ltd else None
+        )
+        ltd_gross_profit_no_free = (
+            (revenue_ltd - ltd_cogs_no_free - (discounts_ltd or 0.0)) if revenue_ltd is not None else None
+        )
+        ltd_gross_margin_no_free = (
+            (ltd_gross_profit_no_free / revenue_ltd) * 100 if revenue_ltd else None
+        )
+
         summary = BudgetSummary(
             as_of=datetime.now(timezone.utc).date().isoformat(),
             fx_rate=fx_rate,
             fx_source=fx_source,
+            ltd_revenue_gbp=revenue_ltd,
+            ltd_discounts_gbp=discounts_ltd,
+            ltd_cogs_gbp=ltd_cogs,
+            ltd_cogs_no_free_gbp=ltd_cogs_no_free,
+            ltd_gross_profit_gbp=ltd_gross_profit,
+            ltd_gross_margin_pct=ltd_gross_margin,
+            ltd_gross_profit_no_free_gbp=ltd_gross_profit_no_free,
+            ltd_gross_margin_no_free_pct=ltd_gross_margin_no_free,
             providers=providers,
         )
         return summary
@@ -544,6 +585,7 @@ class BudgetService:
     def get_model_summary(self) -> ModelBudgetSummary:
         fx_rate, fx_source = self._fx_rate()
         revenue_ltd, discounts_ltd = self._ltd_revenue()
+        cogs_override, cogs_no_free_override = self._ltd_cogs_override()
         providers_map, models_list = self._load_model_registry()
         registry_provider_ids = set(providers_map.keys())
 
@@ -647,10 +689,35 @@ class BudgetService:
                 )
             )
 
+        total_mtd = sum(p.mtd_cost_gbp for p in providers)
+        total_mtd_no_free = sum(p.mtd_cost_no_free_gbp for p in providers)
+        ltd_cogs = cogs_override if cogs_override is not None else total_mtd
+        ltd_cogs_no_free = cogs_no_free_override if cogs_no_free_override is not None else total_mtd_no_free
+        ltd_gross_profit = (
+            (revenue_ltd - ltd_cogs - (discounts_ltd or 0.0)) if revenue_ltd is not None else None
+        )
+        ltd_gross_margin = (
+            (ltd_gross_profit / revenue_ltd) * 100 if revenue_ltd else None
+        )
+        ltd_gross_profit_no_free = (
+            (revenue_ltd - ltd_cogs_no_free - (discounts_ltd or 0.0)) if revenue_ltd is not None else None
+        )
+        ltd_gross_margin_no_free = (
+            (ltd_gross_profit_no_free / revenue_ltd) * 100 if revenue_ltd else None
+        )
+
         return ModelBudgetSummary(
             as_of=datetime.now(timezone.utc).date().isoformat(),
             fx_rate=fx_rate,
             fx_source=fx_source,
+            ltd_revenue_gbp=revenue_ltd,
+            ltd_discounts_gbp=discounts_ltd,
+            ltd_cogs_gbp=ltd_cogs,
+            ltd_cogs_no_free_gbp=ltd_cogs_no_free,
+            ltd_gross_profit_gbp=ltd_gross_profit,
+            ltd_gross_margin_pct=ltd_gross_margin,
+            ltd_gross_profit_no_free_gbp=ltd_gross_profit_no_free,
+            ltd_gross_margin_no_free_pct=ltd_gross_margin_no_free,
             providers=providers,
         )
 

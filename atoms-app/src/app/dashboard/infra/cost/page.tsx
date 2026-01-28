@@ -34,6 +34,14 @@ type BudgetSummary = {
     currency: string;
     fx_rate: number;
     fx_source: string;
+    ltd_revenue_gbp: number | null;
+    ltd_discounts_gbp: number | null;
+    ltd_cogs_gbp: number | null;
+    ltd_cogs_no_free_gbp: number | null;
+    ltd_gross_profit_gbp: number | null;
+    ltd_gross_margin_pct: number | null;
+    ltd_gross_profit_no_free_gbp: number | null;
+    ltd_gross_margin_no_free_pct: number | null;
     providers: ProviderSummary[];
 };
 
@@ -94,59 +102,82 @@ export default function CostDashboard() {
             <div className="w-full max-w-7xl min-h-[90vh] bg-white border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex flex-col relative">
 
                 {/* HEAD */}
-                <header className="p-12 border-b-4 border-black bg-emerald-50 flex justify-between items-center">
-                    <div>
-                        <h1 className="text-6xl font-black uppercase tracking-tighter mb-2">LIVE COST (COGS)</h1>
-                        <p className="font-mono text-sm uppercase tracking-widest opacity-60">MTD Spend • Free Tier Tracking • Unit Economics</p>
-                    </div>
-                    <div className="text-right">
-                        <div className="text-sm font-bold uppercase opacity-50">Month to Date</div>
-                        <div className="text-5xl font-black text-emerald-600">
-                            £{totalMtd.toFixed(2)}
+                <header className="p-10 border-b-4 border-black bg-emerald-50 flex flex-col items-center text-center gap-3">
+                    <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter">LIVE COST (COGS)</h1>
+                    <p className="font-mono text-xs md:text-sm uppercase tracking-widest opacity-60">MTD Spend • Free Tier Tracking • Unit Economics</p>
+                    {summary && (
+                        <div className="text-[10px] md:text-xs font-mono opacity-50">
+                            FX: {summary.fx_rate} ({summary.fx_source}) • {summary.as_of}
                         </div>
-                        {summary && (
-                            <div className="text-xs font-mono opacity-50 mt-2">
-                                FX: {summary.fx_rate} ({summary.fx_source}) • {summary.as_of}
-                            </div>
-                        )}
-                        <div className="mt-3">
-                            <button
-                                onClick={() => router.push('/dashboard/models/cost')}
-                                className="font-bold uppercase tracking-widest hover:underline text-xs"
-                            >
-                                View Model COGS →
-                            </button>
-                        </div>
-                    </div>
+                    )}
+                    <button
+                        onClick={() => router.push('/dashboard/models/cost')}
+                        className="font-bold uppercase tracking-widest hover:underline text-[10px] md:text-xs"
+                    >
+                        View Model COGS →
+                    </button>
                 </header>
 
                 <div className="flex-1 p-12 overflow-x-auto space-y-8">
-                    <div className="border-4 border-black bg-yellow-50 p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)]">
+                    <div className="border-4 border-black bg-white p-6">
+                        <div className="text-xs font-black uppercase tracking-widest mb-4 text-center">COGS SUMMARY</div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                            <div className="border-2 border-black p-4">
+                                <div className="text-[10px] uppercase opacity-60 mb-2">MTD Cost (With Free Tier)</div>
+                                <div className="text-2xl font-black">{money(totalMtd)}</div>
+                            </div>
+                            <div className="border-2 border-black p-4">
+                                <div className="text-[10px] uppercase opacity-60 mb-2">MTD Cost (No Free Tier)</div>
+                                <div className="text-2xl font-black">{money(summary?.providers.reduce((acc, p) => acc + (p.mtd_cost_no_free_gbp || 0), 0) || 0)}</div>
+                            </div>
+                            <div className="border-2 border-black p-4">
+                                <div className="text-[10px] uppercase opacity-60 mb-2">Launch-to-Date Turnover</div>
+                                <div className="text-2xl font-black">{money(summary?.ltd_revenue_gbp)}</div>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center mt-4">
+                            <div className="border-2 border-black p-4">
+                                <div className="text-[10px] uppercase opacity-60 mb-2">LTD Gross Profit (With Free Tier)</div>
+                                <div className="text-2xl font-black">{money(summary?.ltd_gross_profit_gbp)}</div>
+                                <div className="text-[10px] opacity-60 mt-1">{pct(summary?.ltd_gross_margin_pct)}</div>
+                            </div>
+                            <div className="border-2 border-black p-4">
+                                <div className="text-[10px] uppercase opacity-60 mb-2">LTD Gross Profit (No Free Tier)</div>
+                                <div className="text-2xl font-black">{money(summary?.ltd_gross_profit_no_free_gbp)}</div>
+                                <div className="text-[10px] opacity-60 mt-1">{pct(summary?.ltd_gross_margin_no_free_pct)}</div>
+                            </div>
+                            <div className="border-2 border-black p-4">
+                                <div className="text-[10px] uppercase opacity-60 mb-2">Discounts (LTD)</div>
+                                <div className="text-2xl font-black">{money(summary?.ltd_discounts_gbp)}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="border-4 border-black bg-yellow-50 p-5 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)]">
                         <div className="flex flex-col lg:flex-row items-start justify-between gap-6">
                             <div>
-                                <div className="text-xs font-black uppercase tracking-widest mb-2">Action Needed • Azure Billing</div>
-                                <p className="font-mono text-sm leading-relaxed">
+                                <div className="text-[10px] font-black uppercase tracking-widest mb-2">Action Needed • Azure Billing</div>
+                                <p className="font-mono text-xs leading-relaxed">
                                     Azure billing access is paused because the subscription is disabled. Re‑enable the subscription in the Azure Portal,
                                     then run the CLI blocks below and paste the JSON output into the plan note so we can wire live spend.
                                 </p>
                             </div>
                             <button
                                 onClick={() => router.push('/dashboard/infra/free-tiers/azure')}
-                                className="font-bold uppercase tracking-widest hover:underline text-xs"
+                                className="font-bold uppercase tracking-widest hover:underline text-[10px]"
                             >
                                 View Azure Free Tier →
                             </button>
                         </div>
                         <div className="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
                             <div className="border-2 border-black bg-white p-4">
-                                <div className="text-xs font-bold uppercase mb-2">Step 1: Set Subscription</div>
-                                <pre className="font-mono text-xs whitespace-pre-wrap">
+                                <div className="text-[10px] font-bold uppercase mb-2">Step 1: Set Subscription</div>
+                                <pre className="font-mono text-[10px] whitespace-pre-wrap">
 {`az account set --subscription 64cce95c-7395-41e4-87c4-0141783036b9`}
                                 </pre>
                             </div>
                             <div className="border-2 border-black bg-white p-4">
-                                <div className="text-xs font-bold uppercase mb-2">Step 2: Create Billing SP</div>
-                                <pre className="font-mono text-xs whitespace-pre-wrap">
+                                <div className="text-[10px] font-bold uppercase mb-2">Step 2: Create Billing SP</div>
+                                <pre className="font-mono text-[10px] whitespace-pre-wrap">
 {`az ad sp create-for-rbac \\
   --name "northstar-billing" \\
   --role "Cost Management Reader" \\
@@ -154,7 +185,7 @@ export default function CostDashboard() {
                                 </pre>
                             </div>
                         </div>
-                        <div className="mt-4 text-xs font-mono opacity-70">
+                        <div className="mt-4 text-[10px] font-mono opacity-70">
                             Paste the JSON output into `docs/plans/2026-01-27_azure-billing-reenable.md`.
                         </div>
                     </div>

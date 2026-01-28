@@ -3,7 +3,7 @@
 > **Note (2026-01-27)**: The legacy file-based `atoms-registry/` directory is deprecated/quarantined. Treat any references to file YAML registries as historical; the authoritative source is the DB registry (Supabase / `atoms-core` APIs).
 
 ## 1. Objective
-Build a Visual Contract Editor that consumes Muscles as **MCP Connectors** via the real `northstar-engines` API.
+Build a Visual Contract Editor (Contract Builder) that consumes Muscles as **MCP Connectors** via the real `northstar-engines` API.
 -   **No Mocks**: Data comes from `/tools/list` (MCP Gateway) or `/registries/entries` (System Registry).
 -   **Muscles as Tools**: Each Muscle in the DB registry is an MCP Server/Scope that agents can pay to use.
 
@@ -20,7 +20,7 @@ Instead of a file-system loader, we implement an API Client.
 -   `fetchMuscles()`: Calls `/registries/entries` to get the menu of available capabilities.
 -   `fetchToolDefinitions()`: Calls `/tools/list` to get the technical input schema for the generated code.
 
-### C. The Visual Editor (`ForgeCanvas`) — Contract Builder
+### C. The Visual Editor (`ContractBuilderCanvas`)
 -   **UI**: 3-Column Layout (Chat, Graph, Properties).
 -   **Library**: Populated by the `fetchMuscles()` API call.
 -   **Graph**: Nodes represent Atoms.
@@ -29,7 +29,7 @@ Instead of a file-system loader, we implement an API Client.
     -   The Property Panel auto-generates fields based on that Schema (JSON Schema Form).
 
 ## 3. The Production workflow
-1.  **Boot**: `ForgeCanvas` mounts (Contract Builder UI).
+1.  **Boot**: `ContractBuilderCanvas` mounts (Contract Builder UI).
     -   `useEffect(() => api.fetchMuscles())`.
 2.  **User Action**: Drag "Video Muscle" onto canvas.
 3.  **App Logic**:

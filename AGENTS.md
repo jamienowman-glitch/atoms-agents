@@ -96,6 +96,11 @@ We do not "build agents" in code. We assemble them from Atomic Cards.
 *   **UI Foundry:** `agentflow/docs/skills/ui-foundry/SKILL.md`
 *   **Skill Authoring:** `docs/skills/skill-authoring/SKILL.md`
 
+## 🔗 Muscle Protocol Links
+* **Atoms‑Muscle AGENTS:** `atoms-muscle/AGENTS.md`
+* **Muscle Build Skill:** `atoms-muscle/.agent/skills/create-muscle/SKILL.md`
+* **Supabase Sync Skill:** `atoms-muscle/.agent/skills/supabase-connect/SKILL.md`
+
 ## 🌍 GLOBAL PROTOCOLS (Federated)
 These laws are enforced at the sub-repo level but apply to any agent crossing boundaries.
 

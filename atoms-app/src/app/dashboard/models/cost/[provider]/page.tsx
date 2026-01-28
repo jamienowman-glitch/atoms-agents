@@ -14,12 +14,27 @@ type ModelUsage = {
     cost_no_free_gbp: number;
 };
 
+type UsageMetric = {
+    label: string;
+    value: number;
+    unit?: string | null;
+};
+
 type ModelProviderSummary = {
     id: string;
     label: string;
     currency: string;
     mtd_cost_gbp: number;
     mtd_cost_no_free_gbp: number;
+    mtd_usage: UsageMetric[];
+    free_tier_remaining: UsageMetric[];
+    avg_per_flow_gbp: number | null;
+    ltd_revenue_gbp: number | null;
+    ltd_gross_profit_gbp: number | null;
+    ltd_gross_margin_pct: number | null;
+    ltd_revenue_no_free_gbp: number | null;
+    ltd_gross_profit_no_free_gbp: number | null;
+    ltd_gross_margin_no_free_pct: number | null;
     models: ModelUsage[];
 };
 
@@ -33,6 +48,25 @@ type ModelBudgetSummary = {
 const money = (value: number | null | undefined) => {
     if (value === null || value === undefined) return "TBD";
     return `£${value.toFixed(2)}`;
+};
+
+const pct = (value: number | null | undefined) => {
+    if (value === null || value === undefined) return "TBD";
+    return `${value.toFixed(2)}%`;
+};
+
+const usageBlock = (items: UsageMetric[]) => {
+    if (!items || items.length === 0) return <span className="opacity-50 text-xs">—</span>;
+    return (
+        <div className="space-y-1 text-xs font-mono">
+            {items.slice(0, 3).map((item) => (
+                <div key={item.label} className="flex justify-between gap-2">
+                    <span className="uppercase">{item.label}</span>
+                    <span>{item.value.toLocaleString()} {item.unit ?? ''}</span>
+                </div>
+            ))}
+        </div>
+    );
 };
 
 export default function ModelProviderDetail() {
@@ -91,7 +125,72 @@ export default function ModelProviderDetail() {
                     {error && <div className="font-mono text-xs text-red-600">Error: {error}</div>}
 
                     {provider && (
-                        <table className="w-full border-4 border-black text-left border-collapse text-xs font-mono">
+                        <>
+                            {/* ROW 1 */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 border-2 border-black mb-4">
+                                <div className="p-4 border-r-2 border-black">
+                                    <div className="text-xs font-bold uppercase opacity-60 mb-2">MTD Usage</div>
+                                    {usageBlock(provider.mtd_usage)}
+                                </div>
+                                <div className="p-4 border-r-2 border-black">
+                                    <div className="text-xs font-bold uppercase opacity-60 mb-2">Free Tier / Credits Left</div>
+                                    {usageBlock(provider.free_tier_remaining)}
+                                </div>
+                                <div className="p-4">
+                                    <div className="text-xs font-bold uppercase opacity-60 mb-2">Avg / Flow Run (Stub)</div>
+                                    <div className="font-mono text-sm">{money(provider.avg_per_flow_gbp)}</div>
+                                </div>
+                            </div>
+
+                            {/* ROW 2 */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 border-2 border-black mb-4">
+                                <div className="p-4 border-r-2 border-black">
+                                    <div className="text-xs font-bold uppercase opacity-60 mb-2">£ MTD Cost (With Credits)</div>
+                                    <div className="text-2xl font-black">{money(provider.mtd_cost_gbp)}</div>
+                                </div>
+                                <div className="p-4 border-r-2 border-black">
+                                    <div className="text-xs font-bold uppercase opacity-60 mb-2">£ MTD Cost (No Credits)</div>
+                                    <div className="text-2xl font-black">{money(provider.mtd_cost_no_free_gbp)}</div>
+                                </div>
+                                <div className="p-4">
+                                    <div className="text-xs font-bold uppercase opacity-60 mb-2">Currency</div>
+                                    <div className="font-mono text-sm">{provider.currency}</div>
+                                </div>
+                            </div>
+
+                            {/* ROW 3 */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 border-2 border-black mb-4">
+                                <div className="p-4 border-r-2 border-black">
+                                    <div className="text-xs font-bold uppercase opacity-60 mb-2">Launch-to-Date Turnover</div>
+                                    <div className="text-xl font-black">{money(provider.ltd_revenue_gbp)}</div>
+                                </div>
+                                <div className="p-4 border-r-2 border-black">
+                                    <div className="text-xs font-bold uppercase opacity-60 mb-2">Launch-to-Date Gross Profit</div>
+                                    <div className="text-xl font-black">{money(provider.ltd_gross_profit_gbp)}</div>
+                                </div>
+                                <div className="p-4">
+                                    <div className="text-xs font-bold uppercase opacity-60 mb-2">Launch-to-Date Gross Margin</div>
+                                    <div className="text-xl font-black">{pct(provider.ltd_gross_margin_pct)}</div>
+                                </div>
+                            </div>
+
+                            {/* ROW 4 */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 border-2 border-black mb-6">
+                                <div className="p-4 border-r-2 border-black">
+                                    <div className="text-xs font-bold uppercase opacity-60 mb-2">LTD Turnover (No Credits)</div>
+                                    <div className="text-xl font-black">{money(provider.ltd_revenue_no_free_gbp)}</div>
+                                </div>
+                                <div className="p-4 border-r-2 border-black">
+                                    <div className="text-xs font-bold uppercase opacity-60 mb-2">LTD Gross Profit (No Credits)</div>
+                                    <div className="text-xl font-black">{money(provider.ltd_gross_profit_no_free_gbp)}</div>
+                                </div>
+                                <div className="p-4">
+                                    <div className="text-xs font-bold uppercase opacity-60 mb-2">LTD Gross Margin (No Credits)</div>
+                                    <div className="text-xl font-black">{pct(provider.ltd_gross_margin_no_free_pct)}</div>
+                                </div>
+                            </div>
+
+                            <table className="w-full border-4 border-black text-left border-collapse text-xs font-mono">
                             <thead>
                                 <tr className="bg-black text-white uppercase text-[10px]">
                                     <th className="p-3 border-r border-white/20">Model</th>
@@ -121,7 +220,8 @@ export default function ModelProviderDetail() {
                                     </tr>
                                 )}
                             </tbody>
-                        </table>
+                            </table>
+                        </>
                     )}
                 </div>
 

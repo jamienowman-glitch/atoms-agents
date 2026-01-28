@@ -16,7 +16,7 @@
 > 1.  **ChatRail (Left)**: Communication & Stream.
 > 2.  **TopPill (Top-Right)**: Global View/Export.
 > 3.  **ToolPop (Bottom)**: Contextual "Dynamic Island" with Dual Magnifiers & Sliders.
-> **Reference**: `atoms-ui/.agent/skills/canvas-forge/SKILL.md`
+> **Reference**: `atoms-ui/.agent/skills/canvas-contract-builder/SKILL.md`
 
 ## 🛑 THE ATOMIC MANDATE
 1.  **Never Monolith**: Every concern must be its own "Atom" (Table, Component, Service, Site).

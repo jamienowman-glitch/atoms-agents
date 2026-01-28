@@ -9,12 +9,12 @@
     -   Use `CanvasTransport` for auth headers.
 
 ## Phase 2: The Contract Builder Canvas
-- [ ] **Create `canvases/forge/ForgeCanvas.tsx`**:
+- [ ] **Create `canvases/contract_builder/ContractBuilderCanvas.tsx`**:
     -   Standard 3-column layout.
     -   Load data on mount via Client.
-- [ ] **Create `canvases/forge/components/MuscleLibrary.tsx`**:
+- [ ] **Create `canvases/contract_builder/components/MuscleLibrary.tsx`**:
     -   Render list of Muscles from API.
-- [ ] **Create `canvases/forge/components/PropertyPanel.tsx`**:
+- [ ] **Create `canvases/contract_builder/components/PropertyPanel.tsx`**:
     -   Render input form based on MCP Schema.
 
 ## Phase 3: The Integration

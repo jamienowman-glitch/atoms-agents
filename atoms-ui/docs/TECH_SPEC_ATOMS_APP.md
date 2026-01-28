@@ -10,15 +10,15 @@ A clean, lightweight "Application Shell" to host the Console, User Flows, and th
 -   **Dependencies**: `atoms-ui` (Local Workspace Link or Import).
 -   **Routing**:
     -   `/`: The Console (Dashboard).
-    -   `/forge`: The Visual Contract Editor.
+    -   `/contract-builder`: The Visual Contract Editor.
     -   `/flow/{id}`: An active canvas/agent session.
 
 ## 3. The Contract Builder Route
-We will mount the `ForgeCanvas` from `atoms-ui` at `/forge` (legacy route name).
--   It will interpret `atoms-ui/canvases/forge/ForgeCanvas.tsx`.
+We will mount the `ContractBuilderCanvas` from `atoms-ui` at `/contract-builder`.
+-   It will interpret `atoms-ui/canvases/contract_builder/ContractBuilderCanvas.tsx`.
 -   It will use `atoms-ui/harness/context/ToolControlContext`.
 
 ## 4. Setup Plan
 1.  Initialize `atoms-app`.
 2.  Configure `tsconfig` paths to point `@atoms-ui/*` to `../atoms-ui/*`.
-3.  Create `/src/app/forge/page.tsx` importing the Canvas.
+3.  Create `/src/app/contract-builder/page.tsx` importing the Canvas.
