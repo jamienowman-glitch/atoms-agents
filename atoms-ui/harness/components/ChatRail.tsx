@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useToolControl } from '../context/ToolControlContext';
-import { ToolPop } from '../../components/ToolPop'; // Assuming this exists or will be created
-import { ToolPill } from '../../components/ToolPill';
+import { ToolPop } from '../../muscles/ToolPop/ToolPop';
+import { ToolPill } from '../../muscles/ToolPill/ToolPill';
 
 // Nano -> Micro -> Standard -> Full
 export type ChatMode = 'nano' | 'micro' | 'standard' | 'full';
@@ -20,7 +20,7 @@ export function ChatRail() {
         if (!transport) return;
         const cleanup = transport.onEvent((event) => {
             if (event.type === 'chat.message') {
-                setMessages(prev => [...prev, event.data]);
+                setMessages(prev => [...prev, (event as any).data]);
             }
         });
         return cleanup;

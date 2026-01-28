@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useMemo, useState, useCallback, useRef, useEffect } from 'react';
-import { ToolDefinition, TOOL_REGISTRY } from '../lib/multi21/tool-registry'; // Assume available
-import { ToolTarget, ToolOp } from '../lib/multi21/sse-handler'; // Assume available
+import { ToolDefinition } from '../../types/ToolEvent'; // Moved to types? Or just define locally for now
+// import { TOOL_REGISTRY } from '../lib/multi21/tool-registry'; // Removed dependency
+import { ToolTarget, ToolOp } from '../../types/ToolEvent';
 import { CanvasTransport } from '../transport';
 
 // Config - In real app, derived from Env

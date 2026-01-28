@@ -100,3 +100,8 @@ export function useToolControl() {
     if (!ctx) throw new Error('useToolControl must be used within ToolControlProvider');
     return ctx;
 }
+
+export function useToolState<T>(toolId: string, defaultValue: T) {
+    const ctx = useToolControl();
+    return ctx.useToolState(toolId, defaultValue);
+}
