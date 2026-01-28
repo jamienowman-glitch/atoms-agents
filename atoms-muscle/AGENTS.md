@@ -8,8 +8,8 @@
 
 ## 🛑 THE LAW
 **All Muscles MUST obey the following mandates:**
-1.  **Location**: All Muscles must live in `src/muscle/{category}/{name}`.
-2.  **Components**: All Muscles must have `mcp.py`, `SKILL.md`, and `service.py`.
+1.  **Location**: All Muscles must live in `src/{category}/{name}`.
+2.  **Components**: All Muscles must have `mcp.py`, `SKILL.md`, and `service.py` and the MCP wrapper must be complete (no stub `service.run(...)`).
 3.  **Automation**: Use `scripts/factory.py` and `scripts/sentinel.py` for all new work.
 4.  **Tenant Compute First (Production)**: Default interactive paths to **client device CPU/GPU**. Server render is **only** for explicit export/offline requests. **No local fallbacks** in production.
 
@@ -17,17 +17,18 @@
 Any Agent building a Muscle MUST follow this exact sequence:
 
 ### STEP 1: THE CORE LOGIC (Python)
-Create the implementation in `src/muscle/{category}/{name}/service.py`.
+Create the implementation in `src/{category}/{name}/service.py`.
 *   **Style**: Pure Python. Class-based.
 *   **Deps**: Import `ffmpeg`, `torch`, `numpy` etc. locally.
 
 ### STEP 2: THE MCP WRAPPER (mcp.py)
-You MUST wrap the logic using FastMCP in `src/muscle/{category}/{name}/mcp.py`.
+You MUST wrap the logic using FastMCP in `src/{category}/{name}/mcp.py`.
 *   Use `scripts/factory.py` to auto-generate this if possible.
 *   Ensure it imports `service.py`.
+*   **No stubs:** wrapper must call real service logic and return clean JSON errors.
 
 ### STEP 3: THE SKILL PACKAGING (SKILL.md)
-You MUST create a `SKILL.md` file in `src/muscle/{category}/{name}/SKILL.md`.
+You MUST create a `SKILL.md` file in `src/{category}/{name}/SKILL.md`.
 This allows Codex/Agents to "install" this muscle as a capability.
 
 **Format**:
@@ -37,7 +38,7 @@ name: muscle-{category}-{name}
 description: [Short description]
 metadata:
   type: mcp
-  entrypoint: src/muscle/{category}/{name}/mcp.py
+  entrypoint: src/{category}/{name}/mcp.py
   pricing: "compute-seconds"
   auto_wrapped: true
 ---
@@ -55,20 +56,19 @@ python3 scripts/sync_muscles.py
 ```text
 atoms-muscle/
 ├── src/
-│   ├── muscle/
-│   │   ├── video/
-│   │   │   ├── render/             # <--- Subfolder per Muscle
-│   │   │   │   ├── service.py      # Implementation
-│   │   │   │   ├── mcp.py          # MCP Wrapper
-│   │   │   │   └── SKILL.md        # Agent Definition
-│   │   ├── audio/
-│   │   ├── image/
-│   │   ├── cad/
-│   │   ├── text/
-│   │   ├── media/
-│   │   ├── timeline/
-│   │   ├── construction/
-│   │   └── main.py                 # The API Gateway (Legacy/Optional)
+│   ├── video/
+│   │   ├── render/                 # <--- Subfolder per Muscle
+│   │   │   ├── service.py          # Implementation
+│   │   │   ├── mcp.py              # MCP Wrapper
+│   │   │   └── SKILL.md            # Agent Definition
+│   ├── audio/
+│   ├── image/
+│   ├── cad/
+│   ├── text/
+│   ├── media/
+│   ├── timeline/
+│   ├── construction/
+│   └── main.py                     # The API Gateway (Legacy/Optional)
 ├── scripts/
 │   ├── factory.py
 │   ├── sentinel.py

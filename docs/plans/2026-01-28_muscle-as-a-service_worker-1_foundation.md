@@ -47,7 +47,7 @@ Lay the foundation for Rescue & Monetize: database schema, deployment slicing, a
 
 4. **Butcher Script (prepare_deploy.py)**
    - Add `atoms-muscle/scripts/prepare_deploy.py`.
-   - Input: path to `service.py` (muscle) + output dir `_build/<muscle_key>`.
+   - Input: path to `service.py` (muscle under `atoms-muscle/src/{category}/{name}`) + output dir `_build/<muscle_key>`.
    - Output:
      - Copies `service.py` + dependent `atoms-core/src/**` imports into `_build`.
      - Generates `requirements.txt` **only** for the slice.

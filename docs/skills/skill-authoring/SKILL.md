@@ -26,6 +26,17 @@ description: A short, one-line summary of what this skill teaches the agent.
 ---
 ```
 
+## 2.1 Muscle SKILL.md Global Standard (2026)
+Muscle skills are **prompt-injection contracts** for external buyers. They must include the following sections in the body:
+- `# Tool Name`
+- `## Capability` (one sentence)
+- `## When to use` (explicit triggers)
+- `## Schema` (JSON input/output)
+- `## Cost` (Base Snax price)
+- `## Brain/Brawn` (explicit local CLI note if required)
+
+Muscle location is **strict**: `atoms-muscle/src/{category}/{name}/SKILL.md`.
+
 ## 3. Registration Protocol
 A skill does not exist until it is registered in `AGENTS.md`.
 

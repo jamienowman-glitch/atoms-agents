@@ -5,9 +5,9 @@ Rescue CAD ingest + BoQ quantities from northstar-engines into atoms-core, wire 
 
 ## Scope (Allowed Paths)
 - `atoms-core/src/` (new `cad` modules as needed)
-- `atoms-muscle/src/muscle/cad/cad_ingest/*`
-- `atoms-muscle/src/muscle/construction/boq_quantities/*`
-- `atoms-muscle/src/muscle/cad/cad_semantics/*` (only if required by BoQ)
+- `atoms-muscle/src/cad/cad_ingest/*`
+- `atoms-muscle/src/construction/boq_quantities/*`
+- `atoms-muscle/src/cad/cad_semantics/*` (only if required by BoQ)
 - Tests under the above paths
 
 ## Hard Laws (Do Not Break)
@@ -20,7 +20,8 @@ Rescue CAD ingest + BoQ quantities from northstar-engines into atoms-core, wire 
 - Worker 1 must finish SQL patch (tenants/wallets/ledger) before billing can be tested.
 
 ## Tasks (Atomic)
-1. **Rescue CAD Ingest Core**
+1. **Un‑nest + Rescue CAD Ingest Core**
+   - Move any existing code from `atoms-muscle/src/muscle/...` into `atoms-muscle/src/{category}/{name}`.
    - Move `northstar-engines/engines/cad_ingest/*` to `atoms-core/src/cad/`.
    - Keep module layout shallow (e.g., `atoms-core/src/cad/ingest.py`, `models.py`, `dxf_adapter.py`, `ifc_lite_adapter.py`, `topology_heal.py`).
    - Update imports inside rescued code to `from src.cad...` only.
@@ -31,8 +32,8 @@ Rescue CAD ingest + BoQ quantities from northstar-engines into atoms-core, wire 
    - Remove any northstar import paths.
 
 3. **Update atoms-muscle Services**
-   - `atoms-muscle/src/muscle/cad/cad_ingest/service.py` should import from `src.cad.*` (atoms-core).
-   - `atoms-muscle/src/muscle/construction/boq_quantities/service.py` should import from `src.cad.*` or `src.boq.*` as appropriate.
+   - `atoms-muscle/src/cad/cad_ingest/service.py` should import from `src.cad.*` (atoms-core).
+   - `atoms-muscle/src/construction/boq_quantities/service.py` should import from `src.cad.*` or `src.boq.*` as appropriate.
    - Remove stubs and ensure real execution paths exist.
 
 4. **MCP Wrapper (Non‑Stub)**

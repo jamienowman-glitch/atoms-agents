@@ -5,7 +5,7 @@ Rescue and productionize audio_separation + audio_mastering (or closest availabl
 
 ## Scope (Allowed Paths)
 - `atoms-core/src/` (new `audio` modules as needed)
-- `atoms-muscle/src/muscle/audio/*` (only the targeted muscles)
+- `atoms-muscle/src/audio/*` (only the targeted muscles)
 - Tests under the above paths
 
 ## Hard Laws (Do Not Break)
@@ -14,7 +14,8 @@ Rescue and productionize audio_separation + audio_mastering (or closest availabl
 - Keep modules shallow inside `atoms-core/src/`.
 
 ## Tasks (Atomic)
-1. **Locate Closest Audio Targets**
+1. **Un‑nest + Locate Closest Audio Targets**
+   - Move any existing code from `atoms-muscle/src/muscle/...` into `atoms-muscle/src/{category}/{name}`.
    - If `audio_mastering` does not exist, select the nearest existing module (e.g., `audio_normalise`, `audio_fx_chain`, `audio_service`).
    - Record the exact target paths in this plan file before coding.
 

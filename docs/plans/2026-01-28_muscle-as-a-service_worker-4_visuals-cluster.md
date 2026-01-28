@@ -5,8 +5,8 @@ Rescue video_render + animation_kernel into atoms-core and enforce Brain/Brawn s
 
 ## Scope (Allowed Paths)
 - `atoms-core/src/` (new `video` modules as needed)
-- `atoms-muscle/src/muscle/video/video_render/*`
-- `atoms-muscle/src/muscle/alara/animation_kernel/*` (or closest animation module)
+- `atoms-muscle/src/video/video_render/*`
+- `atoms-muscle/src/alara/animation_kernel/*` (or closest animation module)
 - Tests under the above paths
 
 ## Hard Laws (Do Not Break)
@@ -15,7 +15,8 @@ Rescue video_render + animation_kernel into atoms-core and enforce Brain/Brawn s
 - **No server-side rendering**; return CLI instructions only.
 
 ## Tasks (Atomic)
-1. **Rescue Core Logic**
+1. **Un‑nest + Rescue Core Logic**
+   - Move any existing code from `atoms-muscle/src/muscle/...` into `atoms-muscle/src/{category}/{name}`.
    - Move required logic from `northstar-engines/engines/video*` and `engines/animation_kernel` into `atoms-core/src/video/`.
    - Refactor to stateless helpers.
 

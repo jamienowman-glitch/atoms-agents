@@ -21,10 +21,10 @@ You are a **Compute Engineer**. You build efficient, atomic Python tools that ru
 ## 🛠️ The 5-Step Build Process
 
 ### 1. IMPLEMENTATION
-Create the directory `atoms-muscle/src/muscle/{category}/{name}/`.
+Create the directory `atoms-muscle/src/{category}/{name}/`.
 Create `service.py` with a clean Python class.
 ```python
-# src/muscle/{category}/{name}/service.py
+# src/{category}/{name}/service.py
 class {Name}:
     def run(self, input_path: str) -> str:
         # Implementation (FFmpeg, Torch, etc)
@@ -32,7 +32,7 @@ class {Name}:
 ```
 
 ### 2. PACKAGING (The Recursive Skill)
-Create `atoms-muscle/src/muscle/{category}/{name}/SKILL.md`.
+Create `atoms-muscle/src/{category}/{name}/SKILL.md`.
 This ensures the *result* of your work is also a Skill.
 ```markdown
 ---
@@ -41,8 +41,17 @@ description: [Short description]
 metadata:
   mcp-endpoint: https://connect.atoms.fam/mcp/{name}
 ---
-# Instructions
-To use this muscle call `POST /muscle/{category}/{name}`.
+# Tool Name
+## Capability
+One sentence summary.
+## When to use
+Specific triggers (e.g., \"User uploads DXF\").
+## Schema
+JSON input/output definition.
+## Cost
+Base Snax price.
+## Brain/Brawn
+Explicitly state if the user must run a CLI command locally.
 ```
 
 ### 3. AUTOMATION (The Magic)
@@ -54,7 +63,7 @@ The **Muscle Sentinel** is watching.
 3.  **Watch it happen**: The Sentinel will detect the file, generate `mcp.py`, generate `SKILL.md`, and register it in Supabase.
 
 ### 4. VERIFICATION
-1.  Check `atoms-muscle/src/muscle/{category}/{name}/` for the generated files.
+1.  Check `atoms-muscle/src/{category}/{name}/` for the generated files.
 2.  Check the Dashboard to see it live.
 
 ### 5. VERIFICATION
