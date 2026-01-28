@@ -1,7 +1,7 @@
 # 2026-01-28 — Operation Muscle-as-a-Service: Worker 2 (CAD Cluster)
 
 ## Mission
-Rescue CAD ingest + BoQ quantities from northstar-engines into atoms-core, wire real MCP wrappers, and make the slice buildable.
+Rescue CAD ingest + BoQ quantities from **atoms-muscle (source of truth)** into atoms-core, wire real MCP wrappers, and make the slice buildable.
 
 ## Scope (Allowed Paths)
 - `atoms-core/src/` (new `cad` modules as needed)
@@ -11,6 +11,7 @@ Rescue CAD ingest + BoQ quantities from northstar-engines into atoms-core, wire 
 - Tests under the above paths
 
 ## Hard Laws (Do Not Break)
+- **Do not use northstar-engines** as a source. It is deprecated and not the source of truth.
 - **No northstar-engines imports** anywhere in final code.
 - Keep `mcp.py` as the entrypoint (required by `atoms-muscle/AGENTS.md`).
 - **No .env** and no `os.environ.get` in atoms-core.
@@ -22,13 +23,13 @@ Rescue CAD ingest + BoQ quantities from northstar-engines into atoms-core, wire 
 ## Tasks (Atomic)
 1. **Un‑nest + Rescue CAD Ingest Core**
    - Move any existing code from `atoms-muscle/src/muscle/...` into `atoms-muscle/src/{category}/{name}`.
-   - Move `northstar-engines/engines/cad_ingest/*` to `atoms-core/src/cad/`.
+   - Use **atoms-muscle cad_ingest** as the source of truth and move that logic into `atoms-core/src/cad/`.
    - Keep module layout shallow (e.g., `atoms-core/src/cad/ingest.py`, `models.py`, `dxf_adapter.py`, `ifc_lite_adapter.py`, `topology_heal.py`).
    - Update imports inside rescued code to `from src.cad...` only.
 
 2. **Resolve Dependencies for BoQ**
    - `boq_quantities` depends on `cad_semantics` models.
-   - Rescue the minimum `cad_semantics` models/utilities into `atoms-core/src/cad/` if needed.
+   - Move the minimum `cad_semantics` models/utilities from atoms-muscle into `atoms-core/src/cad/` if needed.
    - Remove any northstar import paths.
 
 3. **Update atoms-muscle Services**
@@ -58,4 +59,4 @@ Rescue CAD ingest + BoQ quantities from northstar-engines into atoms-core, wire 
 
 ## Notes / Risks
 - If `require_snax` is not yet implemented, coordinate with Worker 1 for its canonical location; do not create duplicate decorators.
-- If a dependency is missing, rescue it into atoms-core rather than re‑importing northstar.
+- If a dependency is missing, rescue it into atoms-core from atoms-muscle, not northstar.
