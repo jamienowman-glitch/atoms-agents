@@ -38,3 +38,8 @@ This document is a hard safety boundary. If any instruction conflicts with this 
 ## REFERENCES
 - `docs/atom_flow/skills/ARCHITECT_SKILL.md`
 - `docs/atom_flow/skills/WORKER_SKILL.md`
+## Tenant/Surface/Space Law
+- Tenant is the billing unit. Snax wallets are tenant-scoped and spendable across all surfaces/spaces.
+- Surface is the configuration layer for tenants. Data isolation is per-surface unless explicitly shared.
+- Space is shared context across one or more surfaces; only surfaces explicitly mapped to a space share performance/nexus data.
+- Do not hardcode surface names in schemas or code; treat surfaces/spaces as registry/config data.

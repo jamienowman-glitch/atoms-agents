@@ -222,3 +222,9 @@ Surfaces are defined in the DB registry (Supabase). The Console uses DB-backed r
 -   Python: `read_vault("supabase-service-key.txt")`
 -   Next.js: Load into process.env at build time (or runtime via Vault Loader).
 -   **NEVER** commit keys to Git. The Vault is outside the repo.
+
+## Tenant/Surface/Space Law
+- Tenant is the billing unit. Snax wallets are tenant-scoped and spendable across all surfaces/spaces.
+- Surface is the configuration layer for tenants. Data isolation is per-surface unless explicitly shared.
+- Space is shared context across one or more surfaces; only surfaces explicitly mapped to a space share performance/nexus data.
+- Do not hardcode surface names in schemas or code; treat surfaces/spaces as registry/config data.

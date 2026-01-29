@@ -194,3 +194,8 @@ We do not "build agents" in code. We assemble them from Atomic Cards.
 * **Location:** `agentflow/docs/skills/ui-foundry/SKILL.md`
 * **Protocol:** Any agent working on UI, Canvas, or Components within `agentflow` MUST ingest this skill file before modifying the Workbench.
 * **Key Constraint:** The Workbench Frame is immutable. All work happens inside Cartridges.
+## Tenant/Surface/Space Law
+- Tenant is the billing unit. Snax wallets are tenant-scoped and spendable across all surfaces/spaces.
+- Surface is the configuration layer for tenants. Data isolation is per-surface unless explicitly shared.
+- Space is shared context across one or more surfaces; only surfaces explicitly mapped to a space share performance/nexus data.
+- Do not hardcode surface names in schemas or code; treat surfaces/spaces as registry/config data.

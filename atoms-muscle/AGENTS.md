@@ -88,3 +88,9 @@ Before running `scripts/sync_muscles.py` or any Supabase registry update, comple
 3. **Load vault secrets** from `/Users/jaynowman/northstar-keys/` (`supabase-url.txt`, `supabase-service-key.txt`, etc.) via the Vault loader—never use `.env` or plain environment variables.
 4. **Start the Sentinel**, let it generate `mcp.py`/`SKILL.md`, then run `python3 scripts/sync_muscles.py` against the Supabase URL/service key taught by the skill.
 5. **Document results** (success/failure, connection errors, registry updates) so future agents can pick up where you left off.
+
+## Tenant/Surface/Space Law
+- Tenant is the billing unit. Snax wallets are tenant-scoped and spendable across all surfaces/spaces.
+- Surface is the configuration layer for tenants. Data isolation is per-surface unless explicitly shared.
+- Space is shared context across one or more surfaces; only surfaces explicitly mapped to a space share performance/nexus data.
+- Do not hardcode surface names in schemas or code; treat surfaces/spaces as registry/config data.
