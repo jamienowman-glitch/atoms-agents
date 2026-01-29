@@ -1,9 +1,14 @@
+import React, { useState } from 'react';
 import { useChat } from '../../harness/ChatContext';
 
 const Icons = {
-    Copy: () => <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>,
-    Regenerate: () => <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>,
-    BadResponse: () => <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018a2 2 0 01.485.06l3.76.94m-7 10v5a2 2 0 002 2h.096c.5 0 .905-.405.905-.904 0-.715.211-1.413.608-2.008L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5" /></svg>,
+    Notes: () => <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><path d="M4 7h10" /><path d="M4 11h10" /><path d="M4 15h7" /><path d="M14 3h5a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-3" /></svg>,
+    Scales: () => <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><path d="M12 3v18" /><path d="M6 7h12" /><path d="M6 7l-3 6h6l-3-6z" /><path d="M18 7l-3 6h6l-3-6z" /></svg>,
+    Alarm: () => <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="13" r="6" /><path d="M12 10v3l2 2" /><path d="M5 5l2 2" /><path d="M19 5l-2 2" /></svg>,
+    Forward: () => <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><path d="M8 12h8" /><path d="M12 8l4 4-4 4" /><path d="M4 4h6a4 4 0 0 1 4 4v1" /></svg>,
+    Todo: () => <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><path d="M9 6h11" /><path d="M9 12h11" /><path d="M9 18h11" /><path d="M4 6l1.5 1.5L7 6" /><path d="M4 12l1.5 1.5L7 12" /><path d="M4 18l1.5 1.5L7 18" /></svg>,
+    LockOpen: () => <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><path d="M7 11V8a5 5 0 0 1 9.5-2" /><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M12 15v2" /></svg>,
+    LockClosed: () => <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="11" width="14" height="9" rx="2" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /><path d="M12 15v2" /></svg>,
 };
 
 const formatTime = (ts?: string) => {
@@ -15,6 +20,7 @@ const formatTime = (ts?: string) => {
 
 export const MessageStream = () => {
     const { messages } = useChat();
+    const [locked, setLocked] = useState<Record<string, boolean>>({});
     const visibleMessages = messages.filter(message => message.visibility !== 'internal');
     const hasMessages = visibleMessages.length > 0;
 
@@ -32,17 +38,32 @@ export const MessageStream = () => {
                     <span className="text-neutral-500">•</span>
                     <span>{formatTime(msg.ts)}</span>
                 </div>
-                <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity px-1">
-                    <button className="text-neutral-500 hover:text-white transition-colors" title="Copy">
-                        <Icons.Copy />
-                    </button>
-                    <button className="text-neutral-500 hover:text-white transition-colors" title="Retry">
-                        <Icons.Regenerate />
-                    </button>
-                    <button className="text-neutral-500 hover:text-red-400 transition-colors" title="Bad Response">
-                        <Icons.BadResponse />
-                    </button>
-                </div>
+                {msg.type === 'agent' && (
+                    <div className="flex items-center gap-2 text-neutral-200/80 transition-opacity px-1 pl-2 border-l border-white/10">
+                        <button className="text-white/70 hover:text-white transition-colors" title="Notes">
+                            <Icons.Notes />
+                        </button>
+                        <button className="text-white/70 hover:text-white transition-colors" title="Justice Scales">
+                            <Icons.Scales />
+                        </button>
+                        <button className="text-white/70 hover:text-white transition-colors" title="Alarm">
+                            <Icons.Alarm />
+                        </button>
+                        <button className="text-white/70 hover:text-white transition-colors" title="Forward">
+                            <Icons.Forward />
+                        </button>
+                        <button className="text-white/70 hover:text-white transition-colors" title="Todo">
+                            <Icons.Todo />
+                        </button>
+                        <button
+                            className={`ml-1 text-white/80 hover:text-white transition-colors ${locked[msg.id] ? 'text-white' : ''}`}
+                            title={locked[msg.id] ? 'Locked' : 'Unlocked'}
+                            onClick={() => setLocked(prev => ({ ...prev, [msg.id]: !prev[msg.id] }))}
+                        >
+                            {locked[msg.id] ? <Icons.LockClosed /> : <Icons.LockOpen />}
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     );

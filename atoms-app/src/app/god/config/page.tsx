@@ -11,6 +11,7 @@ const MENU_ITEMS = [
     { id: 'spaces', label: '1. SPACES', action: 'navigate', path: '/god/config/spaces' },
     { id: 'surfaces', label: '2. SURFACES', action: 'navigate', path: '/god/config/surfaces' },
     { id: 'muscles', label: '3. MUSCLES', action: 'navigate', path: '/god/config/muscles' },
+    { id: 'connectors', label: '4. CONNECTORS', action: 'navigate', path: '/god/config/connectors' },
 
     // 2. THE BRAIN (Legacy/Recovered)
     { id: 'memory', label: 'MEMORY (NEXUS)', action: 'navigate', path: '/dashboard/memory' },

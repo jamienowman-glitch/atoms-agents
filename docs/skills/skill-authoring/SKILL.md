@@ -80,6 +80,34 @@ Use these templates for consistent muscle creation and handoff:
 - `docs/skills/skill-authoring/muscle-acceptance-checklist.md`
 - `docs/skills/skill-authoring/muscle-chat-brief-prompt.md`
 
+## 2.3 Connector Skill Standard (2026)
+Connector skills are **contract-first**. They must point to the Connector Factory contract template and produce a provider contract JSON that plugs directly into the God Config UI.
+
+**Frontmatter (required for connectors):**
+```yaml
+---
+name: connector-{provider}
+description: Contract-first connector skill for {Provider} (build the contract, then the MCP spec).
+metadata:
+  short-description: Create the {Provider} connector contract
+---
+```
+
+**Body sections (required):**
+- `# Contract-First Workflow`
+- `# Rules`
+
+**Required instructions:**
+1. Copy the template:
+   - `/Users/jaynowman/dev/atoms-core/docs/contracts/connector_factory/CONNECTOR_CONTRACT_TEMPLATE.json`
+2. Save the provider contract:
+   - `/Users/jaynowman/dev/atoms-core/docs/contracts/connector_factory/{PROVIDER}_CONNECTOR_CONTRACT.json`
+3. List **all official scopes** in the contract.
+4. Leave firearms untouched (`requires_firearm=false`, `firearm_type_id` empty).
+5. Keep status **draft** until human approval.
+6. Build or update MCP spec:
+   - `/Users/jaynowman/dev/atoms-connectors/src/{provider}/spec.yaml`
+
 ## 3. Registration Protocol
 A skill does not exist until it is registered in `AGENTS.md`.
 

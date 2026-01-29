@@ -6,9 +6,32 @@ interface TopPillProps {
     setIsExportOpen?: (isOpen: boolean) => void;
     logoIcon?: React.ReactNode;
     RightControls?: React.ReactNode;
+    surfaceAbbrev?: string;
+    temperature?: string;
+    headerTitleNode?: React.ReactNode;
+    headerSubtitle?: string;
+    edgeFlowLabel?: string;
+    onEdgeFlowClick?: () => void;
+    onScheduleClick?: () => void;
+    HeaderCenter?: React.ReactNode;
+    HeaderRight?: React.ReactNode;
 }
 
-export function TopPill({ setIsRightPanelOpen, setIsExportOpen, logoIcon, RightControls }: TopPillProps) {
+export function TopPill({
+    setIsRightPanelOpen,
+    setIsExportOpen,
+    logoIcon,
+    RightControls,
+    surfaceAbbrev,
+    temperature = '72°',
+    headerTitleNode,
+    headerSubtitle = 'Marketing Agents',
+    edgeFlowLabel,
+    onEdgeFlowClick,
+    onScheduleClick,
+    HeaderCenter,
+    HeaderRight
+}: TopPillProps) {
     const [state, setState] = useState<'idle' | 'nx' | 'm21'>('idle');
     const [isHeaderOpen, setIsHeaderOpen] = useState(false);
     const [isNavOpen, setIsNavOpen] = useState(false);
@@ -86,20 +109,53 @@ export function TopPill({ setIsRightPanelOpen, setIsExportOpen, logoIcon, RightC
                         </div>
 
                         <div className="flex flex-col items-center text-center">
-                            <div className="text-3xl font-semibold tracking-tight">
-                                N<sup className="text-base -top-3 relative">x</sup>
-                            </div>
-                            <div className="text-[10px] tracking-[0.3em] uppercase text-white/70 -mt-1">Marketing Agents</div>
+                            {HeaderCenter ?? (
+                                <>
+                                    <div className="text-3xl font-semibold tracking-tight">
+                                        {headerTitleNode ?? (
+                                            <span>
+                                                N<sup className="text-base -top-3 relative">x</sup>
+                                            </span>
+                                        )}
+                                    </div>
+                                    <div className="text-[10px] tracking-[0.3em] uppercase text-white/70 -mt-1">{headerSubtitle}</div>
+                                </>
+                            )}
                         </div>
 
-                        <button
-                            type="button"
-                            className="text-3xl font-semibold tracking-tight"
-                            onClick={() => setIsHeaderOpen(false)}
-                        >
-                            72°
-                        </button>
+                        {HeaderRight ?? (
+                            <button
+                                type="button"
+                                className="text-3xl font-semibold tracking-tight"
+                                onClick={() => setIsHeaderOpen(false)}
+                            >
+                                {temperature}
+                            </button>
+                        )}
                     </div>
+
+                    {(edgeFlowLabel || onScheduleClick) && (
+                        <div className="mt-3 flex items-center justify-center gap-3">
+                            {edgeFlowLabel && (
+                                <button
+                                    type="button"
+                                    className="px-4 py-1.5 rounded-full border border-white/40 text-[10px] font-semibold tracking-[0.25em] uppercase"
+                                    onClick={onEdgeFlowClick}
+                                >
+                                    {edgeFlowLabel}
+                                </button>
+                            )}
+                            {onScheduleClick && (
+                                <button
+                                    type="button"
+                                    className="px-4 py-1.5 rounded-full border border-white/60 text-xs font-semibold tracking-wide"
+                                    onClick={onScheduleClick}
+                                >
+                                    Schedule
+                                </button>
+                            )}
+                        </div>
+                    )}
 
                     <div className="mt-3 flex items-center justify-center gap-3">
                         <div className="relative">
@@ -241,7 +297,11 @@ export function TopPill({ setIsRightPanelOpen, setIsExportOpen, logoIcon, RightC
                     onClick={() => toggleState('nx')}
                     className={`w-8 h-8 flex items-center justify-center rounded-full text-xs font-bold transition-all duration-300 ${state === 'nx' ? 'bg-white text-black' : 'bg-white/10 hover:bg-white/20'}`}
                 >
-                    <span>N<sup>x</sup></span>
+                    {surfaceAbbrev ? (
+                        <span className="uppercase text-[10px] tracking-[0.2em]">{surfaceAbbrev}</span>
+                    ) : (
+                        <span>N<sup>x</sup></span>
+                    )}
                 </button>
 
                 {/* --- CENTER --- */}
@@ -253,7 +313,7 @@ export function TopPill({ setIsRightPanelOpen, setIsExportOpen, logoIcon, RightC
                     onDoubleClick={() => setIsHeaderOpen(true)}
                     title="Expand header"
                 >
-                    72°
+                    {temperature}
                 </button>
 
                 {/* --- RIGHT TRIGGER (M²¹) --- */}
