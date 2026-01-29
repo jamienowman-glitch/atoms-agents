@@ -2,7 +2,7 @@ import pytest
 from unittest.mock import MagicMock, patch, ANY
 from engines.audio_render.service import AudioRenderService, RenderRequest
 from engines.audio_timeline.service import AudioTimelineService
-from engines.media_v2.models import DerivedArtifact, MediaAsset
+from atoms_core.src.media.v2.models import DerivedArtifact, MediaAsset
 from engines.audio_mix_buses.models import MixGraph, BusConfig
 
 def test_render_plan_with_graph():

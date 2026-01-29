@@ -5,7 +5,7 @@ import logging
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional, Protocol
 
-from engines.media_v2.service import MediaService, get_media_service
+from atoms_core.src.media.v2.service import MediaService, get_media_service
 from engines.video_multicam.models import (
     CreateMultiCamSessionRequest,
     MultiCamAlignRequest,

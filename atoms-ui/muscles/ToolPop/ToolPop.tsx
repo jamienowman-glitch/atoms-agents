@@ -86,9 +86,16 @@ interface ToolPopProps {
     activeBlockId?: string | null;
     activeBlockType?: 'media' | 'text' | 'copy' | 'cta' | 'header' | 'row' | 'popup';
     feeds?: Record<string, any[]>; // Dictionary of feeds by category
+    attachment?: 'screen' | 'chatrail';
 }
 
-export function ToolPop({ settingsContent, activeBlockId, activeBlockType = 'media', feeds = {} }: ToolPopProps) {
+export function ToolPop({
+    settingsContent,
+    activeBlockId,
+    activeBlockType = 'media',
+    feeds = {},
+    attachment = 'screen'
+}: ToolPopProps) {
     // New Harness Hook returns { useToolState, scope } automatically bound
     const { useToolState } = useToolControl();
 
@@ -785,8 +792,15 @@ export function ToolPop({ settingsContent, activeBlockId, activeBlockType = 'med
         ? 'translate-y-0 opacity-100 pointer-events-auto'
         : 'translate-y-[100%] opacity-0 pointer-events-none';
 
+    const placementClass = attachment === 'chatrail'
+        ? 'relative w-full'
+        : 'fixed left-0 right-0 bottom-0';
+    const borderClass = attachment === 'chatrail'
+        ? 'border'
+        : 'border-t';
+
     return (
-        <div className={`fixed left-0 right-0 bg-white/95 dark:bg-neutral-900/95 backdrop-blur-xl border-t border-neutral-200 dark:border-neutral-800 rounded-2xl z-[100] shadow-[0_-5px_20px_rgba(0,0,0,0.08)] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] bottom-0 select-none ${visibilityClass}`}>
+        <div className={`${placementClass} bg-white/95 dark:bg-neutral-900/95 backdrop-blur-xl ${borderClass} border-neutral-200 dark:border-neutral-800 rounded-2xl z-[100] shadow-[0_-5px_20px_rgba(0,0,0,0.08)] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] select-none ${visibilityClass}`}>
 
             <div className={`flex flex-col transition-all duration-300 ${isCollapsed ? 'h-[60px]' : 'h-[260px]'}`}>
                 {/* HEAD: Dual Magnifier + Settings Trigger */}

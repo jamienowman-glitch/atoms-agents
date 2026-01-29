@@ -1,10 +1,14 @@
--- 017_connector_providers.sql
--- Purpose: Registry for connector providers (platforms).
+/*
+# 017_connector_providers.sql
 
-CREATE TABLE IF NOT EXISTS connector_providers (
-    provider_id text PRIMARY KEY,
-    platform_slug text UNIQUE NOT NULL,
+## Description
+Connectors register a provider_id, canonical platform slug, and the naming_rule that drives the naming engine (Phase 2).
+*/
+
+create table if not exists public.connector_providers (
+    provider_id text primary key,
+    platform_slug text not null unique,
     display_name text,
-    naming_rule text NOT NULL,
-    created_at timestamptz DEFAULT now()
+    naming_rule text not null,
+    created_at timestamptz default now()
 );

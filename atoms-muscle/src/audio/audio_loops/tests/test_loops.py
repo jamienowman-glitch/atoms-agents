@@ -4,7 +4,7 @@ from unittest.mock import MagicMock, patch
 from engines.audio_loops.service import AudioLoopsService
 from engines.audio_loops.models import LoopDetectRequest
 from engines.audio_shared.health import DependencyInfo
-from engines.media_v2.models import MediaAsset, DerivedArtifact
+from atoms_core.src.media.v2.models import MediaAsset, DerivedArtifact
 
 def _fake_dependencies(librosa_available: bool) -> dict[str, DependencyInfo]:
     return {

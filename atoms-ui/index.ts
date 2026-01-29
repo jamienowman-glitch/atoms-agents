@@ -18,4 +18,4 @@ export * from './harness/console/SurfaceCard';
 export * from './harness/console/LauncherGrid';
 
 export * from './canvases/haze';
-
+export * from './canvases/draft_harness';

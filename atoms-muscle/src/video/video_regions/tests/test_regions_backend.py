@@ -2,7 +2,7 @@ import os
 from unittest.mock import MagicMock, patch
 from engines.video_regions.service import VideoRegionsService
 from engines.video_regions.models import AnalyzeRegionsRequest
-from engines.media_v2.models import MediaAsset, Artifact
+from atoms_core.src.media.v2.models import MediaAsset, Artifact
 
 def test_stub_backend():
     # Default behavior

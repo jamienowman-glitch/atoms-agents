@@ -3,7 +3,7 @@ import json
 from unittest.mock import MagicMock, patch
 from engines.audio_mix_snapshot.service import AudioMixSnapshotService, CaptureRequest, DeltaRequest
 from engines.audio_mix_snapshot.models import MixSnapshot, TrackState
-from engines.media_v2.models import DerivedArtifact, MediaAsset
+from atoms_core.src.media.v2.models import DerivedArtifact, MediaAsset
 
 def test_capture_logic():
     mock_media = MagicMock()

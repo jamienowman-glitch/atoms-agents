@@ -7,8 +7,8 @@ from fastapi.testclient import TestClient
 from engines.audio_semantic_timeline.models import AudioSemanticAnalyzeRequest
 from engines.audio_semantic_timeline.routes import router as semantic_router
 from engines.audio_semantic_timeline.service import AudioSemanticService, set_audio_semantic_service
-from engines.media_v2.models import MediaUploadRequest
-from engines.media_v2.service import InMemoryMediaRepository, MediaService, set_media_service
+from atoms_core.src.media.v2.models import MediaUploadRequest
+from atoms_core.src.media.v2.service import InMemoryMediaRepository, MediaService, set_media_service
 
 
 class CountingBackend:

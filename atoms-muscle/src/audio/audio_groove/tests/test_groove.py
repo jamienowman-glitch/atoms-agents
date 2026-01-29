@@ -4,7 +4,7 @@ from engines.audio_groove.service import AudioGrooveService, GrooveExtractReques
 from engines.audio_groove.dsp import extract_groove_offsets
 from engines.audio_pattern_engine.service import AudioPatternEngineService
 from engines.audio_pattern_engine.models import PatternRequest
-from engines.media_v2.models import DerivedArtifact, MediaAsset
+from atoms_core.src.media.v2.models import DerivedArtifact, MediaAsset
 from engines.audio_groove.models import GrooveProfile
 
 def test_extract_groove_service():

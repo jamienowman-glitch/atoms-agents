@@ -5,8 +5,8 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from engines.media_v2.models import MediaUploadRequest
-from engines.media_v2.service import InMemoryMediaRepository, MediaService, set_media_service
+from atoms_core.src.media.v2.models import MediaUploadRequest
+from atoms_core.src.media.v2.service import InMemoryMediaRepository, MediaService, set_media_service
 from engines.audio_service.routes import router as audio_router
 
 

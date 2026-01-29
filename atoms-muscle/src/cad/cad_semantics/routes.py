@@ -13,7 +13,8 @@ from pydantic import BaseModel, Field
 
 from engines.cad_semantics.models import SemanticResponse, SemanticType
 from engines.cad_semantics.service import get_semantic_service
-from engines.media_v2.models import ArtifactMetadata, RequestContext
+from atoms_core.src.media.v2.models import ArtifactMetadata
+from atoms_core.src.identity.models import RequestContext
 
 router = APIRouter(prefix="/cad", tags=["cad"])
 

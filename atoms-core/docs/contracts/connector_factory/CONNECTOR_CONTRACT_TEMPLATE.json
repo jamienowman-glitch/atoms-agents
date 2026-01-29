@@ -1,0 +1,76 @@
+{
+  "contract_name": "Connector Factory — God Config",
+  "provider_slug": "",
+  "display_name": "",
+  "status": "draft",
+  "sections": {
+    "dev_account": {
+      "system_dev_username": "",
+      "vault_integration": {
+        "enabled": true,
+        "vault_key_hint": ""
+      },
+      "tenant_owned_keys": [
+        {
+          "name_example": "",
+          "description": ""
+        }
+      ],
+      "standardization": {
+        "naming_rule": "PROVIDER_{PLATFORM}_KEY",
+        "platform_name_source": "connector_providers.platform_slug"
+      },
+      "secondary_information": []
+    },
+    "scopes": {
+      "categories": [],
+      "scopes": [],
+      "firearms_gate": {
+        "requires_firearm_field": "requires_firearm",
+        "firearm_type_field": "firearm_type_id"
+      }
+    },
+    "kpi": {
+      "platform_metrics": [],
+      "metric_mappings": [],
+      "dropdown_sources": {
+        "generic_metrics": "public.generic_metrics",
+        "core_kpis": "public.core_kpis"
+      }
+    },
+    "utm": {
+      "templates": [],
+      "schema": {
+        "provider_slug": "",
+        "static_params": {},
+        "allowed_variables": [],
+        "pattern_structure": ""
+      }
+    },
+    "budgets": {
+      "budget_metrics": [],
+      "budget_mappings": [],
+      "dropdown_sources": {
+        "generic_metrics": "public.generic_metrics",
+        "core_kpis": "public.core_kpis"
+      }
+    },
+    "oauth_marketplace": {
+      "free_testing_limit": "",
+      "authorization_links": [],
+      "functional_summary": ""
+    },
+    "byok": {
+      "oauth_only": false,
+      "byok_only": false,
+      "oauth_and_byok": true
+    }
+  },
+  "notes": [
+    "All dropdowns must be Supabase-backed with Plus buttons to persist new entries.",
+    "Firearms is the only safety gate; no other danger/risk fields are allowed.",
+    "This JSON is the interim contract; it becomes editable in the God Config UI.",
+    "Agents must leave firearms fields untouched (requires_firearm=false, firearm_type_id empty) until human approval.",
+    "Contract status remains draft until a human confirms in the UI."
+  ]
+}

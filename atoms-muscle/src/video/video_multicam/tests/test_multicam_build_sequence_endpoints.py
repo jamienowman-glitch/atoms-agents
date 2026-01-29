@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from engines.video_multicam.routes import router
 from engines.video_multicam.service import MultiCamService, get_multicam_service
 from engines.video_multicam.models import MultiCamSession, MultiCamTrackSpec
-from engines.media_v2.models import MediaAsset
+from atoms_core.src.media.v2.models import MediaAsset
 from engines.video_timeline.models import VideoProject, Sequence, Track, Clip
 
 app = FastAPI()

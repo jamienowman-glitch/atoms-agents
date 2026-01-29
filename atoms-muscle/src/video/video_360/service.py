@@ -9,8 +9,8 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 from engines.config import runtime_config
-from engines.media_v2.models import ArtifactCreateRequest, MediaUploadRequest
-from engines.media_v2.service import get_media_service, MediaService
+from atoms_core.src.media.v2.models import ArtifactCreateRequest, MediaUploadRequest
+from atoms_core.src.media.v2.service import get_media_service, MediaService
 from engines.video_360.models import (
     Render360Request,
     Render360Response,

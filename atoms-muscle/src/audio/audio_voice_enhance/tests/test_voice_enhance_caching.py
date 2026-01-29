@@ -7,8 +7,8 @@ from fastapi.testclient import TestClient
 from engines.audio_voice_enhance.models import VoiceEnhanceRequest
 from engines.audio_voice_enhance.routes import router as voice_router
 from engines.audio_voice_enhance.service import VoiceEnhanceService, set_voice_enhance_service
-from engines.media_v2.models import MediaUploadRequest
-from engines.media_v2.service import InMemoryMediaRepository, MediaService, set_media_service
+from atoms_core.src.media.v2.models import MediaUploadRequest
+from atoms_core.src.media.v2.service import InMemoryMediaRepository, MediaService, set_media_service
 
 
 class CountingBackend:

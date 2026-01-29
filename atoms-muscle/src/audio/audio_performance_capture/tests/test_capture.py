@@ -3,7 +3,7 @@ from unittest.mock import MagicMock, patch
 from engines.audio_performance_capture.service import AudioPerformanceCaptureService, CaptureRequest
 from engines.audio_performance_capture.quantise import quantise_events
 from engines.audio_performance_capture.models import PerformanceEvent
-from engines.media_v2.models import DerivedArtifact
+from atoms_core.src.media.v2.models import DerivedArtifact
 
 def test_detect_service_flow():
     mock_media = MagicMock()

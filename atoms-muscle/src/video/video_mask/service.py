@@ -4,8 +4,8 @@ import tempfile
 from pathlib import Path
 from typing import Protocol
 
-from engines.media_v2.models import ArtifactCreateRequest
-from engines.media_v2.service import get_media_service
+from atoms_core.src.media.v2.models import ArtifactCreateRequest
+from atoms_core.src.media.v2.service import get_media_service
 from engines.storage.gcs_client import GcsClient
 from engines.video_mask.models import MaskRequest, MaskResult, MaskPrompt
 

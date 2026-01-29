@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Optional
 
 from muscle.engines.common.identity_stub import RequestContext
-from engines.media_v2.service import get_media_service, MediaService
+from atoms_core.src.media.v2.service import get_media_service, MediaService
 from engines.video_regions.models import (
     AnalyzeRegionsRequest,
     AnalyzeRegionsResult,

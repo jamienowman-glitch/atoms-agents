@@ -13,7 +13,8 @@ from pydantic import BaseModel, Field
 
 from engines.boq_costing.models import Currency, CostResponse
 from engines.boq_costing.service import get_costing_service
-from engines.media_v2.models import ArtifactMetadata, RequestContext
+from atoms_core.src.media.v2.models import ArtifactMetadata
+from atoms_core.src.identity.models import RequestContext
 
 router = APIRouter(prefix="/cad", tags=["cad"])
 

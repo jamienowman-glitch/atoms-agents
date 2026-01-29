@@ -4,8 +4,8 @@ import uuid
 from typing import Optional
 from pathlib import Path
 
-from engines.media_v2.service import get_media_service
-from engines.media_v2.models import ArtifactCreateRequest, MediaUploadRequest, DerivedArtifact
+from atoms_core.src.media.v2.service import get_media_service
+from atoms_core.src.media.v2.models import ArtifactCreateRequest, MediaUploadRequest, DerivedArtifact
 from engines.storage.gcs_client import GcsClient
 from engines.video_stabilise.backend import VideoStabiliseBackend, FfmpegStabiliseBackend, StubStabiliseBackend
 

@@ -9,7 +9,7 @@ from engines.audio_macro_engine.compiler import compile_macro_to_ffmpeg
 from engines.audio_macro_engine.presets import MACRO_DEFINITIONS
 from engines.audio_macro_engine.service import AudioMacroEngineService, MacroRequest
 from engines.audio_shared.health import DependencyInfo, DependencyMissingError
-from engines.media_v2.models import DerivedArtifact, MediaAsset
+from atoms_core.src.media.v2.models import DerivedArtifact, MediaAsset
 
 
 def _fake_dependencies(ffmpeg_available: bool) -> dict[str, DependencyInfo]:

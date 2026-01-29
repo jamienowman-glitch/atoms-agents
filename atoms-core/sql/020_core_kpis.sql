@@ -1,91 +1,78 @@
--- 020_core_kpis.sql
--- Purpose: The 6 Locked Core KPIs serving as the source of truth.
+/*
+# 020_core_kpis.sql
 
-CREATE TABLE IF NOT EXISTS core_kpis (
-    core_kpi_id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    name text UNIQUE NOT NULL,
+## Description
+Tracks the canonical KPI definitions for Connector Factory dashboards. Entries are derived from legacy kpi.json data but now live in the core_kpis registry with normalized JSON metadata.
+*/
+
+create table if not exists public.core_kpis (
+    core_kpi_id uuid primary key default gen_random_uuid(),
+    name text not null unique,
     display_label text,
     description text,
     window_token text,
     comparison_token text,
-    estimate boolean DEFAULT false,
-    missing_components jsonb DEFAULT '[]'::jsonb,
-    metadata jsonb DEFAULT '{}'::jsonb,
+    estimate boolean not null default false,
+    missing_components jsonb default '[]'::jsonb,
     notes text,
-    created_at timestamptz DEFAULT now()
+    created_at timestamptz default now()
 );
 
--- Seed Data (Locked Definitions)
-INSERT INTO core_kpis (name, display_label, description, window_token, comparison_token, estimate, missing_components, metadata, notes) VALUES
-(
-    'profit_after_costs',
-    'Profit After Costs (Before Tax)',
-    'Net Sales minus all visible costs (COGS, Marketing, Fees, Shipping).',
-    'Rolling 7D', -- Default assumptions if not specified, but keeping simple
-    'YoY',
-    false,
-    '[]'::jsonb,
-    '{"format": "Currency", "calculation_logic": "Net Sales - (COGS + Total Marketing Spend + Payment Fees + Platform Fees + Shipping Costs)"}'::jsonb,
-    'This is Pre-Tax. If any cost component is missing, flag as ESTIMATE.'
-),
-(
-    'mer',
-    'MER',
-    'Blended marketing efficiency. Net Sales divided by Total Marketing Spend.',
-    'Rolling 7D',
-    'YoY',
-    false,
-    '[]'::jsonb,
-    '{"format": "Ratio (Decimal)", "calculation_logic": "Net Sales / (Paid Media Spend + Influencer Spend + Agency Fees)"}'::jsonb,
-    'Must be viewed alongside Discount Rate. If spend channels are disconnected, flag as ESTIMATE.'
-),
-(
-    'growth_yoy',
-    'Growth',
-    'Year-over-Year change in Profit After Costs.',
-    'Year-over-Year',
-    'YoY',
-    false,
-    '[]'::jsonb,
-    '{"format": "Percentage", "calculation_logic": "(Current Profit - Prior Year Profit) / Prior Year Profit", "fallback_logic": "If Profit is an ESTIMATE or incomplete, fallback to (Current Net Sales - Prior Year Net Sales) / Prior Year Net Sales and label as Top Line Growth"}'::jsonb,
-    'Fallback to YoY Net Sales when profit is ESTIMATE'
-),
-(
-    'discount_rate',
-    'Discount Rate',
-    'Total margin reduction via promos/markdowns relative to Gross Sales.',
-    'Rolling 7D',
-    'YoY',
-    false,
-    '[]'::jsonb,
-    '{"format": "Percentage", "calculation_logic": "Total Discounts / Gross Sales"}'::jsonb,
-    'Gross Sales is pre-discount. Discounts include codes, auto-discounts, and bundles.'
-),
-(
-    'returns_rate',
-    'Returns Rate',
-    'Percentage of units physically received back vs units sold.',
-    'Rolling 7D',
-    'YoY',
-    false,
-    '[]'::jsonb,
-    '{"format": "Percentage", "calculation_logic": "Returned Units (Received) / Sold Units"}'::jsonb,
-    'Mark ESTIMATE until return confirmations available. If Received data is unavailable, use Requested and flag as ESTIMATE.'
-),
-(
-    'aoa',
-    'AOA',
-    'Unique people reachable via owned channels engaged in the last 90 days.',
-    'Rolling 90D',
-    'YoY',
-    false,
-    '[]'::jsonb,
-    '{"format": "Integer", "calculation_logic": "Count(Unique IDs) where channel is (Email OR SMS OR Push) AND last_engagement_date >= (CURRENT_DATE - 90)"}'::jsonb,
-    'Engagement = Open, Click, Reply, or Logged-in Visit.'
-)
-ON CONFLICT (name) DO UPDATE
-SET
-    display_label = EXCLUDED.display_label,
-    description = EXCLUDED.description,
-    metadata = EXCLUDED.metadata,
-    notes = EXCLUDED.notes;
+insert into public.core_kpis (
+    name,
+    display_label,
+    description,
+    window_token,
+    comparison_token,
+    estimate,
+    missing_components,
+    notes
+) values
+('profit_after_costs',
+ 'Profit After Costs (Before Tax)',
+ 'Net sales after discounts/returns minus included costs before tax',
+ 'Rolling 7D',
+ 'YoY',
+ false,
+ '[]'::jsonb,
+ 'Include marketing, payment, and platform fees when available; mark ESTIMATE otherwise'),
+('mer',
+ 'MER',
+ 'Media Efficiency Ratio = Net Sales / Total Marketing Spend',
+ 'Rolling 7D',
+ 'YoY',
+ true,
+ '["marketing_spend"]'::jsonb,
+ 'Treat influencer spend as marketing_spend; mark missing components when spend not reported'),
+('growth',
+ 'Growth',
+ 'YoY change in Profit After Costs (Before Tax)',
+ 'Year-over-Year',
+ 'YoY',
+ true,
+ '[]'::jsonb,
+ 'Fallback to YoY Net Sales when profit is ESTIMATE'),
+('discount_rate',
+ 'Discount Rate',
+ 'Total Discounts ÷ Gross Sales (pre-discount, pre-tax)',
+ 'Rolling 7D',
+ 'YoY',
+ false,
+ '[]'::jsonb,
+ 'Include promos, markdowns, and bundle discounts'),
+('returns_rate',
+ 'Returns Rate',
+ 'Confirmed returned units ÷ sold units',
+ 'Rolling 7D',
+ 'YoY',
+ true,
+ '["returned_units"]'::jsonb,
+ 'Mark ESTIMATE until return confirmations available'),
+('aoa',
+ 'AOA',
+ '90D unique reachable owned-channel audience',
+ 'Rolling 90D',
+ 'YoY',
+ false,
+ '[]'::jsonb,
+ 'Include multichannel engagements (open/click/reply/react)');

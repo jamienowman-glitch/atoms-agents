@@ -10,8 +10,8 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Protocol, Tuple
 
 from muscle.engines.common.identity_stub import RequestContext
-from engines.media_v2.models import ArtifactCreateRequest, DerivedArtifact, MediaAsset
-from engines.media_v2.service import get_media_service
+from atoms_core.src.media.v2.models import ArtifactCreateRequest, DerivedArtifact, MediaAsset
+from atoms_core.src.media.v2.service import get_media_service
 from engines.storage.gcs_client import GcsClient
 from engines.video_timeline.models import Clip, Keyframe, ParameterAutomation
 from engines.video_timeline.service import get_timeline_service

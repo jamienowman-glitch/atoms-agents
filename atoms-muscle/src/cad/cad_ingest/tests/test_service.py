@@ -15,8 +15,8 @@ import pytest
 from engines.cad_ingest.models import CadIngestRequest, UnitKind
 from engines.cad_ingest.service import CadIngestService, CadIngestCache
 from engines.cad_ingest.tests.fixtures import DXF_FLOORPLAN_FIXTURE, IFC_LITE_FIXTURE_JSON
-from engines.media_v2.service import InMemoryMediaRepository, LocalMediaStorage, MediaService
-from engines.media_v2.models import DerivedArtifact
+from atoms_core.src.media.v2.service import InMemoryMediaRepository, LocalMediaStorage, MediaService
+from atoms_core.src.media.v2.models import DerivedArtifact
 
 
 class TestCadIngestService:

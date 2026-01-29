@@ -31,12 +31,14 @@ export function ToolControlProvider({
     children,
     scope,
     initialState = {},
-    registry = {}
+    registry = {},
+    onUpdateTool
 }: {
     children: React.ReactNode;
     scope: CanvasScope;
     initialState?: ToolControlState;
     registry?: Record<string, ToolDefinition>;
+    onUpdateTool?: (target: ToolTarget, op: ToolOp, value?: any) => void;
 }) {
     const [state, setState] = useState<ToolControlState>(initialState);
 
@@ -51,6 +53,7 @@ export function ToolControlProvider({
 
             // In a real harness, we might dispatch this event to the RealtimeBridge too
             console.debug('[ToolControl] Update', target, op, value);
+            onUpdateTool?.(target, op, value);
 
             const key = keyOf(scope, toolId);
             setState(prev => {

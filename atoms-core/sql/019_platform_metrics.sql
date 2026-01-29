@@ -1,45 +1,43 @@
--- 019_platform_metrics.sql
--- Purpose: Metrics, Mappings, and UTM Templates.
+/*
+# 019_platform_metrics.sql
 
--- 1. Platform Metrics (Raw definitions)
-CREATE TABLE IF NOT EXISTS platform_metrics (
-    provider_id text REFERENCES connector_providers(provider_id),
-    metric_name text NOT NULL,
+## Description
+Stores provider-specific and generic KPI metadata plus optional mappings. Also tracks the reusable UTM templates referenced by the UTM engine (Phase 2).
+*/
+
+create table if not exists public.platform_metrics (
+    metric_id uuid primary key default gen_random_uuid(),
+    provider_id text not null references public.connector_providers(provider_id) on delete cascade,
+    metric_name text not null,
     description text,
     data_source text,
-    created_at timestamptz DEFAULT now(),
-    PRIMARY KEY (provider_id, metric_name)
+    created_at timestamptz default now(),
+    unique(provider_id, metric_name)
 );
 
--- 2. Generic Metrics (Abstract categories)
-CREATE TABLE IF NOT EXISTS generic_metrics (
-    name text PRIMARY KEY,
+create table if not exists public.generic_metrics (
+    generic_metric_id uuid primary key default gen_random_uuid(),
+    name text not null unique,
     description text,
     category text,
-    created_at timestamptz DEFAULT now()
+    created_at timestamptz default now()
 );
 
--- 3. Metric Mappings (Translation Layer)
-CREATE TABLE IF NOT EXISTS metric_mappings (
-    mapping_id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    provider_slug text NOT NULL,
-    raw_metric_name text NOT NULL,
-    standard_metric_slug text NOT NULL,
-    aggregation_method text NOT NULL CHECK (aggregation_method IN ('sum', 'avg', 'max')),
-    is_approved boolean DEFAULT false,
-    created_at timestamptz DEFAULT now()
+create table if not exists public.metric_mappings (
+    mapping_id uuid primary key default gen_random_uuid(),
+    provider_id text not null references public.connector_providers(provider_id) on delete cascade,
+    metric_id uuid references public.platform_metrics(metric_id) on delete cascade,
+    generic_metric_id uuid references public.generic_metrics(generic_metric_id) on delete cascade,
+    created_at timestamptz default now(),
+    unique(provider_id, metric_id, generic_metric_id)
 );
-CREATE INDEX IF NOT EXISTS idx_metric_mappings_provider ON metric_mappings(provider_slug);
 
--- 4. UTM Templates (URL Construction)
-CREATE TABLE IF NOT EXISTS utm_templates (
-    template_id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    provider_slug text NOT NULL,
-    content_type_slug text NOT NULL,
-    static_params jsonb DEFAULT '{}'::jsonb,
-    allowed_variables jsonb DEFAULT '[]'::jsonb,
-    pattern_structure text NOT NULL,
-    is_approved boolean DEFAULT false,
-    created_at timestamptz DEFAULT now()
+create table if not exists public.utm_templates (
+    template_id uuid primary key default gen_random_uuid(),
+    provider_id text not null references public.connector_providers(provider_id) on delete cascade,
+    first_touch_template text,
+    last_touch_template text,
+    content_type_template text,
+    custom_rules jsonb default '{}'::jsonb,
+    created_at timestamptz default now()
 );
-CREATE INDEX IF NOT EXISTS idx_utm_templates_provider ON utm_templates(provider_slug);

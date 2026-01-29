@@ -25,8 +25,8 @@ from .dxf_adapter import dxf_to_cad_model
 from .ifc_lite_adapter import ifc_lite_to_cad_model
 from .topology_heal import heal_topology
 
-# from engines.media_v2.service import get_media_service
-# from engines.media_v2.models import ArtifactCreateRequest
+# from atoms_core.src.media.v2.service import get_media_service
+# from atoms_core.src.media.v2.models import ArtifactCreateRequest
 
 
 class CadIngestCache:
@@ -218,7 +218,7 @@ class CadIngestService:
         # media_service = get_media_service()
         #
         # # First, create parent asset
-        # from engines.media_v2.models import MediaUploadRequest, MediaAsset
+        # from atoms_core.src.media.v2.models import MediaUploadRequest, MediaAsset
         #
         # upload_req = MediaUploadRequest(
         #     tenant_id=request.tenant_id,

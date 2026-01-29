@@ -1,7 +1,7 @@
 from unittest.mock import MagicMock
 from engines.audio_sample_library.service import AudioSampleLibraryService
 from engines.audio_sample_library.models import SampleLibraryQuery
-from engines.media_v2.models import DerivedArtifact
+from atoms_core.src.media.v2.models import DerivedArtifact
 
 def test_query_samples_filters():
     mock_media = MagicMock()

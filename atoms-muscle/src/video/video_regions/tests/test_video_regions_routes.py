@@ -5,7 +5,7 @@ from engines.video_regions.service import get_video_regions_service, VideoRegion
 from muscle.engines.common.identity_stub import RequestContext, get_request_context
 from muscle.engines.identity.auth_stub import get_auth_context
 from engines.identity.jwt_service import AuthContext
-from engines.media_v2.models import MediaAsset, DerivedArtifact
+from atoms_core.src.media.v2.models import MediaAsset, DerivedArtifact
 from unittest.mock import MagicMock, patch
 
 def _video_regions_context() -> RequestContext:

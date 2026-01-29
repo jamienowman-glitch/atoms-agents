@@ -4,8 +4,8 @@ from unittest.mock import MagicMock, patch
 from engines.audio_timeline.service import AudioTimelineService
 from engines.audio_render.service import AudioRenderService
 from engines.audio_render.models import RenderRequest
-from engines.media_v2.models import MediaAsset, DerivedArtifact
-from engines.media_v2.service import MediaService
+from atoms_core.src.media.v2.models import MediaAsset, DerivedArtifact
+from atoms_core.src.media.v2.service import MediaService
 
 FIXTURE_PATH = os.path.abspath("engines/audio_hits/tests/fixtures/audio_hit.wav")
 

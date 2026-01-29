@@ -4,7 +4,7 @@ import os
 from unittest.mock import MagicMock, patch
 from engines.video_focus_automation.service import FocusAutomationService
 from engines.video_focus_automation.models import FocusRequest
-from engines.media_v2.models import DerivedArtifact, MediaAsset
+from atoms_core.src.media.v2.models import DerivedArtifact, MediaAsset
 
 def test_calculate_focus_logic():
     mock_media = MagicMock()

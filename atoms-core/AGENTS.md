@@ -82,6 +82,17 @@ This is the Operating System. High stability, zero hallucinations.
     *   **FORBIDDEN**: `.env`, `os.environ.get("KEY")`.
     *   **REQUIRED**: Use `src/vault` API.
     *   **Reason**: Cloud Agents cannot read local `.env` files. They must call the API.
+
+## 🔐 Connector Factory Laws (Schema-First)
+* **God Config Name (Locked):** `Connector Factory — God Config` (log this exact name in all layers).
+* **UX Law (God Config):** Use existing config style but avoid nested cards/boxes. Flat sections with collapsible headers; mobile-first usability.
+* **Firearms Only Gate:** No danger levels, risk scores, allow-lists, or parallel gating fields. Safety is **only** `requires_firearm` + `firearm_type_id`.
+* **Firearms Handling (Locked):** Agents must leave `requires_firearm=false` and `firearm_type_id` empty in drafts. Only humans set firearms in the UI.
+* **Draft-Only Rule:** Connector contracts remain `draft` until a human explicitly approves in the UI.
+* **UTM Templates Schema (Locked):** `utm_templates` must include `template_id`, `provider_slug` (indexed), `content_type_slug`, `static_params` (jsonb), `allowed_variables` (jsonb array), `pattern_structure`, `is_approved` (default false). Builder must drop empty variables cleanly (no double underscores).
+* **Metric Mappings Schema (Locked):** `metric_mappings` must exist with `mapping_id`, `provider_slug` (indexed), `raw_metric_name`, `standard_metric_slug`, `aggregation_method` (sum/avg/max), `is_approved` (default false).
+* **Firearms Licenses Registry (Locked):** `firearms_licenses` registry table with `license_key` (pk), `category`, `description`. Seed initial licenses for Financial, Communication, System/Founder.
+* **Core KPIs Schema (Locked):** `core_kpis.missing_components` is jsonb array of strings; `core_kpis.metadata` is jsonb (store and do not drop).
     *   **Vault Secret Mount Rule**: Secrets live in `/Users/jaynowman/northstar-keys/` and must be loaded via Vault loaders.
 
 ## 🧠 MEMORY ARCHITECTURE
@@ -242,4 +253,3 @@ Surfaces are defined in the DB registry (Supabase). The Console uses DB-backed r
 - **Automation steps:**
   - After creating/updating a muscle, run `python3 atoms-muscle/scripts/normalize_mcp.py`.
   - Before deploy/hand-off, run `python3 atoms-muscle/scripts/batch_prepare_deploy.py --clean-after`.
-

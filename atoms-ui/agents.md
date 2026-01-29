@@ -25,6 +25,7 @@
 ## 1. The Skills (Agent Capabilities)
 Agents must check `.agent/skills/` for specialized instruction sets.
 -   **Canvas Contract Builder** (`.agent/skills/canvas-contract-builder`): How to build new Canvases from a contract.
+-   **Harness Contract Builder** (`.agent/skills/harness-contract-builder`): How to lock harness tool surfaces and map canvases without reinvention.
 -   **Console Extend** (`.agent/skills/console-extend`): How to add tools to the Dashboard.
 -   **Realtime Harness** (`.agent/skills/realtime-harness`): How to build Harness/Canvas realtime (SSE truth, sidecars, no new routes).
 

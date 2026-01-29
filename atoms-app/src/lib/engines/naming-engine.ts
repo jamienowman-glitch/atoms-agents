@@ -1,21 +1,35 @@
 /**
- * Naming Engine
- * Pure function to format provider keys based on rules.
+ * Builds a deterministic provider key using the configured naming rule.
+ * The rule can reference {{platform}}, {{platform_name}}, {{platform_slug}}, or {{slug}}.
  */
+function normalizePlatform(component: string): string {
+    return component
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+}
+
+const PLACEHOLDER_MAP = ['platform', 'platform_name', 'platform_slug', 'slug'];
 
 export function formatProviderKey(platformName: string, rule: string): string {
-  if (!platformName || !rule) {
-    return "";
-  }
+    const normalizedPlatform = normalizePlatform(platformName || '');
+    const safeRule = rule || '{{platform}}';
 
-  // 1. Slugify the platform name (basic: alphanumeric only, spaces to underscores)
-  const slug = platformName
-    .trim()
-    .replace(/[^a-zA-Z0-9\s]/g, "") // Remove special chars
-    .replace(/\s+/g, "_")            // Replace spaces with underscores
-    .toUpperCase();                  // Uppercase
+    const replacements: Record<string, string> = {
+        platform: normalizedPlatform,
+        platform_name: platformName.trim(),
+        platform_slug: normalizedPlatform,
+        slug: normalizedPlatform
+    };
 
-  // 2. Apply the rule (replace {PLATFORM} token)
-  // We handle {PLATFORM} as the main token.
-  return rule.replace("{PLATFORM}", slug);
+    const formatted = safeRule.replace(/\{\{\s*([^}]+)\s*}}/g, (_, key) => {
+        const normalizedKey = key.trim().toLowerCase();
+        if (PLACEHOLDER_MAP.includes(normalizedKey) && replacements[normalizedKey]) {
+            return replacements[normalizedKey];
+        }
+        return replacements.platform;
+    });
+
+    return formatted.replace(/-{2,}/g, '-').replace(/^-+|-+$/g, '');
 }

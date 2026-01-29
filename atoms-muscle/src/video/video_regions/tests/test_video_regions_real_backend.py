@@ -2,7 +2,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-from engines.media_v2.models import DerivedArtifact
+from atoms_core.src.media.v2.models import DerivedArtifact
 
 
 class TestRealRegionsBackend(unittest.TestCase):

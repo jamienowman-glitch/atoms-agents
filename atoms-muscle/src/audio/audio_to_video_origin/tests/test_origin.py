@@ -4,7 +4,7 @@ from engines.audio_to_video_origin.service import AudioToVideoOriginService, Sho
 from engines.audio_semantic_timeline.models import AudioEvent, AudioSemanticTimelineSummary, AudioSemanticTimelineGetResponse
 from engines.audio_semantic_timeline.service import set_audio_semantic_service
 from engines.audio_timeline.service import AudioTimelineService
-from engines.media_v2.models import DerivedArtifact, MediaAsset
+from atoms_core.src.media.v2.models import DerivedArtifact, MediaAsset
 
 def test_generate_shot_list():
     mock_media = MagicMock()

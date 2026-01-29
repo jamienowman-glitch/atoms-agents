@@ -5,7 +5,7 @@ from unittest.mock import MagicMock, patch
 
 from engines.audio_resample.service import AudioResampleService, ResampleRequest
 from engines.audio_shared.health import DependencyInfo, DependencyMissingError
-from engines.media_v2.models import MediaAsset, DerivedArtifact
+from atoms_core.src.media.v2.models import MediaAsset, DerivedArtifact
 
 
 def _fake_dependencies(ffmpeg_available: bool) -> dict[str, DependencyInfo]:

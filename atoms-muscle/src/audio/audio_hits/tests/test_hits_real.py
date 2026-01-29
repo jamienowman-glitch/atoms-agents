@@ -3,7 +3,7 @@ import pytest
 from unittest.mock import MagicMock, patch, mock_open
 from engines.audio_hits.service import AudioHitsService
 from engines.audio_hits.models import HitDetectRequest
-from engines.media_v2.models import MediaAsset, DerivedArtifact
+from atoms_core.src.media.v2.models import MediaAsset, DerivedArtifact
 
 @patch("engines.audio_hits.service.get_media_service")
 @patch("engines.audio_hits.service.GcsClient")

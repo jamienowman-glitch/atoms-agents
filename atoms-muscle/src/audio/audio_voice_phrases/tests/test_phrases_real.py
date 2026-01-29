@@ -4,7 +4,7 @@ import pytest
 from unittest.mock import MagicMock, patch, mock_open
 from engines.audio_voice_phrases.service import AudioVoicePhrasesService
 from engines.audio_voice_phrases.models import VoicePhraseDetectRequest
-from engines.media_v2.models import MediaAsset, DerivedArtifact
+from atoms_core.src.media.v2.models import MediaAsset, DerivedArtifact
 
 @patch("engines.audio_voice_phrases.service.get_media_service")
 @patch("engines.audio_voice_phrases.service.GcsClient")

@@ -4,7 +4,7 @@ from engines.sample_pack_engine.service import SamplePackEngineService, SamplePa
 from engines.audio_field_to_samples.models import FieldToSamplesResult
 from engines.audio_fx_chain.models import FxChainResult
 from engines.audio_normalise.models import NormaliseResult
-from engines.media_v2.models import DerivedArtifact, MediaAsset
+from atoms_core.src.media.v2.models import DerivedArtifact, MediaAsset
 
 def test_generate_pack_orchestration():
     mock_media = MagicMock()
