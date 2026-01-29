@@ -1,0 +1,77 @@
+
+> atoms-app@0.1.0 dev
+> next dev -p 3001 -p 3004
+
+WARNING: Could not load secret supabase-url.txt from vault.
+WARNING: Could not load secret supabase_publishable_api.txt from vault.
+WARNING: Could not load secret resend-key.txt from vault.
+WARNING: Could not load secret supabase-url.txt from vault.
+WARNING: Could not load secret supabase_publishable_api.txt from vault.
+WARNING: Could not load secret resend-key.txt from vault.
+  ▲ Next.js 14.2.35
+  - Local:        http://localhost:3004
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 2.8s
+ ○ Compiling /god/factory ...
+ ✓ Compiled /god/factory in 5.6s (601 modules)
+ GET /god/factory 200 in 6244ms
+ ✓ Compiled in 703ms (306 modules)
+ ○ Compiling /api/god/factory/spawn ...
+ ✓ Compiled /api/god/factory/spawn in 5.3s (317 modules)
+API Route Error: SyntaxError: Unexpected end of JSON input
+    at JSON.parse (<anonymous>)
+    at parseJSONFromBytes (node:internal/deps/undici/undici:5852:19)
+    at successSteps (node:internal/deps/undici/undici:5833:27)
+    at consumeBody (node:internal/deps/undici/undici:5839:9)
+    at NextRequest.json (node:internal/deps/undici/undici:5779:18)
+    at POST (webpack-internal:///(rsc)/./src/app/api/god/factory/spawn/route.ts:12:32)
+    at /app/atoms-app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57234
+    at /app/atoms-app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/app/a ⚠ Found a change in next.config.mjs. Restarting the server to apply the changes...
+WARNING: Could not load secret supabase-url.txt from vault.
+WARNING: Could not load secret supabase_publishable_api.txt from vault.
+WARNING: Could not load secret resend-key.txt from vault.
+  ▲ Next.js 14.2.35
+  - Local:        http://localhost:3003
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 3.7s
+<w> [webpack.cache.PackFileCache[?25h
+y] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/app/atoms-app/.next/cache/webpack/client-development/0.pack.gz_' -> '/app/atoms-app/.next/cache/webpack/client-development/0.pack.gz'
+[?25h
+p://localhost:3001
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 3.7s
+[?25h
+p/atoms-app/node_modules/next/dist/server/lib/trace/tracer.js:122:28)
+    at /app/atoms-app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:48896
+    at AsyncLocalStorage.run (node:internal/async_local_storage/async_hooks:91:14)
+    at Object.wrap (/app/atoms-app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:40958)
+    at /app/atoms-app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:47472
+    at AsyncLocalStorage.run (node:internal/async_local_storage/async_hooks:91:14)
+    at Object.wrap (/app/atoms-app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:38293)
+    at /app/atoms-app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:47434
+    at AsyncLocalStorage.run (node:internal/async_local_storage/async_hooks:91:14)
+    at eT.execute (/app/atoms-app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46881)
+    at eT.handle (/app/atoms-app/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58771)
+    at doRender (/app/atoms-app/node_modules/next/dist/server/base-server.js:1366:60)
+    at cacheEntry.responseCache.get.routeKind (/app/atoms-app/node_modules/next/dist/server/base-server.js:1588:34)
+    at ResponseCache.get (/app/atoms-app/node_modules/next/dist/server/response-cache/index.js:49:26)
+    at DevServer.renderToResponseWithComponentsImpl (/app/atoms-app/node_modules/next/dist/server/base-server.js:1496:53)
+ ✓ Compiled in 649ms (625 modules)
+ ⚠ Found a change in next.config.mjs. Restarting the server to apply the changes...
+WARNING: Could not load secret supabase-url.txt from vault.
+WARNING: Could not load secret supabase_publishable_api.txt from vault.
+WARNING: Could not load secret resend-key.txt from vault.
+  ▲ Next.js 14.2.35
+  - Local:        http://localhost:3004
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 3.4s
+[?25h
