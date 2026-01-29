@@ -127,3 +127,34 @@ To bridge the gap between `northstar-engines` (Legacy) and `atoms-ui` (New World
 
 
 ```
+
+# UI Architecture: The Graph Orchestration Rig
+
+## Core Concept
+We are building **Orchestration Flows**.
+The **Harness (The Rig)** is the persistent container (Agent, Video, Graph Context).
+The **Canvas** is the swappable workspace. Our primary canvas is the **WYSIWYG Canvas**, a generic builder for composing UI atoms.
+
+## Directory Structure (`/atoms-ui`)
+We separate the "Persistent Rig" from the "Transient Canvases."
+
+```text
+/atoms-ui
+├── /harness             # THE RIG (Persistent)
+│   ├── FlowHarness.tsx     # The Master Layout
+│   ├── /shells
+│   │   ├── TopPill.tsx     # Viewport, Export, Context
+│   │   ├── ChatRail.tsx    # Agent Interface
+│   │   ├── ToolPop.tsx     # The Magnifier Control Container
+│   │   └── ToolPill.tsx    # The "Add Element" Container
+│   └── /context
+│       └── FlowContext.tsx # Shared State
+│
+└── /canvases            # THE WORKSPACES
+    └── /wysiwyg         # The WYSIWYG Builder (Formerly Multi21)
+        ├── WysiwygCanvas.tsx   # The Dnd Context & Grid Logic
+        ├── WysiwygToolbar.tsx  # The Sliders (Plugs into ToolPop)
+        ├── WysiwygAddMenu.tsx  # The Icons (Plugs into ToolPill)
+        └── /atoms              # Individual UI Elements
+            └── MultiTile.tsx   # The Generic Grid Atom (Polymorphic)
+```
