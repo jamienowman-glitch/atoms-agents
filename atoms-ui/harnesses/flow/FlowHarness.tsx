@@ -1,42 +1,8 @@
-"use client";
-
-import React from 'react';
-import { FlowProvider } from './context/FlowContext';
-import { TopPill } from './shells/TopPill';
-import { ChatRail } from './shells/ChatRail';
-import { ToolPop } from './shells/ToolPop';
-import { ToolPill } from './shells/ToolPill';
-
-interface FlowHarnessProps {
-    children: React.ReactNode;
-    toolPopContent?: React.ReactNode;
-    toolPillContent?: React.ReactNode;
-}
-
-export function FlowHarness({ children, toolPopContent, toolPillContent }: FlowHarnessProps) {
-    return (
-        <FlowProvider>
-            <div className="min-h-screen bg-neutral-100 dark:bg-black text-neutral-900 dark:text-neutral-100 font-sans selection:bg-orange-500/30">
-                {/* 1. Global HUD */}
-                <TopPill />
-
-                {/* 2. The Canvas Workspace */}
-                <main className="relative z-0 min-h-screen pt-16 pb-32">
-                    {children}
-                </main>
-
-                {/* 3. The Orchestration Layer (Overlays) */}
-                <ChatRail />
-
-                {/* 4. Tool Surfaces */}
-                <ToolPop isOpen={!!toolPopContent}>
-                    {toolPopContent}
-                </ToolPop>
-
-                <ToolPill>
-                    {toolPillContent}
-                </ToolPill>
-            </div>
-        </FlowProvider>
-    );
-}
+// Stub for the Rig
+// Note: We are just proving the structure. Connect transport later.
+export const FlowHarness = ({ children }: { children: React.ReactNode }) => (
+    <div className="h-screen bg-gray-100 p-4 border-4 border-blue-500 flex flex-col">
+        <div className="bg-blue-800 text-white p-2">RIG: Flow Harness</div>
+        <div className="flex-1 overflow-auto">{children}</div>
+    </div>
+);
