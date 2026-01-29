@@ -9,6 +9,7 @@ const TRANSPORT_CONFIG = {
     httpHost: 'http://localhost:8000',
     wsHost: 'ws://localhost:8000',
     token: 'mock_token',
+    threadId: 'default_thread',
     context: {
         tenant_id: 't_system',
         mode: 'saas' as const,
@@ -38,7 +39,7 @@ function keyOf(target: ToolTarget) {
 
 export function ToolControlProvider({ children, initialState = {} }: { children: React.ReactNode; initialState?: ToolControlState }) {
     const [state, setState] = useState<ToolControlState>(initialState);
-    const registry = useMemo(() => TOOL_REGISTRY, []);
+    const registry = useMemo(() => ({}), []);
 
     // Transport Instance
     const transportRef = useRef<CanvasTransport | null>(null);

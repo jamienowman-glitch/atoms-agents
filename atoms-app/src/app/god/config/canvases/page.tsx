@@ -438,7 +438,7 @@ export default function CanvasesConfigPage() {
         const existing = slot.right_controls_by_category[categoryId] || [];
         const nextControls = {
             ...slot.right_controls_by_category,
-            [categoryId]: [...existing, { name: 'new_control', control_type: 'slider', token: 'new.token', min: 0, max: 100, step: 1 }]
+            [categoryId]: [...existing, { name: 'new_control', control_type: 'slider' as const, token: 'new.token', min: 0, max: 100, step: 1 }]
         };
         updateSlot(slotIndex, { right_controls_by_category: nextControls });
     };

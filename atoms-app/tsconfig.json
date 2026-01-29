@@ -28,6 +28,39 @@
             ],
             "atoms-ui/*": [
                 "../atoms-ui/*"
+            ],
+            "react": [
+                "./node_modules/@types/react"
+            ],
+            "react-dom": [
+                "./node_modules/@types/react-dom"
+            ],
+            "zustand": [
+                "./node_modules/zustand"
+            ],
+            "idb-keyval": [
+                "./node_modules/idb-keyval"
+            ],
+            "uuid": [
+                "./node_modules/@types/uuid"
+            ],
+            "reactflow": [
+                "./node_modules/reactflow"
+            ],
+            "wavesurfer.js": [
+                "./node_modules/wavesurfer.js"
+            ],
+            "@tiptap/react": [
+                "./node_modules/@tiptap/react"
+            ],
+            "@tiptap/starter-kit": [
+                "./node_modules/@tiptap/starter-kit"
+            ],
+            "@tsparticles/react": [
+                "./node_modules/@tsparticles/react"
+            ],
+            "@tsparticles/slim": [
+                "./node_modules/@tsparticles/slim"
             ]
         }
     },
