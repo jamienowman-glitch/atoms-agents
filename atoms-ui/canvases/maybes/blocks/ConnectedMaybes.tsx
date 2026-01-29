@@ -5,6 +5,7 @@ import { MaybesCity } from './molecules/MaybesCity';
 import { useMaybesStore } from '../logic/store';
 import { saveLocal, loadLocal } from '../logic/persistence';
 import { CanvasActionContext } from '../logic/CanvasActionContext';
+import { MaybesToolPill } from './MaybesToolPill';
 
 export const ConnectedMaybes = () => {
     const transport = useCanvasTransport();
@@ -30,15 +31,21 @@ export const ConnectedMaybes = () => {
         // Emit command via transport
         if (!transport) return;
 
-        transport.sendCommand({
+        // Use Command type extension fields (type, command, payload)
+        transport.sendCommand('maybes-canvas', {
+            base_rev: 0,
+            ops: [],
+            actor_id: 'user',
+            correlation_id: `forward-${Date.now()}`,
             type: 'FORWARD_NODE',
-            nodeId,
-            payload,
-            timestamp: Date.now()
+            payload: {
+                nodeId,
+                content: payload,
+                timestamp: Date.now()
+            }
         });
 
         console.log('[ConnectedMaybes] Forwarding node', nodeId);
-        // Optimistic update?
     }, [transport]);
 
     // Effect: Listen to activeMode changes to trigger creation
@@ -75,7 +82,7 @@ export const ConnectedMaybes = () => {
     // Verify transport connection on mount
     useEffect(() => {
         if (!transport) return;
-        console.log('[ConnectedMaybes] Transport active', transport.socketId);
+        console.log('[ConnectedMaybes] Transport active');
     }, [transport]);
 
     return (
@@ -86,6 +93,9 @@ export const ConnectedMaybes = () => {
                     mode={activeMode}
                     transport={transport}
                 />
+
+                {/* Canvas-scoped ToolPill */}
+                <MaybesToolPill />
             </div>
         </CanvasActionContext.Provider>
     );

@@ -55,9 +55,8 @@ export const MessageStream = () => {
                         <div className="w-8 h-8 rounded-full bg-neutral-800 flex items-center justify-center text-neutral-400 text-[10px] font-bold shrink-0 border border-neutral-700">AI</div>
                         <div className="flex flex-col gap-1 max-w-[calc(100%-48px)] group">
                             <div className="bg-neutral-800/50 p-3 rounded-2xl rounded-tl-sm text-neutral-300 text-sm leading-relaxed border border-white/5">
-                                <p>I can help you adjust the grid layout or add new tiles. Just type below.</p>
+                                <p>I can help you navigate the HAZE memory space. Use the controls below.</p>
                             </div>
-                            <div className="text-xs text-neutral-500">Awaiting run events...</div>
                         </div>
                     </div>
                 )}

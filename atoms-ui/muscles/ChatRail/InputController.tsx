@@ -25,7 +25,7 @@ export const InputController = ({ autoFocus = false }: { autoFocus?: boolean }) 
     return (
         <div className="px-3 py-3 border-t border-white/10 bg-neutral-900 pb-safe w-full max-w-full">
             <div className="flex items-center gap-2 bg-neutral-950 border border-white/10 rounded-full px-4 py-2 focus-within:border-neutral-500 transition-colors w-full max-w-full">
-                <img src="/assets/AGENT_STREETWEAR_BLACK.png" alt="Agent Streetwear" className="h-6 w-6 object-contain" />
+                <img src="/assets/AGENT_STREETWEAR_WHITE.png" alt="Agent Streetwear" className="h-6 w-6 object-contain" />
                 <input
                     ref={inputRef}
                     type="text"

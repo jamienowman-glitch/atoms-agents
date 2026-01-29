@@ -31,22 +31,14 @@
             "magnifiers": {
                 "left": {
                     "type": "wheel_selector",
+                    "orientation": "vertical",
                     "default": "nav.forward"
                 },
                 "right": {
                     "type": "wheel_selector",
+                    "orientation": "horizontal",
                     "default": "nav.turn"
                 }
-            },
-            "sliders": {
-                "layout": [
-                    "nav.speed",
-                    "nav.zoom"
-                ],
-                "nodes": [
-                    "node.scale",
-                    "node.detail"
-                ]
             }
         }
     }

@@ -4,13 +4,11 @@ import React, { useRef, useEffect } from 'react';
 import { HazeNode } from '../atoms/HazeNode';
 
 interface HazeWorldProps {
-    speed: number;
-    zoom: number;
     deltaForward: number;
     deltaTurn: number;
 }
 
-export const HazeWorld: React.FC<HazeWorldProps> = ({ speed, zoom, deltaForward, deltaTurn }) => {
+export const HazeWorld: React.FC<HazeWorldProps> = ({ deltaForward, deltaTurn }) => {
     // Pure Visual Component - No Hooks for Data Fetching
     // In a real implementation this would use WebGL (Three.js/R3F)
     // For now we use CSS 3D Transforms to prove the concept
@@ -26,7 +24,7 @@ export const HazeWorld: React.FC<HazeWorldProps> = ({ speed, zoom, deltaForward,
             <div
                 className="relative w-[800px] h-[800px] transform-style-3d transition-transform duration-75 ease-linear"
                 style={{
-                    transform: `translateZ(${zoom * 100}px) rotateY(${deltaTurn * 2}deg) translateZ(${deltaForward * 10}px)`
+                    transform: `rotateY(${deltaTurn}deg) translateZ(${deltaForward * 10}px)`
                 }}
             >
                 {/* Mock Data Grid */}
@@ -45,9 +43,8 @@ export const HazeWorld: React.FC<HazeWorldProps> = ({ speed, zoom, deltaForward,
 
             {/* HUD */}
             <div className="absolute top-4 left-4 text-xs font-mono text-green-500/50 pointer-events-none">
-                <div>SPEED: {speed.toFixed(2)}</div>
-                <div>ZOOM: {zoom.toFixed(2)}</div>
-                <div>POS: {deltaForward.toFixed(1)} / {deltaTurn.toFixed(1)}</div>
+                <div>FORWARD: {deltaForward.toFixed(1)}</div>
+                <div>TURN: {deltaTurn.toFixed(1)}°</div>
             </div>
         </div>
     );

@@ -10,9 +10,10 @@ import 'reactflow/dist/style.css';
 export const MaybesCanvas = () => {
     // We instantiate the harness, which provides the ToolControlContext and CanvasTransport
     // The ConnectedMaybes block will consume these contexts.
+    // We hide the global ToolPill and render our canvas-scoped MaybesToolPill instead
 
     return (
-        <ToolHarness>
+        <ToolHarness showToolPill={false}>
             <ConnectedMaybes />
         </ToolHarness>
     );

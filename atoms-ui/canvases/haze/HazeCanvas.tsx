@@ -1,13 +1,17 @@
 'use client';
 
 import React from 'react';
+import { HazeToolHarness } from './HazeToolHarness';
 import { ConnectedHaze } from './blocks/ConnectedHaze';
+import { HAZE_TOOL_REGISTRY } from './tool-registry';
 
 export function HazeCanvas() {
     return (
-        <div className="w-full h-full bg-black relative overflow-hidden">
-            {/* The Haze World Controller */}
+        <HazeToolHarness
+            scope={{ surfaceId: 'haze', scope: 'global' }}
+            registry={HAZE_TOOL_REGISTRY}
+        >
             <ConnectedHaze />
-        </div>
+        </HazeToolHarness>
     );
 }

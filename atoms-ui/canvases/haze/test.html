@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HAZE Canvas Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            overflow: hidden;
+            touch-action: none;
+        }
+
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            perspective: 1000px;
+            overflow: hidden;
+        }
+
+        #world {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 800px;
+            height: 800px;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
+        }
+
+        .node {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background: rgba(40, 40, 50, 0.8);
+            border: 1px solid rgba(100, 255, 100, 0.3);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-center;
+            font-size: 10px;
+            text-align: center;
+            padding: 8px;
+            backface-visibility: visible;
+        }
+
+        .hud {
+            position: fixed;
+            top: 12px;
+            left: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            color: rgba(100, 255, 100, 0.5);
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(20, 20, 20, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 100;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .control-group {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .control-group label {
+            display: block;
+            font-size: 9px;
+            margin-bottom: 4px;
+            color: rgba(255, 255, 255, 0.5);
+            font-family: 'Courier New', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .control-group input[type="range"] {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .control-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        #btn-reset {
+            padding: 10px 16px;
+            background: #ef4444;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            font-size: 11px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="canvas-container">
+        <div id="world"></div>
+
+        <div class="hud">
+            <div id="hud-forward">FORWARD: 0.0</div>
+            <div id="hud-turn">TURN: 0.0°</div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <div class="control-group">
+            <label>Forward</label>
+            <input type="range" id="slider-forward" min="-100" max="100" step="1" value="0">
+        </div>
+        <div class="control-group">
+            <label>Turn</label>
+            <input type="range" id="slider-turn" min="-180" max="180" step="1" value="0">
+        </div>
+        <button id="btn-reset">RESET</button>
+    </div>
+
+    <script>
+        // Create 9 memory nodes
+        const world = document.getElementById('world');
+        for (let i = 0; i < 9; i++) {
+            const node = document.createElement('div');
+            node.className = 'node';
+            node.textContent = `Memory ${i + 1}`;
+            node.style.transform = `translate(-50%, -50%) rotateY(${i * 40}deg) translateZ(300px)`;
+            world.appendChild(node);
+        }
+
+        // State
+        let state = { forward: 0, turn: 0 };
+
+        // Update transform
+        function updateTransform() {
+            world.style.transform = `rotateY(${state.turn}deg) translateZ(${state.forward * 10}px)`;
+            document.getElementById('hud-forward').textContent = `FORWARD: ${state.forward.toFixed(1)}`;
+            document.getElementById('hud-turn').textContent = `TURN: ${state.turn.toFixed(1)}°`;
+        }
+
+        // Event listeners
+        document.getElementById('slider-forward').addEventListener('input', (e) => {
+            state.forward = parseFloat(e.target.value);
+            updateTransform();
+        });
+
+        document.getElementById('slider-turn').addEventListener('input', (e) => {
+            state.turn = parseFloat(e.target.value);
+            updateTransform();
+        });
+
+        document.getElementById('btn-reset').addEventListener('click', () => {
+            state = { forward: 0, turn: 0 };
+            document.getElementById('slider-forward').value = 0;
+            document.getElementById('slider-turn').value = 0;
+            updateTransform();
+        });
+
+        // Initial render
+        updateTransform();
+    </script>
+</body>
+
+</html>
