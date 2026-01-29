@@ -4,7 +4,7 @@ from unittest.mock import MagicMock, patch
 from engines.audio_hits.service import AudioHitsService
 from engines.audio_hits.models import HitDetectRequest
 from engines.audio_shared.health import DependencyInfo
-from engines.media_v2.models import MediaAsset, DerivedArtifact
+from atoms_core.src.media.v2.models import MediaAsset, DerivedArtifact
 
 def test_detect_hits_basic():
     mock_media = MagicMock()

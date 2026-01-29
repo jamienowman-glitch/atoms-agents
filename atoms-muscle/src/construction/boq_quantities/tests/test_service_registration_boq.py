@@ -5,7 +5,7 @@ Tests for BoQ service registration integration.
 import pytest
 from engines.boq_quantities.service import BoQQuantitiesService
 from engines.boq_quantities.models import BoQModel
-from engines.media_v2.models import DerivedArtifact
+from atoms_core.src.media.v2.models import DerivedArtifact
 
 # Mock Context
 class MockContext:

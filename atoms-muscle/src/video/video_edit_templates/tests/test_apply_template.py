@@ -4,7 +4,7 @@ from engines.video_edit_templates.models import EditTemplate, TrackBlueprint, Cl
 from engines.video_edit_templates.service import TemplateService
 from engines.video_edit_templates.registry import TemplateRegistry
 from engines.video_timeline.models import VideoProject, Sequence
-from engines.media_v2.models import MediaAsset
+from atoms_core.src.media.v2.models import MediaAsset
 
 @patch("engines.video_edit_templates.service.get_timeline_service")
 @patch("engines.video_edit_templates.service.get_media_service")

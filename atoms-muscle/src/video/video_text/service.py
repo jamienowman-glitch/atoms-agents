@@ -3,8 +3,8 @@ from __future__ import annotations
 import tempfile
 from typing import Dict, Optional
 
-from engines.media_v2.models import MediaUploadRequest
-from engines.media_v2.service import MediaService, get_media_service
+from atoms_core.src.media.v2.models import MediaUploadRequest
+from atoms_core.src.media.v2.service import MediaService, get_media_service
 from engines.typography_core.models import TextLayoutRequest
 from engines.typography_core.renderer import TextLayoutResult, TypographyRenderer
 from engines.video_text.models import TextRenderRequest, TextRenderResponse

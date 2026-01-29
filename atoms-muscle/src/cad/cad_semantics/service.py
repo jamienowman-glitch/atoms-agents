@@ -29,7 +29,7 @@ from .rules import (
     infer_levels_from_elevations,
 )
 
-# from engines.media_v2.models import DerivedArtifact
+# from atoms_core.src.media.v2.models import DerivedArtifact
 
 
 class SemanticCache:

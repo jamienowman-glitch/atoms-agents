@@ -7,7 +7,7 @@ from fastapi.testclient import TestClient
 from engines.video_captions.backend import StubAsrBackend
 from engines.video_captions.routes import router
 from engines.video_captions.service import VideoCaptionsService, TranscriptSegment
-from engines.media_v2.models import MediaAsset, DerivedArtifact
+from atoms_core.src.media.v2.models import MediaAsset, DerivedArtifact
 
 @patch("engines.video_captions.service.get_media_service")
 @patch("engines.video_captions.service.GcsClient")

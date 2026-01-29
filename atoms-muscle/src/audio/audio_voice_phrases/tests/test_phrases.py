@@ -7,7 +7,7 @@ from unittest.mock import MagicMock, patch
 from engines.audio_voice_phrases.service import AudioVoicePhrasesService
 from engines.audio_voice_phrases.models import VoicePhraseDetectRequest
 from engines.audio_shared.health import DependencyInfo
-from engines.media_v2.models import MediaAsset, DerivedArtifact
+from atoms_core.src.media.v2.models import MediaAsset, DerivedArtifact
 
 def _create_temp_transcript():
     data = [

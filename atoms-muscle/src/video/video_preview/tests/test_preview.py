@@ -4,10 +4,10 @@ from unittest.mock import MagicMock, patch
 
 from engines.video_preview.models import PreviewRequest
 from engines.video_preview.service import PreviewService
-from engines.media_v2.service import MediaService, InMemoryMediaRepository, LocalMediaStorage, set_media_service
+from atoms_core.src.media.v2.service import MediaService, InMemoryMediaRepository, LocalMediaStorage, set_media_service
 from engines.video_timeline.service import TimelineService, InMemoryTimelineRepository, set_timeline_service
 from engines.video_render.service import RenderService
-from engines.media_v2.models import MediaUploadRequest, DerivedArtifact
+from atoms_core.src.media.v2.models import MediaUploadRequest, DerivedArtifact
 from engines.video_timeline.models import VideoProject, Sequence, Track, Clip
 
 def test_preview_proxy_enforcement_missing():

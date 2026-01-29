@@ -2,7 +2,7 @@ from unittest.mock import MagicMock
 from engines.video_multicam.service import MultiCamService
 from engines.align.service import AlignService
 from engines.video_multicam.models import CreateMultiCamSessionRequest, MultiCamTrackSpec, MultiCamAlignRequest
-from engines.media_v2.models import MediaAsset
+from atoms_core.src.media.v2.models import MediaAsset
 
 def test_multicam_sync_integration():
     # Setup

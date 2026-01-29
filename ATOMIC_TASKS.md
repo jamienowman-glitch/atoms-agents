@@ -2,6 +2,9 @@
 
 The Connector Factory is being rebuilt inside `atoms-core`/`atoms-app`. The following atomic tasks break the work into executable steps for junior agents. Each phase names files, schema, and checks required to keep the FIREARMS rule and scope coverage mandate.
 
+## UX Law (God Config)
+The God Config UI must follow the existing config style but avoid nesting cards inside cards. Prefer flat sections with clear headers and collapsible bodies. Mobile usability is a first-class requirement.
+
 ### Phase 1 – The Foundation (Supabase Schema)
 1. **Create `firearm_types` registry**  
    - File: `atoms-core/sql/016_firearm_types.sql` (new migration).  
@@ -31,6 +34,21 @@ The Connector Factory is being rebuilt inside `atoms-core`/`atoms-app`. The foll
    - File: `atoms-app/lib/engines/utm-engine.ts`.  
    - Pure function that accepts provider context, `utm_templates`, and generates normalized templates for first/last touch + content type. Document inputs/outputs.
 
+### Phase 2.5 – UI Build (God Config: Connectors)
+1. **Add top-level nav entry**  
+   - File: `atoms-app/src/app/god/config/...` (follow existing config nav).  
+   - Label: `Connectors` (or final name; must be logged in AGENTS).
+2. **Connectors list view**  
+   - Pull list from `connector_providers`.  
+   - Display logo + name + status.  
+   - Avoid nested cards; use a single list with clear separators.
+3. **Connector editor (collapsible sections)**  
+   - Sections: Dev Account, Scopes, KPI, UTM, Budgets, OAuth/Marketplace, BYOK.  
+   - Each section collapses to a single header line and expands to flat fields.  
+   - All dropdowns are Supabase-backed with Plus buttons that insert new entries and refresh lists.
+4. **Mobile usability**  
+   - Ensure scrollable sections, large touch targets, and no horizontal overflow.
+
 ### Phase 3 – The Reference Library
 1. **Seed Core KPIs from legacy data**  
    - Source: `northstar-engines/data/seed/surfaces/squared2/kpi.json`.  
@@ -42,11 +60,27 @@ The Connector Factory is being rebuilt inside `atoms-core`/`atoms-app`. The foll
 3. **Document Firearms rule**  
    - In `atoms-core/docs/SCOPE_AUDIT_CHECKLIST.md` add a top note: “Firearms table is the only danger gate; every `requires_firearm = true` entry must point to `firearms_types`. No other danger/risk fields exist.”
 
+### Phase 3.5 – Connector Skills (Samples)
+1. **Add sample SKILLs (YouTube, Shopify)**  
+   - Files:  
+     - `atoms-connectors/src/youtube/SKILL.md`  
+     - `atoms-connectors/src/shopify/SKILL.md`  
+   - Use the agent skill format with metadata + usage.  
+   - Must align to the Connector Factory contract (scopes, KPI mappings, UTM templates, firearms rules).
+
 ### Phase 4 – Verification & Decommission
 1. **Firearms Audit**  
    - Task: run schema validation or SQL check that `connector_scopes` includes `requires_firearm` boolean and `firearm_type_id` FK; missing either is a failure (build stops). Document verification script or query (e.g., `SELECT column_name FROM information_schema.columns ...`).
 2. **Clean legacy references**  
    - After KPI migration and scope checklist move complete, confirm no atoms-* files refer to `northstar-engines/` to prevent broken links.
+
+## Kickoff Prompt (for a Junior UX Agent)
+Role: UX Expert  
+Goal: Build the God Config “Connectors” UI with mobile-first usability.  
+Constraints: No nested cards inside cards; flat layout with collapsible headers.  
+Scope: Implement list view + editor sections for Dev Account, Scopes, KPI, UTM, Budgets, OAuth/Marketplace, BYOK.  
+Data: All dropdowns must be Supabase-backed and support Plus buttons for persistent adds.  
+Deliverable: a working UI scaffold wired to Supabase reads/writes, plus empty-state UX for first-run.
 
 ### Notes for Junior Workers
 - Always cite absolute paths.  

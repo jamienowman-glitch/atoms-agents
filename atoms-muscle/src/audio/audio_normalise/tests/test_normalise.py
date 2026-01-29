@@ -6,8 +6,8 @@ from unittest.mock import MagicMock, patch
 
 from engines.audio_normalise.service import AudioNormaliseService, NormaliseRequest
 from engines.audio_shared.health import DependencyInfo
-from engines.media_v2.models import MediaAsset, DerivedArtifact
-from engines.media_v2.service import MediaService
+from atoms_core.src.media.v2.models import MediaAsset, DerivedArtifact
+from atoms_core.src.media.v2.service import MediaService
 
 FIXTURE_PATH = os.path.abspath("engines/audio_hits/tests/fixtures/audio_hit.wav")
 MOCK_FEATURES = {"brightness": 1000.0, "key_root": "B"}

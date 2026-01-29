@@ -27,10 +27,10 @@ else:
     SUPABASE_KEY = read_vault("supabase-service-key.txt")
     supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-# Relative path from atoms-core/scripts/ to atoms-muscle/src/muscle
+# Relative path from atoms-core/scripts/ to atoms-muscle/src
 # Script is in atoms-core/scripts/
 ROOT_DIR = Path(__file__).parent.parent.parent
-MUSCLE_ROOT = ROOT_DIR / "atoms-muscle/src/muscle"
+MUSCLE_ROOT = ROOT_DIR / "atoms-muscle/src"
 
 async def sync_muscles():
     print(f"🏋️ Scanning Muscles at {MUSCLE_ROOT}...")
@@ -50,21 +50,17 @@ async def sync_muscles():
                 continue
 
             # Check if this IS a muscle (has service.py or is a folder in a category)
-            # In atoms-muscle/src/muscle: 
+            # In atoms-muscle/src:
             #   Category -> Muscle -> service.py
             #   So verify if item_path is a Category
-            
-            # If we are scanning "src/muscle", item IS a category.
+
+            # If we are scanning "src", item IS a category.
             if category_prefix == "":
                  category = item_name
                  for muscle_name in os.listdir(item_path):
                      muscle_path = os.path.join(item_path, muscle_name)
                      if os.path.isdir(muscle_path) and not muscle_name.startswith("__"):
                          found.append(process_muscle(muscle_path, category, muscle_name))
-            
-            # If we are scanning "legacy/muscle", item IS a muscle.
-            elif category_prefix == "legacy":
-                 found.append(process_muscle(item_path, "legacy", item_name))
         return found
 
     def process_muscle(path, category, name):

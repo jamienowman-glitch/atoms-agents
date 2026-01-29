@@ -14,8 +14,8 @@ from engines.audio_semantic_timeline.service import (
 )
 from engines.audio_semantic_timeline.models import AudioSemanticAnalyzeRequest, AudioSemanticTimelineSummary
 from engines.audio_semantic_timeline.routes import router as semantic_router
-from engines.media_v2.models import MediaUploadRequest
-from engines.media_v2.service import InMemoryMediaRepository, MediaService, set_media_service
+from atoms_core.src.media.v2.models import MediaUploadRequest
+from atoms_core.src.media.v2.service import InMemoryMediaRepository, MediaService, set_media_service
 from engines.video_timeline.models import VideoProject, Sequence, Track, Clip
 from engines.video_timeline.service import InMemoryTimelineRepository, TimelineService, get_timeline_service, set_timeline_service
 

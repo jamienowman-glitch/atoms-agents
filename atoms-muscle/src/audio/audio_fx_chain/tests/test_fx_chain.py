@@ -8,8 +8,8 @@ from unittest.mock import MagicMock, patch
 from engines.audio_fx_chain.service import AudioFxChainService
 from engines.audio_fx_chain.models import FxChainRequest
 from engines.audio_shared.health import DependencyInfo, DependencyMissingError
-from engines.media_v2.models import MediaAsset, DerivedArtifact, MediaUploadRequest, ArtifactCreateRequest
-from engines.media_v2.service import MediaService
+from atoms_core.src.media.v2.models import MediaAsset, DerivedArtifact, MediaUploadRequest, ArtifactCreateRequest
+from atoms_core.src.media.v2.service import MediaService
 
 # Use a real fixture path
 FIXTURE_PATH = os.path.abspath("engines/audio_hits/tests/fixtures/audio_hit.wav")

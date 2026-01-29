@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import MagicMock, patch
 from engines.audio_harmony.service import AudioHarmonyService, HarmonyRequest, KeyEstimate
-from engines.media_v2.models import DerivedArtifact, MediaAsset
+from atoms_core.src.media.v2.models import DerivedArtifact, MediaAsset
 from engines.audio_resample.models import ResampleResult
 
 def test_detect_key():

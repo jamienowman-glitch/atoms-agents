@@ -6,7 +6,7 @@ from engines.video_360.service import get_video_360_service, Video360Service
 from muscle.engines.common.identity_stub import RequestContext, get_request_context
 from muscle.engines.identity.auth_stub import get_auth_context
 from engines.identity.jwt_service import AuthContext
-from engines.media_v2.models import MediaAsset
+from atoms_core.src.media.v2.models import MediaAsset
 from unittest.mock import MagicMock, patch
 
 def _mock_video_360_context() -> RequestContext:

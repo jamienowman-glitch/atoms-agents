@@ -4,7 +4,7 @@ import numpy as np
 from unittest.mock import MagicMock, patch
 from engines.audio_loops.service import AudioLoopsService
 from engines.audio_loops.models import LoopDetectRequest
-from engines.media_v2.models import MediaAsset, DerivedArtifact
+from atoms_core.src.media.v2.models import MediaAsset, DerivedArtifact
 
 @patch("engines.audio_loops.service.get_media_service")
 @patch("engines.audio_loops.service.GcsClient")

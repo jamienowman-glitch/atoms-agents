@@ -6,8 +6,8 @@ from pathlib import Path
 from typing import Optional, List
 
 from muscle.engines.common.identity_stub import RequestContext
-from engines.media_v2.service import get_media_service
-from engines.media_v2.models import ArtifactCreateRequest, MediaAsset, MediaUploadRequest, DerivedArtifact
+from atoms_core.src.media.v2.service import get_media_service
+from atoms_core.src.media.v2.models import ArtifactCreateRequest, MediaAsset, MediaUploadRequest, DerivedArtifact
 from engines.storage.gcs_client import GcsClient
 from engines.video_captions.backend import AsrBackend, StubAsrBackend, TranscriptSegment, WhisperLocalBackend
 

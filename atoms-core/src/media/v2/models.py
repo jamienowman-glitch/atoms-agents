@@ -165,3 +165,13 @@ class ArtifactCreateRequest(BaseModel):
 class MediaAssetResponse(BaseModel):
     asset: MediaAsset
     artifacts: List[DerivedArtifact] = Field(default_factory=list)
+
+
+class ArtifactMetadata(BaseModel):
+    """Metadata for tracking artifact lineage and versioning."""
+    artifact_id: str
+    artifact_kind: ArtifactKind
+    source_artifact_id: Optional[str] = None
+    version: Optional[str] = None
+    content_hash: Optional[str] = None
+    metadata: Dict[str, Any] = Field(default_factory=dict)

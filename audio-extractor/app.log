@@ -173,3 +173,5 @@ Traceback (most recent call last):
     rv = file.write(s)
          ^^^^^^^^^^^^^
 OSError: [Errno 28] No space left on device
+/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/multiprocessing/resource_tracker.py:254: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '

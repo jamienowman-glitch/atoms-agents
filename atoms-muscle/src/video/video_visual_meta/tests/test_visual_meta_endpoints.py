@@ -4,8 +4,8 @@ from pathlib import Path
 from fastapi.testclient import TestClient
 
 from engines.chat.service.server import create_app
-from engines.media_v2.models import MediaUploadRequest
-from engines.media_v2.service import InMemoryMediaRepository, MediaService, set_media_service, LocalMediaStorage
+from atoms_core.src.media.v2.models import MediaUploadRequest
+from atoms_core.src.media.v2.service import InMemoryMediaRepository, MediaService, set_media_service, LocalMediaStorage
 from engines.video_visual_meta.models import VisualMetaSummary
 from engines.video_visual_meta.service import StubVisualMetaBackend, VisualMetaService, set_visual_meta_service
 from engines.video_timeline.models import VideoProject, Sequence, Track, Clip

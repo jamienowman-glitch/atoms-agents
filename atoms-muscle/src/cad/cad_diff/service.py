@@ -11,7 +11,7 @@ import hashlib
 from functools import lru_cache
 from typing import Any, Dict, List, Optional
 
-# from engines.media_v2.models import DerivedArtifact
+# from atoms_core.src.media.v2.models import DerivedArtifact
 from atoms_core.src.cad.models import SemanticElement, SpatialGraph, SemanticModel
 from atoms_core.src.construction.models import BoQItem, BoQModel
 from atoms_core.src.construction.models import CostItem, CostModel

@@ -5,8 +5,8 @@ import tempfile
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from engines.media_v2.service import get_media_service, MediaService
-from engines.media_v2.models import DerivedArtifact
+from atoms_core.src.media.v2.service import get_media_service, MediaService
+from atoms_core.src.media.v2.models import DerivedArtifact
 from engines.video_timeline.models import ParameterAutomation, Keyframe
 from engines.video_focus_automation.models import FocusRequest, FocusResult
 from engines.storage.gcs_client import GcsClient

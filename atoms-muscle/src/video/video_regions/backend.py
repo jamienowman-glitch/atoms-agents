@@ -18,8 +18,8 @@ except ImportError:
     np = None
     HAS_OPENCV = False
 
-from engines.media_v2.models import ArtifactCreateRequest, MediaAsset
-from engines.media_v2.service import MediaService
+from atoms_core.src.media.v2.models import ArtifactCreateRequest, MediaAsset
+from atoms_core.src.media.v2.service import MediaService
 from engines.video_regions.models import (
     AnalyzeRegionsRequest,
     AnalyzeRegionsResult,

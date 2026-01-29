@@ -1,8 +1,8 @@
 import os
 from unittest.mock import MagicMock, patch
 
-from engines.media_v2.models import MediaAsset, DerivedArtifact
-from engines.media_v2.models import MediaAsset, DerivedArtifact
+from atoms_core.src.media.v2.models import MediaAsset, DerivedArtifact
+from atoms_core.src.media.v2.models import MediaAsset, DerivedArtifact
 from engines.video_regions.models import AnalyzeRegionsRequest, RegionAnalysisSummary, RegionMaskEntry, AnalyzeRegionsResult
 from engines.video_regions.service import VideoRegionsService
 

@@ -3,7 +3,7 @@ from unittest.mock import MagicMock
 
 from PIL import Image
 
-from engines.media_v2.models import MediaAsset
+from atoms_core.src.media.v2.models import MediaAsset
 from engines.video_text.models import TextRenderRequest
 from engines.video_text.service import VideoTextService
 from engines.typography_core.renderer import TextLayoutMetadata, TextLayoutResult

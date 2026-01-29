@@ -9,8 +9,8 @@ logger = logging.getLogger(__name__)
 
 from engines.video_timeline.service import get_timeline_service, TimelineService
 from engines.video_timeline.models import Sequence, Track, Clip
-from engines.media_v2.service import get_media_service, MediaService
-from engines.media_v2.models import DerivedArtifact
+from atoms_core.src.media.v2.service import get_media_service, MediaService
+from atoms_core.src.media.v2.models import DerivedArtifact
 
 class VideoAssistService:
     def __init__(self, 

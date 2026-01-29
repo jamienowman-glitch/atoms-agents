@@ -3,7 +3,7 @@ from fastapi.testclient import TestClient
 from engines.video_multicam.routes import router
 from engines.video_multicam.service import MultiCamService, get_multicam_service
 from engines.video_multicam.models import MultiCamSession, MultiCamTrackSpec
-from engines.media_v2.models import MediaAsset
+from atoms_core.src.media.v2.models import MediaAsset
 
 app = MagicMock() # Placeholder if needed, but we can test router or build small app
 from fastapi import FastAPI
