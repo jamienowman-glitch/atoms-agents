@@ -1,18 +1,23 @@
 from mcp.server.fastmcp import FastMCP
-from .service import AirCanvas
+from atoms_core.src.budget.snax_guard import require_snax, PaymentRequired
+from .service import HSVBounds
 
-# Initialize FastMCP
 mcp = FastMCP("muscle-video-air_canvas")
 
-# Initialize Service
-service = AirCanvas()
+service = HSVBounds()
 
 @mcp.tool()
+@require_snax(tool_key="muscle-video-air_canvas")
 def run_air_canvas(input_path: str, **kwargs) -> dict:
     """
-    Executes the AirCanvas logic.
+    Executes HSVBounds.
     """
-    return service.run(input_path, **kwargs)
+    try:
+        return service.run(input_path, **kwargs)
+    except PaymentRequired as exc:
+        return {"error": "payment_required", "detail": str(exc)}
+    except Exception as exc:
+        return {"error": str(exc), "error_type": type(exc).__name__}
 
 if __name__ == "__main__":
     mcp.run()

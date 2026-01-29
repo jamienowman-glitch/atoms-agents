@@ -1,6 +1,6 @@
 """
 Construction Domain Models.
-Ports of PlanOfWork, BoQModel, and CostModel from northstar-engines/atoms-muscle.
+Ports of PlanOfWork, BoQModel, and CostModel from legacy engines.
 """
 
 from __future__ import annotations

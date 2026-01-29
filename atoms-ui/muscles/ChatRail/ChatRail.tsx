@@ -98,7 +98,7 @@ export function ChatRailShell({ showTools = false, onToggleTools, mode, onModeCh
             </div>
 
             {mode !== 'nano' && (
-                <div className="flex-1 flex flex-col min-h-0 bg-neutral-900 pointer-events-auto w-full max-w-full">
+                <div className="flex-1 flex flex-col min-h-0 bg-neutral-900 pointer-events-auto w-full">
                     <MessageStream />
                     <InputController autoFocus={mode !== 'full'} />
                 </div>

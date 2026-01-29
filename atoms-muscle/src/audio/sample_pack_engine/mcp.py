@@ -1,16 +1,16 @@
 from mcp.server.fastmcp import FastMCP
 from atoms_core.src.budget.snax_guard import require_snax, PaymentRequired
-from .service import PlanetSurfaceRendererService
+from .service import SamplePackEngineService
 
-mcp = FastMCP("muscle-video-video_planet_surface_renderer")
+mcp = FastMCP("muscle-audio-sample_pack_engine")
 
-service = PlanetSurfaceRendererService()
+service = SamplePackEngineService()
 
 @mcp.tool()
-@require_snax(tool_key="muscle-video-video_planet_surface_renderer")
-def run_video_planet_surface_renderer(input_path: str, **kwargs) -> dict:
+@require_snax(tool_key="muscle-audio-sample_pack_engine")
+def run_sample_pack_engine(input_path: str, **kwargs) -> dict:
     """
-    Executes PlanetSurfaceRendererService.
+    Executes SamplePackEngineService.
     """
     try:
         return service.run(input_path, **kwargs)

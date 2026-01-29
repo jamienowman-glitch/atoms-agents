@@ -2,6 +2,7 @@ node_modules/
 .next/
 dist/
 build/
+_build/
 .DS_Store
 *.pyc
 __pycache__/

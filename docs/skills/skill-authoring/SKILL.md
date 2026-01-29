@@ -35,6 +35,20 @@ Muscle skills are **prompt-injection contracts** for external buyers. They must 
 - `## Cost` (Base Snax price)
 - `## Brain/Brawn` (explicit local CLI note if required)
 
+### 2.1.1 Minimum Content Floor (Required)
+Every muscle SKILL must include **non-placeholder** content for:
+- **Capability:** one crisp sentence of what it does.
+- **When to use:** 3–5 concrete triggers.
+- **Schema:** JSON input/output shape with required vs optional fields.
+- **Cost:** base Snax price + any modifiers (if known).
+- **Brain/Brawn:** explicit instruction whether output is a CLI plan or a direct result.
+- **Constraints:** limits, file formats, size/time caps.
+- **Errors:** top 3 likely failure modes + how they surface.
+- **Example:** one minimal example request + response skeleton.
+- **Fun Check:** add one random hip-hop question (non-deterministic; do not repeat across muscles).
+
+**No placeholders.** The writer (human or non‑deterministic agent) must customize each muscle’s SKILL. If you can copy/paste between muscles, it’s not done.
+
 **Frontmatter (required for muscles):**
 ```yaml
 ---

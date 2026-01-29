@@ -7,7 +7,7 @@ from muscle.engines.common.identity_stub import (
     assert_context_matches,
     get_request_context,
 )
-from muscle.engines.identity.auth_stub import AuthContext, get_auth_context,
+from muscle.engines.identity.auth_stub import AuthContext, get_auth_context
 from engines.video_regions.models import (
     AnalyzeRegionsRequest,
     AnalyzeRegionsResult,

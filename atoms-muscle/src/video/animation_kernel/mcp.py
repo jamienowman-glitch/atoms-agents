@@ -1,24 +1,23 @@
 from mcp.server.fastmcp import FastMCP
-from atoms_core.src.animation.models import AgentAnimInstruction
-from atoms_core.src.animation.logic import AnimationService
+from atoms_core.src.budget.snax_guard import require_snax, PaymentRequired
+from .service import Service
 
-# Initialize FastMCP
 mcp = FastMCP("muscle-video-animation_kernel")
 
-# Initialize Service
-service = AnimationService()
+service = Service()
 
 @mcp.tool()
-def execute_animation(instruction: dict) -> dict:
+@require_snax(tool_key="muscle-video-animation_kernel")
+def run_animation_kernel(input_path: str, **kwargs) -> dict:
     """
-    Executes an animation instruction (Auto-Rig, IK Solve, etc).
-    Input must match AgentAnimInstruction schema.
+    Executes Service.
     """
     try:
-        model = AgentAnimInstruction(**instruction)
-        return service.execute_instruction(model)
-    except Exception as e:
-        return {"error": str(e)}
+        return service.run(input_path, **kwargs)
+    except PaymentRequired as exc:
+        return {"error": "payment_required", "detail": str(exc)}
+    except Exception as exc:
+        return {"error": str(exc), "error_type": type(exc).__name__}
 
 if __name__ == "__main__":
     mcp.run()

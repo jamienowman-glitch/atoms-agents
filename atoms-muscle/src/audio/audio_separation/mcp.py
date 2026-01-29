@@ -1,40 +1,23 @@
-import logging
 from mcp.server.fastmcp import FastMCP
+from atoms_core.src.budget.snax_guard import require_snax, PaymentRequired
 from .service import AudioSeparationService
-from atoms_core.src.audio.audio_separation.models import SeparationRequest
-from atoms_muscle.src.common.billing import require_snax
 
-# Initialize FastMCP
 mcp = FastMCP("muscle-audio-audio_separation")
 
-# Initialize Service
 service = AudioSeparationService()
 
 @mcp.tool()
-@require_snax()
-def run_audio_separation(
-    tenant_id: str,
-    env: str,
-    artifact_id: str,
-    model_name: str = "htdemucs",
-    two_stems: str = None
-) -> dict:
+@require_snax(tool_key="muscle-audio-audio_separation")
+def run_audio_separation(input_path: str, **kwargs) -> dict:
     """
-    Separates audio into stems (drums, bass, vocals, other).
+    Executes AudioSeparationService.
     """
     try:
-        req = SeparationRequest(
-            tenant_id=tenant_id,
-            env=env,
-            artifact_id=artifact_id,
-            model_name=model_name,
-            two_stems=two_stems
-        )
-        result = service.separate_audio(req)
-        return result.model_dump()
-    except Exception as e:
-        logging.error(f"Error in run_audio_separation: {e}")
-        return {"error": str(e)}
+        return service.run(input_path, **kwargs)
+    except PaymentRequired as exc:
+        return {"error": "payment_required", "detail": str(exc)}
+    except Exception as exc:
+        return {"error": str(exc), "error_type": type(exc).__name__}
 
 if __name__ == "__main__":
     mcp.run()

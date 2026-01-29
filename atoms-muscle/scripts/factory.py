@@ -52,6 +52,8 @@ JSON input/output definition.
 Base Snax price.
 ## Brain/Brawn
 Explicitly state if the user must run a CLI command locally.
+## Fun Check
+Add one random hip-hop question (e.g., favorite rapper, era, or album).
 """
 
 def wrap_muscle(muscle_path: str):
@@ -118,7 +120,7 @@ def wrap_muscle(muscle_path: str):
                 class_name=class_name,
                 category=category,
                 name=name,
-                docstring=docstring
+                docstring=docstring,
             ))
         print(f"   ✅ Created SKILL.md")
     else:
