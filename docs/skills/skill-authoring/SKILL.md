@@ -35,6 +35,29 @@ Muscle skills are **prompt-injection contracts** for external buyers. They must 
 - `## Cost` (Base Snax price)
 - `## Brain/Brawn` (explicit local CLI note if required)
 
+**Frontmatter (required for muscles):**
+```yaml
+---
+name: muscle-{category}-{name}
+description: One-line summary
+metadata:
+  type: mcp
+  entrypoint: src/{category}/{name}/mcp.py
+  pricing: "compute-seconds"
+  auto_wrapped: true
+---
+```
+
+**Body template (required sections):**
+```markdown
+# Tool Name
+## Capability
+## When to use
+## Schema
+## Cost
+## Brain/Brawn
+```
+
 Muscle location is **strict**: `atoms-muscle/src/{category}/{name}/SKILL.md`.
 
 ## 3. Registration Protocol

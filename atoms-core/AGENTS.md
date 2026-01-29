@@ -73,14 +73,16 @@ This is the Operating System. High stability, zero hallucinations.
 ## 🛑 THE LAWS
 1.  **Identity is King:** All routes must pass `IdentityMiddleware`.
 2.  **God Mode:** `t_system` is hardcoded in constants; do not query DB for it.
-4.  **No Deep Nesting (The "Burying" Rule)**: Do not nest modules inside generic folders like `core/` or `utils/`.
+3.  **No Deep Nesting (The "Burying" Rule)**: Do not nest modules inside generic folders like `core/` or `utils/`.
     *   **BAD**: `src/core/vault`
     *   **GOOD**: `src/vault`
     *   **Mandate**: All primary modules must live at `src/{module_name}`.
+4.  **No northstar imports:** `northstar-engines` is deprecated. Do not import it anywhere in new work.
 5.  **Vault Only (No .env)**:
     *   **FORBIDDEN**: `.env`, `os.environ.get("KEY")`.
     *   **REQUIRED**: Use `src/vault` API.
     *   **Reason**: Cloud Agents cannot read local `.env` files. They must call the API.
+    *   **Vault Secret Mount Rule**: Secrets live in `/Users/jaynowman/northstar-keys/` and must be loaded via Vault loaders.
 
 ## 🧠 MEMORY ARCHITECTURE
 > **Philosophy**: "Context is money. Don't waste it."
@@ -140,6 +142,7 @@ We maintain a strict "Scale-to-Zero" policy.
 * `atoms-muscle` is the **runtime/service** (MCP wrappers, API routes, billing decorators).
 * **Never** merge namespaces at runtime. `atoms-muscle` must import explicitly from `atoms-core`.
 * **Rescue Protocol:** Port dependency logic from `northstar-engines` into `atoms-core` first. `atoms-muscle` must never import `northstar-engines`.
+* **Slice Rule:** Deployment slices include the required `atoms-core` modules; muscles are not standalone without atoms-core.
 * **Vault Law:** **No .env files**. Secrets must be loaded via the Vault Loader.
 
 **For Agents (Building Muscles)**:

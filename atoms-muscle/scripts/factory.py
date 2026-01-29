@@ -6,6 +6,7 @@ from pathlib import Path
 
 # TEMPLATE: MCP SERVER
 MCP_TEMPLATE = """from mcp.server.fastmcp import FastMCP
+from atoms_core.src.budget.snax_guard import require_snax, PaymentRequired
 from .service import {class_name}
 
 # Initialize FastMCP
@@ -15,11 +16,16 @@ mcp = FastMCP("muscle-{category}-{name}")
 service = {class_name}()
 
 @mcp.tool()
+@require_snax(tool_key="muscle-{category}-{name}")
 def run_{name}(input_path: str, **kwargs) -> dict:
     \"""
     Executes the {class_name} logic.
+    NOTE: You must wire @require_snax and ensure this calls real service logic (no stubs).
     \"""
-    return service.run(input_path, **kwargs)
+    try:
+        return service.run(input_path, **kwargs)
+    except Exception as exc:
+        return {"error": str(exc), "error_type": type(exc).__name__}
 
 if __name__ == "__main__":
     mcp.run()
@@ -31,18 +37,21 @@ name: muscle-{category}-{name}
 description: {docstring}
 metadata:
   type: mcp
-  entrypoint: src/muscle/{category}/{name}/mcp.py
+  entrypoint: src/{category}/{name}/mcp.py
   pricing: "compute-seconds"
   auto_wrapped: true
 ---
-# Usage
-This muscle provides `{name}` capabilities via MCP.
-
-## Inputs
-*   `input_path`: Path to the file (S3 or Local).
-
-## Outputs
-*   JSON Dictionary containing processing results.
+# Tool Name
+## Capability
+One sentence summary.
+## When to use
+Specific triggers (e.g., \"User uploads DXF\").
+## Schema
+JSON input/output definition.
+## Cost
+Base Snax price.
+## Brain/Brawn
+Explicitly state if the user must run a CLI command locally.
 """
 
 def wrap_muscle(muscle_path: str):
@@ -124,7 +133,7 @@ def scan_directory(path: Path):
 
     # Otherwise scan children
     for item in path.iterdir():
-        if item.is_dir() and not item.name.startswith("_") and item.name != "legacy":
+        if item.is_dir() and not item.name.startswith("_") and item.name not in {"legacy", "muscle"}:
             # Check if this child is a muscle
             if (item / "service.py").exists():
                  wrap_muscle(str(item))
@@ -135,7 +144,7 @@ def scan_directory(path: Path):
                          wrap_muscle(str(subitem))
 
 def main():
-    root = Path("../src/muscle")
+    root = Path("../src")
     
     # If arg provided, scan it as a root
     if len(sys.argv) > 1:
@@ -146,7 +155,7 @@ def main():
         scan_directory(target)
         return
 
-    # Default: Scan src/muscle
+    # Default: Scan src
     scan_directory(root)
 
 if __name__ == "__main__":

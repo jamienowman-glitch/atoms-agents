@@ -2,25 +2,31 @@
 # 015_snax_auth_patch.sql
 
 ## Description
-Adds multi-tenant auth, Snax economy (wallets/ledger), and API key management.
+Adds multi-tenant auth, Snax economy (wallets/ledger), API key management, and pricing.
 
-## How to Apply
+## How to Apply (Supabase SQL Editor)
 1. Open Supabase Dashboard -> SQL Editor.
 2. Paste the contents of this file.
 3. Run the script.
 
 ## Notes
 - This patch assumes 'public.muscles' is managed elsewhere (Worker 5).
-- All tables have RLS enabled.
+- All tables have RLS enabled (tenant read, service-role write).
 */
 
--- 1. Tenants & Members
+-- Extensions
+create extension if not exists "pgcrypto";
+
+-- =========================================================
+-- 1) Core Tenant Tables
+-- =========================================================
 create table if not exists public.tenants (
     id text primary key, -- t_...
     name text not null,
     slug text unique,
     status text check (status in ('active', 'disabled', 'suspended')) default 'active',
-    created_by text, -- user_id (optional if system created)
+    owner_user_id uuid,
+    created_by uuid,
     created_at timestamptz default now(),
     updated_at timestamptz default now()
 );
@@ -36,7 +42,9 @@ create table if not exists public.tenant_members (
     unique(tenant_id, user_id)
 );
 
--- 2. Snax Economy
+-- =========================================================
+-- 2) Snax Economy
+-- =========================================================
 create table if not exists public.snax_wallets (
     id uuid primary key default gen_random_uuid(),
     tenant_id text references public.tenants(id) on delete cascade not null unique,
@@ -50,7 +58,7 @@ create table if not exists public.snax_ledger (
     wallet_id uuid references public.snax_wallets(id) on delete cascade not null,
     tenant_id text references public.tenants(id) on delete cascade not null, -- Denormalized for query speed
     delta_snax bigint not null, -- Negative for charge, Positive for deposit
-    reason text not null, -- e.g. "muscle_usage", "deposit" or tool_key
+    reason text not null, -- e.g. "usage", "deposit" or tool_key
     reference_id text, -- e.g. run_id, request_id
     meta jsonb default '{}'::jsonb,
     created_at timestamptz default now()
@@ -58,8 +66,7 @@ create table if not exists public.snax_ledger (
 
 create table if not exists public.pricing (
     id uuid primary key default gen_random_uuid(),
-    resource_type text not null, -- e.g. "muscle", "storage"
-    resource_key text not null unique, -- e.g. "muscle-video-extract"
+    tool_key text not null unique, -- e.g. "muscle-video-extract"
     base_price_snax integer not null default 0,
     price_model text default 'per_call', -- 'per_call', 'per_second', 'per_gb'
     active boolean default true,
@@ -80,12 +87,16 @@ create table if not exists public.crypto_deposits (
     updated_at timestamptz default now()
 );
 
--- 3. API Keys
+-- =========================================================
+-- 3) API Keys
+-- =========================================================
 create table if not exists public.api_keys (
     id uuid primary key default gen_random_uuid(),
     tenant_id text references public.tenants(id) on delete cascade not null,
-    key_hash text not null unique, -- SHA-256 of the sk_...
+    key_prefix text not null, -- e.g. "sk_live_"
+    key_hash text not null unique, -- crypt hash of full key
     name text,
+    scopes jsonb default '[]'::jsonb,
     status text check (status in ('active', 'revoked')) default 'active',
     last_used_at timestamptz,
     created_by uuid, -- user_id
@@ -93,7 +104,9 @@ create table if not exists public.api_keys (
     expires_at timestamptz
 );
 
--- 4. System Config
+-- =========================================================
+-- 4) System Config
+-- =========================================================
 create table if not exists public.system_config (
     key text primary key,
     value jsonb not null,
@@ -101,7 +114,114 @@ create table if not exists public.system_config (
     updated_at timestamptz default now()
 );
 
--- RLS Policies
+-- =========================================================
+-- 5) Utility Functions + Updated-At Triggers
+-- =========================================================
+create or replace function public.set_updated_at()
+returns trigger
+language plpgsql
+as $$
+begin
+    new.updated_at = now();
+    return new;
+end;
+$$;
+
+create or replace function public.is_service_role()
+returns boolean
+language sql
+stable
+as $$
+    select auth.role() = 'service_role';
+$$;
+
+create or replace function public.is_tenant_member(p_tenant_id text)
+returns boolean
+language sql
+stable
+as $$
+    select exists (
+        select 1 from public.tenant_members tm
+        where tm.tenant_id = p_tenant_id
+          and tm.user_id = auth.uid()
+    );
+$$;
+
+-- Updated_at triggers
+drop trigger if exists set_updated_at_tenants on public.tenants;
+create trigger set_updated_at_tenants
+before update on public.tenants
+for each row execute function public.set_updated_at();
+
+drop trigger if exists set_updated_at_tenant_members on public.tenant_members;
+create trigger set_updated_at_tenant_members
+before update on public.tenant_members
+for each row execute function public.set_updated_at();
+
+drop trigger if exists set_updated_at_snax_wallets on public.snax_wallets;
+create trigger set_updated_at_snax_wallets
+before update on public.snax_wallets
+for each row execute function public.set_updated_at();
+
+drop trigger if exists set_updated_at_pricing on public.pricing;
+create trigger set_updated_at_pricing
+before update on public.pricing
+for each row execute function public.set_updated_at();
+
+drop trigger if exists set_updated_at_crypto_deposits on public.crypto_deposits;
+create trigger set_updated_at_crypto_deposits
+before update on public.crypto_deposits
+for each row execute function public.set_updated_at();
+
+-- =========================================================
+-- 6) Auth Trigger (Create tenant + wallet for new user)
+-- =========================================================
+create or replace function public.handle_new_user()
+returns trigger
+language plpgsql
+security definer
+set search_path = public, auth
+as $$
+declare
+    v_tenant_id text;
+    v_name text;
+    v_slug text;
+begin
+    v_tenant_id := coalesce(
+        new.raw_user_meta_data->>'tenant_id',
+        't_' || replace(new.id::text, '-', '')
+    );
+    v_name := coalesce(
+        new.raw_user_meta_data->>'tenant_name',
+        split_part(new.email, '@', 1),
+        'New Tenant'
+    );
+    v_slug := new.raw_user_meta_data->>'tenant_slug';
+
+    insert into public.tenants (id, name, slug, created_by, owner_user_id)
+    values (v_tenant_id, v_name, v_slug, new.id, new.id)
+    on conflict (id) do nothing;
+
+    insert into public.tenant_members (tenant_id, user_id, role, status)
+    values (v_tenant_id, new.id, 'owner', 'active')
+    on conflict (tenant_id, user_id) do nothing;
+
+    insert into public.snax_wallets (tenant_id, balance_snax)
+    values (v_tenant_id, 0)
+    on conflict (tenant_id) do nothing;
+
+    return new;
+end;
+$$;
+
+drop trigger if exists on_auth_user_created on auth.users;
+create trigger on_auth_user_created
+after insert on auth.users
+for each row execute function public.handle_new_user();
+
+-- =========================================================
+-- 7) Row Level Security (RLS)
+-- =========================================================
 alter table public.tenants enable row level security;
 alter table public.tenant_members enable row level security;
 alter table public.snax_wallets enable row level security;
@@ -111,58 +231,109 @@ alter table public.crypto_deposits enable row level security;
 alter table public.api_keys enable row level security;
 alter table public.system_config enable row level security;
 
--- Tenant Read Policy (Simple version: Members can read their tenant data)
-create policy "Users can read their own tenant memberships" on public.tenant_members
+-- Tenant read policies
+drop policy if exists tenant_members_select on public.tenant_members;
+create policy tenant_members_select on public.tenant_members
     for select using (auth.uid() = user_id);
 
-create policy "Members can read their tenants" on public.tenants
-    for select using (
-        exists (
-            select 1 from public.tenant_members
-            where tenant_members.tenant_id = tenants.id
-            and tenant_members.user_id = auth.uid()
-        )
-    );
+drop policy if exists tenants_select on public.tenants;
+create policy tenants_select on public.tenants
+    for select using (public.is_tenant_member(id));
 
-create policy "Members can read their wallet" on public.snax_wallets
-    for select using (
-        exists (
-            select 1 from public.tenant_members
-            where tenant_members.tenant_id = snax_wallets.tenant_id
-            and tenant_members.user_id = auth.uid()
-        )
-    );
+drop policy if exists snax_wallets_select on public.snax_wallets;
+create policy snax_wallets_select on public.snax_wallets
+    for select using (public.is_tenant_member(tenant_id));
 
-create policy "Members can read ledger" on public.snax_ledger
-    for select using (
-        exists (
-            select 1 from public.tenant_members
-            where tenant_members.tenant_id = snax_ledger.tenant_id
-            and tenant_members.user_id = auth.uid()
-        )
-    );
+drop policy if exists snax_ledger_select on public.snax_ledger;
+create policy snax_ledger_select on public.snax_ledger
+    for select using (public.is_tenant_member(tenant_id));
+
+drop policy if exists api_keys_select on public.api_keys;
+create policy api_keys_select on public.api_keys
+    for select using (public.is_tenant_member(tenant_id));
+
+drop policy if exists crypto_deposits_select on public.crypto_deposits;
+create policy crypto_deposits_select on public.crypto_deposits
+    for select using (public.is_tenant_member(tenant_id));
 
 -- Pricing is public read
-create policy "Pricing is public read" on public.pricing for select using (true);
+drop policy if exists pricing_select on public.pricing;
+create policy pricing_select on public.pricing
+    for select using (true);
 
--- System Config is service_role only (or admin)
--- No public policy.
+-- System config is service-role only
+drop policy if exists system_config_select on public.system_config;
+create policy system_config_select on public.system_config
+    for select using (public.is_service_role());
 
--- RPC: snax_charge
+-- Service-role write policies (all tables)
+-- Tenants
+drop policy if exists tenants_service_write on public.tenants;
+create policy tenants_service_write on public.tenants
+    for all using (public.is_service_role()) with check (public.is_service_role());
+
+-- Tenant members
+drop policy if exists tenant_members_service_write on public.tenant_members;
+create policy tenant_members_service_write on public.tenant_members
+    for all using (public.is_service_role()) with check (public.is_service_role());
+
+-- Snax wallets
+drop policy if exists snax_wallets_service_write on public.snax_wallets;
+create policy snax_wallets_service_write on public.snax_wallets
+    for all using (public.is_service_role()) with check (public.is_service_role());
+
+-- Snax ledger
+drop policy if exists snax_ledger_service_write on public.snax_ledger;
+create policy snax_ledger_service_write on public.snax_ledger
+    for all using (public.is_service_role()) with check (public.is_service_role());
+
+-- Pricing
+drop policy if exists pricing_service_write on public.pricing;
+create policy pricing_service_write on public.pricing
+    for all using (public.is_service_role()) with check (public.is_service_role());
+
+-- Crypto deposits
+drop policy if exists crypto_deposits_service_write on public.crypto_deposits;
+create policy crypto_deposits_service_write on public.crypto_deposits
+    for all using (public.is_service_role()) with check (public.is_service_role());
+
+-- API keys
+drop policy if exists api_keys_service_write on public.api_keys;
+create policy api_keys_service_write on public.api_keys
+    for all using (public.is_service_role()) with check (public.is_service_role());
+
+-- System config
+drop policy if exists system_config_service_write on public.system_config;
+create policy system_config_service_write on public.system_config
+    for all using (public.is_service_role()) with check (public.is_service_role());
+
+-- =========================================================
+-- 8) RPCs
+-- =========================================================
 create or replace function public.snax_charge(
     p_tenant_id text,
     p_tool_key text,
     p_cost_snax bigint,
-    p_request_id text
+    p_request_id text,
+    p_reason text default 'usage'
 )
-returns bigint
+returns table (new_balance bigint)
 language plpgsql
 security definer
+set search_path = public
 as $$
 declare
     v_balance bigint;
     v_wallet_id uuid;
 begin
+    if not public.is_service_role() then
+        raise exception 'forbidden';
+    end if;
+
+    if p_cost_snax is null or p_cost_snax <= 0 then
+        raise exception 'invalid_cost';
+    end if;
+
     -- Lock the wallet row
     select id, balance_snax into v_wallet_id, v_balance
     from public.snax_wallets
@@ -170,11 +341,11 @@ begin
     for update;
 
     if v_wallet_id is null then
-        raise exception 'Wallet not found for tenant %', p_tenant_id;
+        raise exception 'wallet_not_found';
     end if;
 
     if v_balance < p_cost_snax then
-        raise exception 'Payment Required: Insufficient Snax Balance (Current: %, Required: %)', v_balance, p_cost_snax;
+        raise exception 'insufficient_snax';
     end if;
 
     -- Update balance
@@ -186,34 +357,56 @@ begin
 
     -- Insert ledger entry
     insert into public.snax_ledger (wallet_id, tenant_id, delta_snax, reason, reference_id)
-    values (v_wallet_id, p_tenant_id, -p_cost_snax, p_tool_key, p_request_id);
+    values (v_wallet_id, p_tenant_id, -p_cost_snax, coalesce(p_reason, p_tool_key), p_request_id);
 
-    return v_balance;
+    return query select v_balance as new_balance;
 end;
 $$;
 
--- RPC: validate_api_key
 create or replace function public.validate_api_key(
-    p_key_hash text
+    p_api_key text
 )
-returns text -- returns tenant_id or null
+returns table (
+    is_valid boolean,
+    tenant_id text,
+    api_key_id uuid,
+    scopes jsonb
+)
 language plpgsql
 security definer
+set search_path = public
 as $$
 declare
+    v_key_id uuid;
     v_tenant_id text;
+    v_scopes jsonb;
+    v_prefix text;
 begin
-    select tenant_id into v_tenant_id
-    from public.api_keys
-    where key_hash = p_key_hash
-    and status = 'active'
-    and (expires_at is null or expires_at > now());
-
-    -- Update last_used_at
-    if v_tenant_id is not null then
-        update public.api_keys set last_used_at = now() where key_hash = p_key_hash;
+    if p_api_key is null or length(p_api_key) < 8 then
+        return query select false, null::text, null::uuid, '[]'::jsonb;
+        return;
     end if;
 
-    return v_tenant_id;
+    v_prefix := left(p_api_key, 8);
+
+    select ak.id, ak.tenant_id, ak.scopes
+    into v_key_id, v_tenant_id, v_scopes
+    from public.api_keys ak
+    where ak.key_prefix = v_prefix
+      and ak.status = 'active'
+      and (ak.expires_at is null or ak.expires_at > now())
+      and ak.key_hash = crypt(p_api_key, ak.key_hash)
+    limit 1;
+
+    if v_key_id is null then
+        return query select false, null::text, null::uuid, '[]'::jsonb;
+        return;
+    end if;
+
+    update public.api_keys
+    set last_used_at = now()
+    where id = v_key_id;
+
+    return query select true, v_tenant_id, v_key_id, coalesce(v_scopes, '[]'::jsonb);
 end;
 $$;

@@ -10,7 +10,10 @@
 ## Muscle Architecture Law (Global)
 - **Service vs Library:** `atoms-core` is the shared **library** (pure logic/models). `atoms-muscle` is the **runtime/service** (MCP wrappers, API routes, billing decorators).
 - **Namespace Rule:** **Never** merge namespaces at runtime. `atoms-muscle` must import explicitly from `atoms-core` (e.g., `from atoms_core.src.audio.models import ...`).
+- **No northstar imports:** `northstar-engines` is deprecated. Do not import it anywhere in new work.
 - **Rescue Protocol:** Port dependency logic from `northstar-engines` into `atoms-core` first. `atoms-muscle` must never import `northstar-engines`.
+- **Slice Rule:** Deployment slices include the required `atoms-core` library modules; muscles are **not** standalone without atoms-core.
+- **Vault Secret Mount Rule:** No `.env` files. Secrets are read from `/Users/jaynowman/northstar-keys/` via Vault loaders.
 
 ## Tenant/Surface/Space Law
 - Tenant is the billing unit. Snax wallets are tenant-scoped and spendable across all surfaces/spaces.

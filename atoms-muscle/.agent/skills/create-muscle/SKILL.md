@@ -61,12 +61,13 @@ Explicitly state if the user must run a CLI command locally.
 ```
 
 ### 3. AUTOMATION (The Magic)
-**STOP.** You do not need to write `mcp.py`. You do not need to write SQL.
+**STOP.** The Sentinel can generate starter files, but you must verify they are production‑ready.
 
 The **Muscle Sentinel** is watching.
 1.  Ensure the Sentinel is running: `python3 atoms-muscle/scripts/sentinel.py`
 2.  Save your `service.py`.
-3.  **Watch it happen**: The Sentinel will detect the file, generate `mcp.py`, generate `SKILL.md`, and register it in Supabase.
+3.  **Watch it happen**: The Sentinel will detect the file, generate `mcp.py` + `SKILL.md`, and register it in Supabase.
+4.  **Verify**: The generated `mcp.py` is **not a stub** and includes `@require_snax` + clean JSON error handling.
 
 ### 4. VERIFICATION
 1.  Check `atoms-muscle/src/{category}/{name}/` for the generated files.

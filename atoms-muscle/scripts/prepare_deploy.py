@@ -23,17 +23,28 @@ from pathlib import Path
 # Constants
 ATOMS_CORE_ROOT = Path("atoms-core")
 BUILD_ROOT = Path("_build")
-FORBIDDEN_IMPORTS = ["northstar_engines", "northstar-engines", "northstar"]
+FORBIDDEN_IMPORTS = ["northstar_engines", "northstar-engines", "northstar.engines"]
+FORBIDDEN_PATTERNS = [
+    re.compile(r"northstar[-_.]engines", re.IGNORECASE),
+]
 
 def fail_fast(message):
     print(f"❌ FATAL: {message}")
     sys.exit(1)
 
-def parse_imports(file_path):
+def scan_forbidden_text(file_path: Path) -> None:
+    content = file_path.read_text()
+    for pattern in FORBIDDEN_PATTERNS:
+        if pattern.search(content):
+            fail_fast(f"Forbidden reference detected in {file_path}: {pattern.pattern}")
+
+
+def parse_imports(file_path: Path, broad_imports: set[str]) -> set[str]:
     """
     Parses a python file and returns a set of top-level imports.
     Also checks for forbidden imports.
     """
+    scan_forbidden_text(file_path)
     with open(file_path, "r") as f:
         try:
             tree = ast.parse(f.read(), filename=file_path)
@@ -45,12 +56,19 @@ def parse_imports(file_path):
         if isinstance(node, ast.Import):
             for alias in node.names:
                 check_forbidden(alias.name)
-                imports.add(alias.name.split('.')[0])
+                imports.add(alias.name)
+                if alias.name == "atoms_core":
+                    broad_imports.add(alias.name)
         elif isinstance(node, ast.ImportFrom):
             if node.module:
                 check_forbidden(node.module)
                 # Capture the full module path to analyze atoms_core usage
                 imports.add(node.module)
+                if node.module == "atoms_core":
+                    broad_imports.add(node.module)
+                if node.module == "atoms_core.src":
+                    for alias in node.names:
+                        imports.add(f"{node.module}.{alias.name}")
     return imports
 
 def check_forbidden(module_name):
@@ -58,11 +76,13 @@ def check_forbidden(module_name):
         if module_name.startswith(bad):
             fail_fast(f"Forbidden import detected: '{module_name}'. The Rescue Rule strictly prohibits importing '{bad}'.")
 
-def get_atoms_core_modules(imports):
+def get_atoms_core_modules(imports, broad_imports: set[str]):
     """
     Identifies which atoms_core modules are needed.
     Returns a set of paths relative to atoms-core/src (e.g., 'identity', 'audio').
     """
+    if broad_imports:
+        fail_fast("Broad 'atoms_core' imports detected. Use explicit 'atoms_core.src.<module>' imports only.")
     modules = set()
     for imp in imports:
         # Expected pattern: atoms_core.src.<module>
@@ -70,10 +90,6 @@ def get_atoms_core_modules(imports):
             parts = imp.split(".")
             if len(parts) >= 3:
                 modules.add(parts[2]) # atoms_core.src.identity -> identity
-        elif imp == "atoms_core":
-            # If importing the root, we might need everything or verify further.
-            # For safety in ambiguous cases, we might warn.
-            print("⚠️  Warning: broad 'import atoms_core' detected. Copying full source recommended, but sticking to slice strategy.")
     return modules
 
 def prepare_build_dir(muscle_key):
@@ -111,7 +127,19 @@ def copy_muscle(muscle_path, build_dir):
     if not (dest_dir / "mcp.py").exists():
         fail_fast(f"Muscle Law Violation: mcp.py not found in {dest_dir}. Every muscle must have an mcp.py wrapper.")
 
+    src_root = build_dir / "src"
+    src_root.mkdir(exist_ok=True)
+    (src_root / "__init__.py").touch()
+
     return dest_dir
+
+
+def collect_imports(root_dir: Path) -> tuple[set[str], set[str]]:
+    imports: set[str] = set()
+    broad_imports: set[str] = set()
+    for py_file in root_dir.rglob("*.py"):
+        imports.update(parse_imports(py_file, broad_imports))
+    return imports, broad_imports
 
 def copy_atoms_core_slice(modules, build_dir):
     """
@@ -136,6 +164,9 @@ def copy_atoms_core_slice(modules, build_dir):
     for mod in modules:
         source = src_root / mod
         if source.exists() and source.is_dir():
+            # Fail fast if forbidden refs exist inside atoms-core slice
+            for py_file in source.rglob("*.py"):
+                scan_forbidden_text(py_file)
             shutil.copytree(source, core_src_dest / mod)
             print(f"✅ Copied atoms-core module: {mod}")
         else:
@@ -194,6 +225,8 @@ def main():
     service_path = Path(args.service_path)
     if not service_path.exists():
         fail_fast(f"File not found: {service_path}")
+    if service_path.name != "service.py":
+        fail_fast("Input must be a service.py file at atoms-muscle/src/{category}/{name}/service.py")
 
     # Derive key
     # src/category/name -> muscle-category-name
@@ -209,15 +242,10 @@ def main():
     print(f"🚀 Preparing deploy for {muscle_key}...")
 
     # 1. Analyze Imports (Recursive Safety Check)
-    # Check ALL files in muscle dir for forbidden imports
-    print("🔍 Scanning for forbidden imports...")
+    print("🔍 Scanning for forbidden imports and collecting atoms-core usage...")
     muscle_dir = service_path.parent
-    for py_file in muscle_dir.rglob("*.py"):
-        parse_imports(py_file) # Will fail fast if forbidden found
-
-    # Get imports from entry point for slicing
-    imports = parse_imports(service_path)
-    core_modules = get_atoms_core_modules(imports)
+    imports, broad_imports = collect_imports(muscle_dir)
+    core_modules = get_atoms_core_modules(imports, broad_imports)
 
     # 2. Prepare Build Dir
     build_dir = prepare_build_dir(muscle_key)

@@ -14,8 +14,10 @@
 4.  **Tenant Compute First (Production)**: Default interactive paths to **client device CPU/GPU**. Server render is **only** for explicit export/offline requests. **No local fallbacks** in production.
 5.  **Service vs Library**: `atoms-muscle` is the **runtime/service**. Shared logic lives in `atoms-core` and must be imported explicitly.
 6.  **Namespace Rule**: **Never** merge namespaces at runtime. Import from `atoms-core` explicitly (e.g., `from atoms_core.src.audio.models import ...`).
-7.  **Rescue Protocol**: Port dependency logic from `northstar-engines` into `atoms-core` first. `atoms-muscle` must never import `northstar-engines`.
-8.  **Vault Law**: **No .env files**. Secrets must be loaded via the Vault Loader from `/Users/jaynowman/northstar-keys/` (or equivalent mount).
+7.  **No northstar imports**: `northstar-engines` is deprecated. Do not import it anywhere in new work.
+8.  **Rescue Protocol**: Port dependency logic from `northstar-engines` into `atoms-core` first. `atoms-muscle` must never import `northstar-engines`.
+9.  **Slice Rule**: Deployment slices must include required `atoms-core` modules; muscles are not standalone without atoms-core.
+10. **Vault Law**: **No .env files**. Secrets must be loaded via the Vault Loader from `/Users/jaynowman/northstar-keys/` (or equivalent mount).
 
 ## 🏗️ THE PRODUCTION LINE
 Any Agent building a Muscle MUST follow this exact sequence:

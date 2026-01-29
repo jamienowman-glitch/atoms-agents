@@ -7,7 +7,7 @@ from watchdog.events import FileSystemEventHandler
 
 # Paths
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__)) # atoms-muscle/scripts
-MUSCLE_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "../src/muscle")) # atoms-muscle/src/muscle
+MUSCLE_ROOT = os.path.abspath(os.path.join(SCRIPT_DIR, "../src")) # atoms-muscle/src
 FACTORY_SCRIPT = os.path.join(SCRIPT_DIR, "factory.py")
 SYNC_SCRIPT = os.path.abspath(os.path.join(SCRIPT_DIR, "../../atoms-core/scripts/sync_muscles.py"))
 
