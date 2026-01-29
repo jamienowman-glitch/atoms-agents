@@ -11,15 +11,25 @@
     "dependencies": {
         "@supabase/ssr": "^0.8.0",
         "@supabase/supabase-js": "^2.91.1",
+        "@tiptap/react": "^2.27.2",
+        "@tiptap/starter-kit": "^2.27.2",
+        "@tsparticles/react": "^3.0.0",
+        "@tsparticles/slim": "^3.9.1",
+        "@types/uuid": "^10.0.0",
         "clsx": "^2.0.0",
         "framer-motion": "^10.0.0",
+        "idb-keyval": "^6.2.2",
         "lucide-react": "^0.200.0",
         "next": "^14.0.0",
         "react": "^18.0.0",
         "react-dom": "^18.0.0",
         "react-dropzone": "^14.3.8",
+        "reactflow": "^11.11.4",
         "resend": "^6.8.0",
-        "tailwind-merge": "^2.0.0"
+        "tailwind-merge": "^2.0.0",
+        "uuid": "^9.0.1",
+        "wavesurfer.js": "^7.12.1",
+        "zustand": "^5.0.10"
     },
     "devDependencies": {
         "@types/node": "^20.0.0",

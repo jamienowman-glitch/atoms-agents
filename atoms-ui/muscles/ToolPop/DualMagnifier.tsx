@@ -1,1 +1,1 @@
-export { DualMagnifier, MagnetWheel, type MagnetItem } from '@/components/workbench/DualMagnifier';
+export { DualMagnifier, MagnetWheel, type MagnetItem } from '../../components/workbench/DualMagnifier';

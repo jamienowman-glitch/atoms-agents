@@ -58,7 +58,7 @@ async function sync() {
                     console.log(`   🚀 LINKED: ${dir}`);
                 }
 
-            } catch (e) {
+            } catch (e: any) {
                 console.error(`   ⚠️ Invalid JSON in ${dir}:`, e.message);
             }
         } else {

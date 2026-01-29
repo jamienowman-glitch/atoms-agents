@@ -19,7 +19,7 @@ export function ChatRail() {
     useEffect(() => {
         if (!transport) return;
         const cleanup = transport.onEvent((event) => {
-            if (event.type === 'chat.message') {
+            if ((event.type as string) === 'chat.message') {
                 setMessages(prev => [...prev, (event as any).data]);
             }
         });
