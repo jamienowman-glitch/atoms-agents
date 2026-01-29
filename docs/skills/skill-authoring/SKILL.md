@@ -74,6 +74,12 @@ metadata:
 
 Muscle location is **strict**: `atoms-muscle/src/{category}/{name}/SKILL.md`.
 
+## 2.2 Muscle Factory Templates
+Use these templates for consistent muscle creation and handoff:
+- `docs/skills/skill-authoring/muscle-brief-template.md`
+- `docs/skills/skill-authoring/muscle-acceptance-checklist.md`
+- `docs/skills/skill-authoring/muscle-chat-brief-prompt.md`
+
 ## 3. Registration Protocol
 A skill does not exist until it is registered in `AGENTS.md`.
 

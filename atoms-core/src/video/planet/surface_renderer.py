@@ -3,10 +3,12 @@ from __future__ import annotations
 """Planet surface renderer: generates glowing planetary surface frames with metadata."""
 
 import hashlib
+import io
 import math
-from typing import Any
+from typing import Any, Optional
 
 import numpy as np
+from PIL import Image
 
 from .models import FrameDescriptor
 
@@ -105,3 +107,128 @@ class PlanetSurfaceRenderer:
         hasher = hashlib.sha256()
         hasher.update(atlas.tobytes())
         return hasher.hexdigest()
+
+    def render_with_assets(
+        self,
+        surface_params: dict[str, Any],
+        duration_ms: int,
+        tenant_id: str,
+        env: str,
+        user_id: Optional[str] = None,
+        frame_rate: int | None = None,
+        media_service: Optional[Any] = None,
+    ) -> dict[str, Any]:
+        """Production render: generates real PNG frames, uploads to S3, registers in media_v2.
+        
+        This is the server-side preview/export path. Interactive rendering stays on device.
+        
+        Args:
+            surface_params: Planet surface parameters (radius, glow_strength, etc)
+            duration_ms: Total duration in milliseconds
+            tenant_id: Tenant ID for media_v2 registration
+            env: Environment (prod/staging/dev)
+            user_id: Optional user ID
+            frame_rate: Optional frame rate override
+            media_service: Optional MediaService instance (for testing)
+        
+        Returns:
+            Dict with frames (containing real media_v2 asset IDs) and metadata
+        """
+        # Import here to avoid circular dependency
+        if media_service is None:
+            from atoms_core.src.media.v2.service import get_media_service
+            from atoms_core.src.media.v2.models import MediaUploadRequest
+            media_service = get_media_service()
+            MediaUploadRequest_cls = MediaUploadRequest
+        else:
+            from atoms_core.src.media.v2.models import MediaUploadRequest as MediaUploadRequest_cls
+        
+        target_rate = frame_rate or self.base_frame_rate
+        frame_count = max(1, math.ceil((duration_ms / 1000.0) * target_rate))
+        radius = float(surface_params.get("radius", 3390.0))
+        glow_strength = float(surface_params.get("glow_strength", 0.8))
+        atmosphere = float(surface_params.get("atmosphere", 0.3))
+        render_instructions = self._build_equirectangular_texture(surface_params, radius)
+        
+        slug = surface_params.get("slug") or self._slug_surface(surface_params)
+        
+        frames: list[dict[str, Any]] = []
+        for index in range(frame_count):
+            progress = index / max(1, frame_count - 1)
+            timestamp_ms = int(progress * duration_ms)
+            lighting = self._lighting_profile(progress, glow_strength, atmosphere)
+            curvature = self._estimate_curvature(radius, progress)
+            
+            # Generate actual PNG frame
+            frame_image = self._render_frame_image(render_instructions, progress, lighting)
+            frame_bytes = self._image_to_png_bytes(frame_image)
+            
+            # Upload to S3 and register in media_v2
+            upload_req = MediaUploadRequest_cls(
+                tenant_id=tenant_id,
+                env=env,
+                user_id=user_id,
+                kind="image",
+                tags=["planet_surface", slug, f"frame_{index:04d}"],
+                source_ref=f"planet_surface_{slug}",
+                meta={
+                    "surface_params": surface_params,
+                    "frame_index": index,
+                    "timestamp_ms": timestamp_ms,
+                    "lighting": lighting,
+                    "curvature": curvature,
+                }
+            )
+            
+            asset = media_service.register_upload(
+                upload_req,
+                filename=f"planet_surface_{slug}_frame_{index:04d}.png",
+                content=frame_bytes
+            )
+            
+            descriptor = FrameDescriptor(
+                timestamp_ms=timestamp_ms,
+                media_uri=f"media_v2://asset/{asset.id}",  # Real asset ID
+                lighting=lighting,
+                curvature=curvature,
+                sample_chunk=self._slice_samples(render_instructions, index),
+            )
+            frames.append(descriptor.__dict__)
+        
+        return {
+            "frames": frames,
+            "metadata": {
+                "surface_params": surface_params,
+                "duration_ms": duration_ms,
+                "frame_rate": target_rate,
+                "atlas_hash": self._shader_fingerprint(render_instructions),
+                "slug": slug,
+            },
+        }
+
+    def _render_frame_image(self, atlas: np.ndarray, progress: float, lighting: dict[str, float]) -> np.ndarray:
+        """Generate a single frame image from the atlas with lighting applied.
+        
+        Returns RGB numpy array (H, W, 3) with values 0-255.
+        """
+        # Extract emissive and curvature channels from atlas
+        emissive_channel = atlas[:, :, 3]  # 4th channel
+        curvature_channel = atlas[:, :, 4]  # 5th channel
+        
+        # Apply lighting to create glow effect
+        glow = lighting["emissive"] * emissive_channel
+        bloom = lighting["bloom"] * 0.5
+        
+        # Create RGB image with planetary glow
+        r = np.clip((glow + bloom) * 255, 0, 255).astype(np.uint8)
+        g = np.clip((glow * 0.8 + bloom * 0.6) * 255, 0, 255).astype(np.uint8)
+        b = np.clip((glow * 0.6 + bloom * 0.9) * 255, 0, 255).astype(np.uint8)
+        
+        return np.stack([r, g, b], axis=-1)
+
+    def _image_to_png_bytes(self, image_array: np.ndarray) -> bytes:
+        """Convert numpy RGB array to PNG bytes."""
+        img = Image.fromarray(image_array, mode='RGB')
+        buffer = io.BytesIO()
+        img.save(buffer, format='PNG', optimize=True)
+        return buffer.getvalue()

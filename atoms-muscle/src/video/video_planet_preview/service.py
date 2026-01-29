@@ -21,8 +21,14 @@ class PlanetPreviewService:
         strategy: str | None = None,
         duration_ms: int | None = None,
         surface_slug: str = "planet-surface",
+        tenant_id: str | None = None,
+        env: str | None = None,
+        user_id: str | None = None,
     ) -> dict[str, Any]:
-        """Delegate to atoms-core implementation."""
+        """Delegate to atoms-core implementation.
+        
+        Tenant context is passed through for real asset generation in surface renderer.
+        """
         return self._preview.create_preview_plan(
             run_metadata,
             resolution,
@@ -41,4 +47,7 @@ class PlanetPreviewService:
             strategy=kwargs.get("strategy"),
             duration_ms=kwargs.get("duration_ms"),
             surface_slug=kwargs.get("surface_slug", "planet-surface"),
+            tenant_id=kwargs.get("tenant_id"),
+            env=kwargs.get("env"),
+            user_id=kwargs.get("user_id"),
         )

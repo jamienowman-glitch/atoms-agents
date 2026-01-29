@@ -11,9 +11,10 @@ interface ChatRailShellProps {
     onToggleTools?: () => void;
     mode: ChatMode;
     onModeChange: (mode: ChatMode) => void;
+    toolPop?: React.ReactNode;
 }
 
-export function ChatRailShell({ showTools = false, onToggleTools, mode, onModeChange }: ChatRailShellProps) {
+export function ChatRailShell({ showTools = false, onToggleTools, mode, onModeChange, toolPop }: ChatRailShellProps) {
     // Height Logic
     const getHeight = () => {
         switch (mode) {
@@ -73,8 +74,13 @@ export function ChatRailShell({ showTools = false, onToggleTools, mode, onModeCh
     return (
         <div
             // z-50: Ensures THIS stays on top of BottomControls (z-40)
-            className={`fixed bottom-0 inset-x-0 max-w-full overflow-hidden box-border bg-neutral-900 border-t border-white/10 rounded-t-2xl shadow-[0_-4px_20px_rgba(0,0,0,0.3)] text-white transition-all duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] z-50 flex flex-col pb-safe touch-manipulation ${styles}`}
+            className={`fixed bottom-0 inset-x-0 max-w-full box-border bg-neutral-900 border-t border-white/10 rounded-t-2xl shadow-[0_-4px_20px_rgba(0,0,0,0.3)] text-white transition-all duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] z-50 flex flex-col pb-safe touch-manipulation ${toolPop ? 'overflow-visible' : 'overflow-hidden'} ${styles}`}
         >
+            {toolPop && (
+                <div className="absolute left-3 right-3 -top-3 z-[60] pointer-events-auto">
+                    {toolPop}
+                </div>
+            )}
             <div
                 className={`flex items-center justify-between px-4 h-[60px] shrink-0 cursor-pointer relative z-[1000] w-full ${mode !== 'nano' ? 'border-b border-white/10' : ''}`}
                 onClick={() => {
