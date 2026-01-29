@@ -1,19 +1,19 @@
 {
   "contract_name": "Connector Factory — God Config",
-  "provider_slug": "shopify",
-  "display_name": "Shopify",
+  "provider_slug": "",
+  "display_name": "",
   "status": "draft",
   "sections": {
     "dev_account": {
       "system_dev_username": "",
       "vault_integration": {
         "enabled": true,
-        "vault_key_hint": "SHOPIFY_ADMIN_TOKEN"
+        "vault_key_hint": ""
       },
       "tenant_owned_keys": [
         {
-          "name_example": "SHOPIFY_STORE_FRONT_TOKEN",
-          "description": "Tenant-owned storefront token"
+          "name_example": "",
+          "description": ""
         }
       ],
       "standardization": {
@@ -41,19 +41,10 @@
     "utm": {
       "templates": [],
       "schema": {
-        "provider_slug": "shopify",
-        "static_params": {
-          "utm_source": "shopify",
-          "utm_medium": "ecommerce"
-        },
-        "allowed_variables": [
-          "year",
-          "season",
-          "content_pool",
-          "product_type",
-          "campaign_name"
-        ],
-        "pattern_structure": "{{year}}_{{content_pool}}_{{season}}_{{campaign_name}}"
+        "provider_slug": "",
+        "static_params": {},
+        "allowed_variables": [],
+        "pattern_structure": ""
       }
     },
     "budgets": {
@@ -78,6 +69,8 @@
   "notes": [
     "All dropdowns must be Supabase-backed with Plus buttons to persist new entries.",
     "Firearms is the only safety gate; no other danger/risk fields are allowed.",
-    "This JSON is the interim contract; it will later be delivered to an agent for MCP connector creation."
+    "This JSON is the interim contract; it becomes editable in the God Config UI.",
+    "Agents must leave firearms fields untouched (requires_firearm=false, firearm_type_id empty) until human approval.",
+    "Contract status remains draft until a human confirms in the UI."
   ]
 }

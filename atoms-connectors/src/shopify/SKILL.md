@@ -1,20 +1,17 @@
 ---
 name: connector-shopify
-description: Connector contract for Shopify (scopes, KPI mappings, UTM templates, firearms rules).
-metadata:
-  type: connector
-  provider_slug: shopify
-  entrypoint: src/shopify/spec.yaml
-  contract: Connector Factory — God Config
+description: Contract-first connector skill for Shopify (build the contract, then the MCP spec).
 ---
-# Usage
-This connector defines Shopify scopes, KPI mappings, UTM templates, and firearms requirements for the God Config UI.
+# Contract-First Workflow
+1. Copy and fill the contract template:
+   - `/Users/jaynowman/dev/atoms-core/docs/contracts/connector_factory/CONNECTOR_CONTRACT_TEMPLATE.json`
+2. Save the Shopify contract:
+   - `/Users/jaynowman/dev/atoms-core/docs/contracts/connector_factory/SHOPIFY_CONNECTOR_CONTRACT.json`
+3. Populate all sections (Dev Account, Scopes, KPI, UTM, Budgets, OAuth/Marketplace, BYOK).
+4. Build or update the MCP spec:
+   - `/Users/jaynowman/dev/atoms-connectors/src/shopify/spec.yaml`
 
-## Defaults
-- Scopes: Full list from `connector_scopes` (Shopify).
-- KPI mappings: Use `metric_mappings` with human approval.
-- UTM templates: Use `utm_templates` with allowed variables.
-- Firearms: Only `requires_firearm` + `firearm_type_id` is allowed.
-
-## Notes
-- This SKILL is a contract marker for internal configuration and agent work.
+# Rules
+- Firearms are the only gate (no danger/risk fields).
+- All scopes must be listed under `connector_scopes`.
+- UTM templates and metric mappings must follow locked schemas.

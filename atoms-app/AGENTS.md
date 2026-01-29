@@ -70,6 +70,8 @@
 * **God Config Name (Locked):** `Connector Factory — God Config` (log this exact name in all layers).
 * **UX Law (God Config):** Use existing config style but avoid nested cards/boxes. Flat sections with collapsible headers; mobile-first usability.
 * **Firearms Only Gate:** No danger levels, risk scores, allow-lists, or parallel gating fields. Safety is **only** `requires_firearm` + `firearm_type_id`.
+* **Firearms Handling (Locked):** Agents must leave `requires_firearm=false` and `firearm_type_id` empty in drafts. Only humans set firearms in the UI.
+* **Draft-Only Rule:** Connector contracts remain `draft` until a human explicitly approves in the UI.
 * **Naming Engine Rule (Locked):** `formatProviderKey(platformName, rule)` is pure; basic slugify → uppercase → underscores; apply `rule` as a token template (e.g., `PROVIDER_{PLATFORM}_KEY`).
 * **Engine Location (Locked):** place engines in `atoms-app/src/lib/engines/`.
 ## Tenant/Surface/Space Law

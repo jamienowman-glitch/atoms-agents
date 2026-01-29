@@ -1,19 +1,19 @@
 {
   "contract_name": "Connector Factory — God Config",
-  "provider_slug": "shopify",
-  "display_name": "Shopify",
+  "provider_slug": "youtube",
+  "display_name": "YouTube",
   "status": "draft",
   "sections": {
     "dev_account": {
       "system_dev_username": "",
       "vault_integration": {
         "enabled": true,
-        "vault_key_hint": "SHOPIFY_ADMIN_TOKEN"
+        "vault_key_hint": "YOUTUBE_API_KEY"
       },
       "tenant_owned_keys": [
         {
-          "name_example": "SHOPIFY_STORE_FRONT_TOKEN",
-          "description": "Tenant-owned storefront token"
+          "name_example": "YOUTUBE_API_KEY",
+          "description": "Tenant-owned API key (if BYOK is enabled)"
         }
       ],
       "standardization": {
@@ -41,19 +41,18 @@
     "utm": {
       "templates": [],
       "schema": {
-        "provider_slug": "shopify",
+        "provider_slug": "youtube",
         "static_params": {
-          "utm_source": "shopify",
-          "utm_medium": "ecommerce"
+          "utm_source": "youtube",
+          "utm_medium": "video"
         },
         "allowed_variables": [
           "year",
-          "season",
           "content_pool",
-          "product_type",
-          "campaign_name"
+          "campaign_name",
+          "content_type"
         ],
-        "pattern_structure": "{{year}}_{{content_pool}}_{{season}}_{{campaign_name}}"
+        "pattern_structure": "{{year}}_{{content_pool}}_{{campaign_name}}_{{content_type}}"
       }
     },
     "budgets": {
@@ -78,6 +77,6 @@
   "notes": [
     "All dropdowns must be Supabase-backed with Plus buttons to persist new entries.",
     "Firearms is the only safety gate; no other danger/risk fields are allowed.",
-    "This JSON is the interim contract; it will later be delivered to an agent for MCP connector creation."
+    "This JSON is the interim contract; it becomes editable in the God Config UI."
   ]
 }
