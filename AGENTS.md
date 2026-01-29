@@ -11,3 +11,10 @@
 - **Service vs Library:** `atoms-core` is the shared **library** (pure logic/models). `atoms-muscle` is the **runtime/service** (MCP wrappers, API routes, billing decorators).
 - **Namespace Rule:** **Never** merge namespaces at runtime. `atoms-muscle` must import explicitly from `atoms-core` (e.g., `from atoms_core.src.audio.models import ...`).
 - **Rescue Protocol:** Port dependency logic from `northstar-engines` into `atoms-core` first. `atoms-muscle` must never import `northstar-engines`.
+- **Vault Law:** **No .env files**. Secrets must be loaded via the Vault Loader from `/Users/jaynowman/northstar-keys/` (or equivalent mount).
+
+## Tenant / Surface / Space Law
+- **Tenant:** The Billing Unit (Organization). Snax wallet is tenant-scoped.
+- **Surface:** Config isolation layer (App context).
+- **Space:** Shared context across mapped surfaces (Memory/Knowledge).
+- **Rule:** Do not hardcode surface names; treat them as registry data.

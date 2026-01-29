@@ -140,6 +140,7 @@ We maintain a strict "Scale-to-Zero" policy.
 * `atoms-muscle` is the **runtime/service** (MCP wrappers, API routes, billing decorators).
 * **Never** merge namespaces at runtime. `atoms-muscle` must import explicitly from `atoms-core`.
 * **Rescue Protocol:** Port dependency logic from `northstar-engines` into `atoms-core` first. `atoms-muscle` must never import `northstar-engines`.
+* **Vault Law:** **No .env files**. Secrets must be loaded via the Vault Loader.
 
 **For Agents (Building Muscles)**:
 1.  **Start Sentinel**: `python3 atoms-muscle/scripts/sentinel.py`
