@@ -10,7 +10,7 @@ scope: atoms-muscle + atoms-core (read-only for integration targets)
 Provide MAYBES‑related muscle support **only where needed** for UI workflows (audio processing, media registration). Do **not** touch HAZE or 3D muscles.
 
 # Non‑Negotiables
-- Path: `atoms-muscle/src/{category}/{name}` (no `src/muscle`).
+- Path: `atoms-muscle/src/{category}/{name}` (no `src`).
 - MCP wrapper must be complete (no stubs).
 - Each muscle must include a `SKILL.md` in the same folder.
 - Tenant compute first (interactive render stays on device).

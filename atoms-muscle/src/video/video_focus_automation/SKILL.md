@@ -3,7 +3,7 @@ name: muscle-video-video_focus_automation
 description: Auto-generated description.
 metadata:
   type: mcp
-  entrypoint: src/muscle/video/video_focus_automation/mcp.py
+  entrypoint: src/video/video_focus_automation/mcp.py
   pricing: "compute-seconds"
   auto_wrapped: true
 ---

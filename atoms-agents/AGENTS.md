@@ -28,7 +28,7 @@ This repository consumes `atoms-core` (if applicable) but maintains strict separ
 - Do not hardcode surface names in schemas or code; treat surfaces/spaces as registry/config data.
 
 ## 🏭 MUSCLE FACTORY STANDARD (2026)
-- **Path law:** muscles live in `atoms-muscle/src/{category}/{name}` (no `src/muscle`).
+- **Path law:** muscles live in `atoms-muscle/src/{category}/{name}` (no legacy nesting).
 - **Wrapper law:** every muscle must include a complete `mcp.py` (no stubs).
 - **Skill law:** every muscle must include `SKILL.md` using the global template and **unique** content (no placeholders).
 - **Imports:** `atoms-muscle` is runtime/service; `atoms-core` is library. Use explicit `from atoms_core.src.<domain> ...` imports only.

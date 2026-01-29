@@ -18,7 +18,7 @@ Rescue and productionize audio_separation + audio_mastering (or closest availabl
 
 ## Tasks (Atomic)
 1. **Un‑nest + Locate Closest Audio Targets**
-   - Move any existing code from `atoms-muscle/src/muscle/...` into `atoms-muscle/src/{category}/{name}`.
+   - Move any existing code from `atoms-muscle/src/...` into `atoms-muscle/src/{category}/{name}`.
    - If `audio_mastering` does not exist, select the nearest existing module (e.g., `audio_normalise`, `audio_fx_chain`, `audio_service`).
    - Record the exact target paths in this plan file before coding.
 

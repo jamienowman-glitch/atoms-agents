@@ -3,7 +3,7 @@ name: muscle-video-video_motifs
 description: Auto-generated description.
 metadata:
   type: mcp
-  entrypoint: src/muscle/video/video_motifs/mcp.py
+  entrypoint: src/video/video_motifs/mcp.py
   pricing: "compute-seconds"
   auto_wrapped: true
 ---

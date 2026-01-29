@@ -22,7 +22,7 @@ Rescue CAD ingest + BoQ quantities from **atoms-muscle (source of truth)** into 
 
 ## Tasks (Atomic)
 1. **Un‑nest + Rescue CAD Ingest Core**
-   - Move any existing code from `atoms-muscle/src/muscle/...` into `atoms-muscle/src/{category}/{name}`.
+   - Move any existing code from `atoms-muscle/src/...` into `atoms-muscle/src/{category}/{name}`.
    - Use **atoms-muscle cad_ingest** as the source of truth and move that logic into `atoms-core/src/cad/`.
    - Keep module layout shallow (e.g., `atoms-core/src/cad/ingest.py`, `models.py`, `dxf_adapter.py`, `ifc_lite_adapter.py`, `topology_heal.py`).
    - Update imports inside rescued code to `from src.cad...` only.

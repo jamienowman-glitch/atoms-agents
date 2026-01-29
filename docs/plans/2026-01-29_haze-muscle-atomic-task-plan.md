@@ -10,7 +10,7 @@ scope: atoms-muscle
 Make the HAZE muscle chain production‑ready and compliant with the new standard.
 
 # Non‑Negotiables
-- Path: `atoms-muscle/src/{category}/{name}` (no `src/muscle`).
+- Path: `atoms-muscle/src/{category}/{name}` (no `src`).
 - MCP wrapper must be complete (no stubs).
 - Each muscle must include a `SKILL.md` in the same folder.
 - Tenant compute first (interactive render stays on device).

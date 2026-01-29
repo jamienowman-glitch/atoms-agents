@@ -22,7 +22,7 @@ export const HazeWorld: React.FC<HazeWorldProps> = ({ deltaForward, deltaTurn })
             }}
         >
             <div
-                className="relative w-[800px] h-[800px] transform-style-3d transition-transform duration-75 ease-linear"
+                className="relative w-full h-full transform-style-3d transition-transform duration-75 ease-linear"
                 style={{
                     transform: `rotateY(${deltaTurn}deg) translateZ(${deltaForward * 10}px)`
                 }}

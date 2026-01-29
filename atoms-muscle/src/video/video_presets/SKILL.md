@@ -3,7 +3,7 @@ name: muscle-video-video_presets
 description: Auto-generated description.
 metadata:
   type: mcp
-  entrypoint: src/muscle/video/video_presets/mcp.py
+  entrypoint: src/video/video_presets/mcp.py
   pricing: "compute-seconds"
   auto_wrapped: true
 ---

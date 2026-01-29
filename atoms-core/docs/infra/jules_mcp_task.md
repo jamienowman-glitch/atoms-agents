@@ -60,8 +60,8 @@ We generally follow the **Tott / CapCut Web** architecture:
 
 ## 4. Execution List
 Target Areas (Priority):
-1.  `src/muscle/video/*` (21 Muscles) -> **Critical for AfterTime**.
-2.  `src/muscle/audio/*` (64 Muscles) -> **Critical for Voice**.
-3.  `src/muscle/vision/*` (1 Muscle) -> **Critical for Nexus**.
+1.  `src/video/*` (21 Muscles) -> **Critical for AfterTime**.
+2.  `src/audio/*` (64 Muscles) -> **Critical for Voice**.
+3.  `src/vision/*` (1 Muscle) -> **Critical for Nexus**.
 
 **Jules, execute.**

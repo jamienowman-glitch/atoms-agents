@@ -19,7 +19,7 @@ Rescue video_render + animation_kernel into atoms-core and enforce Brain/Brawn s
 
 ## Tasks (Atomic)
 1. **Un‑nest + Rescue Core Logic**
-   - Move any existing code from `atoms-muscle/src/muscle/...` into `atoms-muscle/src/{category}/{name}`.
+   - Move any existing code from `atoms-muscle/src/...` into `atoms-muscle/src/{category}/{name}`.
    - Port required logic from `northstar-engines/engines/video*` and `engines/animation_kernel` into `atoms-core/src/video/` and `atoms-core/src/animation/` as appropriate.
    - Refactor to stateless helpers.
 

@@ -3,7 +3,7 @@ name: muscle-video-animation_kernel
 description: Procedural animation engine (Auto-Rig, IK, Motion Planning). Brain Only.
 metadata:
   type: mcp
-  entrypoint: src/muscle/video/animation_kernel/mcp.py
+  entrypoint: src/video/animation_kernel/mcp.py
   pricing: "compute-seconds"
   auto_wrapped: true
 ---

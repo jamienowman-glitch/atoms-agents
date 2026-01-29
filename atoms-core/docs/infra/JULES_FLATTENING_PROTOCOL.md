@@ -1,21 +1,21 @@
 # 🚜 JULES: THE FLATTENING PROTOCOL
-> **Mission**: Unify `legacy/muscle` into the main `src/muscle` directory.
+> **Mission**: Unify `legacy/muscle` into the main `src` directory.
 > **Mandate**: "Nesting is punishable by death."
 
 ## 1. The Migration
 Once you have wrapped the legacy muscles (Previous Task), you must **MOVE** them.
 
-*   **Source**: `atoms-muscle/src/muscle/legacy/muscle/{name}`
-*   **Destination**: `atoms-muscle/src/muscle/{category}/{name}`
+*   **Source**: `atoms-muscle/src/legacy/muscle/{name}`
+*   **Destination**: `atoms-muscle/src/{category}/{name}`
 
 ### Rules of Movement
 1.  **Identify Category**:
-    *   If name starts with `video_` -> move to `src/muscle/video/`.
-    *   If name starts with `audio_` -> move to `src/muscle/audio/`.
-    *   If name starts with `image_` -> move to `src/muscle/image/`.
-    *   If unsure -> move to `src/muscle/legacy_flattened/`.
-2.  **Move Folder**: `mv src/muscle/legacy/muscle/video_render src/muscle/video/video_render`
-3.  **Delete Legacy**: Once empty, delete `src/muscle/legacy`.
+    *   If name starts with `video_` -> move to `src/video/`.
+    *   If name starts with `audio_` -> move to `src/audio/`.
+    *   If name starts with `image_` -> move to `src/image/`.
+    *   If unsure -> move to `src/legacy_flattened/`.
+2.  **Move Folder**: `mv src/legacy/muscle/video_render src/video/video_render`
+3.  **Delete Legacy**: Once empty, delete `src/legacy`.
 
 ## 2. The Code Updates
 Moving/Renaming breaks imports. You must fix them.
@@ -28,8 +28,8 @@ You must rewrite `atoms-muscle/AGENTS.md` and `SKILL.md` to rigidly enforce the 
 ### Update `AGENTS.md`
 ```markdown
 # 🛑 THE LAW OF MUSCLE STORAGE
-1.  **Flat Hierarchy**: `src/muscle/{category}/{name}`.
-2.  **No Nesting**: `src/muscle/legacy/muscle/foo` is FORBIDDEN.
+1.  **Flat Hierarchy**: `src/{category}/{name}`.
+2.  **No Nesting**: `src/legacy/muscle/foo` is FORBIDDEN.
 3.  **One Level**: Category -> Muscle. That's it.
 ```
 
@@ -37,7 +37,7 @@ You must rewrite `atoms-muscle/AGENTS.md` and `SKILL.md` to rigidly enforce the 
 Add a warning block:
 ```markdown
 > [!IMPORTANT]
-> **FOLDER STRUCTURE**: You must create this muscle in `src/muscle/{category}/{name}`.
+> **FOLDER STRUCTURE**: You must create this muscle in `src/{category}/{name}`.
 > Do NOT create sub-sub-folders.
 ```
 

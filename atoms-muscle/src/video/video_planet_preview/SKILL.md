@@ -3,7 +3,7 @@ name: muscle-video-video_planet_preview
 description: Orchestrate the surface renderer + runner automation into a preview plan with optional CPU fallback.
 metadata:
   type: mcp
-  entrypoint: src/muscle/video/video_planet_preview/mcp.py
+  entrypoint: src/video/video_planet_preview/mcp.py
   pricing: "compute-seconds"
   auto_wrapped: true
 ---

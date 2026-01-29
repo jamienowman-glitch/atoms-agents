@@ -3,7 +3,7 @@ name: muscle-video-air_canvas
 description: Auto-generated description.
 metadata:
   type: mcp
-  entrypoint: src/muscle/video/air_canvas/mcp.py
+  entrypoint: src/video/air_canvas/mcp.py
   pricing: "compute-seconds"
   auto_wrapped: true
 ---

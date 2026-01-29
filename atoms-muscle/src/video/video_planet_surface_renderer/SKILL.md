@@ -3,7 +3,7 @@ name: muscle-video-video_planet_surface_renderer
 description: Generate glowing planetary surface frames plus lighting/curvature metadata for preview pipelines.
 metadata:
   type: mcp
-  entrypoint: src/muscle/video/video_planet_surface_renderer/mcp.py
+  entrypoint: src/video/video_planet_surface_renderer/mcp.py
   pricing: "compute-seconds"
   auto_wrapped: true
 ---

@@ -3,7 +3,7 @@ name: muscle-video-auto_test
 description: Auto-generated description.
 metadata:
   type: mcp
-  entrypoint: src/muscle/video/auto_test/mcp.py
+  entrypoint: src/video/auto_test/mcp.py
   pricing: "compute-seconds"
   auto_wrapped: true
 ---

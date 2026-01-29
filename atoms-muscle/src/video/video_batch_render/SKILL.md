@@ -3,7 +3,7 @@ name: muscle-video-video_batch_render
 description: Auto-generated description.
 metadata:
   type: mcp
-  entrypoint: src/muscle/video/video_batch_render/mcp.py
+  entrypoint: src/video/video_batch_render/mcp.py
   pricing: "compute-seconds"
   auto_wrapped: true
 ---

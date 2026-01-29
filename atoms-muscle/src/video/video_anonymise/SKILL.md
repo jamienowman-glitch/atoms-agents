@@ -3,7 +3,7 @@ name: muscle-video-video_anonymise
 description: Auto-generated description.
 metadata:
   type: mcp
-  entrypoint: src/muscle/video/video_anonymise/mcp.py
+  entrypoint: src/video/video_anonymise/mcp.py
   pricing: "compute-seconds"
   auto_wrapped: true
 ---

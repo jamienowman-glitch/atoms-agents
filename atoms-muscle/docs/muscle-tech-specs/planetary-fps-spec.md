@@ -13,11 +13,11 @@ This document captures the atomic task breakdown required to deliver the glowing
 
 ### Atomic Tasks
 1. **Implementation**
-   - Create `atoms-muscle/src/muscle/video/video_planet_surface_renderer/service.py`.
+   - Create `atoms-muscle/src/video/video_planet_surface_renderer/service.py`.
    - Implement a class that builds a procedural hemisphere/sphere (Equirectangular sphere sample) and emits per-frame metadata (lighting, curvature) in a format consumable by the preview muscles.
    - Keep the API simple (e.g., `render(surface_params, duration_ms)`) and make it reusable by other agents.
 2. **Packaging**
-   - Write `atoms-muscle/src/muscle/video/video_planet_surface_renderer/SKILL.md` with the standard frontmatter (`name: muscle-video-video_planet_surface_renderer`, description, metadata pointing to the `mcp` entrypoint).
+   - Write `atoms-muscle/src/video/video_planet_surface_renderer/SKILL.md` with the standard frontmatter (`name: muscle-video-video_planet_surface_renderer`, description, metadata pointing to the `mcp` entrypoint).
    - Document POST `/muscle/video/video_planet_surface_renderer/render` usage inside the Skill instructions so Codex agents can consume it via MCP.
 3. **Automation**
    - Ensure `scripts/sentinel.py` is running so it auto-generates `mcp.py` plus the Skill manifest when `service.py` is saved.
@@ -31,7 +31,7 @@ This document captures the atomic task breakdown required to deliver the glowing
 
 ### Atomic Tasks
 1. **Implementation**
-   - Place an FPS controller within `atoms-muscle/src/muscle/video/video_planet_runner/service.py`.
+   - Place an FPS controller within `atoms-muscle/src/video/video_planet_runner/service.py`.
    - The service should expose a method like `simulate_run(run_duration_ms, speed_profile)` that returns `Keyframe` sequences or parameter automations aligning the camera to the planet's normal at each step.
    - Integrate gravity/raycast logic that keeps the “feet” down by clamping movement to the spherical surface.
 2. **Packaging**
@@ -49,7 +49,7 @@ This document captures the atomic task breakdown required to deliver the glowing
 
 ### Atomic Tasks
 1. **Implementation**
-   - Build `service.py` under `atoms-muscle/src/muscle/video/video_planet_preview/` that orchestrates frame serving:
+   - Build `service.py` under `atoms-muscle/src/video/video_planet_preview/` that orchestrates frame serving:
      * Accepts parameters for resolution, device capability (CPU vs GPU), and run metadata.
      * Streams assets via `media_v2` and optionally uses `video_render` to generate proxies when WebGL isn’t available.
      * Outputs a metadata bundle (`preview_plan`) referencing the glowing sphere render, timeline, and action tokens for the front end.
@@ -82,7 +82,7 @@ When the preview plan contains `preview_plan.actions`, forward them to the exist
 
 This spec follows the Muscle Factory doctrine: implement clean `service.py`, rely on Sentinel for packaging, verify the MCP registration, and keep each muscle atomic so future agents can build/test them without context bleed. Let me know if you’d like this spec split into individual task cards (one file per muscle) or exported to the Dashboard plan format.
 ## Implementation Log (January 28, 2026)
-1. **video_planet_surface_renderer** – Completed implementation in `src/muscle/video/video_planet_surface_renderer/service.py` with hemisphere sampling, `render(...)` metadata, `media_v2` URIs, and a `run` shim for MCP compatibility. Auto-generated `mcp.py` and `SKILL.md` via `scripts/factory.py`, then hand-tweaked the Skill instructions to explain `POST /muscle/video/video_planet_surface_renderer/render` and `media_v2` results.
-2. **video_planet_runner** – Added `src/muscle/video/video_planet_runner/service.py` that simulates spherical FPS runs, clamps positions to the normals, and emits keyframes plus metadata. Confirmed `mcp.py`/`SKILL.md` exist and documented how the `run_plan` output can feed `video_timeline`/`video_focus_automation`.
-3. **video_planet_preview** – Built `src/muscle/video/video_planet_preview/service.py` to orchestrate the renderer + runner outputs, stream assets via `media_v2`, provide GPU/CPU strategies, and emit action tokens for preview clients. Generated wrappers and expanded the Skill with request/response snippets for front-end verification.
+1. **video_planet_surface_renderer** – Completed implementation in `src/video/video_planet_surface_renderer/service.py` with hemisphere sampling, `render(...)` metadata, `media_v2` URIs, and a `run` shim for MCP compatibility. Auto-generated `mcp.py` and `SKILL.md` via `scripts/factory.py`, then hand-tweaked the Skill instructions to explain `POST /muscle/video/video_planet_surface_renderer/render` and `media_v2` results.
+2. **video_planet_runner** – Added `src/video/video_planet_runner/service.py` that simulates spherical FPS runs, clamps positions to the normals, and emits keyframes plus metadata. Confirmed `mcp.py`/`SKILL.md` exist and documented how the `run_plan` output can feed `video_timeline`/`video_focus_automation`.
+3. **video_planet_preview** – Built `src/video/video_planet_preview/service.py` to orchestrate the renderer + runner outputs, stream assets via `media_v2`, provide GPU/CPU strategies, and emit action tokens for preview clients. Generated wrappers and expanded the Skill with request/response snippets for front-end verification.
 4. **Registry sync (Supabase)** – Ran `scripts/sync_muscles.py` (with `NEXT_PUBLIC_SUPABASE_ANON_KEY=placeholder`) to honor the automation checklist; the tool reported `[Errno 61] Connection refused` for every muscle because the Supabase server at `http://127.0.0.1:54321` is not running locally. Once the registry is reachable, add the new muscles to the inventory JSON so the sync process can register these endpoints.

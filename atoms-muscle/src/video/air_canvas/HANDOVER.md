@@ -24,5 +24,5 @@ The development environment lacked `ffmpeg` binaries and `atoms-core` Vault secr
 To verify the current state:
 ```bash
 # Run unit tests
-python3 src/muscle/video/air_canvas/test_air_canvas.py
+python3 src/video/air_canvas/test_air_canvas.py
 ```

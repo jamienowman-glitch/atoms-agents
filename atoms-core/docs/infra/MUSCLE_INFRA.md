@@ -25,8 +25,8 @@ Every Muscle is designed to be **sold** as a standalone tool.
 
 ### The Protocol
 To sell a Muscle, it must be wrapped as a **Model Context Protocol (MCP)** server.
-1.  **Raw Logic**: The Python Class (`src/muscle/video/slowmo/service.py`).
-2.  **The Wrapper**: The MCP Server (`src/muscle/video/slowmo/mcp.py`).
+1.  **Raw Logic**: The Python Class (`src/video/slowmo/service.py`).
+2.  **The Wrapper**: The MCP Server (`src/video/slowmo/mcp.py`).
 3.  **The Manifest**: `SKILL.md` defining the selling points and endpoints.
 
 ### ⚠️ Current Status: AUDIT FAILED

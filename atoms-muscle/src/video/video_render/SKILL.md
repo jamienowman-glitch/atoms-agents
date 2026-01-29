@@ -3,7 +3,7 @@ name: muscle-video-video_render
 description: Generates a render plan (FFmpeg command) for video composition. Brain Only.
 metadata:
   type: mcp
-  entrypoint: src/muscle/video/video_render/mcp.py
+  entrypoint: src/video/video_render/mcp.py
   pricing: "compute-seconds"
   auto_wrapped: true
 ---

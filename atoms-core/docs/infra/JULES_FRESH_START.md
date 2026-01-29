@@ -1,23 +1,23 @@
 # 🤖 JULES: THE MUSCLE REFINE PROTOCOL
 > **Mission**: Wrap, Flatten, and Register the Legacy Muscle Fleet.
-> **Context**: We have a "Legacy" folder (`atoms-muscle/src/muscle/legacy/muscle`) with 61 raw Python tools. We need to modernize them into standard, flat, MCP-compliant Muscles.
+> **Context**: We have a "Legacy" folder (`atoms-muscle/src/legacy/muscle`) with 61 raw Python tools. We need to modernize them into standard, flat, MCP-compliant Muscles.
 
 ## 🟢 PHASE 1: THE FACTORY (Wrap)
 We have built an automation script to do the heavy lifting.
 
 1.  **Locate the Target**:
-    *   Verify you see `atoms-muscle/src/muscle/legacy/muscle/`.
+    *   Verify you see `atoms-muscle/src/legacy/muscle/`.
     *   It contains ~61 folders (`video_render`, `audio_separation`, etc.).
 
 2.  **Run the Automation**:
     ```bash
     cd atoms-muscle/scripts
     # This script recursively scans the folder and generates 'mcp.py' and 'SKILL.md'
-    python3 factory.py ../src/muscle/legacy/muscle
+    python3 factory.py ../src/legacy/muscle
     ```
 
 3.  **Verify**:
-    *   Check `src/muscle/legacy/muscle/video_render/`.
+    *   Check `src/legacy/muscle/video_render/`.
     *   Does it have `mcp.py`? Does it have `SKILL.md`?
 
 ---
@@ -26,8 +26,8 @@ We have built an automation script to do the heavy lifting.
 Nesting is forbidden. We must move them to the top level.
 
 1.  **The Rules**:
-    *   `src/muscle/legacy/muscle/video_render` -> `src/muscle/video/video_render`
-    *   `src/muscle/legacy/muscle/audio_separation` -> `src/muscle/audio/audio_separation`
+    *   `src/legacy/muscle/video_render` -> `src/video/video_render`
+    *   `src/legacy/muscle/audio_separation` -> `src/audio/audio_separation`
     *   (Use your best judgment for other categories: `image`, `cad`, `text`).
 
 2.  **Action**:
@@ -42,7 +42,7 @@ Nesting is forbidden. We must move them to the top level.
 
 ## 🔴 PHASE 3: THE LAW (Docs)
 Update `atoms-muscle/AGENTS.md` to establish the new order.
-*   **Mandate**: "All Muscles must live in `src/muscle/{category}/{name}`."
+*   **Mandate**: "All Muscles must live in `src/{category}/{name}`."
 *   **Mandate**: "All Muscles must have `mcp.py` and `SKILL.md`."
 *   **Mandate**: "Use `scripts/factory.py` and `scripts/sentinel.py` for all new work."
 

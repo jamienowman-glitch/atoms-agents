@@ -3,7 +3,7 @@ name: muscle-video-video_assist
 description: Auto-generated description.
 metadata:
   type: mcp
-  entrypoint: src/muscle/video/video_assist/mcp.py
+  entrypoint: src/video/video_assist/mcp.py
   pricing: "compute-seconds"
   auto_wrapped: true
 ---

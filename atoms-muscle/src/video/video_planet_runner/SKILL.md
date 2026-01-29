@@ -3,7 +3,7 @@ name: muscle-video-video_planet_runner
 description: Simulate a grounded FPS run around the planet with normals preserved for automation.
 metadata:
   type: mcp
-  entrypoint: src/muscle/video/video_planet_runner/mcp.py
+  entrypoint: src/video/video_planet_runner/mcp.py
   pricing: "compute-seconds"
   auto_wrapped: true
 ---
