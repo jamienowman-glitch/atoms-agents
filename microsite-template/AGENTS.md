@@ -61,3 +61,25 @@ This repository holds the Marketing Microsites.
 - **Naming Engine Rule (Locked):** `formatProviderKey(platformName, rule)` is pure; basic slugify → uppercase → underscores; apply `rule` as a token template (e.g., `PROVIDER_{PLATFORM}_KEY`).
 - **Core KPIs Schema (Locked):** `core_kpis.missing_components` is jsonb array of strings; `core_kpis.metadata` is jsonb (store and do not drop).
 
+## ⚙️ The Engine Standard
+To support high-volume sites, all pages must inject a standard "Engine" that handles SEO, Analytics, Legal, and Pricing automatically.
+
+### A. SEO & Metadata
+*   **Mandatory**: Every page must export `generateMetadata()`.
+*   **Sitemap**: `app/sitemap.ts` must generate a dynamic sitemap based on routes.
+*   **Robots**: `app/robots.ts` must define standard allow/disallow rules.
+*   **JSON-LD**: `app/layout.tsx` must inject Organization/WebSite schema.
+
+### B. Analytics
+*   **Mandatory**: `AnalyticsProvider` must be present in the root layout (`app/layout.tsx`).
+*   **Implementation**: Use `src/lib/analytics` and `src/components/analytics/AnalyticsProvider.tsx`.
+*   **UTM**: `useUtmCapture` hook must parse and persist UTM parameters.
+
+### C. Pricing & Compliance
+*   **Mandatory**: `PricingContext` must wrap the application.
+*   **Pricing**: Fetch discount policies from `atoms-core` and expose `price`, `discountedPrice`.
+*   **Compliance**: Include privacy and terms placeholders in `src/components/legal/`.
+
+### D. Middleware
+*   **File**: `middleware.ts` is required.
+*   **Logic**: Handle Geo detection and Personalization (segmentation).
