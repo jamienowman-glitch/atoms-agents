@@ -2,9 +2,10 @@ import type { Config } from "tailwindcss";
 
 const config: Config = {
     content: [
-        "./atoms-ui/harnesses/**/*.{js,ts,jsx,tsx}",
-        "./atoms-ui/canvas/**/*.{js,ts,jsx,tsx}",
-        "./atoms-ui/ui-atoms/**/*.{js,ts,jsx,tsx}",
+        "./harnesses/**/*.{js,ts,jsx,tsx}",
+        "./canvas/**/*.{js,ts,jsx,tsx}",
+        "./ui-atoms/**/*.{js,ts,jsx,tsx}",
+        "./app/**/*.{js,ts,jsx,tsx}",
     ],
     theme: {
         extend: {

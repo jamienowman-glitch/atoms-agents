@@ -156,6 +156,11 @@ We maintain a strict "Scale-to-Zero" policy.
 * **Slice Rule:** Deployment slices include the required `atoms-core` modules; muscles are not standalone without atoms-core.
 * **Vault Law:** **No .env files**. Secrets must be loaded via the Vault Loader.
 
+## 🌐 WEBSITE PRINTING PRESS (GLOBAL)
+- Templates live in the monorepo at `/Users/jaynowman/dev/atoms-site-templates/`.
+- Live customer sites must be **separate repos** outside `/Users/jaynowman/dev/` (e.g., `/Users/jaynowman/sites/<site>`).
+- The Press pipeline (clone → repo → Pages → DNS) is the only supported path for marketing site deploys.
+
 **For Agents (Building Muscles)**:
 1.  **Start Sentinel**: `python3 atoms-muscle/scripts/sentinel.py`
 2.  **Write Code**: Create `src/{category}/{name}/service.py`.

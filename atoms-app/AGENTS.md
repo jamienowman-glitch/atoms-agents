@@ -74,6 +74,11 @@
 * **Draft-Only Rule:** Connector contracts remain `draft` until a human explicitly approves in the UI.
 * **Naming Engine Rule (Locked):** `formatProviderKey(platformName, rule)` is pure; basic slugify → uppercase → underscores; apply `rule` as a token template (e.g., `PROVIDER_{PLATFORM}_KEY`).
 * **Engine Location (Locked):** place engines in `atoms-app/src/lib/engines/`.
+
+## 🌐 WEBSITE PRINTING PRESS (APP)
+- The Press UI lives in `atoms-app` and triggers deploys; **sites themselves are separate repos**.
+- Do not embed marketing sites inside the monorepo or `atoms-app`.
+- Templates are sourced from `/Users/jaynowman/dev/atoms-site-templates/`.
 ## Tenant/Surface/Space Law
 - Tenant is the billing unit. Snax wallets are tenant-scoped and spendable across all surfaces/spaces.
 - Surface is the configuration layer for tenants. Data isolation is per-surface unless explicitly shared.

@@ -15,6 +15,12 @@
 - **Slice Rule:** Deployment slices include the required `atoms-core` library modules; muscles are **not** standalone without atoms-core.
 - **Vault Secret Mount Rule:** No `.env` files. Secrets are read from `/Users/jaynowman/northstar-keys/` via Vault loaders.
 
+## Website Printing Press (Global)
+- **Templates Live In Monorepo:** Source of truth at `/Users/jaynowman/dev/atoms-site-templates/`.
+- **Live Sites Are Separate Repos:** Customer sites are created outside `/Users/jaynowman/dev/` (e.g., `/Users/jaynowman/sites/<site>`).
+- **Deploy Path:** Use Press tooling to clone templates, create a new repo, and deploy via Cloudflare Pages.
+- **No Shared Monorepo Deploys:** Do not deploy customer sites from the monorepo.
+
 ## Connector Factory Laws (Global)
 - **God Config Name (Locked):** `Connector Factory — God Config` (log this exact name in all layers).
 - **UX Law (God Config):** Use the existing config style but avoid nested cards/boxes. Prefer flat sections with collapsible headers and mobile-first usability.
