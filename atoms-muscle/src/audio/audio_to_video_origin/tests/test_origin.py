@@ -1,9 +1,9 @@
 import pytest
 from unittest.mock import MagicMock
-from engines.audio_to_video_origin.service import AudioToVideoOriginService, ShotListRequest
-from engines.audio_semantic_timeline.models import AudioEvent, AudioSemanticTimelineSummary, AudioSemanticTimelineGetResponse
-from engines.audio_semantic_timeline.service import set_audio_semantic_service
-from engines.audio_timeline.service import AudioTimelineService
+from atoms_core.src.audio.audio_to_video_origin.service import AudioToVideoOriginService, ShotListRequest
+from atoms_core.src.audio.audio_semantic_timeline.models import AudioEvent, AudioSemanticTimelineSummary, AudioSemanticTimelineGetResponse
+from atoms_core.src.audio.audio_semantic_timeline.service import set_audio_semantic_service
+from atoms_core.src.audio.audio_timeline.service import AudioTimelineService
 from atoms_core.src.media.v2.models import DerivedArtifact, MediaAsset
 
 def test_generate_shot_list():
@@ -123,7 +123,7 @@ def test_generate_shot_list_without_semantics(monkeypatch):
         meta={},
     )
     monkeypatch.setattr(
-        "engines.audio_to_video_origin.service.get_audio_semantic_service",
+        "atoms_core.src.audio.audio_to_video_origin.service.get_audio_semantic_service",
         lambda: MagicMock(get_timeline=MagicMock()),
     )
     svc = AudioToVideoOriginService(media_service=mock_media)

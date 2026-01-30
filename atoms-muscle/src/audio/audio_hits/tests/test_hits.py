@@ -1,9 +1,9 @@
 import pytest
 from unittest.mock import MagicMock, patch
 
-from engines.audio_hits.service import AudioHitsService
-from engines.audio_hits.models import HitDetectRequest
-from engines.audio_shared.health import DependencyInfo
+from atoms_core.src.audio.audio_hits.service import AudioHitsService
+from atoms_core.src.audio.audio_hits.models import HitDetectRequest
+from atoms_core.src.audio.shared.health import DependencyInfo
 from atoms_core.src.media.v2.models import MediaAsset, DerivedArtifact
 
 def test_detect_hits_basic():
@@ -31,7 +31,7 @@ def test_detect_hits_basic():
         min_peak_db=-30
     )
     
-    with patch("engines.audio_hits.service.check_dependencies") as mock_check:
+    with patch("atoms_core.src.audio.audio_hits.service.check_dependencies") as mock_check:
         mock_check.return_value = {
             "ffmpeg": DependencyInfo(True, "6.0", None),
             "ffprobe": DependencyInfo(True, "6.0", None),
@@ -69,7 +69,7 @@ def test_stub_respects_min_interval():
         min_interval_ms=1500
     )
 
-    with patch("engines.audio_hits.service.check_dependencies") as mock_check:
+    with patch("atoms_core.src.audio.audio_hits.service.check_dependencies") as mock_check:
         mock_check.return_value = {
             "ffmpeg": DependencyInfo(True, "6.0", None),
             "ffprobe": DependencyInfo(True, "6.0", None),
@@ -113,7 +113,7 @@ def test_detect_hits_rejects_unknown_tenant():
         min_peak_db=-30
     )
 
-    with patch("engines.audio_hits.service.check_dependencies") as mock_check:
+    with patch("atoms_core.src.audio.audio_hits.service.check_dependencies") as mock_check:
         mock_check.return_value = {
             "ffmpeg": DependencyInfo(True, "6.0", None),
             "ffprobe": DependencyInfo(True, "6.0", None),
@@ -151,7 +151,7 @@ def test_detect_hits_stub_backend_when_librosa_missing():
         min_peak_db=-30,
     )
 
-    with patch("engines.audio_hits.service.check_dependencies") as mock_check:
+    with patch("atoms_core.src.audio.audio_hits.service.check_dependencies") as mock_check:
         mock_check.return_value = {
             "ffmpeg": DependencyInfo(True, "6.0", None),
             "ffprobe": DependencyInfo(True, "6.0", None),

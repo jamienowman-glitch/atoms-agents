@@ -1,12 +1,12 @@
 import pytest
 from unittest.mock import MagicMock, patch, ANY
-from engines.audio_render.service import AudioRenderService, RenderRequest
-from engines.audio_timeline.service import AudioTimelineService
+from atoms_core.src.audio.audio_render.service import AudioRenderService, RenderRequest
+from atoms_core.src.audio.audio_timeline.service import AudioTimelineService
 from atoms_core.src.media.v2.models import DerivedArtifact, MediaAsset
-from engines.audio_mix_buses.models import MixGraph, BusConfig
+from atoms_core.src.audio.audio_mix_buses.models import MixGraph, BusConfig
 
 def test_render_plan_with_graph():
-    from engines.audio_render.planner import build_ffmpeg_mix_plan
+    from atoms_core.src.audio.audio_render.planner import build_ffmpeg_mix_plan
     
     tl = AudioTimelineService()
     seq = tl.create_sequence("t1", "d")
@@ -52,8 +52,8 @@ def test_render_execution_stems():
     mock_media.register_artifact.side_effect = lambda r: DerivedArtifact(id=f"art_{r.kind}", parent_asset_id="p", tenant_id="t", env="d", kind=r.kind, uri="u")
     
     with patch("subprocess.run") as mock_run, \
-         patch("engines.audio_render.service.Path") as mock_path, \
-         patch("engines.audio_render.service.get_audio_mix_buses_service") as mock_get_buses:
+         patch("atoms_core.src.audio.audio_render.service.Path") as mock_path, \
+         patch("atoms_core.src.audio.audio_render.service.get_audio_mix_buses_service") as mock_get_buses:
          
         # Mock Path
         mock_path.return_value.exists.return_value = True

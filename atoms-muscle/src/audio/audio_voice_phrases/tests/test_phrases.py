@@ -4,9 +4,9 @@ import tempfile
 import pytest
 from unittest.mock import MagicMock, patch
 
-from engines.audio_voice_phrases.service import AudioVoicePhrasesService
-from engines.audio_voice_phrases.models import VoicePhraseDetectRequest
-from engines.audio_shared.health import DependencyInfo
+from atoms_core.src.audio.audio_voice_phrases.service import AudioVoicePhrasesService
+from atoms_core.src.audio.audio_voice_phrases.models import VoicePhraseDetectRequest
+from atoms_core.src.audio.shared.health import DependencyInfo
 from atoms_core.src.media.v2.models import MediaAsset, DerivedArtifact
 
 def _create_temp_transcript():
@@ -70,7 +70,7 @@ def test_detect_phrases_stub():
             max_gap_ms=500
         )
         
-        with patch("engines.audio_voice_phrases.service.check_dependencies") as mock_check:
+        with patch("atoms_core.src.audio.audio_voice_phrases.service.check_dependencies") as mock_check:
             mock_check.return_value = _fake_dependencies(True)
             res = service.detect_phrases(req)
         assert res.meta["backend_info"]["backend_type"] == "librosa"
@@ -117,7 +117,7 @@ def test_detect_phrases_merge_all():
             max_gap_ms=2000
         )
         
-        with patch("engines.audio_voice_phrases.service.check_dependencies") as mock_check:
+        with patch("atoms_core.src.audio.audio_voice_phrases.service.check_dependencies") as mock_check:
             mock_check.return_value = _fake_dependencies(True)
             res = service.detect_phrases(req)
         assert len(res.phrases) == 1
@@ -136,7 +136,7 @@ def test_detect_phrases_rejects_unknown_tenant():
     service = AudioVoicePhrasesService(media_service=mock_media)
     req = VoicePhraseDetectRequest(tenant_id="t_unknown", env="dev", asset_id="x")
 
-    with patch("engines.audio_voice_phrases.service.check_dependencies") as mock_check:
+    with patch("atoms_core.src.audio.audio_voice_phrases.service.check_dependencies") as mock_check:
         mock_check.return_value = _fake_dependencies(True)
         with pytest.raises(ValueError):
             service.detect_phrases(req)
@@ -151,7 +151,7 @@ def test_detect_phrases_stub_backend_when_librosa_missing():
     service = AudioVoicePhrasesService(media_service=mock_media)
     req = VoicePhraseDetectRequest(tenant_id="t", env="d", asset_id="a")
 
-    with patch("engines.audio_voice_phrases.service.check_dependencies") as mock_check:
+    with patch("atoms_core.src.audio.audio_voice_phrases.service.check_dependencies") as mock_check:
         mock_check.return_value = _fake_dependencies(False)
         res = service.detect_phrases(req)
 

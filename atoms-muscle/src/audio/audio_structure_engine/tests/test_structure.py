@@ -1,8 +1,8 @@
 import pytest
 from unittest.mock import MagicMock
-from engines.audio_structure_engine.service import AudioStructureEngineService, ArrangementRequest
-from engines.audio_structure_engine.models import StructureTemplate, StructureSection
-from engines.audio_structure_engine.templates import STRUCTURE_TEMPLATES
+from atoms_core.src.audio.audio_structure_engine.service import AudioStructureEngineService, ArrangementRequest
+from atoms_core.src.audio.audio_structure_engine.models import StructureTemplate, StructureSection
+from atoms_core.src.audio.audio_structure_engine.templates import STRUCTURE_TEMPLATES
 
 def test_arrange_song_simple():
     # Use a simpler custom template or mock the template dict?

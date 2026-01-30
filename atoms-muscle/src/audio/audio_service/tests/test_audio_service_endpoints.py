@@ -7,7 +7,7 @@ from fastapi.testclient import TestClient
 
 from atoms_core.src.media.v2.models import MediaUploadRequest
 from atoms_core.src.media.v2.service import InMemoryMediaRepository, MediaService, set_media_service
-from engines.audio_service.routes import router as audio_router
+from atoms_core.src.audio.audio_service.routes import router as audio_router
 
 
 def setup_module(_module):
@@ -77,7 +77,7 @@ def test_audio_service_endpoints(monkeypatch):
     )
 
     # Patch audio engines to avoid ffmpeg deps
-    import engines.audio_service.service as audio_service_module
+    import atoms_core.src.audio.audio_service.service as audio_service_module
 
     monkeypatch.setattr(audio_service_module, "clean_run", lambda cfg: DummyCleanResult(tmp_file))
     monkeypatch.setattr(audio_service_module, "segment_run", lambda cfg: DummySegResult(tmp_file))

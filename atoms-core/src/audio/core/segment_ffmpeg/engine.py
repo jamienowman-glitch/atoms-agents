@@ -6,7 +6,7 @@ import subprocess
 from pathlib import Path
 from typing import List
 
-from engines.audio.segment_ffmpeg.types import (
+from .types import (
     SegmentFFmpegInput,
     SegmentFFmpegOutput,
     SegmentMetadata,

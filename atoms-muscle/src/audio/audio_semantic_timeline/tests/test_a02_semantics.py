@@ -5,7 +5,7 @@ from unittest.mock import MagicMock, patch
 
 import numpy as np
 
-from engines.audio_semantic_timeline.service import WhisperLibrosaBackend, AudioSemanticTimelineSummary
+from atoms_core.src.audio.audio_semantic_timeline.service import WhisperLibrosaBackend, AudioSemanticTimelineSummary
 
 class TestA02Semantics(unittest.TestCase):
     def _librosa_stub(self):
@@ -60,7 +60,7 @@ class TestA02Semantics(unittest.TestCase):
             self.assertFalse(summary.events)
 
     def test_fallback_wrapper(self):
-        with patch("engines.audio_semantic_timeline.service._try_import", return_value=None):
+        with patch("atoms_core.src.audio.audio_semantic_timeline.service._try_import", return_value=None):
             backend = WhisperLibrosaBackend()
             summary = backend.analyze(Path("test.wav"), True, True, 300, 1000)
             self.assertTrue(len(summary.events) > 0)

@@ -1,6 +1,6 @@
 import pytest
-from engines.audio_timeline.service import AudioTimelineService
-from engines.audio_timeline.models import AutomationPoint
+from atoms_core.src.audio.audio_timeline.service import AudioTimelineService
+from atoms_core.src.audio.audio_timeline.models import AutomationPoint
 
 def test_timeline_structure():
     svc = AudioTimelineService()

@@ -1,6 +1,6 @@
 import pytest
-from engines.audio_pattern_engine.service import AudioPatternEngineService
-from engines.audio_pattern_engine.models import PatternRequest
+from atoms_core.src.audio.audio_pattern_engine.service import AudioPatternEngineService
+from atoms_core.src.audio.audio_pattern_engine.models import PatternRequest
 
 # BPM 120: 1 beat = 500ms. 16th = 125ms.
 # 4/4 Bar = 2000ms.

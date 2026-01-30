@@ -1,8 +1,8 @@
 import pytest
 from unittest.mock import MagicMock, patch
-from engines.audio_harmony.service import AudioHarmonyService, HarmonyRequest, KeyEstimate
+from atoms_core.src.audio.audio_harmony.service import AudioHarmonyService, HarmonyRequest, KeyEstimate
 from atoms_core.src.media.v2.models import DerivedArtifact, MediaAsset
-from engines.audio_resample.models import ResampleResult
+from atoms_core.src.audio.audio_resample.models import ResampleResult
 
 def test_detect_key():
     mock_media = MagicMock()
@@ -12,7 +12,7 @@ def test_detect_key():
     mock_media.get_artifact.return_value = art
     
     # Mock estimate_key directly (to skip librosa)
-    with patch("engines.audio_harmony.service.estimate_key") as mock_est:
+    with patch("atoms_core.src.audio.audio_harmony.service.estimate_key") as mock_est:
         mock_est.return_value = KeyEstimate(root="G", scale="major", confidence=0.9)
         
         svc = AudioHarmonyService(media_service=mock_media)

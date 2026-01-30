@@ -1,8 +1,8 @@
 import pytest
 from unittest.mock import MagicMock, patch
-from engines.audio_performance_capture.service import AudioPerformanceCaptureService, CaptureRequest
-from engines.audio_performance_capture.quantise import quantise_events
-from engines.audio_performance_capture.models import PerformanceEvent
+from atoms_core.src.audio.audio_performance_capture.service import AudioPerformanceCaptureService, CaptureRequest
+from atoms_core.src.audio.audio_performance_capture.quantise import quantise_events
+from atoms_core.src.audio.audio_performance_capture.models import PerformanceEvent
 from atoms_core.src.media.v2.models import DerivedArtifact
 
 def test_detect_service_flow():
@@ -11,7 +11,7 @@ def test_detect_service_flow():
         id="a1", parent_asset_id="p", tenant_id="t", env="d", kind="audio_loop", uri="u", meta={}
     )
     
-    with patch("engines.audio_performance_capture.service.detect_onsets") as mock_detect:
+    with patch("atoms_core.src.audio.audio_performance_capture.service.detect_onsets") as mock_detect:
         # 3 hits: 0ms, 510ms, 1020ms.
         # 120bpm -> beat=500ms.
         mock_detect.return_value = ([0.0, 510.0, 1020.0], [0.5, 0.5, 0.5])

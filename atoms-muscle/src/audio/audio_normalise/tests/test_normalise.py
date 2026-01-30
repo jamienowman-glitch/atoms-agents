@@ -4,8 +4,8 @@ from pathlib import Path
 import pytest
 from unittest.mock import MagicMock, patch
 
-from engines.audio_normalise.service import AudioNormaliseService, NormaliseRequest
-from engines.audio_shared.health import DependencyInfo
+from atoms_core.src.audio.audio_normalise.service import AudioNormaliseService, NormaliseRequest
+from atoms_core.src.audio.shared.health import DependencyInfo
 from atoms_core.src.media.v2.models import MediaAsset, DerivedArtifact
 from atoms_core.src.media.v2.service import MediaService
 
@@ -83,9 +83,9 @@ def test_normalise_and_tag(mock_media_service):
         peak_ceiling_dbfs=-2.0
     )
     
-    with patch("engines.audio_normalise.service.check_dependencies") as mock_check, \
-         patch("engines.audio_normalise.service.normalize_audio", side_effect=_fake_normalize_audio), \
-         patch("engines.audio_normalise.service.extract_features_librosa", side_effect=_fake_extract_features):
+    with patch("atoms_core.src.audio.audio_normalise.service.check_dependencies") as mock_check, \
+         patch("atoms_core.src.audio.audio_normalise.service.normalize_audio", side_effect=_fake_normalize_audio), \
+         patch("atoms_core.src.audio.audio_normalise.service.extract_features_librosa", side_effect=_fake_extract_features):
         mock_check.return_value = _fake_dependencies()
         res = svc.normalise_asset(req)
     
@@ -126,9 +126,9 @@ def test_tag_only_skip_norm(mock_media_service):
         skip_normalization=True
     )
     
-    with patch("engines.audio_normalise.service.check_dependencies") as mock_check, \
-         patch("engines.audio_normalise.service.normalize_audio", side_effect=_fake_normalize_audio), \
-         patch("engines.audio_normalise.service.extract_features_librosa", side_effect=_fake_extract_features):
+    with patch("atoms_core.src.audio.audio_normalise.service.check_dependencies") as mock_check, \
+         patch("atoms_core.src.audio.audio_normalise.service.normalize_audio", side_effect=_fake_normalize_audio), \
+         patch("atoms_core.src.audio.audio_normalise.service.extract_features_librosa", side_effect=_fake_extract_features):
         mock_check.return_value = _fake_dependencies()
         res = svc.normalise_asset(req)
     

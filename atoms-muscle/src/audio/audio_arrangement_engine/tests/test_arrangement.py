@@ -1,7 +1,7 @@
 import pytest
-from engines.audio_arrangement_engine.service import AudioArrangementEngineService, ArrangementRequest
-from engines.audio_timeline.service import AudioTimelineService
-from engines.audio_arrangement_engine.templates import STRUCTURE_TEMPLATES
+from atoms_core.src.audio.audio_arrangement_engine.service import AudioArrangementEngineService, ArrangementRequest
+from atoms_core.src.audio.audio_timeline.service import AudioTimelineService
+from atoms_core.src.audio.audio_arrangement_engine.templates import STRUCTURE_TEMPLATES
 
 def test_arrange_simple_pop():
     # Mock Timeline Service (using real logic but in-memory models)

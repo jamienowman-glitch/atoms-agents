@@ -1,9 +1,9 @@
 import pytest
 from unittest.mock import MagicMock, ANY
-from engines.sample_pack_engine.service import SamplePackEngineService, SamplePackRequest
-from engines.audio_field_to_samples.models import FieldToSamplesResult
-from engines.audio_fx_chain.models import FxChainResult
-from engines.audio_normalise.models import NormaliseResult
+from atoms_core.src.audio.sample_pack_engine.service import SamplePackEngineService, SamplePackRequest
+from atoms_core.src.audio.audio_field_to_samples.models import FieldToSamplesResult
+from atoms_core.src.audio.audio_fx_chain.models import FxChainResult
+from atoms_core.src.audio.audio_normalise.models import NormaliseResult
 from atoms_core.src.media.v2.models import DerivedArtifact, MediaAsset
 
 def test_generate_pack_orchestration():

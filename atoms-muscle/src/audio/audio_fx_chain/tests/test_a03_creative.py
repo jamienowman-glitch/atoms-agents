@@ -1,10 +1,10 @@
 import unittest
 from unittest.mock import MagicMock, patch
-from engines.audio_fx_chain.presets import FX_PRESETS, FX_PRESET_METADATA
-from engines.audio_fx_chain.dsp import build_ffmpeg_filter_string
-from engines.audio_groove.dsp import extract_groove_offsets
-from engines.audio_resample.service import AudioResampleService
-from engines.audio_resample.models import ResampleRequest
+from atoms_core.src.audio.audio_fx_chain.presets import FX_PRESETS, FX_PRESET_METADATA
+from atoms_core.src.audio.audio_fx_chain.dsp import build_ffmpeg_filter_string
+from atoms_core.src.audio.audio_groove.dsp import extract_groove_offsets
+from atoms_core.src.audio.audio_resample.service import AudioResampleService
+from atoms_core.src.audio.audio_resample.models import ResampleRequest
 
 class TestA03Creative(unittest.TestCase):
     def test_new_presets(self):
