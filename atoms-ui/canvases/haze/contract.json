@@ -1,0 +1,45 @@
+{
+    "contract_version": "2.0.0",
+    "meta": {
+        "name": "HAZE Nexus Explorer",
+        "description": "The 3D/Spatial Explorer for Agent Memory. Features infinite navigation and deep zoom.",
+        "key": "haze"
+    },
+    "viewport": {
+        "type": "infinite",
+        "bg_color": "#000000"
+    },
+    "harness": {
+        "top_pill": {
+            "left": [
+                "home",
+                "haze_search"
+            ],
+            "right": [
+                "view_mode",
+                "share"
+            ]
+        },
+        "chat_rail": {
+            "enabled": true,
+            "position": "left",
+            "width": 320
+        },
+        "tool_pop": {
+            "enabled": true,
+            "position": "bottom",
+            "magnifiers": {
+                "left": {
+                    "type": "wheel_selector",
+                    "orientation": "vertical",
+                    "default": "nav.forward"
+                },
+                "right": {
+                    "type": "wheel_selector",
+                    "orientation": "horizontal",
+                    "default": "nav.turn"
+                }
+            }
+        }
+    }
+}
