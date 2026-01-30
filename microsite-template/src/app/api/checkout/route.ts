@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import { getSecret } from '../../lib/vault';
+import { getSecret } from '@/lib/vault';
 
 export async function POST(req: Request) {
     const secretKey = getSecret('stripe-secret-key.txt');
@@ -11,7 +11,7 @@ export async function POST(req: Request) {
 
     const stripe = new Stripe(secretKey, {
         apiVersion: '2024-06-20', // Use latest API version
-    });
+    } as any);
 
     try {
         const { priceId, mode } = await req.json();
