@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Roboto, Roboto_Flex } from "next/font/google"; // Import Roboto_Flex
 import "./globals.css";
+import { PricingProvider } from "../context/PricingContext";
+import { UtmTracker } from "../components/analytics/UtmTracker";
 
 const roboto = Roboto({
   weight: ["400", "500", "700"],
@@ -29,7 +31,10 @@ export default function RootLayout({
       <body
         className={`${roboto.variable} ${robotoFlex.variable} antialiased`}
       >
-        {children}
+        <PricingProvider>
+          <UtmTracker />
+          {children}
+        </PricingProvider>
       </body>
     </html>
   );

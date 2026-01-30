@@ -1,0 +1,21 @@
+
+> atoms-site@0.1.0 dev
+> next dev
+
+   ▲ Next.js 15.5.2
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.0.2:3000
+
+ ✓ Starting...
+ ✓ Ready in 2.1s
+ ○ Compiling /middleware ...
+ ✓ Compiled /middleware in 972ms (114 modules)
+ ○ Compiling /test-pricing ...
+ ✓ Compiled /test-pricing in 7.9s (599 modules)
+ GET /test-pricing 200 in 9395ms
+ ✓ Compiled in 608ms (581 modules)
+ GET /test-pricing?utm_source=test_source&utm_campaign=test_campaign 200 in 425ms
+ GET /test-pricing 200 in 118ms
+ ✓ Compiled in 185ms (237 modules)
+ ✓ Compiled in 173ms (337 modules)
+ ✓ Compiled in 342ms (351 modules)
