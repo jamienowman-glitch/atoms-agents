@@ -3,8 +3,8 @@ Tests for wall quantity deductions (openings).
 """
 
 import pytest
-from engines.cad_semantics.models import SemanticElement, SemanticModel, SemanticType, Level
-from engines.boq_quantities.formulas import WallFormula, bboxes_intersect
+from atoms_core.src.cad.models import SemanticElement, SemanticModel, SemanticType, Level
+from atoms_core.src.construction.boq_quantities.formulas import WallFormula, bboxes_intersect
 
 def create_elem(id: str, type: SemanticType, level_id: str, x: float, y: float, w: float, h: float = 2700.0) -> SemanticElement:
     """Create a mock element with geometry ref."""

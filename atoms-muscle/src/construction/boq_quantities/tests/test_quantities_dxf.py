@@ -11,12 +11,12 @@ Covers:
 
 import pytest
 
-from engines.cad_ingest.dxf_adapter import dxf_to_cad_model
-from engines.cad_ingest.tests.fixtures import DXF_FLOORPLAN_FIXTURE
-from engines.cad_semantics.service import SemanticClassificationService
-from engines.boq_quantities.formulas import deterministic_boq_item_id
-from engines.boq_quantities.models import BoQItem, FormulaType, UnitType
-from engines.boq_quantities.service import BoQQuantitiesService
+from atoms_muscle.src.cad.cad_ingest.dxf_adapter import dxf_to_cad_model
+from atoms_muscle.src.cad.cad_ingest.tests.fixtures import DXF_FLOORPLAN_FIXTURE
+from atoms_muscle.src.cad.cad_semantics.service import SemanticClassificationService
+from atoms_core.src.construction.boq_quantities.formulas import deterministic_boq_item_id
+from atoms_core.src.construction.models import BoQItem, FormulaType, UnitType
+from atoms_core.src.construction.boq_quantities.service import BoQQuantitiesService
 
 
 class TestBoQQuantitiesCalculation:

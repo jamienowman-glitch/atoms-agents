@@ -3,8 +3,8 @@ Tests for BoQ scope tagging and deterministic output.
 """
 
 import pytest
-from engines.cad_semantics.models import SemanticElement, SemanticModel, SemanticType, Level
-from engines.boq_quantities.service import BoQQuantitiesService
+from atoms_core.src.cad.models import SemanticElement, SemanticModel, SemanticType, Level
+from atoms_core.src.construction.boq_quantities.service import BoQQuantitiesService
 
 def create_elem(id: str, type: SemanticType, level_id: str, zone: str = None) -> SemanticElement:
     return SemanticElement(

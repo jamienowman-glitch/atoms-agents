@@ -1,16 +1,16 @@
 from mcp.server.fastmcp import FastMCP
 from atoms_core.src.budget.snax_guard import require_snax, PaymentRequired
-from .service import BoQQuantitiesService
+from .service import Service
 
 mcp = FastMCP("muscle-construction-boq_quantities")
 
-service = BoQQuantitiesService()
+service = Service()
 
 @mcp.tool()
 @require_snax(tool_key="muscle-construction-boq_quantities")
 def run_boq_quantities(input_path: str, **kwargs) -> dict:
     """
-    Executes BoQQuantitiesService.
+    Executes Service.
     """
     try:
         return service.run(input_path, **kwargs)
