@@ -3,13 +3,24 @@ title: Event Spine V2 Contract (Supabase‑first) + PII Rehydration
 date: 2026-01-29
 owner: atoms-core
 scope: atoms-core, atoms-app, atoms-ui, atoms-tuning
-status: draft
+status: in_progress
 ---
 
 # Event Spine V2 Contract (Supabase‑first)
 
 This contract defines the **single event spine** for debugging, audit, tuning, KPI tracking, and agent behavior introspection. It is **append‑only**, **Supabase‑first**, and **PII‑safe** by default.  
 **Cosmos is not used** (blocked). **No `.env` files.** **No `northstar-engines` imports.**
+
+## 0.1) Implementation Status (Merged)
+
+**Merged (Worker A):**
+- Module: `/Users/jaynowman/dev/atoms-core/src/event_spine/`
+- Migration: `/Users/jaynowman/dev/atoms-core/sql/024_event_spine_v2.sql`
+- Routes: `POST /event-spine/append`, `GET /event-spine/replay/{run_id}`
+
+**Notes:**
+- Migration numbering uses `024_*` because `023` is the last existing file.
+- Do **not** create `015_event_spine_v2.sql` (legacy reference only).
 
 ## 0) Vocabulary (use these terms precisely)
 
@@ -152,7 +163,7 @@ This enables SaaS branding without losing traceability.
 
 ## ATOMS‑ES‑00 — Contract + Schema
 - Create this contract doc (you are here).
-- Add schema migration `015_event_spine_v2.sql` to `atoms-core/sql/`.
+- Add schema migration `024_event_spine_v2.sql` to `atoms-core/sql/`.
 
 ## ATOMS‑ES‑01 — Event Spine Core Module
 - Create `atoms-core/src/event_spine/` with:
@@ -177,6 +188,18 @@ This enables SaaS branding without losing traceability.
 ## ATOMS‑ES‑05 — Realtime Bridge
 - Optional: publish `StreamEvent` to timeline/SSE.
 
+## ATOMS‑ES‑06 — Logging Lens Data Contract (No UI)
+- Define event replay filters: `run_id`, `node_id`, `canvas_id`, `agent_id`.
+- Ensure timeline ordering with a single normalized timestamp.
+- Add artifact link fields (URI refs) to payloads where present.
+- Tag events with `context_scope`: `whiteboard` vs `blackboard`.
+- Produce a JSON mock sample for UI prototyping.
+
+## ATOMS‑ES‑07 — Logging UI (Config‑Only Allowed)
+- Do **not** touch `atoms-ui` (canvas/harness rendering is handled by Jay’s UI lead).
+- `atoms-app` **config/observability UI is allowed** and should use the same style.
+- Logging *view* inside the canvas harness is deferred until Jay’s layout is finalized.
+
 ---
 
 # Kickoff Prompt — Core Event Spine + PII (Worker A)
@@ -197,7 +220,7 @@ This enables SaaS branding without losing traceability.
 1) New module: `/Users/jaynowman/dev/atoms-core/src/event_spine/`  
    - `models.py`, `repository.py`, `service.py`, `routes.py`, `pii.py`  
 2) Supabase migration:  
-   - `/Users/jaynowman/dev/atoms-core/sql/015_event_spine_v2.sql`  
+   - `/Users/jaynowman/dev/atoms-core/sql/024_event_spine_v2.sql`  
 3) PII pipeline: redact before persistence, rehydrate only for tenant UI.  
 4) Identity precedence enforcement (tenant/mode/project/surface/space/run).
 
@@ -205,6 +228,9 @@ This enables SaaS branding without losing traceability.
 - Append + replay works (append‑only)  
 - Redaction occurs before persistence  
 - Rehydration only for tenant UI (never LLMs)
+
+**Status**: ✅ Completed and merged.  
+**Do not re‑implement.** Use this as the base for Workers B/C.
 
 ---
 
@@ -219,21 +245,23 @@ This enables SaaS branding without losing traceability.
 
 **Hard guardrails**  
 - No Cosmos  
-- Tenant‑only default, global opt‑in required
+- Tenant‑only default, global opt‑in required  
+- Pull latest from main before starting
 
 **Deliverables**  
 1) Ingestion script that reads Event Spine V2 events  
 2) Tuning schema (RL/RLHA feedback + KPI outcomes)  
-3) Tables/migrations in `/Users/jaynowman/dev/atoms-tuning/` (or centralized Supabase migration if requested)
+3) Tables/migrations in `/Users/jaynowman/dev/atoms-tuning/` (default)  
+   - If centralized schema is explicitly requested, use `/Users/jaynowman/dev/atoms-core/sql/025_tuning_schema.sql`
 
 **Proof**  
 - One run produces a tuning session + KPI outcome record
 
 ---
 
-# Kickoff Prompt — UI Logging Lens + Visibility (Worker C)
+# Kickoff Prompt — Logging Data + Config UI (Worker C)
 
-**Role**: Product UX engineer focused on logging observability + privacy tiers.  
+**Role**: Backend engineer focused on logging data contract + config UI only.  
 **Work root**: `/Users/jaynowman/dev`
 
 **Read first**  
@@ -243,14 +271,23 @@ This enables SaaS branding without losing traceability.
 **Hard guardrails**  
 - No new transport routes  
 - SaaS hides framework/provider by default  
-- PII rehydration only for tenant UI
+- PII rehydration only for tenant UI  
+- Do **not** edit `atoms-ui` (canvas/harness UI)  
+- Config/observability UI is **allowed** in `atoms-app` only  
+- Pull latest from main before starting
 
 **Deliverables**  
-1) Logging lens UI (per run, per canvas)  
-2) Visibility tier config UI  
-3) Tenant UI rehydration rendering
+1) Replay API supports filters: `run_id`, `node_id`, `canvas_id`, `agent_id`  
+2) Normalized timeline fields for race‑condition tracing  
+3) Artifact link fields included in payloads (URI refs only)  
+4) `context_scope` tag per event: `whiteboard` or `blackboard`  
+5) JSON mock payload to hand off to UI  
+6) Config UI in `atoms-app` only:  
+   - `/Users/jaynowman/dev/atoms-app/src/app/dashboard/observability`  
+   - `/Users/jaynowman/dev/atoms-app/src/app/dashboard/tuning`  
 
 **Proof**  
-- SaaS view shows branded names  
-- Enterprise shows optional framework name  
-- System view shows raw trace
+- Replay returns per‑node event windows in correct order  
+- Artifact links appear between nodes  
+- No `atoms-ui` files changed  
+- Config UI exists under `dashboard/observability` and `dashboard/tuning`

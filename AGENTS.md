@@ -15,6 +15,9 @@
 - **Slice Rule:** Deployment slices include the required `atoms-core` library modules; muscles are **not** standalone without atoms-core.
 - **Vault Secret Mount Rule:** No `.env` files. Secrets are read from `/Users/jaynowman/northstar-keys/` via Vault loaders.
 
+## 🧷 Event Spine V2 Contract (Supabase‑First)
+**Canonical Doc:** `docs/plans/2026-01-29_event-spine-v2-contract.md`
+
 ## Website Printing Press (Global)
 - **Templates Live In Monorepo:** Source of truth at `/Users/jaynowman/dev/atoms-site-templates/`.
 - **Live Sites Are Separate Repos:** Customer sites are created outside `/Users/jaynowman/dev/` (e.g., `/Users/jaynowman/sites/<site>`).
@@ -74,3 +77,19 @@ The Canvas is the pure visual representation of the content.
 *   **`ToolPop`**: BOTTOM PANEL (Controls).
 *   **`ToolPill`**: FLOATING BUTTON (Add).
 *   **`ContextPill`**: **DELETED/BANNED**. Do not use floating context lozenges that obscure content.
+
+#### The Suffix Law
+To maintain continuity across different canvases (Web, Seb, Deck), all Harness UI components must follow this naming pattern. Do **not** invent new suffixes.
+1.  **`*TopPill`**: Any top navigation bar (e.g., `DesktopTopPill`, `MobileTopPill`). default: `TopPill`.
+2.  **`*ToolPop`**: Any bottom control panel (e.g., `WysiwygToolPop`, `GraphToolPop`). default: `ToolPop`.
+3.  **`*ToolPill`**: Any floating action button (e.g., `WebToolPill`, `EmailToolPill`). default: `ToolPill`.
+
+### 6. The "Mother Harness" Strategy
+We are currently building the **Central Mother Harness**.
+*   **Status**: **ACTIVE DEVELOPMENT**. Do not fork yet.
+*   **Rule**: All improvements (branding, controls, inputs) must happen on the `WysiwygBuilderHarness` (the current proxy for Mother) until the User declares it "Golden".
+*   **Evolution**:
+    1.  **Phase 1 (Current)**: Build ONE perfect Harness.
+    2.  **Phase 2**: Lock it.
+    3.  **Phase 3**: Fork/Inherit for specialized needs (Video, CAD, Freeform).
+    4.  **Drift Policy**: **ZERO DRIFT** allowed during Phase 1.

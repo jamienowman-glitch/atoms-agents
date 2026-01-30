@@ -21,6 +21,9 @@ All entities in this registry must be defined as **Atomic Cards** (YAML files wi
 3.  **Workbench**: The API surface for interacting with agents.
 
 This repository consumes `atoms-core` (if applicable) but maintains strict separation from `northstar-engines` (stateful OS) and `agentflow` (UI).
+
+## 🧷 EVENT SPINE V2 CONTRACT (SUPABASE‑FIRST)
+**Canonical Doc:** `docs/plans/2026-01-29_event-spine-v2-contract.md`
 ## Tenant/Surface/Space Law
 - Tenant is the billing unit. Snax wallets are tenant-scoped and spendable across all surfaces/spaces.
 - Surface is the configuration layer for tenants. Data isolation is per-surface unless explicitly shared.
@@ -49,4 +52,3 @@ This repository consumes `atoms-core` (if applicable) but maintains strict separ
 - **Firearms Licenses Registry (Locked):** `firearms_licenses` registry table with `license_key` (pk), `category`, `description`. Seed initial licenses for Financial, Communication, System/Founder.
 - **Naming Engine Rule (Locked):** `formatProviderKey(platformName, rule)` is pure; basic slugify → uppercase → underscores; apply `rule` as a token template (e.g., `PROVIDER_{PLATFORM}_KEY`).
 - **Core KPIs Schema (Locked):** `core_kpis.missing_components` is jsonb array of strings; `core_kpis.metadata` is jsonb (store and do not drop).
-

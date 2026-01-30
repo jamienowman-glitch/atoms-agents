@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { WysiwygCanvas, Block } from '../../canvas/wysiwyg/WysiwygCanvas';
 import { ToolPop } from '../../canvas/wysiwyg/ToolPop'; // Formerly WysiwygToolbar
+import { LogicPop } from '../../canvas/wysiwyg/LogicPop'; // NEW: Agent Brain/Logging
 import { ToolPill } from '../../canvas/wysiwyg/ToolPill'; // Formerly WysiwygAddMenu
 // import { WysiwygFloatingControls } from '../../canvas/wysiwyg/WysiwygFloatingControls'; // Removed
 import { TopPill } from './shells/TopPill';
@@ -22,6 +23,7 @@ export function WysiwygBuilderHarness() {
     const [previewMode, setPreviewMode] = useState<'desktop' | 'mobile'>('desktop');
     const [chatMode, setChatMode] = useState<ChatMode>('nano');
     const [showTools, setShowTools] = useState(true);
+    const [showLogic, setShowLogic] = useState(false); // Default logic brain hidden
 
     // Flat tool state map (replacing Context)
     const [toolState, setToolState] = useState<Record<string, any>>({
@@ -139,12 +141,20 @@ export function WysiwygBuilderHarness() {
                     mode={chatMode}
                     onModeChange={setChatMode}
                     showTools={showTools}
-                    onToggleTools={() => setShowTools(!showTools)}
+                    onToggleTools={() => {
+                        setShowTools(!showTools);
+                        if (!showTools) setShowLogic(false); // Mutually exclusive (optional but cleaner)
+                    }}
+                    showLogic={showLogic}
+                    onToggleLogic={() => {
+                        setShowLogic(!showLogic);
+                        if (!showLogic) setShowTools(false); // Mutually exclusive
+                    }}
                 />
             </div>
 
-            {/* 6. TOOL POP (Bottom Panel) - Formerly WysiwygToolbar */}
-            <div className={`transition-all duration-300 ${showTools && chatMode === 'nano' ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 pointer-events-none'} fixed bottom-16 left-0 right-0 z-[70]`}>
+            {/* 6A. TOOL POP (Bottom Right) - Canvas Output Tools */}
+            <div className={`transition-all duration-300 ${showTools && chatMode === 'nano' ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 pointer-events-none'} fixed bottom-[43px] left-0 right-0 z-[40]`}>
                 <ToolPop
                     activeBlockId={activeBlockId}
                     activeBlockType={activeBlockType}
@@ -152,6 +162,20 @@ export function WysiwygBuilderHarness() {
                     toolState={toolState}
                     onToolUpdate={handleToolUpdate}
                 />
+            </div>
+
+            {/* 6B. LOGIC POP (Bottom Full Width) - Agent Brain Tools 
+                 Attached to top of ChatRail (which is h-[44px]). 
+                 bottom-11 = 44px. 
+             */}
+            <div className={`transition-all duration-300 ${showLogic && chatMode === 'nano' ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 pointer-events-none'} fixed bottom-[43px] left-0 right-0 z-[40] pointer-events-none`}>
+                {/* z-40 so it's behind the Rail Header (z-1000) if we want it to look like it pops out *under* it? 
+                   User said "looks like it is popping out of the top". usually means it slides UP from BEHIND the rail.
+                   Rail shell has z-50. So z-40 is perfect. It will slide up from behind.
+                */}
+                <div className="absolute bottom-0 inset-x-0 pointer-events-auto">
+                    <LogicPop onClose={() => setShowLogic(false)} />
+                </div>
             </div>
 
 

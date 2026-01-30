@@ -32,6 +32,9 @@
 *   Do not add new backend routes for canvases/harnesses; consume `atoms-core` only.
 *   Prefer cheap state/tokens; request visual/audio/video sidecars only when needed (and permissioned).
 
+## 🧷 EVENT SPINE V2 CONTRACT (SUPABASE‑FIRST)
+**Canonical Doc:** `docs/plans/2026-01-29_event-spine-v2-contract.md`
+
 ## 🗺️ The Registry Map
 - **Supabase**: `public.spaces`, `public.surfaces`, `public.pricing` (The Single Source of Truth).
 - **Core**: `atoms-core` (The Schema Definitions).

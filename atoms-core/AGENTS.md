@@ -38,6 +38,9 @@
 *   **Artifacts:** Presign uploads; emit sidecar refs (never inline media).
 *   **Identity:** All routes must be tenant/mode/project/surface/app scoped.
 
+## 🧷 EVENT SPINE V2 CONTRACT (SUPABASE‑FIRST)
+**Canonical Doc:** `docs/plans/2026-01-29_event-spine-v2-contract.md`
+
 ## 🛑 THE ATOMIC MANDATE
 1.  **Never Monolith**: Every concern must be its own "Atom" (Table, Component, Service, Site).
 2.  **Registry First**: The DB Registry (`public.registry_entries`) is the Source of Truth.
