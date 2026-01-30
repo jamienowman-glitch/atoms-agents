@@ -26,7 +26,7 @@ export async function POST(req: Request) {
 
     console.log(`Spawning: python3 ${args.join(' ')}`);
 
-    return new Promise((resolve) => {
+    return new Promise<NextResponse>((resolve) => {
         const child = spawn('python3', args);
         let stdout = '';
         let stderr = '';
