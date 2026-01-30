@@ -87,3 +87,7 @@ app.include_router(temperature_router)
 # Maybes
 from src.maybes.routes import router as maybes_router
 app.include_router(maybes_router)
+
+# Event Spine V2
+from src.event_spine.routes import router as event_spine_router
+app.include_router(event_spine_router)

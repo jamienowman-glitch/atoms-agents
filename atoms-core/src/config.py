@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Optional
 from functools import lru_cache
 from pydantic import BaseModel, ConfigDict
 
@@ -7,12 +8,14 @@ VAULT_DIR = Path("/Users/jaynowman/northstar-keys")
 KEY_MAP = {
     "SUPABASE_URL": VAULT_DIR / "supabase-url.txt",
     "SUPABASE_ANON_KEY": VAULT_DIR / "supabase_publishable_api.txt",
+    "SUPABASE_SERVICE_KEY": VAULT_DIR / "supabase-service-role.txt",
     "OPENAI_API_KEY": VAULT_DIR / "openrouter",
 }
 
 class Settings(BaseModel):
     SUPABASE_URL: str
     SUPABASE_ANON_KEY: str
+    SUPABASE_SERVICE_KEY: Optional[str] = None
     OPENAI_API_KEY: str
     SYSTEM_KEY: str
     
@@ -31,6 +34,8 @@ def load_from_vault() -> dict:
     # 1. Load Mapped Keys
     for key, path in KEY_MAP.items():
         if not path.exists():
+            if key == "SUPABASE_SERVICE_KEY":
+                continue
             raise FileNotFoundError(f"CRITICAL: Missing Secret in Vault. Expected at: {path}")
         
         with open(path, "r") as f:
