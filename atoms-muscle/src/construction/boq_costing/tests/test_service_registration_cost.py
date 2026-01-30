@@ -3,8 +3,8 @@ Tests for Cost Service artifact registration.
 """
 
 import pytest
-from engines.boq_costing.service import BoQCostingService
-from engines.boq_costing.models import CostModel, Currency, CostItem
+from atoms_core.src.construction.boq_costing.service import BoQCostingService
+from atoms_core.src.construction.models import CostModel, Currency, CostItem
 
 def mock_cost_model() -> CostModel:
     return CostModel(

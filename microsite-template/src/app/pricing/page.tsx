@@ -1,20 +1,7 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
-
-const [stripeKey, setStripeKey] = useState<string | null>(null);
-
-React.useEffect(() => {
-    // Hydrate Config from Vault API
-    fetch('/api/config/stripe')
-        .then(res => res.json())
-        .then(data => {
-            if (data.key) setStripeKey(data.key);
-        });
-}, []);
-
-const stripePromise = stripeKey ? loadStripe(stripeKey) : null;
 
 const TIERS = [
     {
@@ -47,10 +34,24 @@ const TIERS = [
 ];
 
 export default function PricingPage() {
+    const [stripeKey, setStripeKey] = useState<string | null>(null);
     const [loading, setLoading] = useState<string | null>(null);
+
+    useEffect(() => {
+        // Hydrate Config from Vault API
+        fetch('/api/config/stripe')
+            .then(res => res.json())
+            .then(data => {
+                if (data.key) setStripeKey(data.key);
+            });
+    }, []);
 
     const handleCheckout = async (priceId: string | null) => {
         if (!priceId) return; // Free tier logic (redirect to login)
+        if (!stripeKey) {
+            console.error("Stripe key not loaded");
+            return;
+        }
 
         setLoading(priceId);
         try {
@@ -60,9 +61,11 @@ export default function PricingPage() {
                 body: JSON.stringify({ priceId, mode: 'subscription' })
             });
             const { sessionId } = await res.json();
-            const stripe = await stripePromise;
+
+            const stripe = await loadStripe(stripeKey);
+
             if (stripe) {
-                await stripe.redirectToCheckout({ sessionId });
+                await (stripe as any).redirectToCheckout({ sessionId });
             }
         } catch (err) {
             console.error(err);

@@ -45,7 +45,6 @@ class TenantMembership(BaseModel):
 class RequestContext(BaseModel):
     """
     Standard request context for multi-tenant isolation.
-    Ported from northstar-engines.
     """
     tenant_id: str = Field(..., pattern=r"^t_[a-z0-9_-]+$")
     mode: Literal["saas", "enterprise", "lab"]

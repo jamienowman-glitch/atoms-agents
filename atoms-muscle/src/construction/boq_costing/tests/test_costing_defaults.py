@@ -3,9 +3,8 @@ Tests for default costing behavior (Catalog 1.0.0).
 """
 
 import pytest
-from engines.boq_costing.service import BoQCostingService
-from engines.boq_costing.models import CostRequest, Currency
-from engines.boq_quantities.models import BoQModel, BoQItem, UnitType, Scope
+from atoms_core.src.construction.boq_costing.service import BoQCostingService
+from atoms_core.src.construction.models import CostRequest, Currency, BoQModel, BoQItem, UnitType, Scope
 
 def create_mock_boq() -> BoQModel:
     """Create a simple BoQ model."""

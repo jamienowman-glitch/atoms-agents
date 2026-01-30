@@ -11,8 +11,8 @@ from typing import Optional
 from fastapi import APIRouter, Body, HTTPException, status
 from pydantic import BaseModel, Field
 
-from engines.boq_quantities.models import BoQResponse
-from engines.boq_quantities.service import get_boq_service
+from atoms_core.src.construction.models import BoQResponse
+from atoms_core.src.construction.boq_quantities.service import get_boq_service
 from atoms_core.src.media.v2.models import ArtifactMetadata
 from atoms_core.src.identity.models import RequestContext
 
