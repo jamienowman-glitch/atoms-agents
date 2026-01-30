@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from 'react';
 
-export function WysiwygAddMenu({ onClick, isOpen, children }: { onClick?: () => void, isOpen?: boolean, children?: React.ReactNode }) {
+export function ToolPill({ onClick, isOpen, children }: { onClick?: () => void, isOpen?: boolean, children?: React.ReactNode }) {
     const [position, setPosition] = useState({ x: 0, y: 0 }); // Offset from initial
     const isDragging = useRef(false);
     const dragStart = useRef({ x: 0, y: 0 });
@@ -42,7 +42,7 @@ export function WysiwygAddMenu({ onClick, isOpen, children }: { onClick?: () => 
                     transform: `translate(${position.x}px, ${position.y}px)`,
                     touchAction: 'none'
                 }}
-                className="fixed bottom-32 right-4 w-10 h-10 bg-white text-black rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.3)] flex items-center justify-center z-60 active:scale-95 transition-transform duration-100 cursor-grab active:cursor-grabbing"
+                className="fixed bottom-32 right-4 w-10 h-10 bg-white text-black rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.3)] flex items-center justify-center z-[95] active:scale-95 transition-transform duration-100 cursor-grab active:cursor-grabbing"
                 aria-label="Add Item"
             >
                 <svg className={`w-5 h-5 transition-transform duration-200 ${isOpen ? 'rotate-45' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">

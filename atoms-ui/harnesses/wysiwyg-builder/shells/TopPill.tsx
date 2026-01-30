@@ -172,19 +172,21 @@ export function TopPill({ setIsRightPanelOpen, setIsExportOpen, logoIcon, RightC
 
     const rightControls = RightControls ?? (
         <div className={`flex items-center gap-2 ${state === 'm21' ? 'bg-white text-black border border-black/80 rounded-full px-1 py-0.5' : ''}`}>
-            {/* View Mode Segmented Control */}
+            {/* View Mode Segmented Control (Icons) */}
             <div className="flex bg-neutral-100/50 rounded-full p-0.5 border border-neutral-200/50">
                 <button
                     onClick={() => setPreviewMode('desktop')}
-                    className={`px-3 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full transition-all ${previewMode === 'desktop' ? 'bg-black text-white shadow-sm' : 'text-neutral-500 hover:text-neutral-900'}`}
+                    className={`p-1.5 rounded-full transition-all ${previewMode === 'desktop' ? 'bg-black text-white shadow-sm' : 'text-neutral-500 hover:text-neutral-900'}`}
+                    title="Desktop View"
                 >
-                    Desktop
+                    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="14" x="2" y="3" rx="2" /><line x1="8" x2="16" y1="21" y2="21" /><line x1="12" x2="12" y1="17" y2="21" /></svg>
                 </button>
                 <button
                     onClick={() => setPreviewMode('mobile')}
-                    className={`px-3 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full transition-all ${previewMode === 'mobile' ? 'bg-black text-white shadow-sm' : 'text-neutral-500 hover:text-neutral-900'}`}
+                    className={`p-1.5 rounded-full transition-all ${previewMode === 'mobile' ? 'bg-black text-white shadow-sm' : 'text-neutral-500 hover:text-neutral-900'}`}
+                    title="Mobile View"
                 >
-                    Mobile
+                    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2" /><path d="M12 18h.01" /></svg>
                 </button>
             </div>
 
@@ -273,7 +275,7 @@ export function TopPill({ setIsRightPanelOpen, setIsExportOpen, logoIcon, RightC
 
                 {/* --- RIGHT EXPANSION (M21) --- */}
                 <div
-                    className={`flex items-center overflow-hidden transition-all duration-300 ease-in-out ${state === 'm21' ? 'max-w-[320px] opacity-100 ml-2 pointer-events-auto' : 'max-w-0 opacity-0 pointer-events-none'}`}
+                    className={`flex items-center overflow-hidden transition-all duration-300 ease-in-out ${state === 'm21' ? 'max-w-[190px] opacity-100 ml-2 pointer-events-auto' : 'max-w-0 opacity-0 pointer-events-none'}`}
                 >
                     {rightControls}
                 </div>

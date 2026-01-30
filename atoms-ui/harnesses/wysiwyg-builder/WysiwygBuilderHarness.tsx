@@ -9,8 +9,12 @@ import { TopPill } from './shells/TopPill';
 import { ChatRailShell, ChatMode } from './shells/ChatRailShell';
 // import { ContextPill } from './shells/ContextPill'; // DELETED per user request
 
+// --- Canvas Cartridge Types ---
+type CanvasMode = 'web' | 'seb' | 'deck' | 'dm';
+
 export function WysiwygBuilderHarness() {
     // --- State ---
+    const [canvasMode, setCanvasMode] = useState<CanvasMode>('web'); // The "Cartridge" Selector
     const [blocks, setBlocks] = useState<Block[]>([
         { id: 'block-1', type: 'media', spanDesktop: 6, spanMobile: 2, variant: 'generic' }
     ]);
@@ -82,13 +86,20 @@ export function WysiwygBuilderHarness() {
                 className={`flex-1 overflow-hidden relative transition-colors duration-300 ${isMobileView ? 'flex justify-center items-center bg-neutral-200/50 dark:bg-neutral-900/50' : 'pt-16 pb-32'}`} // Added padding for desktop to avoid overlap
             >
                 <div className={`transition-all duration-300 origin-center ${isMobileView ? 'w-[390px] h-[844px] bg-white dark:bg-neutral-900 border-4 border-neutral-300 dark:border-neutral-700 rounded-3xl overflow-hidden shadow-2xl' : 'w-full h-full'}`}>
-                    <WysiwygCanvas
-                        blocks={blocks}
-                        setBlocks={setBlocks}
-                        activeBlockId={activeBlockId}
-                        setActiveBlockId={setActiveBlockId}
-                        toolState={toolState}
-                    />
+                    {/* --- DYNAMIC CANVAS CARTRIDGE LOADER --- */}
+                    {canvasMode === 'web' && (
+                        <WysiwygCanvas
+                            blocks={blocks}
+                            setBlocks={setBlocks}
+                            activeBlockId={activeBlockId}
+                            setActiveBlockId={setActiveBlockId}
+                            toolState={toolState}
+                        />
+                    )}
+                    {/* Future Cartridges: */}
+                    {/* canvasMode === 'seb' && <EmailCanvas ... /> */}
+                    {/* canvasMode === 'deck' && <DeckCanvas ... /> */}
+                    {/* canvasMode === 'dm' && <MessagingCanvas ... /> */}
                 </div>
             </div>
 

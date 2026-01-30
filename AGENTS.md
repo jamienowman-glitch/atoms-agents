@@ -49,3 +49,28 @@
 - **Automation steps:**
   - After creating/updating a muscle, run `python3 atoms-muscle/scripts/normalize_mcp.py`.
   - Before deploy/hand-off, run `python3 atoms-muscle/scripts/batch_prepare_deploy.py --clean-after`.
+
+## Atoms UI - Architectural Standards (Harness & Canvas)
+The `atoms-ui` repository enforces a strict separation between the "Harness" (Tooling/Rig) and the "Canvas" (Content/State).
+
+### 1. The Harness (`/harnesses`)
+The Harness is the container that holds the Canvas. It is responsible for all **Tooling**, **Navigation**, and **Global State**.
+*   **Definition**: A "Rig" that you load different Canvases into.
+*   **Key Components**:
+    *   **`TopPill`**: Top navigation bar (Environment, View Mode toggles).
+    *   **`ChatRail`**: Collapsible communication rail (Bottom/Left).
+    *   **`ToolPop`**: The bottom panel that extends from the ChatRail (Magnifiers, Grid Sliders).
+    *   **`ToolPill`**: The floating action button (e.g., `+`) for adding elements.
+
+### 2. The Canvas (`/canvas`)
+The Canvas is the pure visual representation of the content.
+*   **Definition**: A render surface for atomic blocks.
+*   **Rule**: **NO OVERLAYS**. The canvas should never contain UI controls (like sliders or popups) that hide the content. All controls must be lifted to the Harness.
+*   **Components**:
+    *   `WysiwygCanvas`: Renders `MultiTile` blocks.
+    *   `MultiTile`: The atomic unit of content.
+
+### 3. Nomenclature (Strict)
+*   **`ToolPop`**: BOTTOM PANEL (Controls).
+*   **`ToolPill`**: FLOATING BUTTON (Add).
+*   **`ContextPill`**: **DELETED/BANNED**. Do not use floating context lozenges that obscure content.

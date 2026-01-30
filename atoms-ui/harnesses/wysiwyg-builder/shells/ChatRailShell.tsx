@@ -73,10 +73,10 @@ export function ChatRailShell({ showTools = false, onToggleTools, mode, onModeCh
     return (
         <div
             // z-50: Ensures THIS stays on top of BottomControls (z-40)
-            className={`fixed bottom-0 inset-x-0 max-w-full overflow-hidden box-border bg-neutral-900 border-t border-white/10 rounded-t-2xl shadow-[0_-4px_20px_rgba(0,0,0,0.3)] text-white transition-all duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] z-50 flex flex-col pb-safe touch-manipulation ${styles}`}
+            className={`fixed bottom-0 inset-x-0 max-w-full overflow-hidden box-border bg-white dark:bg-neutral-900 border-t border-neutral-200 dark:border-white/10 rounded-t-2xl shadow-[0_-4px_20px_rgba(0,0,0,0.3)] text-neutral-900 dark:text-white transition-all duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] z-50 flex flex-col pb-safe touch-manipulation ${styles}`}
         >
             <div
-                className={`flex items-center justify-between px-4 h-[60px] shrink-0 cursor-pointer relative z-[1000] w-full ${mode !== 'nano' ? 'border-b border-white/10' : ''}`}
+                className={`flex items-center justify-between px-4 h-[60px] shrink-0 cursor-pointer relative z-[1000] w-full ${mode !== 'nano' ? 'border-b border-neutral-200 dark:border-white/10' : ''}`}
                 onClick={() => {
                     if (mode === 'nano') onModeChange('micro');
                 }}
@@ -87,7 +87,7 @@ export function ChatRailShell({ showTools = false, onToggleTools, mode, onModeCh
                 <div className="flex items-center gap-1 pointer-events-auto relative z-[1001] shrink-0">
 
                     <ToolTray showTools={showTools} onToggleTools={onToggleTools} />
-                    <div className="w-px h-3 bg-white/20 mx-1" />
+                    <div className="w-px h-3 bg-neutral-300 dark:bg-white/20 mx-1" />
 
                     <div className="flex items-center gap-0.5">
                         <ChevronDown onClick={handleDown} disabled={!canGoDown} />
@@ -98,7 +98,7 @@ export function ChatRailShell({ showTools = false, onToggleTools, mode, onModeCh
             </div>
 
             {mode !== 'nano' && (
-                <div className="flex-1 flex flex-col min-h-0 bg-neutral-900 pointer-events-auto w-full max-w-full">
+                <div className="flex-1 flex flex-col min-h-0 bg-white dark:bg-neutral-900 pointer-events-auto w-full max-w-full">
                     <MessageStream />
                     <InputController autoFocus={mode !== 'full'} />
                 </div>

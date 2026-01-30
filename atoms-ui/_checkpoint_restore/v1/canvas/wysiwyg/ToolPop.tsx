@@ -72,7 +72,7 @@ const COPY_LEVELS = ['h2', 'h3', 'h4', 'body'] as const;
 const COPY_STYLES = ['jumbo', 'headline', 'subtitle', 'tagline', 'quote', 'body', 'caption'] as const;
 
 // --- Main Component ---
-interface WysiwygToolbarProps {
+interface ToolPopProps {
     activeBlockId: string | null;
     activeBlockType?: 'media' | 'text' | 'copy' | 'cta' | 'header' | 'row' | 'popup' | 'generic';
     isMobileView: boolean;
@@ -80,7 +80,7 @@ interface WysiwygToolbarProps {
     onToolUpdate: (key: string, value: any) => void;
 }
 
-export function WysiwygToolbar({ activeBlockId, activeBlockType = 'media', isMobileView, toolState, onToolUpdate }: WysiwygToolbarProps) {
+export function ToolPop({ activeBlockId, activeBlockType = 'media', isMobileView, toolState, onToolUpdate }: ToolPopProps) {
 
     // 1. Visibility & State - STRICT PORT
     const isVisible = true;
