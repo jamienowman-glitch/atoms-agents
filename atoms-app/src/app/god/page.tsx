@@ -142,11 +142,16 @@ export default function GodConsole() {
                                 <h2 className="text-3xl font-bold mb-1 group-hover:underline decoration-2 underline-offset-4 text-blue-900">{surface.name}</h2>
                                 <p className="text-neutral-600 text-lg font-light leading-snug max-w-xl">{surface.description}</p>
                                 {surface.config?.blurb && (
-                                    <p className="text-xs font-mono text-blue-500 mt-2">"{surface.config.blurb}"</p>
+                                    <p className="text-xs font-mono text-blue-500 mt-2">&quot;{surface.config.blurb}&quot;</p>
                                 )}
                             </div>
                         ))}
                     </div>
+
+                    <p className="mb-4 font-bold text-sm text-neutral-500">
+                        You have full read/write access to all registries. Use this power wisely.
+                        Do not modify &quot;LOCKED&quot; records unless you are patching the core schema.
+                    </p>
                 </div>
             </main>
 

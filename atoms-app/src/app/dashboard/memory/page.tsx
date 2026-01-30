@@ -133,7 +133,7 @@ export default function MemoryDashboard() {
                                     <div className="max-w-3xl border-4 border-black p-8 bg-sky-50 mb-8">
                                         <h2 className="text-4xl font-black uppercase mb-4 text-sky-900">Flow State Memory</h2>
                                         <p className="font-medium mb-4">
-                                            The "Consciousness" of a running Agent Flow. Shared between all nodes in a single run.
+                                            The &quot;Consciousness&quot; of a running Agent Flow. Shared between all nodes in a single run.
                                         </p>
 
                                         <div className="bg-white border-2 border-black p-4 mb-6">
@@ -152,7 +152,7 @@ export default function MemoryDashboard() {
                                         </div>
 
                                         <blockquote className="border-l-4 border-sky-900 pl-4 italic opacity-70 mb-6">
-                                            "We chose Postgres over RAM because RAM is wiped when Cloud Run instances scale to zero."
+                                            &quot;We chose Postgres over RAM because RAM is wiped when Cloud Run instances scale to zero.&quot;
                                         </blockquote>
 
                                         <div className="font-mono text-xs bg-black text-white p-4">
@@ -185,6 +185,23 @@ export default function MemoryDashboard() {
                                         <p className="text-sm font-mono opacity-50">
                                             Keeps context windows low. Only explicitly passed data enters the next node.
                                         </p>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="p-4 bg-neutral-50 border-t-2 border-black">
+                                            <div className="text-xs font-bold uppercase mb-2">Capabilities</div>
+                                            <div className="flex gap-2 flex-wrap">
+                                                <span className="px-2 py-1 bg-white border border-black text-[10px] font-mono">&quot;text-embedding-3-small&quot;</span>
+                                                <span className="px-2 py-1 bg-white border border-black text-[10px] font-mono">1536 dim</span>
+                                            </div>
+                                        </div>
+                                        <div className="p-4 bg-neutral-50 border-t-2 border-black">
+                                            <div className="text-xs font-bold uppercase mb-2">Capabilities</div>
+                                            <div className="flex gap-2 flex-wrap">
+                                                <span className="px-2 py-1 bg-white border border-black text-[10px] font-mono">&quot;all-MiniLM-L6-v2&quot;</span>
+                                                <span className="px-2 py-1 bg-white border border-black text-[10px] font-mono">384 dim</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             )}

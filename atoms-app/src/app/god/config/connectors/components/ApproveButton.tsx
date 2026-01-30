@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase';
 
 interface ApproveButtonProps {
@@ -17,13 +17,7 @@ export const ApproveButton: React.FC<ApproveButtonProps> = ({ providerId }) => {
     });
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        if (providerId) {
-            checkStatus();
-        }
-    }, [providerId]);
-
-    const checkStatus = async () => {
+    const checkStatus = useCallback(async () => {
         // We want to count unapproved items
         const [kpiRes, metricRes, utmRes] = await Promise.all([
             supabase.from('kpi_mappings').select('is_approved', { count: 'exact' }).eq('provider_id', providerId),
@@ -45,7 +39,13 @@ export const ApproveButton: React.FC<ApproveButtonProps> = ({ providerId }) => {
             pendingUtms,
             totalMappings: kpis.length + metrics.length + utms.length
         });
-    };
+    }, [providerId, supabase]);
+
+    useEffect(() => {
+        if (providerId) {
+            checkStatus();
+        }
+    }, [providerId, checkStatus]);
 
     const approveAll = async () => {
         if (!confirm('Are you sure you want to APPROVE all mappings for this connector? This will enable them for production use.')) return;

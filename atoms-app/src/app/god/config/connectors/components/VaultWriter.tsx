@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase';
 import { DevAccount } from '../types';
 
@@ -16,13 +16,7 @@ export const VaultWriter: React.FC<VaultWriterProps> = ({ providerId }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        if (providerId) {
-            loadData();
-        }
-    }, [providerId]);
-
-    const loadData = async () => {
+    const loadData = useCallback(async () => {
         const { data } = await supabase.from('connector_dev_accounts').select('*').eq('provider_id', providerId).maybeSingle();
         if (data) {
             setDevAccount(data as DevAccount);
@@ -34,23 +28,16 @@ export const VaultWriter: React.FC<VaultWriterProps> = ({ providerId }) => {
             setClientId('');
             setClientSecret('');
         }
-    };
+    }, [providerId, supabase]);
+
+    useEffect(() => {
+        if (providerId) {
+            loadData();
+        }
+    }, [providerId, loadData]);
 
     const saveKeys = async () => {
         setLoading(true);
-        const payload = {
-            provider_id: providerId,
-            tenant_owned_keys: {
-                client_id: clientId,
-                client_secret: clientSecret
-            }
-            // Preserve other fields if they exist?
-            // The table has default jsonb '[]'.
-            // If I upsert, I should probably fetch existing and merge, but here I am the source of truth for these keys.
-            // But `system_dev_username` and others should be preserved.
-        };
-
-        // If devAccount exists, use its other fields
         const updatePayload = {
             provider_id: providerId,
             system_dev_username: devAccount?.system_dev_username || null,

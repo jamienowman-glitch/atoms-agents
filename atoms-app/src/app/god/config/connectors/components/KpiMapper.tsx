@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase';
 import { PlatformMetric, CoreKpi, KpiMapping } from '../types';
 
@@ -15,13 +15,7 @@ export const KpiMapper: React.FC<KpiMapperProps> = ({ providerId }) => {
     const [mappings, setMappings] = useState<KpiMapping[]>([]);
     const [isOpen, setIsOpen] = useState(false);
 
-    useEffect(() => {
-        if (providerId) {
-            loadData();
-        }
-    }, [providerId]);
-
-    const loadData = async () => {
+    const loadData = useCallback(async () => {
         const [metricRes, kpiRes, mapRes] = await Promise.all([
             supabase.from('platform_metrics').select('*').eq('provider_id', providerId).order('metric_name', { ascending: true }),
             supabase.from('core_kpis').select('*').order('name', { ascending: true }),
@@ -31,7 +25,13 @@ export const KpiMapper: React.FC<KpiMapperProps> = ({ providerId }) => {
         setMetrics((metricRes.data as PlatformMetric[]) || []);
         setKpis((kpiRes.data as CoreKpi[]) || []);
         setMappings((mapRes.data as KpiMapping[]) || []);
-    };
+    }, [providerId, supabase]);
+
+    useEffect(() => {
+        if (providerId) {
+            loadData();
+        }
+    }, [providerId, loadData]);
 
     const addMetric = async () => {
         const metric_name = prompt('Platform metric name (e.g., views, impressions)');

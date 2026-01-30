@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase';
 import { ConnectorScope, ScopeCategory, FirearmType } from '../types';
 
@@ -15,13 +15,7 @@ export const ScopeManager: React.FC<ScopeManagerProps> = ({ providerId }) => {
     const [firearmTypes, setFirearmTypes] = useState<FirearmType[]>([]);
     const [isOpen, setIsOpen] = useState(false);
 
-    useEffect(() => {
-        if (providerId) {
-            loadData();
-        }
-    }, [providerId]);
-
-    const loadData = async () => {
+    const loadData = useCallback(async () => {
         const [scopeRes, catRes, firearmRes] = await Promise.all([
             supabase.from('connector_scopes').select('*').eq('provider_id', providerId).order('scope_name', { ascending: true }),
             supabase.from('connector_scope_categories').select('*').eq('provider_id', providerId).order('name', { ascending: true }),
@@ -31,7 +25,13 @@ export const ScopeManager: React.FC<ScopeManagerProps> = ({ providerId }) => {
         setScopes((scopeRes.data as ConnectorScope[]) || []);
         setCategories((catRes.data as ScopeCategory[]) || []);
         setFirearmTypes((firearmRes.data as FirearmType[]) || []);
-    };
+    }, [providerId, supabase]);
+
+    useEffect(() => {
+        if (providerId) {
+            loadData();
+        }
+    }, [providerId, loadData]);
 
     const updateScope = async (scope: ConnectorScope, changes: Partial<ConnectorScope>) => {
         const { error } = await supabase.from('connector_scopes').update(changes).eq('scope_id', scope.scope_id);

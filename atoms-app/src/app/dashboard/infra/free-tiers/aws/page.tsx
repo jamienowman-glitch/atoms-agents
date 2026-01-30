@@ -34,7 +34,7 @@ const FREE_TIER_DATA = [
         limit: "Orchestration is Free (Pay for EC2/Fargate)",
         risk: "HIGH",
         risk_desc: "Underlying compute is NOT free unless on Free Tier EC2",
-        mitigation: "Use Lambda for true free scale",
+        mitigation: "Use Lambda for true scale",
         type: "Always Free"
     },
 
@@ -261,7 +261,7 @@ export default function AwsFreeTiers() {
                     <div className="bg-yellow-100 border-l-4 border-yellow-500 p-4 mb-8">
                         <p className="font-mono text-sm">
                             <strong>⚠️ WARNING:</strong> Many AWS Free Tiers expire after 12 months.
-                            Google Cloud run is "Always Free". AWS is a "Trap" if you forget.
+                            Google Cloud run is &quot;Always Free&quot;. AWS is a &quot;Trap&quot; if you forget.
                         </p>
                     </div>
 
@@ -302,6 +302,9 @@ export default function AwsFreeTiers() {
                     {/* FOOTER NOTE */}
                     <div className="mt-8 p-4 border-2 border-black bg-neutral-100 text-xs font-mono opacity-60">
                         * Data sourced from AWS Free Tier Offerings.
+                        <div className="mt-2 font-bold">
+                            &quot;Always Free&quot; items are usually reliable. &quot;12 Months Free&quot; will expire. &quot;Trials&quot; are dangerous if you forget.
+                        </div>
                     </div>
                 </div>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase';
 import { ConnectorProvider } from './types';
@@ -17,16 +17,7 @@ export default function ConnectorsConfigPage() {
     const [providers, setProviders] = useState<ConnectorProvider[]>([]);
     const [selected, setSelected] = useState<ConnectorProvider | null>(null);
 
-    useEffect(() => {
-        const checkUser = async () => {
-             const { data: { user } } = await supabase.auth.getUser();
-             if (!user) router.push('/login');
-             else fetchProviders();
-        };
-        checkUser();
-    }, []);
-
-    const fetchProviders = async () => {
+    const fetchProviders = useCallback(async () => {
         setLoading(true);
         const { data } = await supabase
             .from('connector_providers')
@@ -39,7 +30,16 @@ export default function ConnectorsConfigPage() {
             }
         }
         setLoading(false);
-    };
+    }, [supabase, selected]);
+
+    useEffect(() => {
+        const checkUser = async () => {
+             const { data: { user } } = await supabase.auth.getUser();
+             if (!user) router.push('/login');
+             else fetchProviders();
+        };
+        checkUser();
+    }, [fetchProviders, router, supabase.auth]);
 
     const addConnector = async () => {
         const slug = prompt('Provider slug (e.g., shopify, tiktok, youtube)');
