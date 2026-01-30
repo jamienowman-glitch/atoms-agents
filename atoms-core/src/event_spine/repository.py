@@ -44,14 +44,31 @@ class EventRepository:
         if not self.client or not tokens: return
         self.client.table("event_spine_v2_pii_tokens").insert(tokens).execute()
 
-    def get_events_by_run(self, tenant_id: str, run_id: str) -> List[Dict[str, Any]]:
+    def get_events_by_run(
+        self,
+        tenant_id: str,
+        run_id: str,
+        node_ids: Optional[List[str]] = None,
+        canvas_ids: Optional[List[str]] = None,
+        agent_ids: Optional[List[str]] = None
+    ) -> List[Dict[str, Any]]:
         if not self.client: return []
-        # Join with payloads
-        response = self.client.table("event_spine_v2_events")\
-            .select("*, event_spine_v2_payloads(data, payload_type)")\
+        # Join with payloads and artifacts
+        query = self.client.table("event_spine_v2_events")\
+            .select("*, event_spine_v2_payloads(data, payload_type), event_spine_v2_artifacts(uri)")\
             .eq("tenant_id", tenant_id)\
-            .eq("run_id", run_id)\
-            .order("created_at")\
+            .eq("run_id", run_id)
+
+        if node_ids:
+            query = query.in_("node_id", node_ids)
+        if canvas_ids:
+            query = query.in_("canvas_id", canvas_ids)
+        if agent_ids:
+            query = query.in_("agent_id", agent_ids)
+
+        # Order by normalized_timestamp, then sequence_id
+        response = query.order("normalized_timestamp", desc=False)\
+            .order("sequence_id", desc=False)\
             .execute()
         return response.data
 

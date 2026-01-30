@@ -13,6 +13,8 @@ const MENU_ITEMS = [
     { id: 'canvases', label: 'CANVASES', action: 'navigate', path: '/god/config/canvases' },
     { id: 'muscles', label: 'MUSCLES', action: 'navigate', path: '/god/config/muscles' },
     { id: 'tools', label: 'TOOLS', action: 'navigate', path: '/god/config/tools' },
+    { id: 'observability', label: 'OBSERVABILITY', action: 'navigate', path: '/dashboard/observability' },
+    { id: 'tuning', label: 'TUNING', action: 'navigate', path: '/dashboard/tuning' },
     { id: 'typography', label: 'TYPOGRAPHY', action: 'navigate', path: '/dashboard/typography' },
     { id: 'infra', label: 'INFRASTRUCTURE', action: 'navigate', path: '/dashboard/infra' },
     { id: 'memory', label: 'MEMORY (NEXUS)', action: 'navigate', path: '/dashboard/memory' },

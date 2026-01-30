@@ -21,6 +21,10 @@ class EventBase(BaseModel):
     node_id: Optional[str] = None
     agent_id: Optional[str] = None
 
+    sequence_id: Optional[int] = 0
+    normalized_timestamp: Optional[datetime] = Field(default_factory=_now)
+    context_scope: Optional[str] = "blackboard"  # whiteboard or blackboard
+
     event_type: str
     display_name: str
     raw_name: str
