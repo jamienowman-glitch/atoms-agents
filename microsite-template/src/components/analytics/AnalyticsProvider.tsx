@@ -2,7 +2,7 @@
 
 import { usePathname, useSearchParams } from "next/navigation";
 import Script from "next/script";
-import { useEffect, Suspense } from "react";
+import { useEffect, Suspense, useRef } from "react";
 
 // Stub IDs - in production these would come from env vars
 const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-STUB_GA_ID";
@@ -11,8 +11,15 @@ const PIXEL_ID = process.env.NEXT_PUBLIC_FB_PIXEL_ID || "0000000000000000";
 function AnalyticsTracker() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const isMounted = useRef(false);
 
   useEffect(() => {
+    // Skip the first render as the scripts handle the initial page view
+    if (!isMounted.current) {
+      isMounted.current = true;
+      return;
+    }
+
     if (pathname && window.gtag) {
       window.gtag("config", GA_MEASUREMENT_ID, {
         page_path: pathname,

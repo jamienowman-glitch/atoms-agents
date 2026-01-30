@@ -2,6 +2,9 @@
   "name": "atoms-site",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=18.17.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -12,7 +15,7 @@
   "dependencies": {
     "@stripe/stripe-js": "^8.6.4",
     "lucide-react": "^0.563.0",
-    "next": "^15.5.2",
+    "next": "15.5.2",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "stripe": "^20.2.0"
