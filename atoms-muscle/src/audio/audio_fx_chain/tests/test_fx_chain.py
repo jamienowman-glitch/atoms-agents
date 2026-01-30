@@ -5,9 +5,9 @@ from types import SimpleNamespace
 import pytest
 from unittest.mock import MagicMock, patch
 
-from engines.audio_fx_chain.service import AudioFxChainService
-from engines.audio_fx_chain.models import FxChainRequest
-from engines.audio_shared.health import DependencyInfo, DependencyMissingError
+from atoms_core.src.audio.audio_fx_chain.service import AudioFxChainService
+from atoms_core.src.audio.audio_fx_chain.models import FxChainRequest
+from atoms_core.src.audio.shared.health import DependencyInfo, DependencyMissingError
 from atoms_core.src.media.v2.models import MediaAsset, DerivedArtifact, MediaUploadRequest, ArtifactCreateRequest
 from atoms_core.src.media.v2.service import MediaService
 
@@ -81,8 +81,8 @@ def test_apply_fx_clean_hit(mock_media_service):
         preset_id="clean_hit"
     )
     
-    with patch("engines.audio_fx_chain.service.check_dependencies") as mock_check, \
-         patch("engines.audio_fx_chain.service.subprocess.run", side_effect=_fake_subprocess_run):
+    with patch("atoms_core.src.audio.audio_fx_chain.service.check_dependencies") as mock_check, \
+         patch("atoms_core.src.audio.audio_fx_chain.service.subprocess.run", side_effect=_fake_subprocess_run):
         mock_check.return_value = _fake_dependencies(True)
         res = svc.apply_fx(req)
     
@@ -108,8 +108,8 @@ def test_apply_fx_lofi_crunch(mock_media_service):
         preset_id="lofi_crunch"
     )
 
-    with patch("engines.audio_fx_chain.service.check_dependencies") as mock_check, \
-         patch("engines.audio_fx_chain.service.subprocess.run", side_effect=_fake_subprocess_run):
+    with patch("atoms_core.src.audio.audio_fx_chain.service.check_dependencies") as mock_check, \
+         patch("atoms_core.src.audio.audio_fx_chain.service.subprocess.run", side_effect=_fake_subprocess_run):
         mock_check.return_value = _fake_dependencies(True)
         res = svc.apply_fx(req)
     
@@ -132,8 +132,8 @@ def test_apply_fx_override_clamps(mock_media_service):
         params_override={"hpf_hz": 10000, "sat": {"drive": 1.5}}
     )
 
-    with patch("engines.audio_fx_chain.service.check_dependencies") as mock_check, \
-         patch("engines.audio_fx_chain.service.subprocess.run", side_effect=_fake_subprocess_run):
+    with patch("atoms_core.src.audio.audio_fx_chain.service.check_dependencies") as mock_check, \
+         patch("atoms_core.src.audio.audio_fx_chain.service.subprocess.run", side_effect=_fake_subprocess_run):
         mock_check.return_value = _fake_dependencies(True)
         res = svc.apply_fx(req)
 
@@ -153,7 +153,7 @@ def test_apply_fx_missing_dependency(mock_media_service):
         preset_id="clean_hit"
     )
 
-    with patch("engines.audio_fx_chain.service.check_dependencies") as mock_check:
+    with patch("atoms_core.src.audio.audio_fx_chain.service.check_dependencies") as mock_check:
         mock_check.return_value = _fake_dependencies(False)
         with pytest.raises(DependencyMissingError):
             svc.apply_fx(req)
@@ -168,8 +168,8 @@ def test_apply_fx_invalid_preset(mock_media_service):
         preset_id="clean_hit"
     )
 
-    with patch("engines.audio_fx_chain.service.check_dependencies") as mock_check, \
-         patch.dict("engines.audio_fx_chain.presets.FX_PRESETS", {}, clear=True):
+    with patch("atoms_core.src.audio.audio_fx_chain.service.check_dependencies") as mock_check, \
+         patch.dict("atoms_core.src.audio.audio_fx_chain.presets.FX_PRESETS", {}, clear=True):
         mock_check.return_value = _fake_dependencies(True)
         with pytest.raises(ValueError):
             svc.apply_fx(req)

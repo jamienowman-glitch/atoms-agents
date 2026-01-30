@@ -5,8 +5,8 @@ import argparse
 from pathlib import Path
 import json
 
-from engines.audio.beat_features.engine import run
-from engines.audio.beat_features.types import BeatFeaturesInput
+from .engine import run
+from .types import BeatFeaturesInput
 
 
 def main() -> None:

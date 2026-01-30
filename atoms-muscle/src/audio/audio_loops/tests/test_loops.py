@@ -1,9 +1,9 @@
 import pytest
 from unittest.mock import MagicMock, patch
 
-from engines.audio_loops.service import AudioLoopsService
-from engines.audio_loops.models import LoopDetectRequest
-from engines.audio_shared.health import DependencyInfo
+from atoms_core.src.audio.audio_loops.service import AudioLoopsService
+from atoms_core.src.audio.audio_loops.models import LoopDetectRequest
+from atoms_core.src.audio.shared.health import DependencyInfo
 from atoms_core.src.media.v2.models import MediaAsset, DerivedArtifact
 
 def _fake_dependencies(librosa_available: bool) -> dict[str, DependencyInfo]:
@@ -39,7 +39,7 @@ def test_detect_loops_basic():
         target_bars=[2, 4]
     )
     
-    with patch("engines.audio_loops.service.check_dependencies") as mock_check:
+    with patch("atoms_core.src.audio.audio_loops.service.check_dependencies") as mock_check:
         mock_check.return_value = _fake_dependencies(False)
         res = service.detect_loops(req)
     
@@ -79,7 +79,7 @@ def test_detect_loops_rejects_unknown_tenant():
         tenant_id="t_unknown", env="dev", asset_id="asset_1"
     )
 
-    with patch("engines.audio_loops.service.check_dependencies") as mock_check:
+    with patch("atoms_core.src.audio.audio_loops.service.check_dependencies") as mock_check:
         mock_check.return_value = _fake_dependencies(False)
         with pytest.raises(ValueError):
             service.detect_loops(req)
@@ -96,7 +96,7 @@ def test_detect_loops_stub_health_metadata():
     )
     service = AudioLoopsService(media_service=mock_media)
     req = LoopDetectRequest(tenant_id="t1", env="dev", asset_id="asset_1")
-    with patch("engines.audio_loops.service.check_dependencies") as mock_check:
+    with patch("atoms_core.src.audio.audio_loops.service.check_dependencies") as mock_check:
         mock_check.return_value = _fake_dependencies(False)
         res = service.detect_loops(req)
 

@@ -1,8 +1,8 @@
 import pytest
 import json
 from unittest.mock import MagicMock, patch
-from engines.audio_mix_snapshot.service import AudioMixSnapshotService, CaptureRequest, DeltaRequest
-from engines.audio_mix_snapshot.models import MixSnapshot, TrackState
+from atoms_core.src.audio.audio_mix_snapshot.service import AudioMixSnapshotService, CaptureRequest, DeltaRequest
+from atoms_core.src.audio.audio_mix_snapshot.models import MixSnapshot, TrackState
 from atoms_core.src.media.v2.models import DerivedArtifact, MediaAsset
 
 def test_capture_logic():

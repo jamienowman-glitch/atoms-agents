@@ -6,18 +6,18 @@ import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from engines.audio_semantic_timeline.service import (
+from atoms_core.src.audio.audio_semantic_timeline.service import (
     AudioSemanticService,
     SPEED_CHANGE_LIMIT,
     StubAudioSemanticBackend,
     set_audio_semantic_service,
 )
-from engines.audio_semantic_timeline.models import AudioSemanticAnalyzeRequest, AudioSemanticTimelineSummary
-from engines.audio_semantic_timeline.routes import router as semantic_router
+from atoms_core.src.audio.audio_semantic_timeline.models import AudioSemanticAnalyzeRequest, AudioSemanticTimelineSummary
+from atoms_core.src.audio.audio_semantic_timeline.routes import router as semantic_router
 from atoms_core.src.media.v2.models import MediaUploadRequest
 from atoms_core.src.media.v2.service import InMemoryMediaRepository, MediaService, set_media_service
-from engines.video_timeline.models import VideoProject, Sequence, Track, Clip
-from engines.video_timeline.service import InMemoryTimelineRepository, TimelineService, get_timeline_service, set_timeline_service
+from atoms_core.src.video.dependencies.timeline_models import VideoProject, Sequence, Track, Clip
+from atoms_core.src.realtime.timeline import InMemoryTimelineRepository, TimelineService, get_timeline_service, set_timeline_service
 
 
 class DummyStorage:
@@ -170,7 +170,7 @@ def test_audio_semantic_context_validation():
 def test_missing_dependency_uses_stub(monkeypatch):
     media_service = MediaService(repo=InMemoryMediaRepository(), storage=DummyStorage())
     set_media_service(media_service)
-    monkeypatch.setattr("engines.audio_semantic_timeline.service._try_import", lambda name: None)
+    monkeypatch.setattr("atoms_core.src.audio.audio_semantic_timeline.service._try_import", lambda name: None)
     service = AudioSemanticService()
     set_audio_semantic_service(service)
     audio_path = Path(tempfile.mkdtemp()) / "audio_stub.mp3"

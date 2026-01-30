@@ -2,15 +2,15 @@ import os
 import json
 import pytest
 from unittest.mock import MagicMock, patch, mock_open
-from engines.audio_voice_phrases.service import AudioVoicePhrasesService
-from engines.audio_voice_phrases.models import VoicePhraseDetectRequest
+from atoms_core.src.audio.audio_voice_phrases.service import AudioVoicePhrasesService
+from atoms_core.src.audio.audio_voice_phrases.models import VoicePhraseDetectRequest
 from atoms_core.src.media.v2.models import MediaAsset, DerivedArtifact
 
-@patch("engines.audio_voice_phrases.service.get_media_service")
-@patch("engines.audio_voice_phrases.service.GcsClient")
-@patch("engines.audio_voice_phrases.service.shutil.which")
-@patch("engines.audio_voice_phrases.service.subprocess.run")
-@patch("engines.audio_voice_phrases.backend.open") # Mock backend open for reading transcript
+@patch("atoms_core.src.audio.audio_voice_phrases.service.get_media_service")
+@patch("atoms_core.src.audio.audio_voice_phrases.service.GcsClient")
+@patch("atoms_core.src.audio.audio_voice_phrases.service.shutil.which")
+@patch("atoms_core.src.audio.audio_voice_phrases.service.subprocess.run")
+@patch("atoms_core.src.audio.audio_voice_phrases.backend.open") # Mock backend open for reading transcript
 def test_detect_phrases_real(mock_open_file, mock_run, mock_which, mock_gcs, mock_get_media):
     # Setup Mocks
     mock_media = mock_get_media.return_value
@@ -52,9 +52,9 @@ def test_detect_phrases_real(mock_open_file, mock_run, mock_which, mock_gcs, moc
     mock_which.return_value = "/usr/bin/ffmpeg"
     mock_run.return_value.returncode = 0
     
-    with patch("engines.audio_voice_phrases.service.os.path.exists", return_value=True):
-        with patch("engines.audio_voice_phrases.service.Path.read_bytes", return_value=b"FAKE_PHRASE_BYTES"):
-            with patch("engines.audio_voice_phrases.service.Path.unlink", return_value=None):
+    with patch("atoms_core.src.audio.audio_voice_phrases.service.os.path.exists", return_value=True):
+        with patch("atoms_core.src.audio.audio_voice_phrases.service.Path.read_bytes", return_value=b"FAKE_PHRASE_BYTES"):
+            with patch("atoms_core.src.audio.audio_voice_phrases.service.Path.unlink", return_value=None):
                 
                 # Setup Service
                 svc = AudioVoicePhrasesService(media_service=mock_media)

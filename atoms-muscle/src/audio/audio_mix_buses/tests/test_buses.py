@@ -1,5 +1,5 @@
-from engines.audio_mix_buses.service import AudioMixBusesService
-from engines.audio_mix_buses.presets import MIX_GRAPHS
+from atoms_core.src.audio.audio_mix_buses.service import AudioMixBusesService
+from atoms_core.src.audio.audio_mix_buses.presets import MIX_GRAPHS
 
 def test_get_mix_graph():
     svc = AudioMixBusesService()

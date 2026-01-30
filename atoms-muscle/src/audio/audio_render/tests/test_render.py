@@ -1,9 +1,9 @@
 import os
 import pytest
 from unittest.mock import MagicMock, patch
-from engines.audio_timeline.service import AudioTimelineService
-from engines.audio_render.service import AudioRenderService
-from engines.audio_render.models import RenderRequest
+from atoms_core.src.audio.audio_timeline.service import AudioTimelineService
+from atoms_core.src.audio.audio_render.service import AudioRenderService
+from atoms_core.src.audio.audio_render.models import RenderRequest
 from atoms_core.src.media.v2.models import MediaAsset, DerivedArtifact
 from atoms_core.src.media.v2.service import MediaService
 
@@ -63,8 +63,8 @@ def test_render_mix(mock_media_service):
     rnd = AudioRenderService(media_service=mock_media_service)
     req = RenderRequest(sequence=seq)
 
-    with patch("engines.audio_render.service.subprocess.run") as mock_run, \
-         patch("engines.audio_render.service.Path") as mock_path:
+    with patch("atoms_core.src.audio.audio_render.service.subprocess.run") as mock_run, \
+         patch("atoms_core.src.audio.audio_render.service.Path") as mock_path:
         mock_run.return_value = MagicMock(returncode=0)
         mock_path.return_value.exists.return_value = True
         mock_path.return_value.read_bytes.return_value = b"render-data"
@@ -76,7 +76,7 @@ def test_render_mix(mock_media_service):
 
 def test_render_plan_logic(mock_media_service):
     # Verify the plan without running ffmpeg
-    from engines.audio_render.planner import build_ffmpeg_mix_plan
+    from atoms_core.src.audio.audio_render.planner import build_ffmpeg_mix_plan
     
     tl = AudioTimelineService()
     seq = tl.create_sequence("t1", "dev")

@@ -1,16 +1,16 @@
 import os
 import pytest
 from unittest.mock import MagicMock, patch, mock_open
-from engines.audio_hits.service import AudioHitsService
-from engines.audio_hits.models import HitDetectRequest
+from atoms_core.src.audio.audio_hits.service import AudioHitsService
+from atoms_core.src.audio.audio_hits.models import HitDetectRequest
 from atoms_core.src.media.v2.models import MediaAsset, DerivedArtifact
 
-@patch("engines.audio_hits.service.get_media_service")
-@patch("engines.audio_hits.service.GcsClient")
-@patch("engines.audio_hits.service.shutil.which")
-@patch("engines.audio_hits.service.subprocess.run")
-@patch("engines.audio_hits.service.LibrosaHitsBackend")
-@patch("engines.audio_hits.service.HAS_LIBROSA", True)
+@patch("atoms_core.src.audio.audio_hits.service.get_media_service")
+@patch("atoms_core.src.audio.audio_hits.service.GcsClient")
+@patch("atoms_core.src.audio.audio_hits.service.shutil.which")
+@patch("atoms_core.src.audio.audio_hits.service.subprocess.run")
+@patch("atoms_core.src.audio.audio_hits.service.LibrosaHitsBackend")
+@patch("atoms_core.src.audio.audio_hits.service.HAS_LIBROSA", True)
 def test_detect_hits_real(mock_backend_cls, mock_run, mock_which, mock_gcs, mock_get_media):
     # Setup Mocks
     mock_media = mock_get_media.return_value
@@ -30,7 +30,7 @@ def test_detect_hits_real(mock_backend_cls, mock_run, mock_which, mock_gcs, mock
     
     # Mock backend instance
     mock_backend = mock_backend_cls.return_value
-    from engines.audio_hits.backend import OnsetResult
+    from atoms_core.src.audio.audio_hits.backend import OnsetResult
     # Return 2 hits
     mock_backend.detect.return_value = [
         OnsetResult(start_ms=100, end_ms=200, peak_db=-6),
@@ -54,11 +54,11 @@ def test_detect_hits_real(mock_backend_cls, mock_run, mock_which, mock_gcs, mock
     # Mock file existence checks in Service
     # Service checks: os.path.exists(local_path)
     # We used tempfile path.
-    with patch("engines.audio_hits.service.os.path.exists", return_value=True):
+    with patch("atoms_core.src.audio.audio_hits.service.os.path.exists", return_value=True):
         # Also need to mock reading bytes from the sliced path
-        with patch("engines.audio_hits.service.Path.read_bytes", return_value=b"FAKE_WAV_BYTES"):
+        with patch("atoms_core.src.audio.audio_hits.service.Path.read_bytes", return_value=b"FAKE_WAV_BYTES"):
              # Also allow unlink
-            with patch("engines.audio_hits.service.Path.unlink", return_value=None):
+            with patch("atoms_core.src.audio.audio_hits.service.Path.unlink", return_value=None):
                 
                 # Setup Service
                 svc = AudioHitsService(media_service=mock_media)

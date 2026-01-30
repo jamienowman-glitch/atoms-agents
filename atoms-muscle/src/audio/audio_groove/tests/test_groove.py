@@ -1,11 +1,11 @@
 import pytest
 from unittest.mock import MagicMock, patch
-from engines.audio_groove.service import AudioGrooveService, GrooveExtractRequest
-from engines.audio_groove.dsp import extract_groove_offsets
-from engines.audio_pattern_engine.service import AudioPatternEngineService
-from engines.audio_pattern_engine.models import PatternRequest
+from atoms_core.src.audio.audio_groove.service import AudioGrooveService, GrooveExtractRequest
+from atoms_core.src.audio.audio_groove.dsp import extract_groove_offsets
+from atoms_core.src.audio.audio_pattern_engine.service import AudioPatternEngineService
+from atoms_core.src.audio.audio_pattern_engine.models import PatternRequest
 from atoms_core.src.media.v2.models import DerivedArtifact, MediaAsset
-from engines.audio_groove.models import GrooveProfile
+from atoms_core.src.audio.audio_groove.models import GrooveProfile
 
 def test_extract_groove_service():
     mock_media = MagicMock()
@@ -27,9 +27,9 @@ def test_extract_groove_service():
     mock_media.register_artifact.side_effect = fake_artifact
     
     # Mock DSP
-    with patch("engines.audio_groove.service.extract_groove_offsets") as mock_dsp, \
-         patch("engines.audio_groove.service.open"), \
-         patch("engines.audio_groove.service.Path") as mock_path:
+    with patch("atoms_core.src.audio.audio_groove.service.extract_groove_offsets") as mock_dsp, \
+         patch("atoms_core.src.audio.audio_groove.service.open"), \
+         patch("atoms_core.src.audio.audio_groove.service.Path") as mock_path:
          
         # Return 16 offsets. Let's say odd steps distinct.
         # Step 0: 0ms. Step 1: 10ms (late). Step 2: 0ms. Step 3: -5ms (early).
@@ -79,7 +79,7 @@ def test_pattern_apply_groove():
     # Test integration in Pattern Engine
     # We mock get_audio_groove_service to return a specific profile
     
-    with patch("engines.audio_pattern_engine.service.get_audio_groove_service") as mock_get_svc:
+    with patch("atoms_core.src.audio.audio_pattern_engine.service.get_audio_groove_service") as mock_get_svc:
         mock_g_svc = MagicMock()
         mock_get_svc.return_value = mock_g_svc
         

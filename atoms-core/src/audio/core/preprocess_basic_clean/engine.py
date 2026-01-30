@@ -6,7 +6,7 @@ import subprocess
 from pathlib import Path
 from typing import List
 
-from engines.audio.preprocess_basic_clean.types import PreprocessBasicCleanInput, PreprocessBasicCleanOutput
+from .types import PreprocessBasicCleanInput, PreprocessBasicCleanOutput
 
 
 def _ffmpeg_available() -> bool:

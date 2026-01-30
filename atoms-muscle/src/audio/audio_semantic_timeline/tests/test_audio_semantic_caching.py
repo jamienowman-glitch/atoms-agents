@@ -4,9 +4,9 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from engines.audio_semantic_timeline.models import AudioSemanticAnalyzeRequest
-from engines.audio_semantic_timeline.routes import router as semantic_router
-from engines.audio_semantic_timeline.service import AudioSemanticService, set_audio_semantic_service
+from atoms_core.src.audio.audio_semantic_timeline.models import AudioSemanticAnalyzeRequest
+from atoms_core.src.audio.audio_semantic_timeline.routes import router as semantic_router
+from atoms_core.src.audio.audio_semantic_timeline.service import AudioSemanticService, set_audio_semantic_service
 from atoms_core.src.media.v2.models import MediaUploadRequest
 from atoms_core.src.media.v2.service import InMemoryMediaRepository, MediaService, set_media_service
 
@@ -40,7 +40,7 @@ def test_audio_semantic_caching(monkeypatch):
 
         def analyze(self, audio_path, include_beats, include_speech_music, min_silence_ms, loudness_window_ms):
             backend_calls["count"] += 1
-            from engines.audio_semantic_timeline.models import AudioSemanticTimelineSummary, AudioEvent
+            from atoms_core.src.audio.audio_semantic_timeline.models import AudioSemanticTimelineSummary, AudioEvent
 
             return AudioSemanticTimelineSummary(
                 asset_id="",

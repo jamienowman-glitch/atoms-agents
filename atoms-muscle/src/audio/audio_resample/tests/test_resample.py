@@ -3,8 +3,8 @@ from types import SimpleNamespace
 import pytest
 from unittest.mock import MagicMock, patch
 
-from engines.audio_resample.service import AudioResampleService, ResampleRequest
-from engines.audio_shared.health import DependencyInfo, DependencyMissingError
+from atoms_core.src.audio.audio_resample.service import AudioResampleService, ResampleRequest
+from atoms_core.src.audio.shared.health import DependencyInfo, DependencyMissingError
 from atoms_core.src.media.v2.models import MediaAsset, DerivedArtifact
 
 
@@ -27,9 +27,9 @@ def test_resample_command_logic():
         uri="/tmp/loop.wav", meta={"bpm": 120.0}
     )
     
-    with patch("engines.audio_resample.service.check_dependencies") as mock_check, \
-         patch("engines.audio_resample.service.subprocess.run", side_effect=_fake_resample_run) as mock_run, \
-         patch("engines.audio_resample.service.Path.read_bytes", return_value=b"fake_audio"):
+    with patch("atoms_core.src.audio.audio_resample.service.check_dependencies") as mock_check, \
+         patch("atoms_core.src.audio.audio_resample.service.subprocess.run", side_effect=_fake_resample_run) as mock_run, \
+         patch("atoms_core.src.audio.audio_resample.service.Path.read_bytes", return_value=b"fake_audio"):
         mock_check.return_value = _fake_dependencies(True)
 
         mock_media.register_upload.return_value = MediaAsset(
@@ -69,9 +69,9 @@ def test_resample_pitch_only():
         uri="/tmp/loop.wav", meta={"bpm": 120.0}
     )
     
-    with patch("engines.audio_resample.service.check_dependencies") as mock_check, \
-         patch("engines.audio_resample.service.subprocess.run", side_effect=_fake_resample_run) as mock_run, \
-         patch("engines.audio_resample.service.Path.read_bytes", return_value=b"fake_audio"):
+    with patch("atoms_core.src.audio.audio_resample.service.check_dependencies") as mock_check, \
+         patch("atoms_core.src.audio.audio_resample.service.subprocess.run", side_effect=_fake_resample_run) as mock_run, \
+         patch("atoms_core.src.audio.audio_resample.service.Path.read_bytes", return_value=b"fake_audio"):
 
         mock_check.return_value = _fake_dependencies(True)
         mock_media.register_upload.return_value = MediaAsset(
@@ -105,9 +105,9 @@ def test_resample_preserve_formants_flag():
         uri="/tmp/loop.wav", meta={"bpm": 118.0}
     )
 
-    with patch("engines.audio_resample.service.check_dependencies") as mock_check, \
-         patch("engines.audio_resample.service.subprocess.run", side_effect=_fake_resample_run) as mock_run, \
-         patch("engines.audio_resample.service.Path.read_bytes", return_value=b"fake_audio"):
+    with patch("atoms_core.src.audio.audio_resample.service.check_dependencies") as mock_check, \
+         patch("atoms_core.src.audio.audio_resample.service.subprocess.run", side_effect=_fake_resample_run) as mock_run, \
+         patch("atoms_core.src.audio.audio_resample.service.Path.read_bytes", return_value=b"fake_audio"):
 
         mock_check.return_value = _fake_dependencies(True)
         mock_media.register_upload.return_value = MediaAsset(
@@ -143,7 +143,7 @@ def test_no_resample_parameters_returns_original():
     svc = AudioResampleService(media_service=mock_media)
     req = ResampleRequest(tenant_id="t1", env="d", artifact_id="art_no")
 
-    with patch("engines.audio_resample.service.check_dependencies") as mock_check:
+    with patch("atoms_core.src.audio.audio_resample.service.check_dependencies") as mock_check:
         mock_check.return_value = _fake_dependencies(True)
         res = svc.resample_artifact(req)
         assert res.artifact_id == "art_no"
@@ -158,9 +158,9 @@ def test_quality_preset_normalization():
         id="art_quality", parent_asset_id="p1", tenant_id="t1", env="d", kind="audio_loop",
         uri="/tmp/loop.wav", meta={"bpm": 130.0}
     )
-    with patch("engines.audio_resample.service.check_dependencies") as mock_check, \
-         patch("engines.audio_resample.service.subprocess.run", side_effect=_fake_resample_run), \
-         patch("engines.audio_resample.service.Path.read_bytes", return_value=b"fake_audio"):
+    with patch("atoms_core.src.audio.audio_resample.service.check_dependencies") as mock_check, \
+         patch("atoms_core.src.audio.audio_resample.service.subprocess.run", side_effect=_fake_resample_run), \
+         patch("atoms_core.src.audio.audio_resample.service.Path.read_bytes", return_value=b"fake_audio"):
         mock_check.return_value = _fake_dependencies(True)
         mock_media.register_upload.return_value = MediaAsset(
             id="a_new", tenant_id="t1", env="d", kind="audio", source_uri="/tmp/resamp.wav"
@@ -189,9 +189,9 @@ def test_pitch_clamps_to_limit():
         id="art_extreme", parent_asset_id="p1", tenant_id="t1", env="d", kind="audio_loop",
         uri="/tmp/loop.wav", meta={"bpm": 120.0}
     )
-    with patch("engines.audio_resample.service.check_dependencies") as mock_check, \
-         patch("engines.audio_resample.service.subprocess.run", side_effect=_fake_resample_run), \
-         patch("engines.audio_resample.service.Path.read_bytes", return_value=b"fake_audio"):
+    with patch("atoms_core.src.audio.audio_resample.service.check_dependencies") as mock_check, \
+         patch("atoms_core.src.audio.audio_resample.service.subprocess.run", side_effect=_fake_resample_run), \
+         patch("atoms_core.src.audio.audio_resample.service.Path.read_bytes", return_value=b"fake_audio"):
         mock_check.return_value = _fake_dependencies(True)
         mock_media.register_upload.return_value = MediaAsset(
             id="a_new", tenant_id="t1", env="d", kind="audio", source_uri="/tmp/resamp.wav"
@@ -220,7 +220,7 @@ def test_resample_missing_dependency():
         tenant_id="t1", env="d", artifact_id="art_1", target_bpm=130.0
     )
 
-    with patch("engines.audio_resample.service.check_dependencies") as mock_check:
+    with patch("atoms_core.src.audio.audio_resample.service.check_dependencies") as mock_check:
         mock_check.return_value = _fake_dependencies(False)
         with pytest.raises(DependencyMissingError):
             svc.resample_artifact(req)

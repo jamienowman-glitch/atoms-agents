@@ -9,7 +9,7 @@ try:
 except Exception:  # pragma: no cover
     librosa = None  # type: ignore
 
-from engines.audio.beat_features.types import BeatFeaturesInput, BeatFeaturesOutput, BeatMetadata
+from .types import BeatFeaturesInput, BeatFeaturesOutput, BeatMetadata
 
 
 def _analyze(path: Path) -> BeatMetadata:

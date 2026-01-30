@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
-from engines.rootsmanuva_engine.service import RootsmanuvaService
-from engines.routing.schemas import (
+from atoms_core.src.audio.rootsmanuva_engine.service import RootsmanuvaService
+from atoms_core.src.routing.schemas import (
     CandidateOption,
     ModelMetricsSnapshot,
     RoutingContext,

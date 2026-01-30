@@ -1,16 +1,11 @@
 from __future__ import annotations
-from typing import Optional
-from atoms_core.src.audio.audio_mix_buses.models import MixGraph
-from atoms_core.src.audio.audio_mix_buses.presets import MIX_GRAPHS
 
-class AudioMixBusesService:
-    def get_mix_graph(self, preset_id: str = "default_mix") -> Optional[MixGraph]:
-        return MIX_GRAPHS.get(preset_id)
+from atoms_core.src.audio.audio_mix_buses.service import AudioMixBusesService as CoreAudioMixBusesService
+from atoms_core.src.audio.audio_mix_buses.service import get_audio_mix_buses_service as get_core_service
 
-_default_service: Optional[AudioMixBusesService] = None
+class AudioMixBusesService(CoreAudioMixBusesService):
+    """Wrapper for core AudioMixBusesService."""
+    pass
 
 def get_audio_mix_buses_service() -> AudioMixBusesService:
-    global _default_service
-    if _default_service is None:
-        _default_service = AudioMixBusesService()
-    return _default_service
+    return get_core_service()

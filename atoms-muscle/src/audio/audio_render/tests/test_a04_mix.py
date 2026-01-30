@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
-from engines.audio_timeline.models import AudioSequence, AudioClip, AudioTrack, AutomationPoint
-from engines.audio_render.planner import build_ffmpeg_mix_plan
+from atoms_core.src.audio.audio_timeline.models import AudioSequence, AudioClip, AudioTrack, AutomationPoint
+from atoms_core.src.audio.audio_render.planner import build_ffmpeg_mix_plan
 
 class TestA04Mix(unittest.TestCase):
     def test_fade_curves_in_planner(self):

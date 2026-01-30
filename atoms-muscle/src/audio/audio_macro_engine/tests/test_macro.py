@@ -5,10 +5,10 @@ from types import SimpleNamespace
 import pytest
 from unittest.mock import MagicMock, patch
 
-from engines.audio_macro_engine.compiler import compile_macro_to_ffmpeg
-from engines.audio_macro_engine.presets import MACRO_DEFINITIONS
-from engines.audio_macro_engine.service import AudioMacroEngineService, MacroRequest
-from engines.audio_shared.health import DependencyInfo, DependencyMissingError
+from atoms_core.src.audio.audio_macro_engine.compiler import compile_macro_to_ffmpeg
+from atoms_core.src.audio.audio_macro_engine.presets import MACRO_DEFINITIONS
+from atoms_core.src.audio.audio_macro_engine.service import AudioMacroEngineService, MacroRequest
+from atoms_core.src.audio.shared.health import DependencyInfo, DependencyMissingError
 from atoms_core.src.media.v2.models import DerivedArtifact, MediaAsset
 
 
@@ -51,8 +51,8 @@ def test_execute_macro_service():
         id="res1", parent_asset_id="up1", tenant_id="t", env="d", kind="audio_macro", uri="/tmp/out.wav"
     )
     
-    with patch("engines.audio_macro_engine.service.check_dependencies") as mock_check, \
-         patch("engines.audio_macro_engine.service.subprocess.run", side_effect=_fake_macro_run) as mock_run:
+    with patch("atoms_core.src.audio.audio_macro_engine.service.check_dependencies") as mock_check, \
+         patch("atoms_core.src.audio.audio_macro_engine.service.subprocess.run", side_effect=_fake_macro_run) as mock_run:
         mock_check.return_value = _fake_dependencies(True)
         svc = AudioMacroEngineService(media_service=mock_media)
         req = MacroRequest(
@@ -88,9 +88,9 @@ def test_macro_override_logging():
         )
     mock_media.register_artifact.side_effect = fake_artifact
 
-    with patch("engines.audio_macro_engine.service.check_dependencies") as mock_check, \
-         patch("engines.audio_macro_engine.service.subprocess.run", side_effect=_fake_macro_run) as mock_run, \
-         patch("engines.audio_macro_engine.service.logger") as mock_logger:
+    with patch("atoms_core.src.audio.audio_macro_engine.service.check_dependencies") as mock_check, \
+         patch("atoms_core.src.audio.audio_macro_engine.service.subprocess.run", side_effect=_fake_macro_run) as mock_run, \
+         patch("atoms_core.src.audio.audio_macro_engine.service.logger") as mock_logger:
 
         mock_check.return_value = _fake_dependencies(True)
         svc = AudioMacroEngineService(media_service=mock_media)
@@ -119,7 +119,7 @@ def test_macro_missing_ffmpeg():
     svc = AudioMacroEngineService(media_service=mock_media)
     req = MacroRequest(tenant_id="t", env="d", artifact_id="a1", macro_id="reverse_swell")
 
-    with patch("engines.audio_macro_engine.service.check_dependencies") as mock_check:
+    with patch("atoms_core.src.audio.audio_macro_engine.service.check_dependencies") as mock_check:
         mock_check.return_value = _fake_dependencies(False)
         with pytest.raises(DependencyMissingError):
             svc.execute_macro(req)

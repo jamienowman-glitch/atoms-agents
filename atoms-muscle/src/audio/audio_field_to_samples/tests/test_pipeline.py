@@ -1,10 +1,10 @@
 from unittest.mock import MagicMock
 
-from engines.audio_field_to_samples.service import AudioFieldToSamplesService
-from engines.audio_field_to_samples.models import FieldToSamplesRequest
-from engines.audio_hits.models import HitDetectResult, HitEvent
-from engines.audio_loops.models import LoopDetectResult, LoopEvent
-from engines.audio_voice_phrases.models import VoicePhraseDetectResult, VoicePhrase
+from atoms_core.src.audio.audio_field_to_samples.service import AudioFieldToSamplesService
+from atoms_core.src.audio.audio_field_to_samples.models import FieldToSamplesRequest
+from atoms_core.src.audio.audio_hits.models import HitDetectResult, HitEvent
+from atoms_core.src.audio.audio_loops.models import LoopDetectResult, LoopEvent
+from atoms_core.src.audio.audio_voice_phrases.models import VoicePhraseDetectResult, VoicePhrase
 
 def test_process_asset_pipeline():
     # Mock Sub-Services
