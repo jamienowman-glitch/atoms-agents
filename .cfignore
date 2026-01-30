@@ -1,0 +1,16 @@
+atoms-agents/
+atoms-connectors/
+atoms-core/
+atoms-muscle/
+atoms-tuning/
+audio-extractor/
+mcp-repo-connector/
+northstar-agents/
+northstar-engines/
+northstar-keys/
+packages/
+scripts/
+_git_backups/
+_quarantine/
+agentflow/
+docs/
