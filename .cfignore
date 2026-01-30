@@ -9,3 +9,5 @@ northstar-agents/
 northstar-engines/
 northstar-keys/
 scripts/
+atoms_core
+atoms_muscle
