@@ -8,6 +8,7 @@ import { ToolPill } from '../../canvas/wysiwyg/ToolPill'; // Formerly WysiwygAdd
 // import { WysiwygFloatingControls } from '../../canvas/wysiwyg/WysiwygFloatingControls'; // Removed
 import { TopPill } from './shells/TopPill';
 import { ChatRailShell, ChatMode } from './shells/ChatRailShell';
+import { LoggingLens } from './overlays/LoggingLens';
 // import { ContextPill } from './shells/ContextPill'; // DELETED per user request
 
 // --- Canvas Cartridge Types ---
@@ -24,6 +25,7 @@ export function WysiwygBuilderHarness() {
     const [chatMode, setChatMode] = useState<ChatMode>('nano');
     const [showTools, setShowTools] = useState(true);
     const [showLogic, setShowLogic] = useState(false); // Default logic brain hidden
+    const [showLogging, setShowLogging] = useState(false); // Logging Lens Overlay
 
     // Flat tool state map (replacing Context)
     const [toolState, setToolState] = useState<Record<string, any>>({
@@ -72,6 +74,11 @@ export function WysiwygBuilderHarness() {
 
     return (
         <div className="relative w-full h-[100dvh] bg-neutral-50 dark:bg-neutral-950 overflow-hidden flex flex-col">
+
+            {/* 0. LOGGING LENS OVERLAY */}
+            {showLogging && (
+                <LoggingLens onClose={() => setShowLogging(false)} />
+            )}
 
             {/* 1. TOP PILL (Header) */}
             <TopPill
@@ -174,7 +181,14 @@ export function WysiwygBuilderHarness() {
                    Rail shell has z-50. So z-40 is perfect. It will slide up from behind.
                 */}
                 <div className="absolute bottom-0 inset-x-0 pointer-events-auto">
-                    <LogicPop onClose={() => setShowLogic(false)} />
+                    <LogicPop
+                        onClose={() => setShowLogic(false)}
+                        onToggleLogging={() => {
+                            console.log('Toggle logging clicked');
+                            setShowLogic(false); // Hide LogicPop to Focus
+                            setShowLogging(true); // Show Lens
+                        }}
+                    />
                 </div>
             </div>
 
@@ -183,3 +197,4 @@ export function WysiwygBuilderHarness() {
         </div >
     );
 }
+

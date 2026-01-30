@@ -134,6 +134,13 @@ Every event MUST include:
 5) UI render (rehydrate only for tenant UI) →  
 6) Tuning ingest consumes events in batches.
 
+## 7.1) Tuning Architecture (Decoupled by Design)
+- `atoms-tuning` is a **separate service** (batch/cron/daemon) that ingests Event Spine V2.
+- It **does not** run inside `atoms-core` or `atoms-agents`.
+- It **produces adapters** (LoRA/other) and stores binaries in object storage (S3).
+- `atoms-agents` only stores **adapter references** (IDs/URIs), never binaries.
+- This keeps the core runtime lightweight and allows tuning to run on laptop/GPU credits.
+
 ## 8) Audit & Retention (defaults)
 
 - **SaaS default retention**: 12 months (configurable).

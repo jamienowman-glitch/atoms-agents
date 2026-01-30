@@ -69,6 +69,12 @@
     *   **REQUIRED**: Use `lib/vault.ts` (or equivalent loader) which calls `atoms-core` Vault API.
     *   **Reason**: Cloud Agents have no file access. They must use the API.
 
+## 📍 CONFIG & OBSERVABILITY LOCATIONS (LOCKED)
+All new config/observability UI must live under:
+* `/Users/jaynowman/dev/atoms-app/src/app/dashboard/observability`
+* `/Users/jaynowman/dev/atoms-app/src/app/dashboard/tuning`
+Do not create parallel config areas under `/god` for new work.
+
 ## 🔐 Connector Factory Laws (UI/Engines)
 * **God Config Name (Locked):** `Connector Factory — God Config` (log this exact name in all layers).
 * **UX Law (God Config):** Use existing config style but avoid nested cards/boxes. Flat sections with collapsible headers; mobile-first usability.

@@ -49,6 +49,10 @@ We are currently building the **Central Mother Harness**.
 
 ### 7.1 Event Spine V2 Contract (Supabase‑First)
 **Canonical Doc:** `docs/plans/2026-01-29_event-spine-v2-contract.md`
+**Scope:** Replay filters support `run_id`, `node_id`, `canvas_id`, `agent_id` (single or multi).  
+**Ordering:** `normalized_timestamp` then `sequence_id`.  
+**Context:** `context_scope` is explicit (`whiteboard` / `blackboard`).  
+**Artifacts:** URIs in payloads + `event_spine_v2_artifacts` join.
 
 ### 4. Responsive Tooling Strategy (Mobile First -> Desktop Scale)
 *   **Principle**: The Harness (`WysiwygBuilderHarness`) holds the **Truth** (State). The Tool Surfaces (`ToolPop`, `ToolPill`) are just **Views**.

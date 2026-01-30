@@ -17,6 +17,10 @@
 
 ## 🧷 Event Spine V2 Contract (Supabase‑First)
 **Canonical Doc:** `docs/plans/2026-01-29_event-spine-v2-contract.md`
+**Scope:** Replay filters support `run_id`, `node_id`, `canvas_id`, `agent_id` (single or multi).  
+**Ordering:** `normalized_timestamp` then `sequence_id`.  
+**Context:** `context_scope` is explicit (`whiteboard` / `blackboard`).  
+**Artifacts:** URIs in payloads + `event_spine_v2_artifacts` join.
 
 ## Website Printing Press (Global)
 - **Templates Live In Monorepo:** Source of truth at `/Users/jaynowman/dev/atoms-site-templates/`.
@@ -35,6 +39,11 @@
 - **Firearms Licenses Registry (Locked):** `firearms_licenses` registry table with `license_key` (pk), `category`, `description`. Seed initial licenses for Financial, Communication, System/Founder.
 - **Naming Engine Rule (Locked):** `formatProviderKey(platformName, rule)` is pure; basic slugify → uppercase → underscores; apply `rule` as a token template (e.g., `PROVIDER_{PLATFORM}_KEY`).
 - **Core KPIs Schema (Locked):** `core_kpis.missing_components` is jsonb array of strings; `core_kpis.metadata` is jsonb (store and do not drop).
+
+## 📍 CONFIG & OBSERVABILITY LOCATIONS (APP)
+All new config/observability UI must live under:
+* `/Users/jaynowman/dev/atoms-app/src/app/dashboard/observability`
+* `/Users/jaynowman/dev/atoms-app/src/app/dashboard/tuning`
 
 ## Tenant/Surface/Space Law
 - Tenant is the billing unit. Snax wallets are tenant-scoped and spendable across all surfaces/spaces.

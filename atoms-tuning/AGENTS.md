@@ -31,6 +31,12 @@
 This repository holds the **Evaluation & Tuning** scripts:
 -   **Datasets**: Golden sets for testing.
 -   **Evals**: LLM-as-a-Judge scripts.
+
+## 🧷 TUNING ARCHITECTURE (DECOUPLED)
+- `atoms-tuning` runs as a **separate service** (batch/cron/daemon).
+- It ingests **Event Spine V2** from Supabase.
+- It outputs adapters (LoRA/other) to **object storage** (S3).
+- `atoms-agents` only stores **adapter references** (IDs/URIs), never binaries.
 ## Tenant/Surface/Space Law
 - Tenant is the billing unit. Snax wallets are tenant-scoped and spendable across all surfaces/spaces.
 - Surface is the configuration layer for tenants. Data isolation is per-surface unless explicitly shared.
@@ -59,4 +65,3 @@ This repository holds the **Evaluation & Tuning** scripts:
 - **Firearms Licenses Registry (Locked):** `firearms_licenses` registry table with `license_key` (pk), `category`, `description`. Seed initial licenses for Financial, Communication, System/Founder.
 - **Naming Engine Rule (Locked):** `formatProviderKey(platformName, rule)` is pure; basic slugify → uppercase → underscores; apply `rule` as a token template (e.g., `PROVIDER_{PLATFORM}_KEY`).
 - **Core KPIs Schema (Locked):** `core_kpis.missing_components` is jsonb array of strings; `core_kpis.metadata` is jsonb (store and do not drop).
-

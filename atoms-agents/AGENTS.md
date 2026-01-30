@@ -24,6 +24,11 @@ This repository consumes `atoms-core` (if applicable) but maintains strict separ
 
 ## 🧷 EVENT SPINE V2 CONTRACT (SUPABASE‑FIRST)
 **Canonical Doc:** `docs/plans/2026-01-29_event-spine-v2-contract.md`
+
+## 🧷 TUNING ARCHITECTURE (DECOUPLED)
+- `atoms-tuning` is external and produces adapters (LoRA/other).
+- `atoms-agents` stores **adapter references only** (IDs/URIs).
+- No adapter binaries live in this repo.
 ## Tenant/Surface/Space Law
 - Tenant is the billing unit. Snax wallets are tenant-scoped and spendable across all surfaces/spaces.
 - Surface is the configuration layer for tenants. Data isolation is per-surface unless explicitly shared.

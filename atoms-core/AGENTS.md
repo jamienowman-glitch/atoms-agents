@@ -40,6 +40,14 @@
 
 ## 🧷 EVENT SPINE V2 CONTRACT (SUPABASE‑FIRST)
 **Canonical Doc:** `docs/plans/2026-01-29_event-spine-v2-contract.md`
+**Scope:** Replay filters support `run_id`, `node_id`, `canvas_id`, `agent_id` (single or multi).  
+**Ordering:** `normalized_timestamp` then `sequence_id`.  
+**Context:** `context_scope` is explicit (`whiteboard` / `blackboard`).  
+**Artifacts:** URIs in payloads + `event_spine_v2_artifacts` join.
+
+## 🧷 TUNING ARCHITECTURE (DECOUPLED)
+- `atoms-tuning` runs separately and ingests Event Spine V2.
+- `atoms-core` stays lightweight; no tuning runtimes here.
 
 ## 🛑 THE ATOMIC MANDATE
 1.  **Never Monolith**: Every concern must be its own "Atom" (Table, Component, Service, Site).
