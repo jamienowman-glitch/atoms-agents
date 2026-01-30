@@ -1,0 +1,14 @@
+[project]
+name = "atoms-tuning"
+version = "0.1.0"
+description = "Tuning Pipeline and RL/RLHA Schema Management for Atoms"
+requires-python = ">=3.9"
+dependencies = [
+    "supabase>=2.0.0",
+    "pydantic>=2.0.0",
+    "typer>=0.9.0",
+    "python-dateutil>=2.8.0"
+]
+
+[project.scripts]
+atoms-tuning = "atoms_tuning.main:app"
