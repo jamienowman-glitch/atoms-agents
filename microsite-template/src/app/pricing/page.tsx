@@ -65,7 +65,7 @@ export default function PricingPage() {
             const stripe = await loadStripe(stripeKey);
 
             if (stripe) {
-                await (stripe as any).redirectToCheckout({ sessionId });
+                await (stripe as any).redirectToCheckout({ sessionId }); // eslint-disable-line @typescript-eslint/no-explicit-any
             }
         } catch (err) {
             console.error(err);

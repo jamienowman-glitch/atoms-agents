@@ -19,14 +19,15 @@ export default function HeroSplash() {
         // Wait for logo (1000ms fade) + 500ms wait = 1500ms + initial offset
         // Let's say logo starts at 100ms, takes 1000ms to fade. Total 1100ms.
         // Wait 500ms. Start at 1600ms.
-        const startTyping = 1600;
+        // const startTyping = 1600; // Unused
 
+        // Unused logic removed
+        /*
         let charIndex = 0;
         const typeWriter = setInterval(() => {
             const now = Date.now();
-            // This is a simple implementation, but checking time is better. 
-            // Instead, let's just use a timeout chain or interval after the delay.
         }, 50);
+        */
 
         // Better simple approach for typewriter
         const typeTimer = setTimeout(() => {
