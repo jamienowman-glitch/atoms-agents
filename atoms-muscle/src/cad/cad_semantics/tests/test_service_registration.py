@@ -3,9 +3,9 @@ Integration test for semantic artifact registration.
 """
 
 import pytest
-from engines.cad_ingest.models import CadModel, UnitKind, BoundingBox, Vector3, Entity, EntityType
-from engines.cad_semantics.service import SemanticClassificationService
-from engines.cad_semantics.models import SemanticType, SemanticModel, SpatialGraph
+from atoms_core.src.cad.models import CadModel, UnitKind, BoundingBox, Vector3, Entity, EntityType
+from atoms_core.src.cad.semantics.service import SemanticClassificationService
+from atoms_core.src.cad.models import SemanticType, SemanticModel, SpatialGraph
 
 def create_mock_semantic_model() -> SemanticModel:
     model = SemanticModel(

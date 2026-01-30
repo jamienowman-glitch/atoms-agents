@@ -12,9 +12,9 @@ Covers:
 import hashlib
 import pytest
 
-from engines.cad_ingest.models import CadIngestRequest, UnitKind
-from engines.cad_ingest.service import CadIngestService, CadIngestCache
-from engines.cad_ingest.tests.fixtures import DXF_FLOORPLAN_FIXTURE, IFC_LITE_FIXTURE_JSON
+from atoms_core.src.cad.models import CadIngestRequest, UnitKind
+from atoms_core.src.cad.ingest.service import CadIngestService, CadIngestCache
+from atoms_core.src.cad.ingest.fixtures import DXF_FLOORPLAN_FIXTURE, IFC_LITE_FIXTURE_JSON
 from atoms_core.src.media.v2.service import InMemoryMediaRepository, LocalMediaStorage, MediaService
 from atoms_core.src.media.v2.models import DerivedArtifact
 
@@ -225,7 +225,7 @@ class TestCadIngestCache:
     
     def test_cache_put_and_get(self):
         """Test basic put/get operations."""
-        from engines.cad_ingest.models import CadModel, UnitKind, Vector3, BoundingBox
+        from atoms_core.src.cad.models import CadModel, UnitKind, Vector3, BoundingBox
         
         cache = CadIngestCache()
         
@@ -250,7 +250,7 @@ class TestCadIngestCache:
     
     def test_cache_clear(self):
         """Test cache clearing."""
-        from engines.cad_ingest.models import CadModel, UnitKind, Vector3, BoundingBox
+        from atoms_core.src.cad.models import CadModel, UnitKind, Vector3, BoundingBox
         
         cache = CadIngestCache()
         

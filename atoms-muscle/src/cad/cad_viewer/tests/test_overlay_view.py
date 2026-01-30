@@ -1,8 +1,8 @@
 """Tests for CadOverlayView generation from boq_costing engine."""
 from unittest.mock import Mock
 
-from engines.cad_viewer.service import CadViewerService, MissingArtifactError
-from engines.boq_costing.models import CostModel, CostItem, Currency
+from atoms_core.src.cad.viewer.service import CadViewerService, MissingArtifactError
+from atoms_core.src.construction.models import CostModel, CostItem, Currency
 
 
 def _make_cost_item(item_id: str, name: str, quantity: float, unit: str, total_cost: float) -> CostItem:

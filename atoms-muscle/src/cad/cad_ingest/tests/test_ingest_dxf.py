@@ -11,9 +11,9 @@ Covers:
 import hashlib
 import pytest
 
-from engines.cad_ingest.dxf_adapter import dxf_to_cad_model
-from engines.cad_ingest.models import UnitKind, EntityType
-from engines.cad_ingest.tests.fixtures import DXF_FLOORPLAN_FIXTURE
+from atoms_core.src.cad.ingest.dxf_adapter import dxf_to_cad_model
+from atoms_core.src.cad.models import UnitKind, EntityType
+from atoms_core.src.cad.ingest.fixtures import DXF_FLOORPLAN_FIXTURE
 
 
 class TestDxfParsing:
@@ -160,7 +160,7 @@ class TestDxfCaching:
     
     def test_cache_hit_same_content(self):
         """Test that identical content is cached."""
-        from engines.cad_ingest.service import CadIngestCache
+        from atoms_core.src.cad.ingest.service import CadIngestCache
         
         cache = CadIngestCache()
         
@@ -174,7 +174,7 @@ class TestDxfCaching:
     
     def test_cache_miss_different_params(self):
         """Test that different params result in different cache entries."""
-        from engines.cad_ingest.service import CadIngestCache
+        from atoms_core.src.cad.ingest.service import CadIngestCache
         
         cache = CadIngestCache()
         
@@ -189,7 +189,7 @@ class TestDxfCaching:
     
     def test_cache_eviction(self):
         """Test simple FIFO eviction when cache is full."""
-        from engines.cad_ingest.service import CadIngestCache
+        from atoms_core.src.cad.ingest.service import CadIngestCache
         
         cache = CadIngestCache(max_entries=2)
         

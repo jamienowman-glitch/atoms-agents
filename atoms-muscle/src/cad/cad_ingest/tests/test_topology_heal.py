@@ -3,7 +3,7 @@ Tests for topology healing module.
 """
 
 import pytest
-from engines.cad_ingest.topology_heal import (
+from atoms_core.src.cad.ingest.topology_heal import (
     heal_topology,
     distance_3d,
     vector_equal,
@@ -13,7 +13,7 @@ from engines.cad_ingest.topology_heal import (
     heal_polyline_geometry,
     remove_duplicate_entities
 )
-from engines.cad_ingest.models import Entity, EntityType, Vector3, BoundingBox, HealingActionKind
+from atoms_core.src.cad.models import Entity, EntityType, Vector3, BoundingBox, HealingActionKind
 
 class TestTopologyPrimitives:
     """Test low-level healing primitives."""

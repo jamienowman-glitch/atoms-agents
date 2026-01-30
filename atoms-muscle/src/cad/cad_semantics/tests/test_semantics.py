@@ -10,14 +10,14 @@ Covers:
 
 import pytest
 
-from engines.cad_ingest.dxf_adapter import dxf_to_cad_model
-from engines.cad_ingest.ifc_lite_adapter import ifc_lite_to_cad_model
-from engines.cad_ingest.models import EntityType, UnitKind
-from engines.cad_ingest.tests.fixtures import DXF_FLOORPLAN_FIXTURE, IFC_LITE_FIXTURE_JSON
-from engines.cad_semantics.graph import build_spatial_graph
-from engines.cad_semantics.models import SemanticType
-from engines.cad_semantics.rules import ClassificationRuleSet, infer_levels_from_elevations
-from engines.cad_semantics.service import SemanticClassificationService
+from atoms_core.src.cad.ingest.dxf_adapter import dxf_to_cad_model
+from atoms_core.src.cad.ingest.ifc_lite_adapter import ifc_lite_to_cad_model
+from atoms_core.src.cad.models import EntityType, UnitKind
+from atoms_core.src.cad.ingest.fixtures import DXF_FLOORPLAN_FIXTURE, IFC_LITE_FIXTURE_JSON
+from atoms_core.src.cad.semantics.graph import build_spatial_graph
+from atoms_core.src.cad.models import SemanticType
+from atoms_core.src.cad.semantics.rules import ClassificationRuleSet, infer_levels_from_elevations
+from atoms_core.src.cad.semantics.service import SemanticClassificationService
 
 
 class TestClassificationRules:
@@ -28,7 +28,7 @@ class TestClassificationRules:
         ruleset = ClassificationRuleSet()
         
         # Create mock entity
-        from engines.cad_ingest.models import Entity, BoundingBox, Vector3
+        from atoms_core.src.cad.models import Entity, BoundingBox, Vector3
         
         entity = Entity(
             id="wall1",
@@ -47,7 +47,7 @@ class TestClassificationRules:
         """Test door rule matches layer names."""
         ruleset = ClassificationRuleSet()
         
-        from engines.cad_ingest.models import Entity, BoundingBox, Vector3
+        from atoms_core.src.cad.models import Entity, BoundingBox, Vector3
         
         entity = Entity(
             id="door1",
@@ -64,7 +64,7 @@ class TestClassificationRules:
         """Test window rule matches."""
         ruleset = ClassificationRuleSet()
         
-        from engines.cad_ingest.models import Entity, BoundingBox, Vector3
+        from atoms_core.src.cad.models import Entity, BoundingBox, Vector3
         
         entity = Entity(
             id="window1",
@@ -81,7 +81,7 @@ class TestClassificationRules:
         """Test unknown classification."""
         ruleset = ClassificationRuleSet()
         
-        from engines.cad_ingest.models import Entity, BoundingBox, Vector3
+        from atoms_core.src.cad.models import Entity, BoundingBox, Vector3
         
         entity = Entity(
             id="unknown1",
@@ -101,7 +101,7 @@ class TestLevelInference:
     
     def test_infer_levels_single_elevation(self):
         """Test level inference with single elevation."""
-        from engines.cad_ingest.models import Entity, BoundingBox, Vector3
+        from atoms_core.src.cad.models import Entity, BoundingBox, Vector3
         
         entity = Entity(
             id="e1",
@@ -117,7 +117,7 @@ class TestLevelInference:
     
     def test_infer_levels_multiple_elevations(self):
         """Test level inference with multiple elevations."""
-        from engines.cad_ingest.models import Entity, BoundingBox, Vector3
+        from atoms_core.src.cad.models import Entity, BoundingBox, Vector3
         
         entity1 = Entity(
             id="e1",
@@ -145,7 +145,7 @@ class TestSpatialGraph:
     
     def test_graph_node_creation(self):
         """Test graph creates nodes for all elements."""
-        from engines.cad_semantics.models import SemanticElement, SemanticType
+        from atoms_core.src.cad.models import SemanticElement, SemanticType
         
         elem1 = SemanticElement(
             id="elem1",
@@ -171,7 +171,7 @@ class TestSpatialGraph:
     
     def test_graph_adjacency_detection(self):
         """Test adjacency edge detection."""
-        from engines.cad_semantics.models import SemanticElement, SemanticType
+        from atoms_core.src.cad.models import SemanticElement, SemanticType
         
         # Create two adjacent elements
         elem1 = SemanticElement(
@@ -197,7 +197,7 @@ class TestSpatialGraph:
     
     def test_graph_determinism(self):
         """Test graph hashing is deterministic."""
-        from engines.cad_semantics.models import SemanticElement, SemanticType
+        from atoms_core.src.cad.models import SemanticElement, SemanticType
         
         elem = SemanticElement(
             id="elem1",
