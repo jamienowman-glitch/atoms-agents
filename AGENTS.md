@@ -44,12 +44,22 @@
 All new config/observability UI must live under:
 * `/Users/jaynowman/dev/atoms-app/src/app/dashboard/observability`
 * `/Users/jaynowman/dev/atoms-app/src/app/dashboard/tuning`
+* `/Users/jaynowman/dev/atoms-app/src/app/dashboard/pricing`
 
 ## Tenant/Surface/Space Law
 - Tenant is the billing unit. Snax wallets are tenant-scoped and spendable across all surfaces/spaces.
 - Surface is the configuration layer for tenants. Data isolation is per-surface unless explicitly shared.
 - Space is shared context across one or more surfaces; only surfaces explicitly mapped to a space share performance/nexus data.
 - Do not hardcode surface names in schemas or code; treat surfaces/spaces as registry/config data.
+
+## 💳 SNAX + PRICING + DISCOUNTS (PRODUCTION)
+- **Snax Schema:** `atoms-core/sql/015_snax_auth_patch.sql` (tenants, wallets, ledger, pricing, system_config, api_keys).
+- **Discount Schema:** `atoms-core/sql/016_discount_engine.sql` (policy, codes, redemptions, KPI snapshots).
+- **Contract:** `docs/contracts/discount-engine-contract.md`.
+- **Plan:** `docs/plans/2026-01-30_snax-pricing-discount-atomic-task-plan.md`.
+- **UI Spec:** `docs/plans/2026-01-30_snax-pricing-discount-ui-spec.md`.
+- **Pricing UI (new location):** `atoms-app/src/app/dashboard/pricing/` (pricing + exchange + crypto bonus + discount policy).
+- **Rules:** tenant‑scoped, surface‑configured, no PII in discount tables, KPI ceilings/floors enforced.
 
 ## 🏭 MUSCLE FACTORY STANDARD (2026)
 - **Path law:** muscles live in `atoms-muscle/src/{category}/{name}` (no legacy nesting).

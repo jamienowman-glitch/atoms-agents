@@ -73,7 +73,16 @@
 All new config/observability UI must live under:
 * `/Users/jaynowman/dev/atoms-app/src/app/dashboard/observability`
 * `/Users/jaynowman/dev/atoms-app/src/app/dashboard/tuning`
+* `/Users/jaynowman/dev/atoms-app/src/app/dashboard/pricing`
 Do not create parallel config areas under `/god` for new work.
+
+## 💳 SNAX + PRICING + DISCOUNTS (UI)
+- **Pricing + Exchange UI:** `atoms-app/src/app/dashboard/pricing/` (pricing table + `system_config` edit).
+- **Discount Policy UI:** same area (`/dashboard/pricing`), per‑surface policy editor.
+- **Contract:** `docs/contracts/discount-engine-contract.md`.
+- **UI Spec:** `docs/plans/2026-01-30_snax-pricing-discount-ui-spec.md`.
+- **Plan:** `docs/plans/2026-01-30_snax-pricing-discount-atomic-task-plan.md`.
+- **Rules:** no PII in discount tables; enforce KPI ceilings/floors; tenant‑scoped with per‑surface config.
 
 ## 🔐 Connector Factory Laws (UI/Engines)
 * **God Config Name (Locked):** `Connector Factory — God Config` (log this exact name in all layers).

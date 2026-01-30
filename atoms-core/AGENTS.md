@@ -61,6 +61,14 @@
     *   **Legacy**: The old file-based `atoms-registry/` directory is deprecated and quarantined (do not recreate it).
 7.  **Tenant Compute First (Production)**: Interactive rendering must default to **client device CPU/GPU**. Server render only for explicit export/offline requests. **No local fallbacks** in production.
 
+## 💳 SNAX + PRICING + DISCOUNTS (CORE)
+- **Snax Schema:** `atoms-core/sql/015_snax_auth_patch.sql` (tenants, wallets, ledger, pricing, system_config, api_keys, RPC `snax_charge`).
+- **Discount Schema:** `atoms-core/sql/016_discount_engine.sql` (policy, codes, redemptions, KPI snapshots).
+- **Contract:** `docs/contracts/discount-engine-contract.md`.
+- **Plan:** `docs/plans/2026-01-30_snax-pricing-discount-atomic-task-plan.md`.
+- **Tables (target):** `discount_policy`, `discount_codes`, `discount_redemptions`, `discount_kpi_snapshots`.
+- **Rule:** discount policies are tenant‑scoped and surface‑configured; enforce KPI ceilings/floors.
+
 ## 🏗️ CONTEXT: THE FLEET OF 7
 *   **atoms-core:** The OS (Identity, Routing, Safety). **[YOU ARE HERE]**
 *   **atoms-agents:** The Brain (Logic, Personas).

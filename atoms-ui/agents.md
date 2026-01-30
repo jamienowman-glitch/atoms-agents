@@ -1,5 +1,43 @@
 # Atoms UI - Architectural Standards
 
+## GOLDEN UI STATE: CHAT RAIL & POPUPS (LOCKED)
+> [!WARNING]
+> The following UI behaviors are **PERFECTED**. Do not change them "incidentally". If you touch them, you must verify they still work exactly as described.
+> **AUDIT REQUIRED**: AFTER EVERY TASK, YOU MUST AUDIT YOUR CHANGES AGAINST THIS CONSTITUTION.
+
+### 1. ChatRail Shell (Nano Mode)
+*   **Behavior**: In `nano` mode, the Input Box is HIDDEN. The Message Thread is VISIBLE.
+*   **Height**: Fixed at `128px` (Header + 1 Message Bubble).
+*   **Reference**: `ChatRailShell.tsx` -> `getHeight()`.
+
+### 2. Popups (ToolPop / LogicPop)
+*   **Positioning**: MUST be **Dynamic**. They attach to the top of the ChatRail.
+    *   *Code Rule*: `style={{ bottom: chatMode === 'nano' ? '128px' : ... }}`
+*   **Layering**: MUST have `z-index: 60` (or higher) to sit **ON TOP** of the ChatRail (z-50).
+    *   *Failure Mode*: If Z-Index is < 50, the "Brain" button stops working because the Rail covers it.
+*   **Layout**:
+    *   **ToolPop**: Height must be `h-auto` (Hug content). Do NOT use fixed height (`h-[260px]`). Do NOT use bottom padding (`pb-20`).
+    *   **LogicPop**: Must have explicit Close ('X') button wired to `onClose` prop.
+
+### 3. Harness Wiring
+*   **Rule**: The Harness (`WysiwygBuilderHarness`) MUST pass `onClose={() => setOpen(false)}` to both Popups.
+*   **Rule**: Toggles must be mutually exclusive (Opening Brain closes Tools).
+
+### 4. MANDATORY REGRESSION CHECK
+**Before finishing any task involving `atoms-ui`, you must verify:**
+1.  [ ] **Brain Button**: Click Brain in Nano Mode -> Does menu appear *over* the rail?
+2.  [ ] **Close Buttons**: Click 'X' on both menus -> Do they close?
+3.  [ ] **Nano Mode**: Is the Input Box hidden? Is the Message visible?
+4.  [ ] **Gap Check**: Open Tools -> Is there a huge white gap at the bottom? (Should be NO).
+
+## CRITICAL BACKUP INTEGRITY
+> [!IMPORTANT]
+> **BACKUP PATH**: `atoms-ui/_backups`
+> **RULE**: NEVER DELETE FILES IN THIS DIRECTORY.
+> These are manual save points requested by the User (e.g. `wysiwyg_2026_01_30_stable`).
+> Even if disk space is low, DO NOT DELETE.
+> Checking for and restoring from these backups is PERMITTED if the main branch is corrupted.
+
 ## The Harness & Canvas Pattern
 The `atoms-ui` repository enforces a strict separation between the "Harness" (Tooling/Rig) and the "Canvas" (Content/State).
 
