@@ -14,3 +14,5 @@ _quarantine/
 .codex/
 .idea/
 .git/
+atoms_core
+atoms_muscle
