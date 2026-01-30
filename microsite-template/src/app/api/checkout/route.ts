@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { getSecret } from '@/lib/vault';
 
+export const runtime = 'edge';
+
 export async function POST(req: Request) {
     const secretKey = getSecret('stripe-secret-key.txt');
 
