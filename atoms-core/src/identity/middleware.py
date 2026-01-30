@@ -6,11 +6,18 @@ from supabase import create_client, Client, ClientOptions
 from src.config import get_settings
 from src.identity.constants import ROOT_TENANT_ID, SYSTEM_KEY_HEADER
 
-settings = get_settings()
+try:
+    settings = get_settings()
+except Exception:
+    # Fallback for environments without vault access (e.g. CI/Build)
+    # We create a dummy settings object or None, but middleware needs 'settings' variable.
+    # We can mock it or set it to None and handle checks.
+    print("Warning: Could not load settings from Vault. Running in limited mode.")
+    settings = None
 
 # Global client (initialized if config present)
 supabase: Client | None = None
-if settings.SUPABASE_URL and settings.SUPABASE_ANON_KEY:
+if settings and settings.SUPABASE_URL and settings.SUPABASE_ANON_KEY:
     try:
         supabase = create_client(
             settings.SUPABASE_URL,
@@ -34,7 +41,7 @@ class IdentityMiddleware(BaseHTTPMiddleware):
         # 1. System Key Check (God Mode)
         system_key = request.headers.get(SYSTEM_KEY_HEADER)
         # Only grant system access if key is configured and matches
-        if settings.SYSTEM_KEY and system_key == settings.SYSTEM_KEY:
+        if settings and settings.SYSTEM_KEY and system_key == settings.SYSTEM_KEY:
             request.state.user_id = "system"
             request.state.tenant_id = ROOT_TENANT_ID
             request.state.role = "owner"
