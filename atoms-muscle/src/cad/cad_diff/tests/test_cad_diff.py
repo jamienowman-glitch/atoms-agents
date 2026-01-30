@@ -3,11 +3,11 @@
 import pytest
 from datetime import datetime, timezone
 
-from engines.cad_semantics.models import SemanticElement, SemanticModel
-from engines.boq_quantities.models import BoQItem, BoQModel
-from engines.plan_of_work.models import PlanTask, PlanOfWork
-from engines.cad_diff.models import ChangeType, SeverityLevel
-from engines.cad_diff.service import DiffService
+from atoms_core.src.cad.models import SemanticElement, SemanticModel
+from atoms_core.src.construction.models import BoQItem, BoQModel
+from atoms_core.src.construction.models import PlanTask, PlanOfWork
+from atoms_core.src.cad.diff.models import ChangeType, SeverityLevel
+from atoms_core.src.cad.diff.service import DiffService
 
 
 def make_semantic_element(id_: str, sem_type: str = "wall", area: float = 50.0) -> SemanticElement:

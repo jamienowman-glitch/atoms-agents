@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from engines.muscle.cad_viewer.mcp.tools import view_gantt, view_overlay, CadViewInput
+from .tools import view_gantt, view_overlay, CadViewInput
 
 app = FastAPI(title="CAD Viewer MCP Server")
 

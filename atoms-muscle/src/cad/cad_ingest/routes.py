@@ -12,18 +12,16 @@ from typing import Optional
 
 from fastapi import APIRouter, Body, Depends, File, Form, HTTPException, UploadFile
 
-from muscle.engines.common.identity_stub import (
-    RequestContext,
-    assert_context_matches,
-    get_request_context,
-)
-from muscle.engines.identity.auth_stub import AuthContext, get_auth_context
-from engines.cad_ingest.models import (
+from atoms_core.src.identity.models import RequestContext
+from atoms_core.src.identity.auth import AuthContext, assert_context_matches
+from atoms_core.src.identity.dependencies import get_request_context, get_auth_context
+
+from atoms_core.src.cad.models import (
     CadIngestRequest,
     CadIngestResponse,
     UnitKind,
 )
-from engines.cad_ingest.service import get_cad_ingest_service
+from atoms_core.src.cad.ingest.service import get_cad_ingest_service
 
 router = APIRouter(prefix="/cad", tags=["cad_ingest"])
 
@@ -64,7 +62,7 @@ async def ingest_cad_file(
     try:
         if file:
             # Multipart upload
-            assert_context_matches(request_context, tenant_id, env)
+            assert_context_matches(request_context, tenant_id=tenant_id, env=env)
             content = await file.read()
             request_obj = CadIngestRequest(
                 file_uri=source_uri or file.filename or "uploaded_file",
@@ -80,7 +78,7 @@ async def ingest_cad_file(
             )
         elif payload:
             # JSON body
-            assert_context_matches(request_context, payload.tenant_id, payload.env)
+            assert_context_matches(request_context, tenant_id=payload.tenant_id, env=payload.env)
             request_obj = payload
             request_obj.tenant_id = request_context.tenant_id
             request_obj.env = request_context.env

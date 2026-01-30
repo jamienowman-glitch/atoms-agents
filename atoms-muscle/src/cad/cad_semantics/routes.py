@@ -11,8 +11,8 @@ from typing import Optional
 from fastapi import APIRouter, Body, HTTPException, status
 from pydantic import BaseModel, Field
 
-from engines.cad_semantics.models import SemanticResponse, SemanticType
-from engines.cad_semantics.service import get_semantic_service
+from atoms_core.src.cad.models import SemanticResponse, SemanticType
+from atoms_core.src.cad.semantics.service import get_semantic_service
 from atoms_core.src.media.v2.models import ArtifactMetadata
 from atoms_core.src.identity.models import RequestContext
 

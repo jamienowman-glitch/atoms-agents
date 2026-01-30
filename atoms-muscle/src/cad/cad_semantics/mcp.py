@@ -1,16 +1,16 @@
 from mcp.server.fastmcp import FastMCP
 from atoms_core.src.budget.snax_guard import require_snax, PaymentRequired
-from .service import SemanticClassificationService
+from .service import Service
 
 mcp = FastMCP("muscle-cad-cad_semantics")
 
-service = SemanticClassificationService()
+service = Service()
 
 @mcp.tool()
 @require_snax(tool_key="muscle-cad-cad_semantics")
 def run_cad_semantics(input_path: str, **kwargs) -> dict:
     """
-    Executes SemanticClassificationService.
+    Executes Service.
     """
     try:
         return service.run(input_path, **kwargs)

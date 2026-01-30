@@ -1,8 +1,8 @@
 """Tests for CadGanttView generation from plan_of_work engine."""
 from unittest.mock import Mock
 
-from engines.cad_viewer.service import CadViewerService, MissingArtifactError
-from engines.plan_of_work.models import PlanOfWork, PlanTask, DependencyType, PlanDependency, TaskCategory
+from atoms_core.src.cad.viewer.service import CadViewerService, MissingArtifactError
+from atoms_core.src.construction.models import PlanOfWork, PlanTask, DependencyType, PlanDependency, TaskCategory
 
 
 def _make_plan_task(task_id: str, name: str, duration: float, deps=None) -> PlanTask:

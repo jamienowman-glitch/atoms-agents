@@ -6,7 +6,7 @@ Routes for computing diffs between artifact versions.
 
 from fastapi import APIRouter
 
-from .models import DiffRequest, DiffResponse
+from atoms_core.src.cad.diff.models import DiffRequest, DiffResponse
 
 router = APIRouter()
 

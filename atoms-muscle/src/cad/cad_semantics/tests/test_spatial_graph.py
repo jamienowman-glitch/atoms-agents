@@ -4,8 +4,8 @@ Tests for CAD spatial graph construction and hashing.
 
 import pytest
 from typing import Dict, Any
-from engines.cad_semantics.models import SemanticElement, SemanticType, EdgeType
-from engines.cad_semantics.graph import build_spatial_graph, bboxes_adjacent
+from atoms_core.src.cad.models import SemanticElement, SemanticType, EdgeType
+from atoms_core.src.cad.semantics.graph import build_spatial_graph, bboxes_adjacent
 
 def create_elem(id: str, type: SemanticType, x: float = 0.0, y: float = 0.0, z: float = 0.0, level_id: str = "L0") -> SemanticElement:
     return SemanticElement(

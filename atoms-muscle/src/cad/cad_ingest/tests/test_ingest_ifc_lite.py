@@ -12,9 +12,9 @@ import json
 import hashlib
 import pytest
 
-from engines.cad_ingest.ifc_lite_adapter import ifc_lite_to_cad_model
-from engines.cad_ingest.models import UnitKind, EntityType
-from engines.cad_ingest.tests.fixtures import IFC_LITE_FIXTURE_JSON
+from atoms_core.src.cad.ingest.ifc_lite_adapter import ifc_lite_to_cad_model
+from atoms_core.src.cad.models import UnitKind, EntityType
+from atoms_core.src.cad.ingest.fixtures import IFC_LITE_FIXTURE_JSON
 
 
 class TestIfcLiteParsing:

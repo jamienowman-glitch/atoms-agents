@@ -3,12 +3,12 @@ Tests for CAD semantic rules configuration, overrides, and additional types.
 """
 
 import pytest
-from engines.cad_ingest.models import Entity, EntityType, BoundingBox, Vector3, CadModel, UnitKind
-from engines.cad_semantics.models import SemanticType
-from engines.cad_semantics.rules import ClassificationRuleSet
-from engines.cad_semantics.service import SemanticClassificationService, SemanticModel
-from engines.cad_ingest.dxf_adapter import dxf_to_cad_model
-from engines.cad_ingest.tests.fixtures import DXF_FLOORPLAN_FIXTURE
+from atoms_core.src.cad.models import Entity, EntityType, BoundingBox, Vector3, CadModel, UnitKind
+from atoms_core.src.cad.models import SemanticType
+from atoms_core.src.cad.semantics.rules import ClassificationRuleSet
+from atoms_core.src.cad.semantics.service import SemanticClassificationService, SemanticModel
+from atoms_core.src.cad.ingest.dxf_adapter import dxf_to_cad_model
+from atoms_core.src.cad.ingest.fixtures import DXF_FLOORPLAN_FIXTURE
 
 def create_mock_entity(id: str, type: EntityType, layer: str) -> Entity:
     """Helper to create a simple mock entity."""
@@ -104,7 +104,7 @@ class TestRuleOverrides:
         # but fixture IDs are deterministic hashes. 
         # We can construct a CadModel manually for precision.
         
-        # from engines.cad_ingest.models import CadModel  <-- Removed
+        # from atoms_core.src.cad.models import CadModel  <-- Removed
         
         e1 = create_mock_entity("e1", EntityType.POLYLINE, "Wall")
         model = CadModel(

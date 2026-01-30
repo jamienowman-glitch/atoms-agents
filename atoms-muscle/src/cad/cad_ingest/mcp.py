@@ -1,16 +1,16 @@
 from mcp.server.fastmcp import FastMCP
 from atoms_core.src.budget.snax_guard import require_snax, PaymentRequired
-from .service import CadIngestService
+from .service import Service
 
 mcp = FastMCP("muscle-cad-cad_ingest")
 
-service = CadIngestService()
+service = Service()
 
 @mcp.tool()
 @require_snax(tool_key="muscle-cad-cad_ingest")
 def run_cad_ingest(input_path: str, **kwargs) -> dict:
     """
-    Executes CadIngestService.
+    Executes Service.
     """
     try:
         return service.run(input_path, **kwargs)

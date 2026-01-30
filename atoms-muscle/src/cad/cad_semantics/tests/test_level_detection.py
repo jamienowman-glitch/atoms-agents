@@ -3,9 +3,9 @@ Tests for CAD level detection and metadata.
 """
 
 import pytest
-from engines.cad_ingest.models import Entity, EntityType, BoundingBox, Vector3, CadModel, UnitKind
-from engines.cad_semantics.service import SemanticClassificationService
-from engines.cad_semantics.rules import infer_levels_from_elevations
+from atoms_core.src.cad.models import Entity, EntityType, BoundingBox, Vector3, CadModel, UnitKind
+from atoms_core.src.cad.semantics.service import SemanticClassificationService
+from atoms_core.src.cad.semantics.rules import infer_levels_from_elevations
 
 def create_entity_z(id: str, z: float) -> Entity:
     return Entity(
@@ -24,7 +24,7 @@ def create_entity_no_z(id: str) -> Entity:
     # Pydantic model for Vector3 usually requires z, defaults to 0.0?
     # Let's assume we can simulate "no elevation" by maybe having 2D vectors in a 3D struct 
     # or just pass a None if allowed. 
-    # Looking at `engines/cad_ingest/models.py`, Vector3 has `z: float = 0.0`.
+    # Looking at `atoms_core.src.cad.models.py`, Vector3 has `z: float = 0.0`.
     # So "no elevation" data implies everything is at 0.0.
     # However, `dxf_adapter` sets z from geometry.
     # The rule says: `if z is not None: elevations.append(z)`.
