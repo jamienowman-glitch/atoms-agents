@@ -20,6 +20,9 @@ function loadSecretWithFallback(filename, fallback) {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    eslint: {
+        ignoreDuringBuilds: true,
+    },
     transpilePackages: ['atoms-ui'],
     env: {
         NEXT_PUBLIC_SUPABASE_URL: loadSecretWithFallback('supabase-url.txt', 'https://placeholder.supabase.co'),

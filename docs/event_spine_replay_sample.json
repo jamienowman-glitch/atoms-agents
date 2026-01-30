@@ -1,0 +1,91 @@
+[
+  {
+    "id": "e1-uuid",
+    "tenant_id": "tenant-1",
+    "mode": "saas",
+    "project_id": "proj-1",
+    "run_id": "run-abc",
+    "node_id": "node-1",
+    "canvas_id": "canvas-alpha",
+    "agent_id": "agent-007",
+    "sequence_id": 1,
+    "normalized_timestamp": "2026-02-01T12:00:01.000Z",
+    "context_scope": "whiteboard",
+    "event_type": "AGENT_CONTEXT_READ",
+    "display_name": "Context Read",
+    "raw_name": "AGENT_CONTEXT_READ",
+    "artifact_uris": [],
+    "event_spine_v2_payloads": [
+      {
+        "payload_type": "trace",
+        "data": {
+          "message": "Reading global context",
+          "artifact_uris": []
+        }
+      }
+    ]
+  },
+  {
+    "id": "e2-uuid",
+    "tenant_id": "tenant-1",
+    "mode": "saas",
+    "project_id": "proj-1",
+    "run_id": "run-abc",
+    "node_id": "node-1",
+    "canvas_id": "canvas-alpha",
+    "agent_id": "agent-007",
+    "sequence_id": 2,
+    "normalized_timestamp": "2026-02-01T12:00:02.500Z",
+    "context_scope": "blackboard",
+    "event_type": "AGENT_DECISION",
+    "display_name": "Generate Image",
+    "raw_name": "AGENT_DECISION",
+    "artifact_uris": [],
+    "event_spine_v2_payloads": [
+      {
+        "payload_type": "decision",
+        "data": {
+          "reasoning": "User requested a cat image.",
+          "tool": "image_gen",
+          "artifact_uris": []
+        }
+      }
+    ]
+  },
+  {
+    "id": "e3-uuid",
+    "tenant_id": "tenant-1",
+    "mode": "saas",
+    "project_id": "proj-1",
+    "run_id": "run-abc",
+    "node_id": "node-1",
+    "canvas_id": "canvas-alpha",
+    "agent_id": "agent-007",
+    "sequence_id": 3,
+    "normalized_timestamp": "2026-02-01T12:00:05.000Z",
+    "context_scope": "blackboard",
+    "event_type": "AGENT_ACTION",
+    "display_name": "Image Created",
+    "raw_name": "AGENT_ACTION",
+    "artifact_uris": [
+      "s3://atoms-artifacts/run-abc/cat.png"
+    ],
+    "event_spine_v2_artifacts": [
+      {
+        "uri": "s3://atoms-artifacts/run-abc/cat.png",
+        "artifact_type": "image"
+      }
+    ],
+    "event_spine_v2_payloads": [
+      {
+        "payload_type": "result",
+        "data": {
+          "status": "success",
+          "artifact_uris": [
+            "s3://atoms-artifacts/run-abc/cat.png"
+          ]
+        }
+      }
+    ]
+  }
+]

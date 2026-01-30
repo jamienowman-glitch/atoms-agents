@@ -2,7 +2,7 @@
 Event Spine V2 Routes.
 """
 from typing import List, Optional
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request, Query
 from .models import EventCreate
 from .service import EventService
 from .repository import EventRepository
@@ -46,11 +46,15 @@ async def replay_run(
     run_id: str,
     request: Request,
     rehydrate: bool = True,
+    node_id: Optional[List[str]] = Query(None),
+    canvas_id: Optional[List[str]] = Query(None),
+    agent_id: Optional[List[str]] = Query(None),
     service: EventService = Depends(get_service)
 ):
     """
     Replays events for a specific run.
     Rehydration is allowed only for Tenant UI (authenticated members).
+    Supports filtering by node_id, canvas_id, agent_id (multi-value).
     """
     user_id = getattr(request.state, "user_id", None)
     tenant_id = getattr(request.state, "tenant_id", None)
@@ -66,5 +70,12 @@ async def replay_run(
     # TODO: Check if user is member of tenant (IdentityMiddleware does some of this or separate policy)
 
     # Fetch events
-    events = service.get_run_events(tenant_id, run_id, rehydrate=rehydrate)
+    events = service.get_run_events(
+        tenant_id,
+        run_id,
+        rehydrate=rehydrate,
+        node_ids=node_id,
+        canvas_ids=canvas_id,
+        agent_ids=agent_id
+    )
     return events

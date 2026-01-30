@@ -47,12 +47,42 @@ class EventService:
 
         return event_id
 
-    def get_run_events(self, tenant_id: str, run_id: str, rehydrate: bool = False) -> List[dict]:
+    def get_run_events(
+        self,
+        tenant_id: str,
+        run_id: str,
+        rehydrate: bool = False,
+        node_ids: Optional[List[str]] = None,
+        canvas_ids: Optional[List[str]] = None,
+        agent_ids: Optional[List[str]] = None
+    ) -> List[dict]:
         # 1. Fetch Events + Payloads
-        raw_events = self.repo.get_events_by_run(tenant_id, run_id)
+        raw_events = self.repo.get_events_by_run(
+            tenant_id,
+            run_id,
+            node_ids=node_ids,
+            canvas_ids=canvas_ids,
+            agent_ids=agent_ids
+        )
+
+        # Helper to inject artifacts into payload
+        def inject_artifacts(event_dict):
+            artifacts = event_dict.get("event_spine_v2_artifacts", [])
+            artifact_uris = [a["uri"] for a in artifacts] if artifacts else []
+
+            # Add to event root
+            event_dict["artifact_uris"] = artifact_uris
+
+            # Add to payloads
+            payloads = event_dict.get("event_spine_v2_payloads", [])
+            if payloads:
+                 for p in payloads:
+                      if isinstance(p.get("data"), dict):
+                           p["data"]["artifact_uris"] = artifact_uris
+            return event_dict
 
         if not rehydrate:
-            return raw_events
+            return [inject_artifacts(e) for e in raw_events] if raw_events else []
 
         if not raw_events:
             return []
@@ -64,22 +94,28 @@ class EventService:
         # Map tokens: {token_key: raw_value}
         token_map = {t["token_key"]: t["raw_value"] for t in tokens}
 
-        if not token_map:
-            return raw_events
-
         # 3. Rehydrate
         hydrated_events = []
         for e in raw_events:
+            # Inject artifacts first (or after, doesn't matter much, but before rehydration logic is safer for copies)
+            e = inject_artifacts(e)
+
             # Make a copy to avoid mutating cache if any
             e_copy = e.copy()
-            payloads = e_copy.get("event_spine_v2_payloads", [])
-            if payloads:
-                new_payloads = []
-                for p in payloads:
-                    p_copy = p.copy()
-                    p_copy["data"] = rehydrate_payload(p_copy["data"], token_map)
-                    new_payloads.append(p_copy)
-                e_copy["event_spine_v2_payloads"] = new_payloads
+
+            if token_map:
+                payloads = e_copy.get("event_spine_v2_payloads", [])
+                if payloads:
+                    new_payloads = []
+                    for p in payloads:
+                        p_copy = p.copy()
+                        p_copy["data"] = rehydrate_payload(p_copy["data"], token_map)
+                        # Re-inject artifact_uris just in case rehydrate_payload nukes it (it shouldn't, but let's be safe)
+                        # Actually rehydrate_payload probably just string replaces or traverses dict.
+                        # Since we added artifact_uris to p['data'] in inject_artifacts, it is already there.
+                        new_payloads.append(p_copy)
+                    e_copy["event_spine_v2_payloads"] = new_payloads
+
             hydrated_events.append(e_copy)
 
         return hydrated_events
