@@ -11,3 +11,6 @@ northstar-keys/
 scripts/
 atoms_core
 atoms_muscle
+_git_backups/
+_quarantine/
+verification_error.png
