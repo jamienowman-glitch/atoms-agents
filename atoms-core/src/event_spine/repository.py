@@ -79,3 +79,21 @@ class EventRepository:
             .in_("event_id", event_ids)\
             .execute()
         return response.data
+
+    def get_recent_events_by_type(
+        self,
+        tenant_id: str,
+        event_type: str,
+        limit: int = 100
+    ) -> List[Dict[str, Any]]:
+        if not self.client: return []
+        # Get events and join payload to access data
+        query = self.client.table("event_spine_v2_events")\
+            .select("*, event_spine_v2_payloads(data, payload_type)")\
+            .eq("tenant_id", tenant_id)\
+            .eq("event_type", event_type)\
+            .order("normalized_timestamp", desc=True)\
+            .limit(limit)
+
+        response = query.execute()
+        return response.data
