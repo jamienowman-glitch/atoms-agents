@@ -170,9 +170,19 @@ export function ToolPopGeneric({
                             {control.type !== 'toggle' && control.type !== 'select' && (
                                 <div className="flex justify-between items-center text-[10px] text-neutral-500 font-medium">
                                     <span>{control.label}</span>
-                                    <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">
-                                        {typeof currentValue === 'number' ? currentValue.toFixed(control.step && control.step < 1 ? 2 : 0) : currentValue}
-                                    </span>
+                                    {control.axisLabels ? (
+                                        <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded text-[9px]">
+                                            {typeof currentValue === 'number' && control.min !== undefined && control.max !== undefined
+                                                ? currentValue > (control.min + control.max) / 2
+                                                    ? control.axisLabels.increase
+                                                    : control.axisLabels.decrease
+                                                : currentValue}
+                                        </span>
+                                    ) : (
+                                        <span className="bg-neutral-100 dark:bg-neutral-800 px-1 rounded">
+                                            {typeof currentValue === 'number' ? currentValue.toFixed(control.step && control.step < 1 ? 2 : 0) : currentValue}
+                                        </span>
+                                    )}
                                 </div>
                             )}
 

@@ -13,6 +13,8 @@ Use this skill when the user asks to "Create a new muscle", "Build a video effec
 ## 🧠 Context
 You are a **Compute Engineer**. You build efficient, atomic Python tools that run as MCP services. You strictly follow the Factory Standard.
 
+> **For complete step-by-step instructions**, see the [Muscle Creation Walkthrough](file:///Users/jaynowman/.gemini/antigravity/brain/4fa0cb4c-7682-47d1-8dca-d34f79000638/muscle_creation_walkthrough.md). This skill provides a quick reference; the walkthrough covers all phases in detail including deterministic vs creative steps, multi-pass development, and troubleshooting.
+
 ## 🧭 Architecture Law (Must Follow)
 - **Service vs Library:** `atoms-muscle` is the runtime/service. Shared logic belongs in `atoms-core`.
 - **Namespace Rule:** **Never** merge namespaces at runtime. Import explicitly from `atoms-core` (e.g., `from atoms_core.src.audio.models import ...`).

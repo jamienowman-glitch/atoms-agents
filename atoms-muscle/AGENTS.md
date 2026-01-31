@@ -90,6 +90,35 @@ Run the sync script to register new muscles:
 python3 scripts/sync_muscles.py
 ```
 
+## 🔧 MUSCLE CREATION WORKFLOW (COMPLETE)
+
+> **For detailed step-by-step instructions**, see the [Muscle Creation Walkthrough](file:///Users/jaynowman/.gemini/antigravity/brain/4fa0cb4c-7682-47d1-8dca-d34f79000638/muscle_creation_walkthrough.md) and the [`create-muscle` skill](.agent/skills/create-muscle/SKILL.md).
+
+### Quick Command Sequence:
+```bash
+# 1. Scaffold
+python3 scripts/scaffold_muscle.py --name my_muscle --category audio --description "Short description"
+
+# 2. Implement (edit src/{category}/{name}/service.py manually)
+
+# 3. Normalize MCP wrapper
+python3 scripts/normalize_mcp.py
+
+# 4. Document (edit src/{category}/{name}/SKILL.md manually with detailed info)
+
+# 5. Sync to registry
+python3 scripts/sync_muscles.py
+
+# 6. Package for deployment
+python3 scripts/batch_prepare_deploy.py --clean-after
+```
+
+### Key Rules:
+- **Deterministic steps** (scripts): Scaffolding, Normalization, Sync, Deployment Prep
+- **Creative steps** (agent work): Planning, Implementation, Documentation
+- **Multi-pass development**: Document progress in muscle-level `AGENTS.md`
+- **Status tracking**: `dev` → `prod` when MCP + SKILL are complete
+
 ## 📋 STANDARD FOLDER STRUCTURE
 ```text
 atoms-muscle/

@@ -1,3 +1,8 @@
+export interface AxisLabel {
+    increase: string;  // e.g., "Bulk Up"
+    decrease: string;  // e.g., "Slim Down"
+}
+
 export interface ControlDefinition {
     id: string;
     type: 'slider' | 'toggle' | 'select' | 'joystick'; // Added joystick for future
@@ -5,6 +10,7 @@ export interface ControlDefinition {
     targetVar: string;
     min?: number; max?: number;
     step?: number;
+    axisLabels?: AxisLabel;  // For motion axes
 }
 
 export interface TraitDefinition {

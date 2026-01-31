@@ -30,6 +30,13 @@ export function WysiwygBuilderHarness() {
     const [showLogic, setShowLogic] = useState(false); // Default logic brain hidden
     const [showLogging, setShowLogging] = useState(false); // Logging Lens Overlay
 
+    // Typography trait inheritance
+    const [lastUsedTypographyState, setLastUsedTypographyState] = useState({
+        weight: 400,
+        slant: 0,
+        alignment: 'left'
+    });
+
     // Flat tool state map (replacing Context)
     const [toolState, setToolState] = useState<Record<string, any>>({
         'grid.cols_desktop': 6,
@@ -43,7 +50,11 @@ export function WysiwygBuilderHarness() {
         // 1. Update Global State (for UI reflection)
         setToolState(prev => ({ ...prev, [key]: value }));
 
-        // 2. Update Active Block (Persistence)
+        // 2. Track typography changes for inheritance
+        if (key === 'typo.weight') setLastUsedTypographyState(prev => ({ ...prev, weight: value }));
+        if (key === 'typo.slant') setLastUsedTypographyState(prev => ({ ...prev, slant: value }));
+
+        // 3. Update Active Block (Persistence)
         if (activeBlockId) {
             setBlocks(prev => prev.map(b => {
                 if (b.id !== activeBlockId) return b;
@@ -107,14 +118,21 @@ export function WysiwygBuilderHarness() {
     const [isAddMenuOpen, setIsAddMenuOpen] = useState(false);
     const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
-    const handleAddBlock = (type: Block['type']) => {
+    const handleAddBlock = (type: string, atomId?: string) => {
         const base: Block = {
             id: `block-${Date.now()}`,
-            type,
+            type: type as any,
             spanDesktop: 6,
             spanMobile: 2,
-            variant: 'generic'
+            variant: atomId || 'generic'
         };
+
+        // Apply trait inheritance for Copy atoms
+        if (type === 'text' && atomId) {
+            (base as any).axisWeight = lastUsedTypographyState.weight;
+            (base as any).axisSlant = lastUsedTypographyState.slant;
+            (base as any).textSize = atomId === 'jumbo' ? 72 : atomId === 'headline' ? 48 : atomId === 'subtitle' ? 32 : 16;
+        }
 
         // Defaults by Type
         if (type === 'hero') {
@@ -186,89 +204,11 @@ export function WysiwygBuilderHarness() {
 
             {/* 4. TOOL PILL (Floating Add Menu) */}
             <ToolPill
-                isOpen={isAddMenuOpen}
-                onClick={() => setIsAddMenuOpen(!isAddMenuOpen)}
-            >
-                {/* Expandable Menu Content */}
-                {({ anchor }) => {
-                    const isUp = anchor === 'bottom';
-                    // No absolute positioning needed here. ToolPill handles placement.
-                    // Just Stack Direction.
-                    const stackClass = isUp ? 'flex-col-reverse' : 'flex-col';
-
-                    return (
-                        <div className={`flex ${stackClass} items-center gap-3 animate-in fade-in duration-200`}>
-
-                            {/* Categories */}
-                            {[
-                                { id: 'layout', icon: <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />, label: 'Layout' },
-                                { id: 'media', icon: <path d="m21 15-9-7-9 7 21 0 z" />, label: 'Media' },
-                                { id: 'commerce', icon: <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />, label: 'Commerce' }
-                            ].map(cat => (
-                                <div key={cat.id} className="relative">
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation(); // Prevent closing ToolPill
-                                            setActiveCategory(activeCategory === cat.id ? null : cat.id);
-                                        }}
-                                        className={`w-10 h-10 rounded-full shadow-lg border flex items-center justify-center text-xs hover:scale-110 transition-transform ${activeCategory === cat.id ? 'bg-black text-white border-black dark:bg-white dark:text-black' : 'bg-white dark:bg-neutral-800 border-neutral-100 dark:border-neutral-700 text-neutral-600 dark:text-neutral-300'}`}
-                                        title={cat.label}
-                                    >
-                                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                                            {cat.icon}
-                                        </svg>
-                                    </button>
-
-                                    {/* Level 2: Horizontal Pop-out (Active State) */}
-                                    {activeCategory === cat.id && (
-                                        <div className="absolute right-12 top-0 pr-2 flex items-center gap-2 z-[100]">
-                                            <div className="bg-white dark:bg-neutral-900 rounded-full border border-neutral-200 dark:border-neutral-700 shadow-xl p-1 flex items-center gap-2 px-2 h-10 animate-in slide-in-from-right-4 fade-in duration-200">
-
-                                                {/* Layout Atoms */}
-                                                {cat.id === 'layout' && (
-                                                    <>
-                                                        <button onClick={() => handleAddBlock('hero')} className="w-8 h-8 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center justify-center" title="Hero Banner">
-                                                            {/* Hero Icon (Banner) */}
-                                                            <svg className="w-4 h-4 text-neutral-700 dark:text-neutral-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                                                                <rect x="2" y="2" width="20" height="20" rx="2" />
-                                                                <line x1="2" y1="8" x2="22" y2="8" />
-                                                            </svg>
-                                                        </button>
-                                                        <button onClick={() => handleAddBlock('text')} className="w-8 h-8 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center justify-center" title="Text Block">
-                                                            {/* Text Icon */}
-                                                            <svg className="w-4 h-4 text-neutral-700 dark:text-neutral-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                                                                <path d="M4 6h16M4 12h16M4 18h8" />
-                                                            </svg>
-                                                        </button>
-                                                    </>
-                                                )}
-
-                                                {/* Media Atoms */}
-                                                {cat.id === 'media' && (
-                                                    <button onClick={() => handleAddBlock('media')} className="w-8 h-8 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center justify-center" title="Image / Video">
-                                                        {/* Image Icon */}
-                                                        <svg className="w-4 h-4 text-neutral-700 dark:text-neutral-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                                                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                                                            <circle cx="8.5" cy="8.5" r="1.5" />
-                                                            <polyline points="21 15 16 10 5 21" />
-                                                        </svg>
-                                                    </button>
-                                                )}
-
-                                                {/* Commerce Atoms (Placeholder) */}
-                                                {cat.id === 'commerce' && (
-                                                    <div className="text-[10px] uppercase font-bold text-neutral-400 px-2 min-w-12">Soon</div>
-                                                )}
-
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                    );
+                onAddAtom={(atomType, atomId) => {
+                    handleAddBlock(atomType, atomId);
+                    setIsAddMenuOpen(false);
                 }}
-            </ToolPill>
+            />
 
             {/* 5. CHAT RAIL (Shell Bottom) - z-[90] to be always on top of tools if expanded */}
             {/* 5. CHAT RAIL (Shell Bottom) - z-[40] (Requested) */}

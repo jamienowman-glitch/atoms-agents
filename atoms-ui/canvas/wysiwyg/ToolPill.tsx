@@ -2,8 +2,95 @@
 
 import React, { useState, useRef } from 'react';
 
-export function ToolPill({ onClick, isOpen, children }: { onClick?: () => void, isOpen?: boolean, children?: React.ReactNode | ((props: { anchor: 'top' | 'bottom' }) => React.ReactNode) }) {
-    const [position, setPosition] = useState({ x: 0, y: 0 }); // Offset from initial
+// Category Icons as SVG components
+const CopyIcon = () => (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+        <path d="M4 7V4a2 2 0 0 1 2-2h8.5L20 7.5V20a2 2 0 0 1-2 2h-5.5" />
+        <path d="M14 2v6h6" />
+        <path d="M4 13h12" />
+        <path d="M4 17h12" />
+    </svg>
+);
+
+const ImageIcon = () => (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+        <circle cx="8.5" cy="8.5" r="1.5" />
+        <path d="M21 15l-5-5L5 21" />
+    </svg>
+);
+
+const FeedsIcon = () => (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+        <path d="M4 11a9 9 0 0 1 9 9" />
+        <path d="M4 4a16 16 0 0 1 16 16" />
+        <circle cx="5" cy="19" r="1" />
+    </svg>
+);
+
+const CTAIcon = () => (
+    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+        <rect x="3" y="8" width="18" height="8" rx="2" />
+        <path d="M12 8v8" />
+        <path d="M8 12h8" />
+    </svg>
+);
+
+// Category and Atom definitions
+type Category = 'copy' | 'image' | 'feeds' | 'cta';
+
+interface AtomDefinition {
+    id: string;
+    label: string;
+    type: string;
+}
+
+const CATEGORY_CONFIG: Record<Category, { icon: React.FC; label: string; atoms: AtomDefinition[] }> = {
+    copy: {
+        icon: CopyIcon,
+        label: 'Copy',
+        atoms: [
+            { id: 'jumbo', label: 'Jumbo', type: 'text' },
+            { id: 'headline', label: 'Headline', type: 'text' },
+            { id: 'subtitle', label: 'Subtitle', type: 'text' },
+            { id: 'body', label: 'Body', type: 'text' }
+        ]
+    },
+    image: {
+        icon: ImageIcon,
+        label: 'Image',
+        atoms: [
+            { id: 'hero', label: 'Hero', type: 'hero' },
+            { id: 'bleeding_hero', label: 'Bleeding', type: 'bleeding_hero' },
+            { id: 'media', label: 'Media', type: 'media' }
+        ]
+    },
+    feeds: {
+        icon: FeedsIcon,
+        label: 'Feeds',
+        atoms: [
+            { id: 'news', label: 'News', type: 'generic' },
+            { id: 'products', label: 'Products', type: 'generic' }
+        ]
+    },
+    cta: {
+        icon: CTAIcon,
+        label: 'CTA',
+        atoms: [
+            { id: 'button', label: 'Button', type: 'cta' },
+            { id: 'link', label: 'Link', type: 'cta' }
+        ]
+    }
+};
+
+interface ToolPillProps {
+    onAddAtom: (atomType: string, atomId: string) => void;
+}
+
+export function ToolPill({ onAddAtom }: ToolPillProps) {
+    const [isOpen, setIsOpen] = useState(false);
+    const [activeCategory, setActiveCategory] = useState<Category | null>(null);
+    const [position, setPosition] = useState({ x: 0, y: 0 });
     const isDragging = useRef(false);
     const dragStart = useRef({ x: 0, y: 0 });
     const initialPos = useRef({ x: 0, y: 0 });
@@ -14,7 +101,6 @@ export function ToolPill({ onClick, isOpen, children }: { onClick?: () => void, 
         dragStart.current = { x: e.clientX, y: e.clientY };
         initialPos.current = { ...position };
         setHasMoved(false);
-        // CRITICAL FIX: Capture on the container (currentTarget), NOT the target (which might be SVG)
         (e.currentTarget as Element).setPointerCapture(e.pointerId);
     };
 
@@ -30,25 +116,24 @@ export function ToolPill({ onClick, isOpen, children }: { onClick?: () => void, 
         if (!isDragging.current) return;
         isDragging.current = false;
         (e.target as Element).releasePointerCapture(e.pointerId);
-        if (!hasMoved) onClick?.();
+        if (!hasMoved) {
+            setIsOpen(!isOpen);
+            setActiveCategory(null);
+        }
     };
 
+    const handleCategoryClick = (category: Category) => {
+        setActiveCategory(activeCategory === category ? null : category);
+    };
 
-    // Smart Direction Logic
-    const [anchor, setAnchor] = useState<'top' | 'bottom'>('bottom');
-    const containerRef = useRef<HTMLDivElement>(null);
-
-    React.useEffect(() => {
-        if (isOpen && containerRef.current) {
-            const rect = containerRef.current.getBoundingClientRect();
-            const mid = window.innerHeight / 2;
-            setAnchor(rect.top > mid ? 'bottom' : 'top');
-        }
-    }, [isOpen, position]);
+    const handleAtomClick = (atom: AtomDefinition) => {
+        onAddAtom(atom.type, atom.id);
+        setIsOpen(false);
+        setActiveCategory(null);
+    };
 
     return (
         <div
-            ref={containerRef}
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
@@ -58,16 +143,46 @@ export function ToolPill({ onClick, isOpen, children }: { onClick?: () => void, 
             }}
             className="fixed bottom-32 right-4 z-[95] flex flex-col items-center justify-center cursor-grab active:cursor-grabbing"
         >
-            {/* Menu Layer - Rendered based on Anchor */}
+            {/* Level 1: Vertical Category Lozenge */}
             {isOpen && (
-                <div className={`absolute ${anchor === 'bottom' ? 'bottom-full mb-4' : 'top-full mt-4'} flex flex-col items-center pointer-events-none`}>
-                    <div
-                        className="pointer-events-auto"
-                        onPointerDown={(e) => e.stopPropagation()}
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        {typeof children === 'function' ? children({ anchor }) : children}
-                    </div>
+                <div className="absolute bottom-full mb-4 flex flex-col gap-2 pointer-events-auto"
+                    onPointerDown={(e) => e.stopPropagation()}
+                    onClick={(e) => e.stopPropagation()}>
+                    {(Object.keys(CATEGORY_CONFIG) as Category[]).map((category) => {
+                        const config = CATEGORY_CONFIG[category];
+                        const Icon = config.icon;
+                        return (
+                            <button
+                                key={category}
+                                onClick={() => handleCategoryClick(category)}
+                                className={`w-12 h-12 rounded-full shadow-lg flex items-center justify-center transition-all duration-200 ${activeCategory === category
+                                        ? 'bg-black text-white scale-110'
+                                        : 'bg-white text-black hover:scale-105'
+                                    }`}
+                                aria-label={config.label}
+                            >
+                                <Icon />
+                            </button>
+                        );
+                    })}
+                </div>
+            )}
+
+            {/* Level 2: Horizontal Atom Side-Pop */}
+            {activeCategory && (
+                <div className="absolute right-full mr-4 flex gap-2 pointer-events-auto"
+                    onPointerDown={(e) => e.stopPropagation()}
+                    onClick={(e) => e.stopPropagation()}>
+                    {CATEGORY_CONFIG[activeCategory].atoms.map((atom) => (
+                        <button
+                            key={atom.id}
+                            onClick={() => handleAtomClick(atom)}
+                            className="w-12 h-12 bg-white text-black rounded-full shadow-lg flex items-center justify-center text-[10px] font-bold uppercase hover:scale-105 transition-transform"
+                            title={atom.label}
+                        >
+                            {atom.label.charAt(0)}
+                        </button>
+                    ))}
                 </div>
             )}
 

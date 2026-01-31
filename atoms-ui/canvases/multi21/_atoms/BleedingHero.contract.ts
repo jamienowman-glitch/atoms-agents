@@ -45,7 +45,11 @@ export const BleedingHeroContract: AtomContract = {
                             targetVar: 'typo.weight',
                             min: 100,
                             max: 900,
-                            step: 10
+                            step: 10,
+                            axisLabels: {
+                                increase: 'Bulk Up',
+                                decrease: 'Slim Down'
+                            }
                         },
                         {
                             id: 'typo.slant',
@@ -54,7 +58,11 @@ export const BleedingHeroContract: AtomContract = {
                             targetVar: 'typo.slant',
                             min: -10,
                             max: 0,
-                            step: 1
+                            step: 1,
+                            axisLabels: {
+                                increase: 'Stand Up',
+                                decrease: 'Lean Back'
+                            }
                         }
                     ]
                 }
