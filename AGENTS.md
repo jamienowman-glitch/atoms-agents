@@ -72,11 +72,30 @@
 - **Naming Engine Rule (Locked):** `formatProviderKey(platformName, rule)` is pure; basic slugify → uppercase → underscores; apply `rule` as a token template (e.g., `PROVIDER_{PLATFORM}_KEY`).
 - **Core KPIs Schema (Locked):** `core_kpis.missing_components` is jsonb array of strings; `core_kpis.metadata` is jsonb (store and do not drop).
 
-## 📍 CONFIG & OBSERVABILITY LOCATIONS (APP)
-All new config/observability UI must live under:
-* `/Users/jaynowman/dev/atoms-app/src/app/dashboard/observability`
-* `/Users/jaynowman/dev/atoms-app/src/app/dashboard/tuning`
-* `/Users/jaynowman/dev/atoms-app/src/app/dashboard/pricing`
+## 🏁 OVERNIGHT BUILD LAWS (2026-01-31)
+**Master Scorecard**: [Overnight Agent Checklist](file:///Users/jaynowman/dev/docs/checklists/2026-01-31_overnight_agent_checklist.md)
+
+### 1. The Financial & Control Law
+**Canonical Doc**: [Financial & Control Layer Plan](file:///Users/jaynowman/dev/docs/plans/2026-01-31_finance_control_layer_plan.md)
+*   **Efficiency Oracle**: `snax_rate` is dynamic (Target Profit).
+*   **Dual Rails**: Payments via Stripe (Fiat) AND Helius (Crypto) are treated as equal peers.
+*   **God Controls**: User must be able to override the Peg via `TreasuryDashboard`.
+
+### 2. The Legacy Quarantine Law
+**Canonical Doc**: [Legacy Migration Plan](file:///Users/jaynowman/dev/docs/plans/2026-01-31_legacy_migration_plan.md)
+*   **Status**: `northstar-engines` is moved to `_legacy/`.
+*   **Mandate**: **NEVER** import from `northstar-engines`. If you find a broken import in `atoms-core`, you must **PORT** the logic to `atoms-muscle` first.
+
+### 3. The RAG Assistant Law
+**Canonical Doc**: [Agent RAG Assistant Plan](file:///Users/jaynowman/dev/docs/plans/2026-01-31_agent_rag_assistant_plan.md)
+*   **Mandate**: All Agents must use `atoms-muscle/src/knowledge/search_assistant` for RAG.
+*   **Why**: It automatically handles the `nexus.search_hit` logging required for the Haze Heatmap.
+
+### 4. The Muscle Factory Skill Law
+**CRITICAL**: Every Agent building a muscle MUST read `atoms-muscle/.agent/skills/create-muscle/SKILL.md` first.
+*   No Stubs.
+*   MCP Wrapper required.
+*   SKILL.md required.
 
 ## Tenant/Surface/Space Law
 - Tenant is the billing unit. Snax wallets are tenant-scoped and spendable across all surfaces/spaces.

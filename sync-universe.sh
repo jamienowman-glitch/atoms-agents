@@ -9,7 +9,7 @@ fi
 # Configuration
 # Directories to iterate through. 
 # Make sure these are relative paths from where the script is run (the root).
-TARGET_DIRS=("agentflow" "northstar-engines" "ui" "northstar-agents" "atoms_factory")
+TARGET_DIRS=("agentflow" "northstar-engines" "atoms-ui" "northstar-agents" "atoms_factory")
 
 # Colors for output
 GREEN='\033[0;32m'

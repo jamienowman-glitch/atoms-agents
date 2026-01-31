@@ -263,7 +263,7 @@ export function WysiwygBuilderHarness() {
             </ToolPill>
 
             {/* 5. CHAT RAIL (Shell Bottom) - z-[90] to be always on top of tools if expanded */}
-            <div className="z-[40] relative">
+            <div className="z-[90] relative">
                 <ChatRailShell
                     mode={chatMode}
                     onModeChange={setChatMode}

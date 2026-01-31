@@ -240,11 +240,21 @@ export function WysiwygCanvas({ blocks, setBlocks, activeBlockId, setActiveBlock
     };
 
     const renderBlock = (block: Block, isSortable: boolean) => {
-        // Mock Items
-        const items = generateItems(12, block.variant || 'generic', block.id);
+        // Mock Items: If media/hero, only 1 item. Else 12.
+        const itemCount = (block.type === 'media' || block.type === 'hero') ? 1 : 12;
+        const items = generateItems(itemCount, block.variant || 'generic', block.id);
 
         const content = (
-            <div className="relative group/block bg-white dark:bg-black rounded-xl border border-transparent hover:border-neutral-200 dark:hover:border-neutral-800 transition-colors">
+            <div
+                onClick={(e) => {
+                    e.stopPropagation();
+                    setActiveBlockId(block.id);
+                }}
+                className={`relative group/block bg-white dark:bg-black rounded-xl border transition-all duration-200 cursor-pointer ${activeBlockId === block.id
+                    ? 'border-black dark:border-white ring-2 ring-black/10 dark:ring-white/10 shadow-lg'
+                    : 'border-transparent hover:border-neutral-200 dark:hover:border-neutral-800'
+                    }`}
+            >
                 {/* Visual: Switch based on Type */}
                 {block.type === 'hero' ? (
                     <HeroWeb
@@ -259,13 +269,20 @@ export function WysiwygCanvas({ blocks, setBlocks, activeBlockId, setActiveBlock
                 ) : (
                     <MultiTile
                         items={items}
-                        gridColsDesktop={block.spanDesktop || 6}
-                        gridColsMobile={block.spanMobile || 2}
+                        // Default Props (Can be overridden by ...block)
+                        // If block has 'gridColsDesktop' (from Trait Tool), usage that.
+                        // Fallback: If media, default to 1. Else spanDesktop or 6.
+                        gridColsDesktop={(block as any).gridColsDesktop ?? (block.type === 'media' ? 1 : (block.spanDesktop || 6))}
+                        gridColsMobile={(block as any).gridColsMobile ?? (block.type === 'media' ? 1 : (block.spanMobile || 2))}
+
+                        // Aspect Ratio fallback
+                        gridAspectRatio={(block as any).gridAspectRatio ?? (block.type === 'media' ? '16:9' : '1:1')}
+
                         tileVariant={block.variant || 'generic'}
-                        // Defaults
-                        gridGapXDesktop={16}
-                        gridGapYDesktop={16}
-                        itemsDesktop={12}
+
+                        // Pass through ALL other props (Style, Typo, etc.)
+                        // This ensures 'gridTitleRadiusDesktop' etc. are passed through
+                        {...block as any}
                     />
                 )}
 

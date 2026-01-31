@@ -1,20 +1,80 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { ColorRibbon } from './ui/ColorRibbon';
-import { DualMagnifier, MagnetItem } from './ui/DualMagnifier';
+import { useToolControl } from '../../harness/ToolControlProvider';
+import { ColorRibbon } from '../ui/ColorRibbon';
+import { DualMagnifier, MagnetItem } from './DualMagnifier';
 import { ContentPicker, ContentPickerItem } from './ui/ContentPicker';
 import { MediaPicker, MediaItem } from './ui/MediaPicker';
-import { SEED_FEEDS } from './data/seed-feeds';
-import { TraitRenderer } from './ui/TraitRenderer';
-import { AtomConfig } from '../../ui-atoms/multi-tile/MultiTile.config';
+// import { SEED_FEEDS } from '../../../../lib/data/seed-feeds'; // Decoupled
 
 // --- Types & Interfaces ---
 export type PanelState = 'collapsed' | 'compact' | 'full';
 
-import { UniversalSlider } from './ui/UniversalSlider';
+// Simplified Slider Component (Touch-Aware)
+interface UniversalSliderProps {
+    value: number;
+    min: number;
+    max: number;
+    step?: number;
+    onChange: (v: number) => void;
+}
+const UniversalSlider: React.FC<UniversalSliderProps> = ({ value, min, max, step = 1, onChange }) => {
+    const trackRef = useRef<HTMLDivElement>(null);
 
-// --- Types & Interfaces ---
+    const handleInteract = (e: React.MouseEvent | React.TouchEvent) => {
+        // Prevent default touch actions (scrolling/selection)
+        if ('touches' in e && e.cancelable) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        if (!trackRef.current) return;
+        const rect = trackRef.current.getBoundingClientRect();
+
+        // Use pageX/clientX carefully. ClientX is consistent with getBoundingClientRect
+        const clientX = 'touches' in e ? e.touches[0].clientX : (e as React.MouseEvent).clientX;
+
+        let percentage = (clientX - rect.left) / rect.width;
+        percentage = Math.max(0, Math.min(1, percentage));
+
+        const rawValue = min + percentage * (max - min);
+        // Snap to step
+        let stepped = Math.round(rawValue / step) * step;
+
+        // Clamp result due to JS floating point
+        stepped = Math.max(min, Math.min(max, stepped));
+
+        onChange(stepped);
+    };
+
+    return (
+        <div
+            ref={trackRef}
+            onClick={handleInteract}
+            onTouchMove={handleInteract}
+            onTouchStart={handleInteract}
+            className="relative w-full h-8 flex items-center group cursor-pointer touch-none select-none"
+        >
+            {/* Track bg */}
+            <div className="absolute w-full h-1 bg-neutral-200 dark:bg-neutral-800 rounded-full overflows-hidden">
+                {/* Progress Fill (Optional polish) */}
+                <div
+                    className="h-full bg-neutral-400 dark:bg-neutral-600 rounded-full"
+                    style={{ width: `${((value - min) / (max - min)) * 100}%` }}
+                />
+            </div>
+
+            {/* Thumb */}
+            <div
+                className="absolute w-4 h-4 bg-black dark:bg-white rounded-full shadow-sm transform -translate-x-1/2 pointer-events-none transition-transform duration-75"
+                style={{ left: `${((value - min) / (max - min)) * 100}%` }}
+            />
+        </div>
+    );
+};
+
+
 // Constants
 const ASPECT_RATIOS = ['16:9', '4:3', '1:1', '9:16'];
 const COPY_LEVELS = ['h2', 'h3', 'h4', 'body'] as const;
@@ -22,35 +82,41 @@ const COPY_STYLES = ['jumbo', 'headline', 'subtitle', 'tagline', 'quote', 'body'
 
 // --- Main Component ---
 interface ToolPopProps {
-    activeBlockId: string | null;
-    activeBlockType?: 'media' | 'text' | 'copy' | 'cta' | 'header' | 'row' | 'popup' | 'generic' | 'hero';
-    isMobileView: boolean;
-    toolState: Record<string, any>;
-    onToolUpdate: (key: string, value: any) => void;
-    onClose?: () => void;
-    atomConfig?: AtomConfig;
+    settingsContent?: React.ReactNode;
+    activeBlockId?: string | null;
+    activeBlockType?: 'media' | 'text' | 'copy' | 'cta' | 'header' | 'row' | 'popup';
+    feeds?: Record<string, any[]>; // Dictionary of feeds by category
+    attachment?: 'screen' | 'chatrail';
 }
 
-export function ToolPop({ activeBlockId, activeBlockType = 'media', isMobileView, toolState, onToolUpdate, onClose, atomConfig }: ToolPopProps) {
+export function ToolPop({
+    settingsContent,
+    activeBlockId,
+    activeBlockType = 'media',
+    feeds = {},
+    attachment = 'screen'
+}: ToolPopProps) {
+    // New Harness Hook returns { useToolState, scope } automatically bound
+    const { useToolState } = useToolControl();
 
-    // 1. Visibility & State - STRICT PORT
-    const isVisible = true;
+    // 1. Visibility & State
+    const [isVisible, setIsVisible] = useToolState<boolean>('ui.show_tools', false);
+    const [previewMode] = useToolState<'desktop' | 'mobile'>('previewMode', 'desktop');
+    const isMobileView = previewMode === 'mobile';
+
+    // scope is handled by Provider now!
 
     // 2. Control Mode State
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [activeMode, setActiveMode] = useState<'layout' | 'font' | 'type' | 'colour'>('layout');
     const [activeLayoutTool, setActiveLayoutTool] = useState<string>('density');
 
-    // ... (skipping unchanged lines) ...
-
-    // ... (skipping unchanged lines) ...
-
     // Content Mode State
     const [activeContentCat, setActiveContentCat] = useState<string>('youtube');
     const [activeStrategy, setActiveStrategy] = useState<string>('feed');
 
-    const [activeFontTool, setActiveFontTool] = useState<string>('size');
-    const [activeTypeTool, setActiveTypeTool] = useState<string>('align');
+    const [activeFontTool, setActiveFontTool] = useState<string>('size'); // Was Typography, Default to Size
+    const [activeTypeTool, setActiveTypeTool] = useState<string>('align'); // Was Set/Typeset
     const [activeColourTool, setActiveColourTool] = useState<string>('palette');
     const [showSettings, setShowSettings] = useState(false);
 
@@ -68,136 +134,83 @@ export function ToolPop({ activeBlockId, activeBlockType = 'media', isMobileView
         }
     }, [activeBlockType, activeLayoutTool]);
 
-    // 3. Tool Hooks (Layout) - LINKED TO PROPS (Pure Adaptation)
-    const getVal = (key: string, def: any) => toolState[key] !== undefined ? toolState[key] : def;
-    const setVal = (key: string) => (val: any) => onToolUpdate(key, val);
-
+    // 3. Tool Hooks (Layout)
     // COLS
-    const colsDesktop = getVal('grid.cols_desktop', 6);
-    const setColsDesktop = setVal('grid.cols_desktop');
-    const colsMobile = getVal('grid.cols_mobile', 2);
-    const setColsMobile = setVal('grid.cols_mobile');
+    const [colsDesktop, setColsDesktop] = useToolState<number>('grid.cols_desktop', 6);
+    const [colsMobile, setColsMobile] = useToolState<number>('grid.cols_mobile', 2);
 
     // GAP X (Split)
-    const gapXDesktop = getVal('grid.gap_x_desktop', 16);
-    const setGapXDesktop = setVal('grid.gap_x_desktop');
-    const gapXMobile = getVal('grid.gap_x_mobile', 16);
-    const setGapXMobile = setVal('grid.gap_x_mobile');
+    const [gapXDesktop, setGapXDesktop] = useToolState<number>('grid.gap_x_desktop', 16);
+    const [gapXMobile, setGapXMobile] = useToolState<number>('grid.gap_x_mobile', 16);
 
     // GAP Y (Split)
-    const gapYDesktop = getVal('grid.gap_y_desktop', 16);
-    const setGapYDesktop = setVal('grid.gap_y_desktop');
-    const gapYMobile = getVal('grid.gap_y_mobile', 16);
-    const setGapYMobile = setVal('grid.gap_y_mobile');
+    const [gapYDesktop, setGapYDesktop] = useToolState<number>('grid.gap_y_desktop', 16);
+    const [gapYMobile, setGapYMobile] = useToolState<number>('grid.gap_y_mobile', 16);
 
     // RADIUS (Split)
-    const radiusDesktop = getVal('grid.tile_radius_desktop', 8);
-    const setRadiusDesktop = setVal('grid.tile_radius_desktop');
-    const radiusMobile = getVal('grid.tile_radius_mobile', 8);
-    const setRadiusMobile = setVal('grid.tile_radius_mobile');
+    const [radiusDesktop, setRadiusDesktop] = useToolState<number>('grid.tile_radius_desktop', 8);
+    const [radiusMobile, setRadiusMobile] = useToolState<number>('grid.tile_radius_mobile', 8);
 
     // Aspect Ratio (Shared)
-    const aspectRatioStr = getVal('grid.aspect_ratio', '1:1');
-    const setAspectRatioStr = setVal('grid.aspect_ratio');
+    const [aspectRatioStr, setAspectRatioStr] = useToolState<string>('grid.aspect_ratio', '1:1');
 
     // Copy Atom Layout
-    const copyLevel = getVal('copy.level', 'body');
-    const setCopyLevel = setVal('copy.level');
-    const copyStyle = getVal('copy.style', 'body');
-    const setCopyStyle = setVal('copy.style');
+    const [copyLevel, setCopyLevel] = useToolState<string>('copy.level', 'body');
+    const [copyStyle, setCopyStyle] = useToolState<string>('copy.style', 'body');
 
     // CTA Atom Layout
-    const ctaWidth = getVal('cta.width', 180);
-    const setCtaWidth = setVal('cta.width');
-    const ctaHeight = getVal('cta.height', 48);
-    const setCtaHeight = setVal('cta.height');
-    const ctaScale = getVal('cta.scale', 1);
-    const setCtaScale = setVal('cta.scale');
-    const ctaVariant = getVal('cta.variant', 'solid');
-    const setCtaVariant = setVal('cta.variant');
+    const [ctaWidth, setCtaWidth] = useToolState<number>('cta.width', 180);
+    const [ctaHeight, setCtaHeight] = useToolState<number>('cta.height', 48);
+    const [ctaScale, setCtaScale] = useToolState<number>('cta.scale', 1);
+    const [ctaVariant, setCtaVariant] = useToolState<string>('cta.variant', 'solid');
 
     // Items Limit (Split)
-    const limitDesktop = getVal('feed.query.limit_desktop', 12);
-    const setLimitDesktop = setVal('feed.query.limit_desktop');
-    const limitMobile = getVal('feed.query.limit_mobile', 6);
-    const setLimitMobile = setVal('feed.query.limit_mobile');
+    const [limitDesktop, setLimitDesktop] = useToolState<number>('feed.query.limit_desktop', 12);
+    const [limitMobile, setLimitMobile] = useToolState<number>('feed.query.limit_mobile', 6);
 
 
     // 4. Tool Hooks (Typography)
-    const fontFamily = getVal('typo.family', 0);
-    const setFontFamily = setVal('typo.family');
-    const axisWeight = getVal('typo.weight', 400);
-    const setAxisWeight = setVal('typo.weight');
-    const axisWidth = getVal('typo.width', 100);
-    const setAxisWidth = setVal('typo.width');
-    const axisCasual = getVal('typo.casual', 0);
-    const setAxisCasual = setVal('typo.casual');
-    const axisSlant = getVal('typo.slant', 0);
-    const setAxisSlant = setVal('typo.slant');
-    const fontSizeDesktop = getVal('typo.size_desktop', 16);
-    const setFontSizeDesktop = setVal('typo.size_desktop');
-    const fontSizeMobile = getVal('typo.size_mobile', 16);
-    const setFontSizeMobile = setVal('typo.size_mobile');
+    const [fontFamily, setFontFamily] = useToolState<number>('typo.family', 0); // 0=Sans
+    const [axisWeight, setAxisWeight] = useToolState<number>('typo.weight', 400);
+    const [axisWidth, setAxisWidth] = useToolState<number>('typo.width', 100);
+    const [axisCasual, setAxisCasual] = useToolState<number>('typo.casual', 0);
+    const [axisSlant, setAxisSlant] = useToolState<number>('typo.slant', 0);
+    const [fontSizeDesktop, setFontSizeDesktop] = useToolState<number>('typo.size_desktop', 16);
+    const [fontSizeMobile, setFontSizeMobile] = useToolState<number>('typo.size_mobile', 16);
 
     // 5. Tool Hooks (Style)
-    const bgColor = getVal('style.bg', 'transparent');
-    const setBgColor = setVal('style.bg');
-    const blockBgColor = getVal('style.block_bg', 'transparent');
-    const setBlockBgColor = setVal('style.block_bg');
-    const textColor = getVal('style.text', 'inherit');
-    const setTextColor = setVal('style.text');
-    const borderColor = getVal('style.border_color', 'transparent');
-    const setBorderColor = setVal('style.border_color');
-    const borderWidth = getVal('style.border_width', 0);
-    const setBorderWidth = setVal('style.border_width');
-    const opacity = getVal('style.opacity', 100);
-    const setOpacity = setVal('style.opacity');
-    const blur = getVal('style.blur', 0);
-    const setBlur = setVal('style.blur');
-    const textStrokeColor = getVal('style.text_stroke_color', 'transparent');
-    const setTextStrokeColor = setVal('style.text_stroke_color');
-    const textStrokeWidth = getVal('style.text_stroke_width', 0);
-    const setTextStrokeWidth = setVal('style.text_stroke_width');
+    const [bgColor, setBgColor] = useToolState<string>('style.bg', 'transparent');
+    const [blockBgColor, setBlockBgColor] = useToolState<string>('style.block_bg', 'transparent');
+    const [textColor, setTextColor] = useToolState<string>('style.text', 'inherit');
+    const [borderColor, setBorderColor] = useToolState<string>('style.border_color', 'transparent');
+    const [borderWidth, setBorderWidth] = useToolState<number>('style.border_width', 0);
+    const [opacity, setOpacity] = useToolState<number>('style.opacity', 100);
+    const [blur, setBlur] = useToolState<number>('style.blur', 0);
+    const [textStrokeColor, setTextStrokeColor] = useToolState<string>('style.text_stroke_color', 'transparent');
+    const [textStrokeWidth, setTextStrokeWidth] = useToolState<number>('style.text_stroke_width', 0);
 
-    // 5b. Tool Hooks (Type Setting)
-    const textAlign = getVal('typo.align', 'left');
-    const setTextAlign = setVal('typo.align');
-    const lineHeight = getVal('typo.line_height', 1.5);
-    const setLineHeight = setVal('typo.line_height');
-    const letterSpacing = getVal('typo.tracking', 0);
-    const setLetterSpacing = setVal('typo.tracking');
-    const wordSpacing = getVal('typo.word_spacing', 0);
-    const setWordSpacing = setVal('typo.word_spacing');
+    // 5b. Tool Hooks (Type Setting - Phase 16)
+    const [textAlign, setTextAlign] = useToolState<string>('typo.align', 'left');
+    const [lineHeight, setLineHeight] = useToolState<number>('typo.line_height', 1.5);
+    const [letterSpacing, setLetterSpacing] = useToolState<number>('typo.tracking', 0);
+    const [wordSpacing, setWordSpacing] = useToolState<number>('typo.word_spacing', 0);
     // Vertical Type
-    const verticalAlign = getVal('typo.vert', 'top');
-    const setVerticalAlign = setVal('typo.vert');
-    const stackGap = getVal('typo.stack_gap', 16);
-    const setStackGap = setVal('typo.stack_gap');
+    // Vertical Type
+    const [verticalAlign, setVerticalAlign] = useToolState<string>('typo.vert', 'top');
+    const [stackGap, setStackGap] = useToolState<number>('typo.stack_gap', 16);
 
-    const textTransform = getVal('typo.case', 'none');
-    const setTextTransform = setVal('typo.case');
-    const textDecoration = getVal('typo.decoration', 'none');
-    const setTextDecoration = setVal('typo.decoration');
+    const [textTransform, setTextTransform] = useToolState<string>('typo.case', 'none');
+    const [textDecoration, setTextDecoration] = useToolState<string>('typo.decoration', 'none');
 
-    // 6. Content Wiring
-    const tileVariant = getVal('tile.variant', 'generic');
-    const setTileVariant = setVal('tile.variant');
-
+    // 6. Content Wiring (Phase 14)
+    const [tileVariant, setTileVariant] = useToolState<'generic' | 'product' | 'kpi' | 'text' | 'video' | 'youtube' | 'events' | 'blogs'>('tile.variant', 'generic');
     // Tile Elements (Booleans)
-    const tileShowTitle = getVal('tile.show_title', true);
-    const setTileShowTitle = setVal('tile.show_title');
-    const tileShowMeta = getVal('tile.show_meta', true);
-    const setTileShowMeta = setVal('tile.show_meta');
-    const tileShowBadge = getVal('tile.show_badge', true);
-    const setTileShowBadge = setVal('tile.show_badge');
-    const tileShowCtaLabel = getVal('tile.show_cta_label', true);
-    const setTileShowCtaLabel = setVal('tile.show_cta_label');
-    const tileShowCtaArrow = getVal('tile.show_cta_arrow', true);
-    const setTileShowCtaArrow = setVal('tile.show_cta_arrow');
-
-
-    const feedSourceIndex = getVal('content.feed_source_index', 0);
-    const setFeedSourceIndex = setVal('content.feed_source_index');
+    const [tileShowTitle, setTileShowTitle] = useToolState<boolean>('tile.show_title', true);
+    const [tileShowMeta, setTileShowMeta] = useToolState<boolean>('tile.show_meta', true);
+    const [tileShowBadge, setTileShowBadge] = useToolState<boolean>('tile.show_badge', true);
+    const [tileShowCtaLabel, setTileShowCtaLabel] = useToolState<boolean>('tile.show_cta_label', true);
+    const [tileShowCtaArrow, setTileShowCtaArrow] = useToolState<boolean>('tile.show_cta_arrow', true);
+    const [feedSourceIndex, setFeedSourceIndex] = useToolState<number>('content.feed_source_index', 0);
 
 
     // Sync Strategy & Canvas State
@@ -249,7 +262,7 @@ export function ToolPop({ activeBlockId, activeBlockType = 'media', isMobileView
             setLimitDesktop(8);
             setAspectRatioStr('16:9');
         }
-    }, [activeContentCat]);
+    }, [activeContentCat, setTileVariant, setFeedSourceIndex, setColsDesktop, setLimitDesktop, setAspectRatioStr]);
 
     // UI Local State
     const [colorTarget, setColorTarget] = useState<'block' | 'bg' | 'text'>('block');
@@ -257,16 +270,13 @@ export function ToolPop({ activeBlockId, activeBlockType = 'media', isMobileView
 
     // --- Configuration Maps ---
     const designModes: MagnetItem[] = [
-        // Layout: Only for MultiTile blocks (media, generic, product, etc.)
-        ...((['media', 'generic', 'hero', 'row'].includes(activeBlockType)) ? [{ id: 'layout', label: 'Layout', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /></svg> }] : []),
-
+        { id: 'layout', label: 'Layout', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /></svg> },
         { id: 'font', label: 'Font', icon: <span className="text-[10px] font-bold">Aa</span> },
         { id: 'type', label: 'Type', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><line x1="4" y1="6" x2="20" y2="6" /><line x1="4" y1="12" x2="16" y2="12" /><line x1="4" y1="18" x2="18" y2="18" /></svg> },
-
         { id: 'colour', label: 'Colour', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" /></svg> },
     ];
 
-    // --- Default Tool Sets (Fallbacks) ---
+    // Naming Proposal: Frame, Type, Style
     const defaultLayoutTools: MagnetItem[] = [
         { id: 'density', label: 'Grid', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /></svg> },
         { id: 'spacing', label: 'Space', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><line x1="4" y1="9" x2="20" y2="9" /><line x1="4" y1="15" x2="20" y2="15" /><line x1="10" y1="3" x2="10" y2="21" /><line x1="16" y1="3" x2="16" y2="21" /></svg> },
@@ -282,52 +292,28 @@ export function ToolPop({ activeBlockId, activeBlockType = 'media', isMobileView
         { id: 'cta_scale', label: 'Scale', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M4 4h6v6M20 20h-6v-6" /><path d="M20 4l-6 6" /><path d="M4 20l6-6" /></svg> },
         { id: 'cta_style', label: 'Style', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="3" y="5" width="18" height="14" rx="3" /><path d="M7 12h10" /></svg> },
     ];
-    const getDynamicTools = (category: string, defaultTools: MagnetItem[]): MagnetItem[] => {
-        if (!atomConfig) return defaultTools;
 
-        const trait = atomConfig.traits.find(t => t.type === category);
-        if (!trait) return [];
+    const fontTools: MagnetItem[] = [
+        { id: 'size', label: 'Size', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" /></svg> },
+        { id: 'identity', label: 'Font', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M4 7V4h16v3M9 20h6M12 4v16" /></svg> },
+        { id: 'tune', label: 'Tune', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="15" y2="12" /><line x1="3" y1="18" x2="18" y2="18" /></svg> },
+    ];
 
-        // Extract unique subGroups
-        const groups = Array.from(new Set(trait.properties.map(p => p.subGroup).filter(Boolean))) as string[];
+    const layoutTools = activeBlockType === 'copy'
+        ? copyLayoutTools
+        : activeBlockType === 'cta'
+            ? ctaLayoutTools
+            : defaultLayoutTools;
 
-        if (groups.length === 0) return defaultTools; // Fallback if no grouping
-
-        // Map groups to MagnetItems (Labels)
-        // We use a mapping for nice labels, or capitalize.
-        const labelMap: Record<string, string> = {
-            'density': 'Grid',
-            'spacing': 'Space',
-            'geometry': 'Shape',
-            'size': 'Size',
-            'identity': 'Font',
-            'tune': 'Tune',
-            'palette': 'Color',
-            'effects': 'FX'
-        };
-
-        return groups.map(g => ({
-            id: g,
-            label: labelMap[g] || g.charAt(0).toUpperCase() + g.slice(1),
-            // Use generic icons or mapped icons based on group name
-            icon: <div className="w-1 h-1 rounded-full bg-current" /> // Simple Dot for dynamic for now, or map icons later
-        }));
-    };
-
-    const layoutTools = getDynamicTools('layout', activeBlockType === 'copy' ? copyLayoutTools : activeBlockType === 'cta' ? ctaLayoutTools : defaultLayoutTools);
-    const fontTools = getDynamicTools('typography', [
-        { id: 'size', label: 'Size', icon: <span className="font-bold">T</span> },
-        { id: 'identity', label: 'Font', icon: <span className="font-serif">Aa</span> },
-        { id: 'tune', label: 'Tune', icon: <span className="italic">I</span> },
-    ]);
-    const colourTools = getDynamicTools('style', [
-        { id: 'palette', label: 'Color', icon: <div className="w-3 h-3 rounded-full border border-current" /> },
-        { id: 'effects', label: 'FX', icon: <div className="w-3 h-3 border border-current" /> },
-    ]);
     const typeTools: MagnetItem[] = [
         { id: 'align', label: 'Align', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><line x1="21" y1="10" x2="3" y2="10" /><line x1="21" y1="6" x2="3" y2="6" /><line x1="21" y1="14" x2="3" y2="14" /><line x1="21" y1="18" x2="3" y2="18" /></svg> },
         { id: 'space', label: 'Spacing', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><polyline points="13 17 13 21 16 21 16 17" /><polyline points="13 7 13 3 16 3 16 7" /><line x1="9" y1="21" x2="9" y2="3" /></svg> },
         { id: 'vert', label: 'Vertical', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M12 3v18" /><path d="M8 6h8" /><path d="M8 18h8" /></svg> },
+    ];
+
+    const colourTools: MagnetItem[] = [
+        { id: 'palette', label: 'Color', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" /></svg> },
+        { id: 'effects', label: 'FX', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg> },
     ];
 
     // --- Content Source Config ---
@@ -341,7 +327,9 @@ export function ToolPop({ activeBlockId, activeBlockType = 'media', isMobileView
         { id: 'blogs', label: 'Blogs', icon: <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M12 19l7-7 3 3-7 7-3-3z" /><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z" /><path d="M2 2l7.586 7.586" /><circle cx="11" cy="11" r="2" /></svg> },
     ];
 
+    // Strategy Maps
     const getStrategyTools = (category: string): MagnetItem[] => {
+        // Text Icon Helper
         const mkText = (id: string, label: string, textOverride?: string) => ({
             id,
             label,
@@ -354,45 +342,19 @@ export function ToolPop({ activeBlockId, activeBlockType = 'media', isMobileView
             case 'kpi': return [mkText('6-core', '6-Core', '6-CORE'), mkText('feed', 'Feed', 'FEED'), mkText('focused', 'Focused', 'FOCUS')];
             case 'image': return [mkText('album', 'Album', 'ALBUM'), mkText('feed', 'Feed', 'FEED'), mkText('image', 'Image', 'IMG')];
             case 'video': return [mkText('album', 'Album', 'ALBUM'), mkText('feed', 'Feed', 'FEED'), mkText('video', 'Video', 'VID')];
-            case 'events': return [mkText('sched', 'Schedule', 'SCHED'), mkText('feed', 'Feed', 'FEED'), mkText('next', 'Next', 'NEXT')];
+            case 'events': return [
+                mkText('sched', 'Schedule', 'SCHED'),
+                mkText('feed', 'Feed', 'FEED'),
+                mkText('next', 'Next', 'NEXT')
+            ];
             case 'blogs': return [mkText('blog', 'Blog', 'BLOG'), mkText('feed', 'Feed', 'FEED'), mkText('post', 'Post', 'POST')];
             default: return [];
         }
     };
 
     // --- Render Logic: Sliders ---
+    // --- Render Logic: Sliders ---
     const renderSliders = () => {
-        // [REGISTRY OVERRIDE]
-        // If an AtomConfig is provided, and it has traits for this mode, use the Generic Renderer.
-        if (atomConfig) {
-            // Map 'type' mode to 'typography' trait for compatibility if needed, 
-            // or just ensure modes align.
-            let traitCategory: string = activeMode;
-            if (activeMode === 'font' || activeMode === 'type') traitCategory = 'typography';
-            if (activeMode === 'colour') traitCategory = 'style';
-
-            const hasTrait = atomConfig.traits.some(t => t.type === traitCategory);
-
-            if (hasTrait) {
-                // Determine active subgroup ID based on active mode
-                let subGroupId = undefined;
-                if (activeMode === 'layout') subGroupId = activeLayoutTool;
-                if (activeMode === 'font') subGroupId = activeFontTool;
-                if (activeMode === 'colour') subGroupId = activeColourTool;
-
-                return (
-                    <TraitRenderer
-                        traits={atomConfig.traits}
-                        toolState={toolState}
-                        onUpdate={onToolUpdate}
-                        activeCategory={traitCategory}
-                        activeSubGroup={subGroupId} // PASSED TO RENDERER
-                        isMobileView={isMobileView}
-                    />
-                );
-            }
-        }
-
         // Shared Setters Check
         const setCols = isMobileView ? setColsMobile : setColsDesktop;
         const currentCols = isMobileView ? colsMobile : colsDesktop;
@@ -418,7 +380,7 @@ export function ToolPop({ activeBlockId, activeBlockType = 'media', isMobileView
                         key={opt.value}
                         type="button"
                         onPointerDown={(e) => {
-                            e.preventDefault();
+                            e.preventDefault(); // Prevent focus stealing and ghost clicks
                             onChange(opt.value);
                         }}
                         className={`
@@ -708,6 +670,8 @@ export function ToolPop({ activeBlockId, activeBlockType = 'media', isMobileView
             }
         }
 
+
+
         // COLOUR MODE
         if (activeMode === 'colour') {
             if (activeColourTool === 'palette') {
@@ -785,7 +749,7 @@ export function ToolPop({ activeBlockId, activeBlockType = 'media', isMobileView
                                 <UniversalSlider
                                     value={colorTarget === 'bg' ? borderWidth : textStrokeWidth}
                                     min={0}
-                                    max={colorTarget === 'bg' ? 20 : 10}
+                                    max={colorTarget === 'bg' ? 20 : 10} // Text stroke usually smaller
                                     step={colorTarget === 'bg' ? 1 : 0.5}
                                     onChange={colorTarget === 'bg' ? setBorderWidth : setTextStrokeWidth}
                                 />
@@ -828,10 +792,17 @@ export function ToolPop({ activeBlockId, activeBlockType = 'media', isMobileView
         ? 'translate-y-0 opacity-100 pointer-events-auto'
         : 'translate-y-[100%] opacity-0 pointer-events-none';
 
-    return (
-        <div className={`w-full bg-white/95 dark:bg-neutral-900/95 backdrop-blur-xl border-t border-neutral-200 dark:border-neutral-800 rounded-2xl z-[100] shadow-[0_-5px_20px_rgba(0,0,0,0.08)] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] select-none ${visibilityClass}`}>
+    const placementClass = attachment === 'chatrail'
+        ? 'relative w-full'
+        : 'fixed left-0 right-0 bottom-0';
+    const borderClass = attachment === 'chatrail'
+        ? 'border'
+        : 'border-t';
 
-            <div className={`flex flex-col transition-all duration-300 ${isCollapsed ? 'h-[60px]' : 'h-auto'}`}>
+    return (
+        <div className={`${placementClass} bg-white/95 dark:bg-neutral-900/95 backdrop-blur-xl ${borderClass} border-neutral-200 dark:border-neutral-800 rounded-2xl z-[100] shadow-[0_-5px_20px_rgba(0,0,0,0.08)] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] select-none ${visibilityClass}`}>
+
+            <div className={`flex flex-col transition-all duration-300 ${isCollapsed ? 'h-[60px]' : 'h-[260px]'}`}>
                 {/* HEAD: Dual Magnifier + Settings Trigger */}
                 <div className="flex items-center justify-center p-2 border-b border-neutral-100 dark:border-neutral-800 relative bg-neutral-50/50 dark:bg-neutral-900/50 shrink-0 h-[72px] rounded-t-2xl z-20">
 
@@ -875,14 +846,8 @@ export function ToolPop({ activeBlockId, activeBlockType = 'media', isMobileView
                     {/* Collapse & Close Controls (Right) */}
                     <div className="absolute right-4 flex items-center gap-2">
                         {/* Close X */}
-                        {/* 
-                        // REMOVED: Internal close logic is probably not desired if parent controls it? 
-                        // Actually original has it. I'll keep it but it changes internal state which affects visibility class.
-                        // But previous harness wrapper might also control it. 
-                        // Original code: setIsVisible(false).
-                        */}
                         <button
-                            onClick={onClose}
+                            onClick={() => setIsVisible(false)}
                             className="w-8 h-8 flex items-center justify-center rounded-full text-neutral-400 hover:text-red-500 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800"
                         >
                             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M18 6L6 18M6 6l12 12" /></svg>
@@ -891,7 +856,7 @@ export function ToolPop({ activeBlockId, activeBlockType = 'media', isMobileView
                 </div>
 
                 {/* BODY: Sliders OR Settings */}
-                <div className={`flex-1 overflow-y-auto px-4 pt-4 pb-4 transition-opacity duration-200 ${isCollapsed ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+                <div className={`flex-1 overflow-y-auto px-4 pt-4 pb-[calc(80px+env(safe-area-inset-bottom))] transition-opacity duration-200 ${isCollapsed ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
                     <div className="max-w-md mx-auto">
                         {showSettings ? (
                             <div className="flex flex-col gap-1 pt-0">
@@ -899,8 +864,11 @@ export function ToolPop({ activeBlockId, activeBlockType = 'media', isMobileView
                                 {(() => {
                                     // 1. ATOMIC MEDIA (Image/Video) - Use MediaPicker
                                     if (['image', 'video'].includes(activeContentCat) && ['image', 'video', 'album'].includes(activeStrategy)) {
-                                        // Mock Data Transform
-                                        const mockItems: MediaItem[] = SEED_FEEDS.news.map(n => ({
+                                        // Mock Data Transform using props
+                                        const news = feeds.news || [];
+                                        const youtube = feeds.youtube || [];
+
+                                        const mockItems: MediaItem[] = news.map((n: any) => ({
                                             id: n.id,
                                             type: 'image',
                                             src: n.image,
@@ -908,7 +876,7 @@ export function ToolPop({ activeBlockId, activeBlockType = 'media', isMobileView
                                         }));
                                         // If video, mix in some video mocks
                                         if (activeContentCat === 'video') {
-                                            const videoItems: MediaItem[] = SEED_FEEDS.youtube.map(v => ({
+                                            const videoItems: MediaItem[] = youtube.map((v: any) => ({
                                                 id: v.id,
                                                 type: 'video',
                                                 src: v.image, // Use thumb as src for now
@@ -922,7 +890,7 @@ export function ToolPop({ activeBlockId, activeBlockType = 'media', isMobileView
                                             <MediaPicker
                                                 type={activeContentCat as 'image' | 'video'}
                                                 items={mockItems}
-                                                onSelect={(item) => console.log('Selected Media:', item)}
+                                                onSelect={(id) => console.log('Selected Media:', id)}
                                                 onUpload={() => console.log('Trigger Upload')}
                                                 onGenerate={() => console.log('Trigger AI Gen')}
                                             />
@@ -933,19 +901,18 @@ export function ToolPop({ activeBlockId, activeBlockType = 'media', isMobileView
                                     let mockPickerItems: ContentPickerItem[] = [];
                                     let label = `Select ${activeStrategy}`;
 
-                                    // Simple Mock Mapping based on Category
+                                    // Simple Mock Mapping based on Category using props.feeds
                                     if (activeContentCat === 'youtube') {
-                                        mockPickerItems = SEED_FEEDS.youtube.map(y => ({ id: y.id, title: y.title, subtitle: y.subtitle }));
+                                        mockPickerItems = (feeds.youtube || []).map((y: any) => ({ id: y.id, title: y.title, subtitle: y.subtitle }));
                                     } else if (activeContentCat === 'product') {
-                                        mockPickerItems = SEED_FEEDS.retail.map(r => ({ id: r.id, title: r.title, subtitle: r.price, badge: r.badge }));
+                                        mockPickerItems = (feeds.retail || []).map((r: any) => ({ id: r.id, title: r.title, subtitle: r.price, badge: r.badge }));
                                     } else if (activeContentCat === 'kpi') {
-                                        mockPickerItems = SEED_FEEDS.kpi.map(k => ({ id: k.id, title: k.title, subtitle: k.subtitle, badge: k.badge }));
+                                        mockPickerItems = (feeds.kpi || []).map((k: any) => ({ id: k.id, title: k.title, subtitle: k.subtitle, badge: k.badge }));
                                     } else if (activeContentCat === 'events') {
-                                        // Use mock events
-                                        mockPickerItems = SEED_FEEDS.events.map(e => ({ id: e.id, title: e.title, subtitle: e.subtitle, badge: e.badge }));
+                                        mockPickerItems = (feeds.events || []).map((e: any) => ({ id: e.id, title: e.title, subtitle: e.subtitle, badge: e.badge }));
                                     } else {
                                         // Generic Fallback
-                                        mockPickerItems = SEED_FEEDS.news.map(n => ({ id: n.id, title: n.title, subtitle: n.subtitle }));
+                                        mockPickerItems = (feeds.news || []).map((n: any) => ({ id: n.id, title: n.title, subtitle: n.subtitle }));
                                     }
 
                                     return (

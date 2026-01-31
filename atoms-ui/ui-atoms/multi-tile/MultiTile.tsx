@@ -94,7 +94,7 @@ const YouTubeTile = ({ videoId, title, aspectClass }: { videoId: string, title: 
 
     if (isPlaying) {
         return (
-            <div className={`relative ${aspectClass} bg-black overflow-hidden group/yt z-0`}>
+            <div className={`relative ${aspectClass} bg-black overflow-hidden group/yt z-0`} style={{ aspectRatio: '16/9' }}>
                 <iframe
                     src={`https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&rel=0&playsinline=1`}
                     className="absolute inset-0 w-full h-full pointer-events-auto"

@@ -11,6 +11,7 @@ interface TraitRendererProps {
     toolState: Record<string, any>;
     onUpdate: (key: string, value: any) => void;
     activeCategory: string; // 'layout', 'typography', 'style'
+    activeSubGroup?: string; // NEW: 'density', 'spacing', 'geometry'
     isMobileView: boolean;
 }
 
@@ -19,6 +20,7 @@ export const TraitRenderer: React.FC<TraitRendererProps> = ({
     toolState,
     onUpdate,
     activeCategory,
+    activeSubGroup, // NEW: Filter by Right Magnifier
     isMobileView
 }) => {
 
@@ -30,9 +32,15 @@ export const TraitRenderer: React.FC<TraitRendererProps> = ({
         return <div className="p-4 text-xs text-neutral-400">No controls for {activeCategory}</div>;
     }
 
+    // Filter by SubGroup if provided
+    const visibleProperties = useMemo(() => {
+        if (!activeSubGroup) return activeTrait.properties;
+        return activeTrait.properties.filter(p => p.subGroup === activeSubGroup);
+    }, [activeTrait, activeSubGroup]);
+
     return (
         <div className="flex flex-col gap-3 animate-fadeIn">
-            {activeTrait.properties.map((prop: AtomTraitProperty) => {
+            {visibleProperties.map((prop: AtomTraitProperty) => {
 
                 // 1. Resolve Property Key (Desktop/Mobile split)
                 let valueKey = prop.targetProp || prop.id;
