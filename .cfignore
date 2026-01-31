@@ -1,3 +1,4 @@
+# Backend & Agents
 atoms-agents/
 atoms-connectors/
 atoms-core/
@@ -9,14 +10,31 @@ northstar-agents/
 northstar-engines/
 northstar-keys/
 scripts/
+
+# Other Apps/Libs
+atoms-app/
+atoms-ui/
+atoms-site-templates/
+packages/
+agentflow/
+
+# Infra/Meta
 _git_backups/
 _quarantine/
 .codex/
 .idea/
 .git/
-atoms_core
-atoms_muscle
-verification_error.png
-packages/
-agentflow/
 docs/
+
+# Symlinks (ignore both file and dir variants to be safe)
+atoms_core
+atoms_core/
+atoms_muscle
+atoms_muscle/
+
+# Files
+verification_error.png
+*.py
+*.pyc
+**/__pycache__
+**/tests/

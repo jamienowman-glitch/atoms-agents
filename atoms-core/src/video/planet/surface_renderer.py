@@ -24,7 +24,8 @@ class PlanetSurfaceRenderer:
         self, 
         surface_params: dict[str, Any], 
         duration_ms: int, 
-        frame_rate: int | None = None
+        frame_rate: int | None = None,
+        heatmap_payload: list[dict[str, Any]] | None = None,
     ) -> dict[str, Any]:
         """Render a sequence of hemisphere frames with metadata that preview muscles can consume."""
         target_rate = frame_rate or self.base_frame_rate
@@ -32,7 +33,7 @@ class PlanetSurfaceRenderer:
         radius = float(surface_params.get("radius", 3390.0))
         glow_strength = float(surface_params.get("glow_strength", 0.8))
         atmosphere = float(surface_params.get("atmosphere", 0.3))
-        render_instructions = self._build_equirectangular_texture(surface_params, radius)
+        render_instructions = self._build_equirectangular_texture(surface_params, radius, heatmap_payload)
 
         frames: list[dict[str, Any]] = []
         for index in range(frame_count):
@@ -59,7 +60,12 @@ class PlanetSurfaceRenderer:
             },
         }
 
-    def _build_equirectangular_texture(self, surface_params: dict[str, Any], radius: float) -> np.ndarray:
+    def _build_equirectangular_texture(
+        self,
+        surface_params: dict[str, Any],
+        radius: float,
+        heatmap_payload: list[dict[str, Any]] | None = None
+    ) -> np.ndarray:
         """Sample a simple equirectangular hemisphere mesh to drive preview textures."""
         sample_count = self.sample_density
         latitudes = np.linspace(0.0, math.pi / 2, sample_count)
@@ -69,6 +75,21 @@ class PlanetSurfaceRenderer:
         y = radius * np.cos(lat_grid) * np.sin(lon_grid)
         z = radius * np.sin(lat_grid)
         emissive = np.sin(lat_grid * 2) * surface_params.get("emissive_variation", 0.5)
+
+        if heatmap_payload:
+            for point in heatmap_payload:
+                p_lat = point.get("lat", 0.0)
+                p_lon = point.get("lon", 0.0)
+                intensity = point.get("intensity", 0.5)
+                # Map lat (0..pi/2) and lon (0..2pi) to grid indices
+                lat_idx = int((p_lat / (math.pi / 2)) * (sample_count - 1))
+                lon_idx = int((p_lon / (2 * math.pi)) * (sample_count - 1))
+                # Clamp to be safe
+                lat_idx = max(0, min(sample_count - 1, lat_idx))
+                lon_idx = max(0, min(sample_count - 1, lon_idx))
+                # Accumulate intensity (hotspots)
+                emissive[lat_idx, lon_idx] += intensity
+
         curvature = (x**2 + y**2 + z**2) / radius**2
         texture = np.stack([x, y, z, emissive, curvature], axis=-1)
         return texture
@@ -117,6 +138,7 @@ class PlanetSurfaceRenderer:
         user_id: Optional[str] = None,
         frame_rate: int | None = None,
         media_service: Optional[Any] = None,
+        heatmap_payload: list[dict[str, Any]] | None = None,
     ) -> dict[str, Any]:
         """Production render: generates real PNG frames, uploads to S3, registers in media_v2.
         
@@ -130,6 +152,7 @@ class PlanetSurfaceRenderer:
             user_id: Optional user ID
             frame_rate: Optional frame rate override
             media_service: Optional MediaService instance (for testing)
+            heatmap_payload: Optional list of points to visualize on the surface
         
         Returns:
             Dict with frames (containing real media_v2 asset IDs) and metadata
@@ -148,7 +171,7 @@ class PlanetSurfaceRenderer:
         radius = float(surface_params.get("radius", 3390.0))
         glow_strength = float(surface_params.get("glow_strength", 0.8))
         atmosphere = float(surface_params.get("atmosphere", 0.3))
-        render_instructions = self._build_equirectangular_texture(surface_params, radius)
+        render_instructions = self._build_equirectangular_texture(surface_params, radius, heatmap_payload)
         
         slug = surface_params.get("slug") or self._slug_surface(surface_params)
         
