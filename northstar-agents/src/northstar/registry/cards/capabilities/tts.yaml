@@ -1,5 +1,0 @@
-card_type: capability
-capability_id: tts
-capability_name: Text to Speech
-embedded_or_separate: SEPARATE
-description: Enables Text to Speech

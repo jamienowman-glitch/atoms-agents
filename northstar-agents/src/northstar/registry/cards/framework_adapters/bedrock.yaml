@@ -1,3 +1,0 @@
-card_type: framework_adapter
-framework_id: bedrock
-adapter_import_path: northstar.runtime.frameworks.bedrock.adapter

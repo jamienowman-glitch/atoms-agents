@@ -1,7 +1,0 @@
-provider_id: gencast
-name: Google GenCast
-provider_type: local_lib
-api_base_url: null
-description: Ensemble Forecasting for Weather & Trends.
-python_module: northstar.runtime.providers.gencast
-env_var_keys: []

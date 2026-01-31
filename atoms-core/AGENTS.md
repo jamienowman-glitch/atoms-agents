@@ -1,6 +1,8 @@
 # 🚨 ATOMIC VISION MANDATE 🚨
 > **CRITICAL**: Every Agent MUST read the [UI Architecture v2.1 (The Fleet & Factory)](file:///Users/jaynowman/dev/atoms-core/docs/plans/2026-01-30_ui_architecture_v2_1.md) before carrying out ANY work.
-> This document defines the "Atomic Facade" law: The Graph is invisible; The Canvas is the Product.
+> **PATH LAW**: Use `atoms_core.config.aliases.resolve_path()` to locate repos. NEVER hardcode paths.
+> **SYNC LAW**: Register tools via `python3 atoms-muscle/scripts/sync_muscles.py`.
+> **VAULT LAW**: Load secrets via `atoms_core.config.naming`. NO `.env`.
 
 # 🚨 ATOMIC VISION MANDATE 🚨
 > **CRITICAL**: Every Agent MUST read the [UI Architecture v2.1 (The Fleet & Factory)](file:///Users/jaynowman/dev/atoms-core/docs/plans/2026-01-30_ui_architecture_v2_1.md) before carrying out ANY work.

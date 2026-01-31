@@ -1,9 +1,26 @@
 import os
-import json
+import re
 import logging
-from typing import List, Dict
+from pathlib import Path
+from typing import List, Dict, Optional
+import sys
+import os
 
-# Try to import supabase, or mock/fail gently
+# Ensure atoms-core is findable (Bootstrap Problem)
+# We trust that if we are running standard scripts, we are in a layout where atoms-core is a peer.
+# Or we hardcode the bootstrap path just once to load the Aliaser.
+bootstrap_core = Path(os.path.expanduser("~/dev/atoms-core/src"))
+if bootstrap_core.exists():
+    sys.path.append(str(bootstrap_core))
+
+try:
+    from atoms_core.config.naming import get_secret_name
+    from atoms_core.config.aliases import resolve_path, ATOMS_CORE
+except ImportError:
+    print(f"CRITICAL: Could not bootstrap atoms-core from {bootstrap_core}.")
+    exit(1)
+
+# Try to import supabase
 try:
     from supabase import create_client, Client
 except ImportError:
@@ -13,64 +30,129 @@ except ImportError:
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("sync_muscles")
 
-# CONFIG (Defaults for local dev if envs missing)
-SUPABASE_URL = os.getenv("NEXT_PUBLIC_SUPABASE_URL", "http://127.0.0.1:54321")
-SUPABASE_KEY = os.getenv("NEXT_PUBLIC_SUPABASE_ANON_KEY", "") # Often needing service_role for writes
+# VAULT LOADER
+VAULT_PATH = Path(os.path.expanduser("~/northstar-keys"))
+def load_vault_secret(filename: str) -> Optional[str]:
+    try:
+        with open(VAULT_PATH / filename, 'r') as f:
+            return f.read().strip()
+    except FileNotFoundError:
+        return None
 
-# If we are in the agent environment, we might not have the service role key readily available.
-# However, typically the ANon key can write if RLS allows, or we need the service role.
-# For now, let's assume we can try with the ANON key or prompt the user if it fails.
-# Realistically, the "God Mode" implies we might need a service role key.
-# But let's try with what we might have or standard placeholder.
+# CONFIG LOADING (Vault Strict -> Vault Legacy -> Env Fallback)
+sup_url_name = get_secret_name('DEFAULT', 'SUPABASE', 'URL') # DEFAULT_SUPABASE_URL
+sup_key_name = get_secret_name('DEFAULT', 'SUPABASE', 'SERVICE_ROLE_KEY') # DEFAULT_SUPABASE_SERVICE_ROLE_KEY
 
-if not SUPABASE_KEY:
-    # Try to read from a local .env file or just warn
-    print("WARNING: SUPABASE_KEY not set. Sync might fail.")
+SUPABASE_URL = load_vault_secret(f"{sup_url_name}.txt") or load_vault_secret("supabase-url.txt") or os.getenv("NEXT_PUBLIC_SUPABASE_URL")
+SUPABASE_KEY = load_vault_secret(f"{sup_key_name}.txt") or load_vault_secret("supabase-service-key.txt") or os.getenv("SUPABASE_SERVICE_ROLE_KEY")
 
-def load_inventory(path: str) -> List[Dict]:
+if not SUPABASE_URL or not SUPABASE_KEY:
+    logger.error("Missing Supabase credentials. Checked Vault (Strict & Legacy) and Env.")
+    exit(1)
+
+def parse_skill_md(path: Path) -> Dict[str, str]:
+    """
+    Parses the YAML frontmatter from SKILL.md
+    """
     with open(path, 'r') as f:
-        return json.load(f)
+        content = f.read()
+    
+    # Simple regex to get frontmatter
+    match = re.search(r'^---\n(.*?)\n---', content, re.DOTALL)
+    if not match:
+        return {}
+    
+    yaml_block = match.group(1)
+    data = {}
+    for line in yaml_block.split('\n'):
+        if ':' in line:
+            key, val = line.split(':', 1)
+            data[key.strip()] = val.strip()
+            
+    return data
 
-def sync_to_supabase(muscles: List[Dict]):
+def scan_muscles(src_root: Path) -> List[Dict]:
+    muscles = []
+    # Walk src directory
+    # Structure: src/{category}/{name}/SKILL.md
+    
+    # We allow arbitrary depth but typically it's category/name
+    for root, dirs, files in os.walk(src_root):
+        if 'SKILL.md' in files:
+            skill_path = Path(root) / 'SKILL.md'
+            try:
+                meta = parse_skill_md(skill_path)
+                if not meta.get('name'):
+                    logger.warning(f"Skipping {skill_path}: Missing 'name' in frontmatter")
+                    continue
+                    
+                # Infer directory structure info
+                rel_path = Path(root).relative_to(src_root)
+                parts = rel_path.parts
+                
+                # Default category from folder if not in frontmatter
+                category = meta.get('category')
+                if not category and len(parts) > 0:
+                    category = parts[0]
+                
+                # Construct key: category.name
+                key = f"{category}.{meta['name']}"
+                
+                muscle = {
+                    "key": key,
+                    "name": meta['name'], # Internal name? Or Display Name?
+                    "category": category,
+                    "description": meta.get('description', ''),
+                    # Check for other files to determine status
+                    "has_mcp": (Path(root) / 'mcp.py').exists(),
+                    "has_service": (Path(root) / 'service.py').exists()
+                }
+                
+                # Determine Status based on files
+                if muscle['has_mcp'] and muscle['has_service']:
+                    muscle['status'] = 'prod' 
+                else:
+                    muscle['status'] = 'dev'
+                    
+                muscles.append(muscle)
+                
+            except Exception as e:
+                logger.error(f"Error parsing {skill_path}: {e}")
+                
+    return muscles
+
+def sync_registry(muscles: List[Dict]):
     client: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
     
-    # Transform to fit DB schema if needed. 
-    # Current page.tsx expects: key, name, spec: { mcp_endpoint, pricing }
-    # Our inventory has: category, name, description, mcp_url, middle_line
+    logger.info(f"Found {len(muscles)} muscles on disk.")
     
-    records = []
     for m in muscles:
-        # Construct a stable key: e.g. "video_multicam"
-        key = m['name'].lower().replace(' ', '_')
-        
         record = {
-            "key": key,
+            "key": m['key'],
             "name": m['name'],
-            "spec": {
-                "mcp_endpoint": m['mcp_url'],
-                "pricing": "FREE", # Default pending actual logic
-                "description": m['description'],
-                "category": m['category']
-            }
+            "category": m['category'],
+            "description": m['description'],
+            "status": m['status'],
+            "spec": m.get('spec', {}) # Fix NULL Spec Violation
         }
-        records.append(record)
         
-    logger.info(f"Syncing {len(records)} muscles to Supabase...")
-    
-    for rec in records:
         try:
-            # Upsert by key
-            res = client.table("muscles").upsert(rec, on_conflict="key").execute()
-            logger.info(f"Synced: {rec['key']}")
+            # Upsert
+            # Constraint is UNIQUE(key, tenant_id). We target that.
+            data = client.table("muscles").upsert(record, on_conflict="key,tenant_id").execute()
+            logger.info(f"Synced: {m['key']} (Status: {m['status']})")
         except Exception as e:
-            logger.error(f"Failed to sync {rec['key']}: {e}")
+            logger.error(f"Failed to sync {m['key']}: {e}")
 
 if __name__ == "__main__":
-    INVENTORY_PATH = "/Users/jaynowman/.gemini/antigravity/brain/25d74e8d-0916-4d1b-8b34-c550ef13c252/muscle_inventory.json"
-    
-    if not os.path.exists(INVENTORY_PATH):
-        logger.error(f"Inventory not found at {INVENTORY_PATH}")
+    # Use the Aliased Path if possible to ensure we are scanning the canonical repo
+    target_root = ATOMS_MUSCLE if 'ATOMS_MUSCLE' in locals() else Path(__file__).parent.parent
+    src_dir = target_root / "src"
+
+    if not src_dir.exists():
+        logger.error(f"Source directory not found: {src_dir}")
         exit(1)
         
-    data = load_inventory(INVENTORY_PATH)
-    sync_to_supabase(data)
+    logger.info(f"Scanning Muscles in: {src_dir} (via {'Alias' if 'ATOMS_MUSCLE' in locals() else 'Relative Path'})")
+    found_muscles = scan_muscles(src_dir)
+    sync_registry(found_muscles)

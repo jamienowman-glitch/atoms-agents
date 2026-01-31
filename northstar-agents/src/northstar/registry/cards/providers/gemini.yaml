@@ -1,8 +1,0 @@
-provider_id: gemini
-name: Google Gemini
-provider_type: api
-api_base_url: https://generativelanguage.googleapis.com/v1beta
-description: Google AI Studio Gateway for Gemini models.
-python_module: northstar.runtime.providers.gemini
-env_var_keys:
-  - GEMINI_API_KEY

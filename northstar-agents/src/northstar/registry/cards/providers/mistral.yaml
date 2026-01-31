@@ -1,8 +1,0 @@
-provider_id: mistral
-name: Mistral AI
-provider_type: api
-api_base_url: https://api.mistral.ai/v1
-description: Mistral AI Gateway.
-python_module: northstar.runtime.providers.mistral
-env_var_keys:
-  - MISTRAL_API_KEY

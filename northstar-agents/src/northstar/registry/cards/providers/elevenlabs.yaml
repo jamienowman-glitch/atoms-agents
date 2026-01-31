@@ -1,8 +1,0 @@
-provider_id: elevenlabs
-name: ElevenLabs
-provider_type: api
-api_base_url: https://api.elevenlabs.io/v1
-description: ElevenLabs Voice Gateway (Scribe).
-python_module: northstar.runtime.providers.elevenlabs
-env_var_keys:
-  - ELEVENLABS_API_KEY

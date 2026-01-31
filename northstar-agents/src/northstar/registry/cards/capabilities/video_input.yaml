@@ -1,5 +1,0 @@
-card_type: capability
-capability_id: video_input
-capability_name: Video Input
-embedded_or_separate: EMBEDDED
-description: Enables Video Input

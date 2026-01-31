@@ -1,5 +1,0 @@
-card_type: capability
-capability_id: web_grounding
-capability_name: Web Search
-embedded_or_separate: EMBEDDED
-description: Enables Web Search

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { WysiwygCanvas, Block } from '../../canvas/wysiwyg/WysiwygCanvas';
-import { ToolPop } from '../Mother/tool-areas/ToolPop/ToolPop'; // Mother Harness Tool
+import { ToolPop } from '@harnesses/Mother/tool-areas/ToolPop/ToolPop'; // Mother Harness Tool
 import { LogicPop } from '../../canvas/wysiwyg/LogicPop'; // NEW: Agent Brain/Logging
 import { ToolPill } from '../../canvas/wysiwyg/ToolPill'; // Formerly WysiwygAddMenu
 // import { WysiwygFloatingControls } from '../../canvas/wysiwyg/WysiwygFloatingControls'; // Removed
@@ -163,7 +163,10 @@ export function WysiwygBuilderHarness() {
                             blocks={blocks}
                             setBlocks={setBlocks}
                             activeBlockId={activeBlockId}
-                            setActiveBlockId={setActiveBlockId}
+                            setActiveBlockId={(id) => {
+                                setActiveBlockId(id);
+                                if (id) setShowTools(true);
+                            }}
                             toolState={toolState}
                         />
                     )}
@@ -284,7 +287,7 @@ export function WysiwygBuilderHarness() {
 
             {/* 6A. TOOL POP (Bottom Right) - Canvas Output Tools */}
             <div
-                className={`transition-all duration-300 ${showTools ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 pointer-events-none'} fixed left-0 right-0 z-[60]`}
+                className={`transition-all duration-300 ${showTools ? 'translate-y-0 opacity-100 pointer-events-auto' : 'translate-y-full opacity-0 pointer-events-none'} fixed left-0 right-0 z-[100]`}
                 style={{ bottom: chatMode === 'full' ? '92vh' : chatMode === 'standard' ? '50vh' : chatMode === 'micro' ? '180px' : '128px' }}
             >
                 <div className="flex-1 w-full pl-0">
@@ -295,6 +298,7 @@ export function WysiwygBuilderHarness() {
                         toolState={toolState}
                         onToolUpdate={handleToolUpdate}
                         onClose={() => setShowTools(false)} // Explicit Close Handler
+                        attachment="chatrail"
 
                         // ... (inside component)
 

@@ -1,2 +1,0 @@
-{"timestamp": "2025-12-25T08:43:29.909270", "event_id": "9388c44b-dfb0-43ad-b3d1-4b1659a7909d", "run_id": "da78ba5f-3db9-4b17-b462-730964244d65", "event_type": "NODE_START", "tenant_id": null, "actor": null, "node_id": "node.test.audit", "payload": {"profile_id": "dev_local"}}
-{"timestamp": "2025-12-25T08:46:00.656857", "event_id": "20d662ab-6695-462a-89e6-73afc99dab9a", "run_id": "6ad0de0d-7b06-4fd2-b56e-fbc7f5f230fe", "event_type": "NODE_START", "tenant_id": null, "actor": null, "node_id": "node.test.audit", "payload": {"profile_id": "dev_local"}}

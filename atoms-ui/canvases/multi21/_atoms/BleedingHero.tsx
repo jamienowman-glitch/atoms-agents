@@ -1,5 +1,5 @@
 import React from 'react';
-import { useVarioEngine } from '@tool-areas/ui/hooks/useVarioEngine'; // Making assumption purely based on previous patterns, may need fix
+import { useVarioEngine } from '@hooks/useVarioEngine'; // Corrected alias
 
 interface BleedingHeroProps {
     // Content

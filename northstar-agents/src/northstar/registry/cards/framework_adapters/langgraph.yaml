@@ -1,3 +1,0 @@
-card_type: framework_adapter
-framework_id: langgraph
-adapter_import_path: northstar.runtime.frameworks.langgraph.adapter

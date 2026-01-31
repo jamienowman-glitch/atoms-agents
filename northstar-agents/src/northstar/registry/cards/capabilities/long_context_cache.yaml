@@ -1,5 +1,0 @@
-card_type: capability
-capability_id: long_context_cache
-capability_name: Long Context / Caching
-embedded_or_separate: EMBEDDED
-description: Enables Long Context / Caching

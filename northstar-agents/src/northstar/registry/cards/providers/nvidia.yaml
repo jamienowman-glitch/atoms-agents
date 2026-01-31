@@ -1,7 +1,0 @@
-provider_id: nvidia
-name: NVIDIA Alpamayo
-provider_type: local_lib
-api_base_url: null
-description: Biomechanics & Reasoning VLA (Vision-Language-Action).
-python_module: northstar.runtime.providers.nvidia
-env_var_keys: []

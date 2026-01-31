@@ -2,7 +2,7 @@
 
 import React from 'react';
 import dynamic from 'next/dynamic';
-import { ToolControlProvider } from 'atoms-ui/harness/context/ToolControlContext';
+import { ToolControlProvider } from 'atoms-ui/harnesses/Mother/logic/ToolControlContext';
 
 // Dynamic Import to avoid SSR issues with Transport/Window
 const ContractBuilderCanvas = dynamic(

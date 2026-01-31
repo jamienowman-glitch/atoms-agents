@@ -1,6 +1,8 @@
 # 🚨 ATOMIC VISION MANDATE 🚨
 > **CRITICAL**: Every Agent MUST read the [UI Architecture v2.1 (The Fleet & Factory)](file:///Users/jaynowman/dev/atoms-core/docs/plans/2026-01-30_ui_architecture_v2_1.md) before carrying out ANY work.
-> This document defines the "Atomic Facade" law: The Graph is invisible; The Canvas is the Product.
+> **PATH LAW**: Use `atoms_core.config.aliases.resolve_path()` to locate repos. NEVER hardcode paths.
+> **SYNC LAW**: Register tools via `python3 atoms-muscle/scripts/sync_muscles.py`.
+> **VAULT LAW**: Load secrets via `atoms_core.config.naming`. NO `.env`.
 
 # 🚨 ATOMIC VISION MANDATE 🚨
 > **CRITICAL**: Every Agent MUST read the [UI Architecture v2.1 (The Fleet & Factory)](file:///Users/jaynowman/dev/atoms-core/docs/plans/2026-01-30_ui_architecture_v2_1.md) before carrying out ANY work.
@@ -44,7 +46,9 @@
 7.  **No northstar imports**: `northstar-engines` is deprecated. Do not import it anywhere in new work.
 8.  **Rescue Protocol**: Port dependency logic from `northstar-engines` into `atoms-core` first. `atoms-muscle` must never import `northstar-engines`.
 9.  **Slice Rule**: Deployment slices must include required `atoms-core` modules; muscles are not standalone without atoms-core.
-10. **Vault Law**: **No .env files**. Secrets must be loaded via the Vault Loader from `/Users/jaynowman/northstar-keys/` (or equivalent mount).
+10. **Vault Law**: **No .env files**. Secrets must be loaded via `atoms_core.config.naming.get_secret_name(TENANT, PROVIDER, FIELD)`.
+    - **NEVER** hardcode `DEFAULT_CLOUDFLARE_KEY`. Always import the naming engine.
+    - **NEVER** use `os.getenv`.
 
 ## 🏗️ THE PRODUCTION LINE
 Any Agent building a Muscle MUST follow this exact sequence:

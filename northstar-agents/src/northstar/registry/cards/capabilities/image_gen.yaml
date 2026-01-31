@@ -1,5 +1,0 @@
-card_type: capability
-capability_id: image_gen
-capability_name: Image Generation
-embedded_or_separate: EMBEDDED
-description: Enables Image Generation

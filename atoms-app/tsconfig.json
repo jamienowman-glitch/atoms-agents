@@ -26,8 +26,35 @@
             "@/*": [
                 "./src/*"
             ],
+            "@atoms-fam/*": [
+                "./src/fam/*"
+            ],
+            "@app/*": [
+                "./src/*"
+            ],
+            "@god/*": [
+                "./src/app/god/*"
+            ],
+            "@atoms/*": [
+                "../atoms-ui/canvases/multi21/_atoms/*"
+            ],
+            "@harnesses/*": [
+                "../atoms-ui/harnesses/*"
+            ],
+            "@canvases/*": [
+                "../atoms-ui/canvases/*"
+            ],
             "atoms-ui/*": [
                 "../atoms-ui/*"
+            ],
+            "@templates/*": [
+                "../atoms-site-templates/*"
+            ],
+            "@logic/*": [
+                "../atoms-ui/harnesses/Mother/logic/*"
+            ],
+            "@tool-areas/*": [
+                "../atoms-ui/harnesses/Mother/tool-areas/*"
             ],
             "react": [
                 "./node_modules/@types/react"

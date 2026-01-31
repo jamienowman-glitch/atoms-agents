@@ -1,5 +1,0 @@
-card_type: provider
-provider_id: bedrock
-name: AWS Bedrock
-required_fields: []
-notes: Uses boto3 default session (AWS_PROFILE or Env Vars)
