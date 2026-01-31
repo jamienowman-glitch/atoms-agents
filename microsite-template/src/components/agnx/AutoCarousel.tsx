@@ -1,3 +1,9 @@
+"use client";
+
+import { useRef, useEffect, useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+
 interface CarouselTile {
     id: string | number;
     type: 'image' | 'text';
@@ -14,12 +20,6 @@ interface CarouselTile {
 interface AutoCarouselProps {
     tiles?: CarouselTile[];
 }
-
-"use client";
-
-import { useRef, useEffect, useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
 
 export default function AutoCarousel({ tiles = [] }: AutoCarouselProps) {
     const scrollRef = useRef<HTMLDivElement>(null);

@@ -3,6 +3,8 @@ import { Roboto, Roboto_Flex } from "next/font/google";
 import "./globals.css";
 import AnalyticsProvider from "@/components/analytics/AnalyticsProvider";
 import { generateOrganizationSchema } from "@/lib/seo/schema";
+import { PricingProvider } from "../context/PricingContext";
+import { UtmTracker } from "../components/analytics/UtmTracker";
 
 const roboto = Roboto({
   weight: ["400", "500", "700"],
@@ -42,12 +44,15 @@ export default function RootLayout({
       <body
         className={`${roboto.variable} ${robotoFlex.variable} antialiased`}
       >
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-        <AnalyticsProvider />
-        {children}
+        <PricingProvider>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          />
+          <AnalyticsProvider />
+          <UtmTracker />
+          {children}
+        </PricingProvider>
       </body>
     </html>
   );

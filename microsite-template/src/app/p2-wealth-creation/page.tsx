@@ -1,5 +1,5 @@
 import MicrositeHeader from "@/components/shared/MicrositeHeader";
-import AutoCarousel from "@/components/agnx/AutoCarousel";
+// import AutoCarousel from "@/components/agnx/AutoCarousel";
 import InteractivePills from "@/components/agnx/InteractivePills";
 
 export default function P2WealthCreation() {

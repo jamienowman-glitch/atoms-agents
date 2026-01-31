@@ -13,7 +13,7 @@ export async function POST(req: Request) {
 
     const stripe = new Stripe(secretKey, {
         apiVersion: '2024-06-20', // Use latest API version
-    } as any);
+    } as any); // eslint-disable-line @typescript-eslint/no-explicit-any
 
     try {
         const { priceId, mode } = await req.json();
@@ -33,7 +33,7 @@ export async function POST(req: Request) {
         });
 
         return NextResponse.json({ sessionId: session.id });
-    } catch (err: any) {
+    } catch (err: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
         console.error("Stripe Checkout Error:", err);
         return NextResponse.json({ error: err.message }, { status: 500 });
     }

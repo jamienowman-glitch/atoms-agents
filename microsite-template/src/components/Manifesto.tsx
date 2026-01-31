@@ -6,7 +6,7 @@ export default function Manifesto() {
             {/* Quote */}
             <blockquote className="mb-2 max-w-lg">
                 <p className="text-xl italic">
-                    "I&apos;m Atoms Fam to the bone marrow. Fuck a soul even God knows his body is hollow"
+                    &quot;I&apos;m Atoms Fam to the bone marrow. Fuck a soul even God knows his body is hollow&quot;
                 </p>
             </blockquote>
             <p className="text-sm text-gray-400 mb-12 italic">

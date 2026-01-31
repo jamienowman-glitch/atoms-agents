@@ -13,12 +13,11 @@ export function getSecret(filename: string): string | null {
     // 2. Try Local Vault (Node.js Only - Local Dev)
     // Wrapped in try/catch and runtime check to avoid Edge build errors
     try {
-        // @ts-ignore
         if (process.env.NEXT_RUNTIME !== 'edge' && typeof window === 'undefined') {
             // Use dynamic require to bypass static analysis for 'fs' in Edge
-            // eslint-disable-next-line @typescript-eslint/no-var-requires
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
             const fs = require('fs');
-            // eslint-disable-next-line @typescript-eslint/no-var-requires
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
             const path = require('path');
 
             const VAULT_PATH = '/Users/jaynowman/northstar-keys';
@@ -30,7 +29,7 @@ export function getSecret(filename: string): string | null {
 
             console.warn(`⚠️ Vault Warning: Key file '${filename}' not found in ${VAULT_PATH}`);
         }
-    } catch (error) {
+    } catch {
         // Ignore errors in environments where fs is not available
     }
 

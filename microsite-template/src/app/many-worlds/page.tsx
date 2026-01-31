@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { Menu } from "lucide-react";
 import MegaMenu from "@/components/shared/MegaMenu";
-import AutoCarousel from "@/components/agnx/AutoCarousel";
+// import AutoCarousel from "@/components/agnx/AutoCarousel";
 import InteractivePills from "@/components/agnx/InteractivePills";
 
 export default function ManyWorlds() {
@@ -24,7 +24,7 @@ export default function ManyWorlds() {
                     <Menu size={32} />
                 </button>
 
-                {/* Hero Image Section - Removed Top Padding (pt-0) and Side Padding on Mobile (px-0) */}
+                {/* Hero Image Section - Removed Top Padding (pt-0) and Side Padding (px-0) */}
                 <div className="w-full flex items-center justify-center pt-0 pb-12 px-0 md:px-4">
                     <div className="w-full max-w-xl relative">
                         <Image

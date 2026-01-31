@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { Menu } from "lucide-react";
 import MegaMenu from "@/components/shared/MegaMenu";
-import AutoCarousel from "@/components/agnx/AutoCarousel";
+// import AutoCarousel from "@/components/agnx/AutoCarousel";
 import InteractivePills from "@/components/agnx/InteractivePills";
 
 export default function CaidenceAgents() {

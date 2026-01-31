@@ -28,7 +28,7 @@ export default function VisualHook() {
             <div className="px-6 text-center mb-8">
                 <blockquote className="mb-2 max-w-lg mx-auto">
                     <p className="text-xl italic">
-                        "I&apos;m Atoms Fam to the bone marrow. Fuck a soul even God knows his body is hollow"
+                        &quot;I&apos;m Atoms Fam to the bone marrow. Fuck a soul even God knows his body is hollow&quot;
                     </p>
                 </blockquote>
                 <p className="text-sm text-gray-400 italic">
