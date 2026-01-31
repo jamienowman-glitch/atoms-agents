@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
-import { DualMagnifier, MagnetItem } from './DualMagnifier';
-import { AtomContract, ControlDefinition } from '../../types/AtomContract';
+import { DualMagnifier, MagnetItem } from '@harnesses/Mother/tool-areas/ToolPop/DualMagnifier';
+import { AtomContract, ControlDefinition } from '../../../../types/AtomContract';
 
 // --- Simplified Slider Component (Copied from ToolPop.tsx to preserve Sacred Visuals) ---
 interface UniversalSliderProps {
@@ -112,8 +112,8 @@ export function ToolPopGeneric({
 
     // Derived: Mode Options (Left Magnifier) -> Traits
     const modeOptions: MagnetItem[] = activeAtomContract.traits.map(t => ({
-        id: t.id,
-        label: t.id.charAt(0).toUpperCase() + t.id.slice(1),
+        id: t.id || 'unknown',
+        label: t.id ? (t.id.charAt(0).toUpperCase() + t.id.slice(1)) : 'Unknown',
         // Use generic icon since we don't have mapping yet, or mapping based on ID.
         // Reusing icons from main ToolPop if ids match would be ideal, but for now simple fallback.
         icon: <div className="w-2 h-2 rounded-full bg-current" />
@@ -122,8 +122,8 @@ export function ToolPopGeneric({
     // Derived: Tool Options (Right Magnifier) -> SubGroups of active Trait
     const activeTrait = activeAtomContract.traits.find(t => t.id === activeTraitId);
     const toolOptions: MagnetItem[] = activeTrait?.subGroups.map(g => ({
-        id: g.id,
-        label: g.id.charAt(0).toUpperCase() + g.id.slice(1),
+        id: g.id || 'unknown',
+        label: g.id ? (g.id.charAt(0).toUpperCase() + g.id.slice(1)) : 'Unknown',
         icon: <div className="w-1.5 h-1.5 rounded-full border border-current" />
     })) || [];
 
@@ -182,7 +182,7 @@ export function ToolPopGeneric({
                                     value={Number(currentValue)}
                                     min={control.min || 0}
                                     max={control.max || 100}
-                                    step={1} // Could be added to contract later
+                                    step={control.step || 1}
                                     onChange={(v) => onToolUpdate(control.targetVar, v)}
                                 />
                             )}

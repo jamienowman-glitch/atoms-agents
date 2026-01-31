@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { WysiwygCanvas, Block } from '../../canvas/wysiwyg/WysiwygCanvas';
-import { ToolPop } from '@harnesses/Mother/tool-areas/ToolPop/ToolPop'; // Mother Harness Tool
+import { ToolPopGeneric } from '@harnesses/Mother/tool-areas/ToolPop/ToolPopGeneric';
 import { LogicPop } from '../../canvas/wysiwyg/LogicPop'; // NEW: Agent Brain/Logging
 import { ToolPill } from '../../canvas/wysiwyg/ToolPill'; // Formerly WysiwygAddMenu
 // import { WysiwygFloatingControls } from '../../canvas/wysiwyg/WysiwygFloatingControls'; // Removed
@@ -77,10 +77,13 @@ export function WysiwygBuilderHarness() {
                     'grid.tile_radius_desktop': 'gridTileRadiusDesktop',
                     'typo.size_desktop': 'fontSizeDesktop',
                     'typo.family': 'fontFamily',
+                    // Typography (Vario)
                     'typo.weight': 'axisWeight',
                     'typo.width': 'axisWidth',
                     'typo.slant': 'axisSlant',
-                    // Add more as needed
+                    // Bleeding Hero Mappings
+                    'layout.image_offset': 'imageOffset',
+                    'layout.text_width': 'textColumnWidth',
                 };
 
                 const propName = keyMap[key];
@@ -268,6 +271,7 @@ export function WysiwygBuilderHarness() {
             </ToolPill>
 
             {/* 5. CHAT RAIL (Shell Bottom) - z-[90] to be always on top of tools if expanded */}
+            {/* 5. CHAT RAIL (Shell Bottom) - z-[40] (Requested) */}
             <div className="z-[40] relative">
                 <ChatRailShell
                     mode={chatMode}
@@ -291,24 +295,19 @@ export function WysiwygBuilderHarness() {
                 style={{ bottom: chatMode === 'full' ? '92vh' : chatMode === 'standard' ? '50vh' : chatMode === 'micro' ? '180px' : '128px' }}
             >
                 <div className="flex-1 w-full pl-0">
-                    <ToolPop
-                        activeBlockId={activeBlockId}
-                        activeBlockType={activeBlockType}
-                        isMobileView={isMobileView}
-                        toolState={toolState}
-                        onToolUpdate={handleToolUpdate}
-                        onClose={() => setShowTools(false)} // Explicit Close Handler
-                        attachment="chatrail"
-
-                        // ... (inside component)
-
-                        atomConfig={
-                            activeBlockType === 'bleeding_hero' ? BleedingHeroContract :
-                                activeBlockType === 'hero' ? HeroConfig :
-                                    ['media', 'text', 'generic', 'row'].includes(activeBlockType) ? MultiTileConfig :
-                                        undefined
-                        }
-                    />
+                    {activeBlockType === 'bleeding_hero' ? (
+                        <ToolPopGeneric
+                            activeAtomContract={BleedingHeroContract}
+                            toolState={toolState}
+                            onToolUpdate={handleToolUpdate}
+                            onClose={() => setShowTools(false)}
+                            isMobileView={isMobileView}
+                        />
+                    ) : (
+                        <div className="fixed left-0 right-0 bottom-0 bg-white/95 dark:bg-neutral-900/95 backdrop-blur-xl border-t border-neutral-200 dark:border-neutral-800 rounded-2xl z-[100] h-[260px] flex items-center justify-center">
+                            <div className="text-xs text-neutral-400">Select Bleeding Hero to use tools</div>
+                        </div>
+                    )}
                 </div>
             </div>
 

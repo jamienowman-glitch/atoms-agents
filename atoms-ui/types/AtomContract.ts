@@ -4,6 +4,7 @@ export interface ControlDefinition {
     label: string;
     targetVar: string;
     min?: number; max?: number;
+    step?: number;
 }
 
 export interface TraitDefinition {
