@@ -21,9 +21,9 @@ import {
 } from '@dnd-kit/sortable';
 
 import { SortableBlockWrapper } from './SortableBlockWrapper';
-import { MultiTile, MultiTileItem } from '../../ui-atoms/multi-tile/MultiTile';
-import { MultiTileBlock } from '../../ui-atoms/multi-tile/MultiTileBlock';
-import { HeroWeb } from '../../ui-atoms/hero/Hero.web';
+import { MultiTile, MultiTileItem } from '@atoms/multi-tile/MultiTile';
+import { MultiTileBlock } from '@atoms/multi-tile/MultiTileBlock';
+import { HeroWeb } from '@atoms/hero/Hero.web';
 
 // --- Types ---
 export type Block = {

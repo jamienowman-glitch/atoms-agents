@@ -1,5 +1,23 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@mother/*": [
+        "harnesses/Mother/*"
+      ],
+      "@tool-areas/*": [
+        "harnesses/Mother/tool-areas/*"
+      ],
+      "@logic/*": [
+        "harnesses/Mother/logic/*"
+      ],
+      "@multi21/*": [
+        "canvases/multi21/*"
+      ],
+      "@atoms/*": [
+        "canvases/multi21/_atoms/*"
+      ]
+    },
     "target": "ES2017",
     "lib": [
       "dom",

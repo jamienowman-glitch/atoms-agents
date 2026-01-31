@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useState } from 'react';
-import { ToolControlProvider, ToolDefinition } from '../../harness/ToolControlProvider';
-import { ChatProvider } from '../../harness/ChatContext';
-import { TopPill } from '../../muscles/TopPill/TopPill';
-import { ChatRailShell } from '../../muscles/ChatRail/ChatRail';
+import { ToolControlProvider } from '@logic/ToolControlContext';
+import { ToolDefinition } from '@logic/ToolControlContext';
+import { ChatProvider } from '@logic/ChatContext';
+import { TopPill } from '@tool-areas/TopPill/TopPill';
+import { ChatRailShell } from '@tool-areas/ChatRail/ChatRail';
 import { CanvasScope } from '../../types/CanvasContext';
 
 // HAZE-specific ToolPop with custom navigation controls

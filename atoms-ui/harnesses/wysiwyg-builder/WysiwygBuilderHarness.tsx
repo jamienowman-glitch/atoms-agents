@@ -9,8 +9,8 @@ import { ToolPill } from '../../canvas/wysiwyg/ToolPill'; // Formerly WysiwygAdd
 import { TopPill } from './shells/TopPill';
 import { ChatRailShell, ChatMode } from './shells/ChatRailShell';
 import { LoggingLens } from './overlays/LoggingLens';
-import { MultiTileConfig } from '../../ui-atoms/multi-tile/MultiTile.config';
-import { HeroConfig } from '../../ui-atoms/hero/Hero.config';
+import { MultiTileConfig } from '@atoms/multi-tile/MultiTile.config';
+import { HeroConfig } from '@atoms/hero/Hero.config';
 
 // --- Canvas Cartridge Types ---
 type CanvasMode = 'web' | 'seb' | 'deck' | 'dm';

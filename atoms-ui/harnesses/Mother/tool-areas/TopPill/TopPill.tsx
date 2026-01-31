@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useToolControl } from '../../harness/ToolControlProvider';
+import { useToolControl } from '@logic/ToolControlContext';
 
 interface TopPillProps {
     setIsRightPanelOpen?: (isOpen: boolean) => void;

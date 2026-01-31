@@ -9,10 +9,10 @@
 export * from './types/ToolEvent';
 export * from './types/CanvasContext';
 
-export * from './muscles/TopPill/TopPill';
-export * from './muscles/ToolPill/ToolPill';
-export * from './muscles/ToolPop/ToolPop';
-export * from './muscles/ChatRail/ChatRail';
+export * from './harnesses/Mother/tool-areas/TopPill/TopPill';
+export * from './harnesses/Mother/tool-areas/ToolPill/ToolPill';
+export * from './harnesses/Mother/tool-areas/ToolPop/ToolPop';
+export * from './harnesses/Mother/tool-areas/ChatRail/ChatRail';
 // export * from './harness/registry/client';
 // export * from './harness/console/SurfaceCard';
 // export * from './harness/console/LauncherGrid';

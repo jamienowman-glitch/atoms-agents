@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { useToolControl } from '../../harness/ToolControlProvider';
+import { useToolControl } from '@logic/ToolControlContext';
 import { ColorRibbon } from '../ui/ColorRibbon';
 import { DualMagnifier, MagnetItem } from './DualMagnifier';
 import { ContentPicker, ContentPickerItem } from './ui/ContentPicker';

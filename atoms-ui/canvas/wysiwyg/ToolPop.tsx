@@ -7,7 +7,7 @@ import { ContentPicker, ContentPickerItem } from './ui/ContentPicker';
 import { MediaPicker, MediaItem } from './ui/MediaPicker';
 import { SEED_FEEDS } from './data/seed-feeds';
 import { TraitRenderer } from './ui/TraitRenderer';
-import { AtomConfig } from '../../ui-atoms/multi-tile/MultiTile.config';
+import { AtomConfig } from '../../canvases/multi21/_atoms/multi-tile/MultiTile.config';
 
 // --- Types & Interfaces ---
 export type PanelState = 'collapsed' | 'compact' | 'full';

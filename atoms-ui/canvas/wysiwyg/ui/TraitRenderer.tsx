@@ -3,7 +3,7 @@
 import React, { useMemo } from 'react';
 import { UniversalSlider } from './UniversalSlider';
 import { ColorRibbon } from '../ui/ColorRibbon';
-import { AtomTrait, AtomTraitProperty } from '../../../ui-atoms/multi-tile/MultiTile.config';
+import { AtomTrait, AtomTraitProperty } from '@atoms/multi-tile/MultiTile.config';
 
 // Re-using the types from ToolPop but making them generic
 interface TraitRendererProps {

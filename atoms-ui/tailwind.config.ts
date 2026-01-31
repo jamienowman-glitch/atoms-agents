@@ -4,7 +4,7 @@ const config: Config = {
     content: [
         "./harnesses/**/*.{js,ts,jsx,tsx}",
         "./canvas/**/*.{js,ts,jsx,tsx}",
-        "./ui-atoms/**/*.{js,ts,jsx,tsx}",
+        "./canvases/multi21/_atoms/**/*.{js,ts,jsx,tsx}",
         "./app/**/*.{js,ts,jsx,tsx}",
     ],
     theme: {
