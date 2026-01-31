@@ -4,8 +4,8 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from engines.audio.asr_whisper.engine import run
-from engines.audio.asr_whisper.types import ASRWhisperInput
+from atoms_core.src.audio.core.asr_whisper.engine import run
+from atoms_core.src.audio.core.asr_whisper.types import ASRWhisperInput
 
 
 def main() -> None:

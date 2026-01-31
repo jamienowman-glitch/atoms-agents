@@ -26,7 +26,6 @@ from atoms_core.src.audio.audio_voice_phrases.backend import (
     DefaultPhrasesBackend,
     PhraseCandidate,
 )
-# from engines.storage.gcs_client import GcsClient
 
 logger = logging.getLogger(__name__)
 PHRASE_MIN_DURATION_MS = 500

@@ -9,7 +9,6 @@ from typing import Optional, Protocol
 from atoms_core.src.audio.audio_voice_enhance.models import VoiceEnhanceMode, VoiceEnhanceRequest, VoiceEnhanceResult
 from atoms_core.src.media.v2.models import ArtifactCreateRequest, DerivedArtifact, MediaAsset
 from atoms_core.src.media.v2.service import get_media_service
-# from engines.storage.gcs_client import GcsClient
 
 
 class VoiceEnhanceBackend(Protocol):

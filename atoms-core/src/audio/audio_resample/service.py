@@ -18,7 +18,6 @@ from atoms_core.src.audio.shared.health import (
 from atoms_core.src.media.v2.models import ArtifactCreateRequest, MediaUploadRequest, DerivedArtifact
 from atoms_core.src.media.v2.service import MediaService, get_media_service
 from atoms_core.src.audio.audio_resample.models import ResampleRequest, ResampleResult
-# from engines.storage.gcs_client import GcsClient
 
 QUALITY_PRESET_ARGS = {
     "draft": ["-resampler", "soxr", "-precision", "12"],

@@ -16,7 +16,6 @@ from atoms_core.src.media.v2.models import ArtifactCreateRequest, MediaUploadReq
 from atoms_core.src.media.v2.service import MediaService, get_media_service
 from atoms_core.src.audio.audio_separation.models import SeparationRequest, SeparationResult
 from atoms_core.src.audio.audio_separation.backend import run_demucs_separation
-# from engines.storage.gcs_client import GcsClient
 
 logger = logging.getLogger(__name__)
 

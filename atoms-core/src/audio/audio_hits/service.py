@@ -27,7 +27,6 @@ from atoms_core.src.audio.audio_hits.backend import (
     HAS_LIBROSA,
     OnsetResult,
 )
-# from engines.storage.gcs_client import GcsClient
 
 logger = logging.getLogger(__name__)
 HIT_MIN_DURATION_MS = 500

@@ -2,9 +2,9 @@ from pathlib import Path
 
 import pytest
 
-from engines.audio import beat_features as mod
-from engines.audio.beat_features.engine import run
-from engines.audio.beat_features.types import BeatFeaturesInput, BeatFeaturesOutput, BeatMetadata
+from atoms_core.src.audio.core import beat_features as mod
+from atoms_core.src.audio.core.beat_features.engine import run
+from atoms_core.src.audio.core.beat_features.types import BeatFeaturesInput, BeatFeaturesOutput, BeatMetadata
 
 
 def test_beat_features_uses_librosa_when_available(monkeypatch, tmp_path: Path) -> None:

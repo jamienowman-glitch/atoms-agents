@@ -20,7 +20,6 @@ from atoms_core.src.media.v2.models import ArtifactCreateRequest, MediaUploadReq
 from atoms_core.src.audio.audio_fx_chain.models import FxChainRequest, FxChainResult
 from atoms_core.src.audio.audio_fx_chain.presets import FX_PRESETS, FX_PRESET_METADATA
 from atoms_core.src.audio.audio_fx_chain.dsp import build_ffmpeg_filter_string
-# from engines.storage.gcs_client import GcsClient
 
 SAT_TYPES = {"soft", "hard", "cubic"}
 HPF_RANGE = (20.0, 4000.0)

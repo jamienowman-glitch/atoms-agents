@@ -20,7 +20,6 @@ from atoms_core.src.media.v2.service import MediaService, get_media_service
 from atoms_core.src.audio.audio_macro_engine.models import MacroRequest, MacroResult
 from atoms_core.src.audio.audio_macro_engine.presets import MACRO_DEFINITIONS
 from atoms_core.src.audio.audio_macro_engine.compiler import compile_macro_to_ffmpeg
-# from engines.storage.gcs_client import GcsClient
 
 MACRO_KNOB_RANGE = (0.0, 100.0)
 

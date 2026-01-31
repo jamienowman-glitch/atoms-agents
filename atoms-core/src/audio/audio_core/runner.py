@@ -5,10 +5,10 @@ from pathlib import Path
 from typing import Dict, Any
 import subprocess
 
-from engines.audio.preprocess_basic_clean.engine import run as run_clean
-from engines.audio.preprocess_basic_clean.types import PreprocessBasicCleanInput
-from engines.audio.beat_features.engine import run as run_beats
-from engines.audio.beat_features.types import BeatFeaturesInput
+from atoms_core.src.audio.core.preprocess_basic_clean.engine import run as run_clean
+from atoms_core.src.audio.core.preprocess_basic_clean.types import PreprocessBasicCleanInput
+from atoms_core.src.audio.core.beat_features.engine import run as run_beats
+from atoms_core.src.audio.core.beat_features.types import BeatFeaturesInput
 from atoms_core.src.audio.audio_core import asr_backend, dataset_builder, lora_train
 
 
