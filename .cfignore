@@ -20,3 +20,9 @@ verification_error.png
 packages/
 agentflow/
 docs/
+
+# Python exclusions
+**/*.py
+**/*.pyc
+**/__pycache__
+**/tests/
