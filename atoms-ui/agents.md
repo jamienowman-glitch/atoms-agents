@@ -2,9 +2,11 @@
 > **CRITICAL**: Every Agent MUST read the [UI Architecture v2.1 (The Fleet & Factory)](file:///Users/jaynowman/dev/atoms-core/docs/plans/2026-01-30_ui_architecture_v2_1.md) before carrying out ANY work.
 > This document defines the "Atomic Facade" law: The Graph is invisible; The Canvas is the Product.
 
-# 🚨 ATOMIC VISION MANDATE 🚨
-> **CRITICAL**: Every Agent MUST read the [UI Architecture v2.1 (The Fleet & Factory)](file:///Users/jaynowman/dev/atoms-core/docs/plans/2026-01-30_ui_architecture_v2_1.md) before carrying out ANY work.
-> This document defines the "Atomic Facade" law: The Graph is invisible; The Canvas is the Product.
+## 📜 THE SYSTEM LAWS (JAN 31 UPDATE)
+1.  **The Harness Law**: All tool logic (magnifiers, sliders, real-time logging) lives in `harnesses/Mother`. The Canvas is dumb; The Harness is the Brain.
+2.  **The Atom Contract Law**: No UI Atom is built without a corresponding `.contract.ts` file. This file dictates exactly what the sliders in the ToolPop do.
+3.  **The Skill Protocol**: Every major task (Building Atoms, Grading Color, Connecting Muscles) must refer to its specific `.agent/skills/` document for formatting and logic standards.
+
 
 
 # Atoms UI - Architectural Standards
