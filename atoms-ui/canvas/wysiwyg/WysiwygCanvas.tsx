@@ -24,11 +24,12 @@ import { SortableBlockWrapper } from './SortableBlockWrapper';
 import { MultiTile, MultiTileItem } from '@atoms/multi-tile/MultiTile';
 import { MultiTileBlock } from '@atoms/multi-tile/MultiTileBlock';
 import { HeroWeb } from '@atoms/hero/Hero.web';
+import { BleedingHero } from '@atoms/BleedingHero';
 
 // --- Types ---
 export type Block = {
     id: string;
-    type: 'media' | 'text' | 'copy' | 'cta' | 'row' | 'header' | 'hero';
+    type: 'media' | 'text' | 'copy' | 'cta' | 'row' | 'header' | 'hero' | 'bleeding_hero';
     // For Rows
     columns?: number;
     children?: Block[][]; // Array of arrays. children[0] = Col 1 items.
@@ -256,7 +257,14 @@ export function WysiwygCanvas({ blocks, setBlocks, activeBlockId, setActiveBlock
                     }`}
             >
                 {/* Visual: Switch based on Type */}
-                {block.type === 'hero' ? (
+                {block.type === 'bleeding_hero' ? (
+                    <BleedingHero
+                        imageOffset={toolState?.['layout.image_offset']}
+                        textColumnWidth={toolState?.['layout.text_width']}
+                        axisWeight={toolState?.['typo.weight']}
+                        axisSlant={toolState?.['typo.slant']}
+                    />
+                ) : block.type === 'hero' ? (
                     <HeroWeb
                         height={toolState?.['height_desktop'] || 80}
                         alignment={toolState?.['alignment'] || 'center'}

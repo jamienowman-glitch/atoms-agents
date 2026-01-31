@@ -10,16 +10,22 @@ export interface AtomTraitProperty {
     responsive?: boolean; // If true, creates desktop/mobile variants automatically
     targetProp?: string; // If different from id
     subGroup?: string; // For Right Magnifier (e.g. 'density', 'spacing')
+    defaultValue?: any; // Default value for the property
 }
 
 export interface AtomTrait {
+    id?: string;
+    label?: string;
     type: 'layout' | 'typography' | 'style' | 'content';
     properties: AtomTraitProperty[];
 }
 
+export type AtomContract = AtomConfig;
+
 export interface AtomConfig {
     id: string;
     name: string;
+    label?: string;
     category: 'layout' | 'text' | 'media' | 'interaction';
     version: string;
     family: string[];

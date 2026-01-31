@@ -1,37 +1,33 @@
-// Muscle Registry (Mother Harness)
-// This file acts as the central lookup for all available "Muscle" capabilities
-// that can be plugged into the Harness LogicPop.
-
-export type MuscleId = 'DRACULA_GRADING' | 'AUTO_LAYOUT' | 'CONTENT_GEN';
+/**
+ * Muscle Registry (Mother Harness)
+ * --------------------------------
+ * This registry acts as the central lookup for all "Automated Muscles" available to the Harness.
+ * Muscles are functional units (Color Grading, Auto-Layout, Text Summarization) 
+ * that operate on Canvas Data but live in the Harness.
+ */
 
 export interface MuscleDefinition {
-    id: MuscleId;
+    id: string;
     name: string;
     description: string;
-    enabled: boolean;
+    version: string;
+    capabilities: string[];
 }
 
-export const MuscleRegistry: Record<MuscleId, MuscleDefinition> = {
-    DRACULA_GRADING: {
-        id: 'DRACULA_GRADING',
-        name: 'Dracula',
-        description: 'Automated color grading and contrast enhancement for dark mode aesthetics.',
-        enabled: false // Coming soon
+export const MuscleRegistry: Record<string, MuscleDefinition> = {
+    'muscle.dracula': {
+        id: 'muscle.dracula',
+        name: 'Dracula Color Grade',
+        description: 'Applies cinematic dark mode color grading to any surface.',
+        version: '1.0.0',
+        capabilities: ['color-shift', 'contrast-boost']
     },
-    AUTO_LAYOUT: {
-        id: 'AUTO_LAYOUT',
-        name: 'Auto-Layout',
-        description: 'Intelligent rearrangement of blocks based on content density.',
-        enabled: false
-    },
-    CONTENT_GEN: {
-        id: 'CONTENT_GEN',
-        name: 'Copywriter',
-        description: 'AI-assisted generation of headlines and body text.',
-        enabled: false
+    'muscle.vario': {
+        id: 'muscle.vario',
+        name: 'Vario Font Engine',
+        description: 'Dynamic variable font axis controller.',
+        version: '2.1.0',
+        capabilities: ['weight-axis', 'slant-axis', 'optical-size-axis']
     }
+    // Future muscles (Auto-Layout, SEO-Bot) will be registered here.
 };
-
-export function getAvailableMuscles(): MuscleDefinition[] {
-    return Object.values(MuscleRegistry).filter(m => m.enabled);
-}

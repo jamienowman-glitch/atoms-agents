@@ -1,38 +1,37 @@
 ---
-description: Standard operating procedure for building Wysiwyg UI Atoms (Bleeding Layouts, Variable Fonts).
+name: build-wysiwyg-atom
+description: Standard operating procedure for building "Bleeding Layout" UI Atoms for the Wysiwyg Canvas.
 ---
 
-# SKILL: Build Wysiwyg Atom
+# SKILL: Build Wysiwyg Atom (Bleeding Layout)
 
-## 1. The Standard
-All UI Atoms built for the Wysiwyg Canvas must adhere to the **Bleeding Hero Protocol**.
-This ensures that atoms can break the grid while maintaining typographic integrity.
+> **Context**: This skill defines how to build high-fidelity UI Block Atoms that support "Bleeding" layouts (elements breaking the grid) and Variable Fonts.
 
-### A. Input Capability (Bleed)
-*   **Requirement**: The Atom MUST handle an image/container that "bleeds" off the canvas edge.
-*   **Implementation**: Use negative margins or absolute positioning based on a `bleed` prop.
-    *   *Example*: `margin-left: -30px` (or dynamic percentage).
+## 1. Input Capability (The Contract)
+Every Wysiwyg Atom must start with a defined Contract.
+- **Bleeding Support**: The atom must handle negative margins or absolute positioning to allow media to bleed off the edge.
+- **Contract Type**: `AtomContract` from `@atoms/multi-tile/MultiTile.config`.
 
-### B. Typography (Variable Fonts)
-*   **Requirement**: Typography MUST natively support Variable Fonts.
-*   **Hook**: Use `useVarioEngine(weight, slant, ...)`.
-*   **Forbidden**: Do NOT import static font weights (400, 700). Always use the hook.
+## 2. Typography (Variable Fonts)
+- **Engine**: MUST use `useVarioEngine` hook. 
+- **Sliders**: The font weight and slant must be controlled by `axisWeight` and `axisSlant` props mapping to the variable font axes.
 
-### C. Control Mapping (The Contract)
-The Atom's contract must map the `ToolPop` controls to specific visual properties.
+## 3. Mapping Strategy (The Magnifiers)
+The ToolPop has two magnifiers. You must map your atom's contract to them:
+- **Left Magnifier (Category)**: Typically `'layout'` or `'typography'`.
+- **Right Magnifier (Sub-Group)**: Used for fine-tuning. For Bleeding Atoms:
+    - **Target**: `'Bleed/Offset'`
+    - **Controls**: `imageOffset`, `textColumnWidth`, `overlap`.
 
-*   **Left Magnifier (Slider 1)** -> **Layout / Ratio**
-    *   *Behavior*: Controls the split between image and text (e.g., 30/70 vs 50/50).
-*   **Right Magnifier (Slider 2)** -> **Bleed / Offset**
-    *   *Behavior*: Controls how far the element bleeds off the edge.
+## 4. Implementation Steps
+1.  **Define Contract**: Create `[AtomName].contract.ts`. Define traits for `layout` (sliders for offset/width) and `typography` (sliders for weight/grade).
+2.  **Scaffold Component**: Create `[AtomName].tsx`.
+3.  **Wire Props**: Destructure props to match Contract IDs (snake_case from Tool Control, usually camelCase in prop interface after mapping).
+4.  **Implement Bleed**: Use Tailwind arbitrary values `-[30px]` or percentage based widths `w-[130%]` combined with `overflow-visible` on containers.
+5.  **Verify**: Check Slider 1 moves the image. Check Slider 2 adjusts the text width.
 
-## 2. The Step-by-Step
-
-1.  **Define Contract**: Create `[Name].contract.ts`. Define the schema for `layout` and `bleed`.
-2.  **Scaffold Component**: Create `[Name].tsx`. Import `useVarioEngine`.
-3.  **Wire Props**: Connect the Contract props to the CSS variables / styles.
-4.  **Verify**: Ensure the Left Magnifier adjusts layout, Right Magnifier adjusts bleed.
-
-## 3. Output
-*   A `.tsx` file that is purely visual (no logic).
-*   A `.contract.ts` file that definitions the inputs.
+## 5. Output Verification
+- [ ] Atom renders without crashing.
+- [ ] "Layout" Slider 1 adjusts the Image Bleed.
+- [ ] "Layout" Slider 2 adjusts the Text Width.
+- [ ] Typography sliders change the font weight/slant smoothly.

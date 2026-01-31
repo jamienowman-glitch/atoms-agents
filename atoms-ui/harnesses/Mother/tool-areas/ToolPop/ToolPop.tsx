@@ -84,9 +84,14 @@ const COPY_STYLES = ['jumbo', 'headline', 'subtitle', 'tagline', 'quote', 'body'
 interface ToolPopProps {
     settingsContent?: React.ReactNode;
     activeBlockId?: string | null;
-    activeBlockType?: 'media' | 'text' | 'copy' | 'cta' | 'header' | 'row' | 'popup';
+    activeBlockType?: 'media' | 'text' | 'copy' | 'cta' | 'header' | 'row' | 'popup' | 'hero' | 'bleeding_hero' | 'generic';
     feeds?: Record<string, any[]>; // Dictionary of feeds by category
     attachment?: 'screen' | 'chatrail';
+    atomConfig?: any;
+    onToolUpdate?: (key: string, value: any) => void;
+    onClose?: () => void;
+    isMobileView?: boolean;
+    toolState?: any;
 }
 
 export function ToolPop({

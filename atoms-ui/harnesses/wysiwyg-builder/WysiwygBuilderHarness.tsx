@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { WysiwygCanvas, Block } from '../../canvas/wysiwyg/WysiwygCanvas';
-import { ToolPop } from '../../canvas/wysiwyg/ToolPop'; // Formerly WysiwygToolbar
+import { ToolPop } from '../Mother/tool-areas/ToolPop/ToolPop'; // Mother Harness Tool
 import { LogicPop } from '../../canvas/wysiwyg/LogicPop'; // NEW: Agent Brain/Logging
 import { ToolPill } from '../../canvas/wysiwyg/ToolPill'; // Formerly WysiwygAddMenu
 // import { WysiwygFloatingControls } from '../../canvas/wysiwyg/WysiwygFloatingControls'; // Removed
@@ -11,6 +11,7 @@ import { ChatRailShell, ChatMode } from './shells/ChatRailShell';
 import { LoggingLens } from './overlays/LoggingLens';
 import { MultiTileConfig } from '@atoms/multi-tile/MultiTile.config';
 import { HeroConfig } from '@atoms/hero/Hero.config';
+import { BleedingHeroContract } from '@atoms/BleedingHero.contract';
 
 // --- Canvas Cartridge Types ---
 type CanvasMode = 'web' | 'seb' | 'deck' | 'dm';
@@ -19,7 +20,8 @@ export function WysiwygBuilderHarness() {
     // --- State ---
     const [canvasMode, setCanvasMode] = useState<CanvasMode>('web'); // The "Cartridge" Selector
     const [blocks, setBlocks] = useState<Block[]>([
-        { id: 'block-1', type: 'media', spanDesktop: 6, spanMobile: 2, variant: 'generic' }
+        { id: 'block-1', type: 'media', spanDesktop: 6, spanMobile: 2, variant: 'generic' },
+        { id: 'block-2', type: 'bleeding_hero', spanDesktop: 12, spanMobile: 4, variant: 'generic' }
     ]);
     const [activeBlockId, setActiveBlockId] = useState<string | null>('block-1');
     const [previewMode, setPreviewMode] = useState<'desktop' | 'mobile'>('desktop');
@@ -293,10 +295,14 @@ export function WysiwygBuilderHarness() {
                         toolState={toolState}
                         onToolUpdate={handleToolUpdate}
                         onClose={() => setShowTools(false)} // Explicit Close Handler
+
+                        // ... (inside component)
+
                         atomConfig={
-                            activeBlockType === 'hero' ? HeroConfig :
-                                ['media', 'text', 'generic', 'row'].includes(activeBlockType) ? MultiTileConfig :
-                                    undefined
+                            activeBlockType === 'bleeding_hero' ? BleedingHeroContract :
+                                activeBlockType === 'hero' ? HeroConfig :
+                                    ['media', 'text', 'generic', 'row'].includes(activeBlockType) ? MultiTileConfig :
+                                        undefined
                         }
                     />
                 </div>

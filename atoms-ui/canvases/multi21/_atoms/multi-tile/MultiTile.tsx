@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import { VideoThumb } from './VideoThumb';
 import { MultiTileBack } from './MultiTileBack';
-import { ROBOTO_PRESETS } from '../../lib/fonts/roboto-presets';
-import { SEED_FEEDS, FeedItem } from '../../lib/data/seed-feeds';
+import { ROBOTO_PRESETS } from '../../../../lib/fonts/roboto-presets';
+import { SEED_FEEDS, FeedItem } from '../../../../lib/data/seed-feeds';
 
 export interface MultiTileItem {
     id: string;

@@ -1,69 +1,77 @@
 import React from 'react';
-import { useVarioEngine } from '@/hooks/useVarioEngine';
+import { useVarioEngine } from '@tool-areas/ui/hooks/useVarioEngine'; // Making assumption purely based on previous patterns, may need fix
 
-// Contract-defined props (mapped from Harness sliders)
 interface BleedingHeroProps {
-    imageBleed: number; // Slider 1
-    textWidth: number;  // Slider 2
-    content?: {
-        imageSrc: string;
-        headline: string;
-        body: string;
-    };
+    // Content
+    title?: string;
+    subtitle?: string;
+    imageUrl?: string;
+
+    // Contract Props (Layout)
+    imageOffset?: number; // -100 to 50
+    textColumnWidth?: number; // 20 to 100
+
+    // Contract Props (Typography)
+    axisWeight?: number;
+    axisSlant?: number;
 }
 
 export const BleedingHero: React.FC<BleedingHeroProps> = ({
-    imageBleed = -30,
-    textWidth = 70,
-    content = {
-        imageSrc: '/assets/AGENT_STREETWEAR_BLACK.png', // Placeholder
-        headline: 'THE BLEEDING EDGE.',
-        body: 'This layout breaks the grid. The image bleeds off the screen to create dynamic tension.'
-    }
+    title = "The Bleeding Edge",
+    subtitle = "This layout breaks the grid to create dynamic tension.",
+    imageUrl = "https://picsum.photos/seed/bleed/800/1200",
+    imageOffset = -30,
+    textColumnWidth = 70,
+    axisWeight = 400,
+    axisSlant = 0
 }) => {
-    // Typography: Connect to the Vario Engine (Harness Global State)
-    // This automatically listens to the Weight/Slant sliders in the ToolPop
-    const fontStyle = useVarioEngine();
-
-    // Layout Logic
-    // Image Width is the inverse of Text Width, plus the bleed
-    const imageWidth = 100 - textWidth;
+    // Vario Engine Hook (Mock implementation if real one missing)
+    // In real implementation: const fontStyle = useVarioEngine({ weight: axisWeight, slant: axisSlant });
+    // For now, manual style:
+    const fontStyle = {
+        fontWeight: axisWeight,
+        fontStyle: axisSlant < 0 ? 'italic' : 'normal',
+        fontVariationSettings: `'wght' ${axisWeight}, 'slnt' ${axisSlant}`
+    };
 
     return (
-        <div className="w-full flex flex-row overflow-hidden relative border-b border-black">
+        <div className="relative w-full overflow-hidden bg-neutral-100 dark:bg-neutral-900 min-h-[600px] flex items-center">
 
-            {/* LEFT: Bleeding Image */}
+            {/* 1. Bleeding Image Container */}
             <div
+                className="absolute left-0 top-0 bottom-0 h-full transition-all duration-300 ease-out"
                 style={{
-                    width: `${imageWidth}%`,
-                    marginLeft: `${imageBleed}px`, // The Bleed
-                    transition: 'all 0.2s ease-out'
+                    width: '40%', // Base width
+                    transform: `translateX(${imageOffset}%)` // The "Bleed" Logic
                 }}
-                className="h-[600px] bg-gray-200 relative shrink-0"
             >
                 <img
-                    src={content.imageSrc}
-                    alt="Hero"
-                    className="w-full h-full object-cover grayscale contrast-125"
+                    src={imageUrl}
+                    alt="Bleeding Hero"
+                    className="w-full h-full object-cover shadow-2xl"
                 />
             </div>
 
-            {/* RIGHT: Text Block */}
+            {/* 2. Text Column */}
             <div
-                style={{ width: `${textWidth}%` }}
-                className="flex flex-col justify-center px-12 shrink-0"
+                className="relative z-10 ml-auto flex flex-col justify-center px-12 transition-all duration-300"
+                style={{
+                    width: `${textColumnWidth}%` // Controlled by slider
+                }}
             >
                 <h1
-                    style={fontStyle} // Applies var(--font-weight), var(--font-slant)
-                    className="text-8xl leading-[0.85] uppercase mb-6 tracking-tighter"
+                    className="text-6xl md:text-8xl leading-tight text-neutral-900 dark:text-white"
+                    style={fontStyle}
                 >
-                    {content.headline}
+                    {title}
                 </h1>
-                <p className="text-xl max-w-md font-mono text-gray-500">
-                    {content.body}
+                <p
+                    className="mt-6 text-xl text-neutral-600 dark:text-neutral-400 max-w-lg"
+                    style={{ fontWeight: 300 }} // Contrast
+                >
+                    {subtitle}
                 </p>
             </div>
-
         </div>
     );
 };
