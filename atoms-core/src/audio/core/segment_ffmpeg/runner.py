@@ -4,8 +4,8 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from engines.audio.segment_ffmpeg.engine import run
-from engines.audio.segment_ffmpeg.types import SegmentFFmpegInput
+from atoms_core.src.audio.core.segment_ffmpeg.engine import run
+from atoms_core.src.audio.core.segment_ffmpeg.types import SegmentFFmpegInput
 
 
 def main() -> None:

@@ -3,8 +3,8 @@ from io import BytesIO
 
 import pytest
 
-from engines.audio.ingest_remote_pull import engine
-from engines.audio.ingest_remote_pull.types import IngestRemotePullInput
+from atoms_core.src.audio.core.ingest_remote_pull import engine
+from atoms_core.src.audio.core.ingest_remote_pull.types import IngestRemotePullInput
 
 
 def test_ingest_remote_pull_downloads(monkeypatch, tmp_path: Path) -> None:

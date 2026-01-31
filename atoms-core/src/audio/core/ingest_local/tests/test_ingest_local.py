@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from engines.audio.ingest_local.engine import run
-from engines.audio.ingest_local.types import IngestLocalInput
+from atoms_core.src.audio.core.ingest_local.engine import run
+from atoms_core.src.audio.core.ingest_local.types import IngestLocalInput
 
 
 def test_ingest_local_stages_tree(tmp_path: Path) -> None:

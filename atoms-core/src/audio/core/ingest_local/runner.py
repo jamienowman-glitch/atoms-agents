@@ -4,8 +4,8 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from engines.audio.ingest_local.engine import run
-from engines.audio.ingest_local.types import IngestLocalInput
+from atoms_core.src.audio.core.ingest_local.engine import run
+from atoms_core.src.audio.core.ingest_local.types import IngestLocalInput
 
 
 def main() -> None:

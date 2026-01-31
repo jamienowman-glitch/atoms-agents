@@ -2,8 +2,8 @@ from pathlib import Path
 
 import pytest
 
-from engines.audio.asr_whisper.engine import run
-from engines.audio.asr_whisper.types import ASRWhisperInput, ASRWhisperOutput
+from atoms_core.src.audio.core.asr_whisper.engine import run
+from atoms_core.src.audio.core.asr_whisper.types import ASRWhisperInput, ASRWhisperOutput
 
 
 def test_asr_whisper_stub(tmp_path: Path) -> None:

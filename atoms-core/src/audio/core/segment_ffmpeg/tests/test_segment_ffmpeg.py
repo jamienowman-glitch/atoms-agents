@@ -2,8 +2,8 @@ from pathlib import Path
 
 import pytest
 
-from engines.audio.segment_ffmpeg import engine
-from engines.audio.segment_ffmpeg.types import SegmentFFmpegInput
+from atoms_core.src.audio.core.segment_ffmpeg import engine
+from atoms_core.src.audio.core.segment_ffmpeg.types import SegmentFFmpegInput
 
 
 class DummyRun:

@@ -7,9 +7,6 @@ from typing import Any, Dict, List, Optional
 from .models import CadGanttView, CadOverlayView, GanttTask, OverlayElement
 # Upstream services are currently unavailable in standalone muscle build.
 # Stubs provided for build compatibility.
-# from engines.plan_of_work.service import get_plan_service
-# from engines.boq_costing.service import get_costing_service
-# from engines.boq_quantities.service import get_boq_service
 
 
 class CadViewerError(Exception):

@@ -4,8 +4,8 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from engines.audio.ingest_remote_pull.engine import run
-from engines.audio.ingest_remote_pull.types import IngestRemotePullInput
+from atoms_core.src.audio.core.ingest_remote_pull.engine import run
+from atoms_core.src.audio.core.ingest_remote_pull.types import IngestRemotePullInput
 
 
 def main() -> None:

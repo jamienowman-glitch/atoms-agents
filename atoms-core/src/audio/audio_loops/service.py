@@ -21,7 +21,6 @@ from atoms_core.src.media.v2.models import ArtifactCreateRequest, MediaUploadReq
 from atoms_core.src.media.v2.service import MediaService, get_media_service
 from atoms_core.src.audio.audio_loops.models import LoopDetectRequest, LoopDetectResult, LoopEvent
 from atoms_core.src.audio.audio_loops.backend import AudioLoopsBackend, LibrosaLoopsBackend, StubLoopsBackend, HAS_LIBROSA
-# from engines.storage.gcs_client import GcsClient
 
 logger = logging.getLogger(__name__)
 LOOP_MIN_DURATION_MS = 500

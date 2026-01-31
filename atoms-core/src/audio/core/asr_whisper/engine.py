@@ -1,7 +1,7 @@
 """Atomic engine: AUDIO.ASR.WHISPER_V1 (structure-ready, stub inference)."""
 from __future__ import annotations
 
-from engines.audio.asr_whisper.types import (
+from atoms_core.src.audio.core.asr_whisper.types import (
     ASRWhisperInput,
     ASRWhisperOutput,
     FileASRResult,

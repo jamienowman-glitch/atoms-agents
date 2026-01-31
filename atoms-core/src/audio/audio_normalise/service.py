@@ -16,7 +16,6 @@ from atoms_core.src.media.v2.models import ArtifactCreateRequest, MediaUploadReq
 from atoms_core.src.media.v2.service import MediaService, get_media_service
 from atoms_core.src.audio.audio_normalise.models import NormaliseRequest, NormaliseResult, FeatureTags
 from atoms_core.src.audio.audio_normalise.dsp import normalize_audio, extract_features_librosa
-# from engines.storage.gcs_client import GcsClient
 
 logger = logging.getLogger(__name__)
 MIN_TARGET_LUFS = -30.0

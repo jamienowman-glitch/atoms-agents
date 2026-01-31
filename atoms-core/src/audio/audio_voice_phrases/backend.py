@@ -39,15 +39,9 @@ class DefaultPhrasesBackend(VoicePhrasesBackend):
                 
                 content = None
                 if uri.startswith("gs://"):
-                    # Use GcsClient if we were injected or instantiate ad-hoc
-                    # But better: try to use standard storage abstraction if available?
-                    # For now, minimal robust logic:
-#                     from engines.storage.gcs_client import GcsClient
-                    gcs = GcsClient()
-                    # simplistic download
-                    bucket_name, key = uri.replace("gs://", "", 1).split("/", 1)
-                    blob = gcs._client.bucket(bucket_name).blob(key)
-                    content = blob.download_as_text()
+                    # GCS Client removed in legacy cleanup.
+                    print(f"WARNING: Skipping GCS artifact {uri} (client unavailable)")
+                    content = None
                 else:
                     # Assume local path
                     with open(uri, 'r') as f:

@@ -25,7 +25,6 @@ from atoms_core.src.audio.audio_service.models import (
 from atoms_core.src.audio.audio_core import asr_backend
 from atoms_core.src.media.v2.models import ArtifactCreateRequest, MediaUploadRequest
 from atoms_core.src.media.v2.service import get_media_service
-# from engines.storage.gcs_client import GcsClient
 from atoms_core.src.audio.audio_voice_enhance.service import get_voice_enhance_service
 
 

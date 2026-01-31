@@ -2,9 +2,9 @@ from pathlib import Path
 
 import pytest
 
-from engines.audio import preprocess_basic_clean as mod
-from engines.audio.preprocess_basic_clean.engine import run
-from engines.audio.preprocess_basic_clean.types import PreprocessBasicCleanInput
+from atoms_core.src.audio.core.preprocess_basic_clean import engine as mod
+from atoms_core.src.audio.core.preprocess_basic_clean.engine import run
+from atoms_core.src.audio.core.preprocess_basic_clean.types import PreprocessBasicCleanInput
 
 
 def test_preprocess_basic_clean_invokes_ffmpeg(monkeypatch, tmp_path: Path) -> None:

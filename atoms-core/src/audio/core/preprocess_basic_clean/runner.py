@@ -4,8 +4,8 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from engines.audio.preprocess_basic_clean.engine import run
-from engines.audio.preprocess_basic_clean.types import PreprocessBasicCleanInput
+from atoms_core.src.audio.core.preprocess_basic_clean.engine import run
+from atoms_core.src.audio.core.preprocess_basic_clean.types import PreprocessBasicCleanInput
 
 
 def main() -> None:

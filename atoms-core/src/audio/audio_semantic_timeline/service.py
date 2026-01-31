@@ -13,7 +13,6 @@ from typing import Any, Dict, List, Optional, Protocol, Tuple
 
 from atoms_core.src.media.v2.models import ArtifactCreateRequest, DerivedArtifact, MediaAsset
 from atoms_core.src.media.v2.service import get_media_service
-# from engines.storage.gcs_client import GcsClient
 from atoms_core.src.realtime.timeline import get_timeline_service
 from atoms_core.src.audio.shared.health import build_backend_health_meta, check_dependencies, DependencyInfo
 from atoms_core.src.audio.audio_semantic_timeline.models import (
