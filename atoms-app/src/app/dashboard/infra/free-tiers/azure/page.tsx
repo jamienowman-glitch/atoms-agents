@@ -121,7 +121,10 @@ export default function AzureFreeTiers() {
 
                     {/* FOOTER NOTE */}
                     <div className="mt-8 p-4 border-2 border-black bg-neutral-100 text-xs font-mono opacity-60">
-                        * Data sourced from Azure Free Account documentation. "Always Free" vs "12 Months" noted where critical.
+                        * Data sourced from Azure Free Account documentation. &quot;Always Free&quot; vs &quot;12 Months&quot; noted where critical.
+                        <div className="mt-2 font-bold">
+                            &quot;Always Free&quot; items are reliable. &quot;12 Months&quot; expire. &quot;Credit&quot; is finite.
+                        </div>
                     </div>
                 </div>
 

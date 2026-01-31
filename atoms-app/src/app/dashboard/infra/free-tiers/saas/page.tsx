@@ -125,7 +125,10 @@ export default function SaasFreeTiers() {
 
                     {/* FOOTER NOTE */}
                     <div className="mt-8 p-4 border-2 border-black bg-neutral-100 text-xs font-mono opacity-60">
-                        * Data verified 2026. "Inactivity Pause" on Supabase is critical for Prototype tier.
+                        * Data verified 2026. &quot;Inactivity Pause&quot; on Supabase is critical for Prototype tier.
+                        <div className="mt-2 font-bold">
+                            &quot;Free Tier&quot; usually means limited usage forever. &quot;Trial&quot; means limited time.
+                        </div>
                     </div>
                 </div>
 

@@ -1,0 +1,40 @@
+
+> atoms-app@0.1.0 dev
+> next dev -p 3001
+
+WARNING: Could not load secret supabase-url.txt from vault.
+WARNING: Could not load secret supabase_publishable_api.txt from vault.
+WARNING: Could not load secret resend-key.txt from vault.
+WARNING: Could not load secret supabase-url.txt from vault.
+WARNING: Could not load secret supabase_publishable_api.txt from vault.
+WARNING: Could not load secret resend-key.txt from vault.
+  ▲ Next.js 14.2.35
+  - Local:        http://localhost:3001
+
+ ✓ Starting...
+Attention: Next.js now collects completely anonymous telemetry regarding usage.
+This information is used to shape Next.js' roadmap and prioritize features.
+You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+https://nextjs.org/telemetry
+
+ ✓ Ready in 1787ms
+ ○ Compiling /god/config/connectors ...
+ ✓ Compiled /god/config/connectors in 10.2s (591 modules)
+ GET /god/config/connectors 200 in 11429ms
+ ✓ Compiled in 1280ms (301 modules)
+ GET /god/config/connectors 200 in 61ms
+ ✓ Compiled in 626ms (582 modules)
+ ✓ Compiled in 463ms (582 modules)
+ ✓ Compiled in 358ms (582 modules)
+ ✓ Compiled in 458ms (582 modules)
+ ✓ Compiled in 379ms (582 modules)
+ GET /god/config/connectors 200 in 263ms
+ GET /god/config/connectors 200 in 43ms
+ ✓ Compiled in 970ms (582 modules)
+ ✓ Compiled in 460ms (582 modules)
+ ✓ Compiled in 312ms (582 modules)
+ ✓ Compiled in 352ms (582 modules)
+ ✓ Compiled in 433ms (582 modules)
+ ✓ Compiled in 2.5s (582 modules)
+ ✓ Compiled in 661ms (301 modules)
+ ✓ Compiled in 472ms (301 modules)

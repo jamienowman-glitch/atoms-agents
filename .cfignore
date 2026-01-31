@@ -17,3 +17,6 @@ _quarantine/
 atoms_core
 atoms_muscle
 verification_error.png
+packages/
+agentflow/
+docs/

@@ -60,10 +60,20 @@ export default function InfrastructureHub() {
                         {/* FALLBACK IF EMPTY */}
                         {registries.length === 0 && (
                             <div className="col-span-2 border-4 border-red-500 p-8 bg-red-50 text-red-900 font-mono">
-                                <strong>ERROR:</strong> No registries found in database table 'public.registries'. <br />
+                                <strong>ERROR:</strong> No registries found in database table &apos;public.registries&apos;. <br />
                                 Please run migration: <code>supabase/migrations/20260126221100_create_registries_table.sql</code>
                             </div>
                         )}
+                    </div>
+
+                    <div className="border-2 border-black p-6 bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mt-8">
+                        <h2 className="text-2xl font-black uppercase mb-4">What&apos;s in the Registry?</h2>
+                        <ul className="list-disc pl-5 space-y-2 text-sm font-medium">
+                            <li><strong>Storage Buckets:</strong> S3, GCS, R2 definitions.</li>
+                            <li><strong>Compute Resources:</strong> EC2, Lambda, Cloud Run configs.</li>
+                            <li><strong>Free Tiers:</strong> Tracked limits for &quot;Always Free&quot; services.</li>
+                            <li><strong>Cost Centers:</strong> Mapping resources to internal budgets.</li>
+                        </ul>
                     </div>
                 </div>
 
