@@ -1,3 +1,12 @@
+# 🚨 ATOMIC VISION MANDATE 🚨
+> **CRITICAL**: Every Agent MUST read the [UI Architecture v2.1 (The Fleet & Factory)](file:///Users/jaynowman/dev/atoms-core/docs/plans/2026-01-30_ui_architecture_v2_1.md) before carrying out ANY work.
+> This document defines the "Atomic Facade" law: The Graph is invisible; The Canvas is the Product.
+
+# 🚨 ATOMIC VISION MANDATE 🚨
+> **CRITICAL**: Every Agent MUST read the [UI Architecture v2.1 (The Fleet & Factory)](file:///Users/jaynowman/dev/atoms-core/docs/plans/2026-01-30_ui_architecture_v2_1.md) before carrying out ANY work.
+> This document defines the "Atomic Facade" law: The Graph is invisible; The Canvas is the Product.
+
+
 # AGENTS.md — Atoms Core (The OS)
 
 ## Active Initiatives: MAYBES & HAZE
@@ -5,16 +14,29 @@
 - **HAZE**: Nexus Explorer planetary canvas (first-person on curved surface). Client device CPU/GPU for interactive render; server render only for export/offline. Uses HAZE muscles (surface renderer, runner, preview, optional contours) and registers via Supabase.
 
 
-## 🗺️ Strategic Infrastructure (V2 VISION)
-> **The Hierarchy**: Tenant (Org) -> Space (Context) -> Surface (Flow).
-> **The 4 Spaces**: `Health`, `Marketing`, `Quantum`, `Tuning`.
+## 🏛️ THE HIERARCHY OF POWER (v2.1)
+**Architecture Law**: The relationship between Surfaces and Spaces is **Dynamic Configuration**, not hard-coded logic.
 
-*   **Space**: The Shared Nexus (Memory & Config). Multiple Surfaces share ONE Space.
-*   **Surface**: The Flow Container (Not an App). It runs on a Domain (URL).
-*   **Tenant**: The Billing Unit.
+### 1. The Core Hierarchy
+*   **Level 1: The Tenant (Wallet)**: The User Identity. Owns Snax.
+*   **Level 2: The Space (Context)**: The Data Boundary (Nexus + Feeds). Data **NEVER** leaks between Spaces.
+    *   *Shared Assets*: Nexus (Vector Memory), Feeds (RSS/API), Config (Brand Voice).
+*   **Level 3: The Surface (Domain)**: The Brand Wrapper & Demographic Interface.
+    *   *Dynamic Mapping*: A Surface maps to **ONE** Space at a time via `space_surface_mappings`.
+    *   *Contents*: Flows, Canvases, Projects.
+*   **Level 4: The Commercial Units**:
+    *   *AgentFlow*: Unit of Work (Cost per Run).
+    *   *FlowStack*: Unit of Value (Marketplace Asset).
+    *   *Firm*: Unit of Scale (Subscription).
 
-*   [Auth & Key Playbook (GCP/AWS)](docs/infra/NORTHSTAR_AUTH_SETUP.md)
-*   [Nexus Architecture (Spaces & Domains)](docs/infra/NEXUS_ARCHITECTURE.md)
+### 2. The Data Contract
+*   **Feed Contract**: Feeds live in the **Space**. Surfaces read from their mapped Space.
+*   **Co-Founder View**: Aggregates Space-level data (Feeds + Nexus) for active BI.
+*   **God Mode Injection**: Auto-creates "Self-Feeds" (YouTube) on onboarding.
+
+### 3. The Code Laws
+1.  **Do Not Hardcode Mappings**: Use `space_surface_mappings` table.
+2.  **Respect The Boundary**: Nexus/Feed queries must ALWAYS filter by `space_key` AND `tenant_id`.
 
 ## 🎨 UI FOUNDRY (V2 STANDARD)
 > **The Law**: All new Canvases must use the **V2 Contract** and **Vario Harness**.
@@ -67,7 +89,17 @@
 - **Contract:** `docs/contracts/discount-engine-contract.md`.
 - **Plan:** `docs/plans/2026-01-30_snax-pricing-discount-atomic-task-plan.md`.
 - **Tables (target):** `discount_policy`, `discount_codes`, `discount_redemptions`, `discount_kpi_snapshots`.
-- **Rule:** discount policies are tenant‑scoped and surface‑configured; enforce KPI ceilings/floors.
+- **Rule**: discount policies are tenant‑scoped and surface‑configured; enforce KPI ceilings/floors.
+
+## 🌡️ THE TEMPERATURE LAW (BEHAVIORAL)
+> **The Law**: "Temperature is a Signal, not just a number."
+
+1.  **Check First**: Agents **MUST** check the Surface Temperature before executing high-impact actions (e.g., massive discounts, high ad spend, aggressive copy changes).
+2.  **Obey the Band**:
+    *   **Green (65-75)**: "Optimize for Growth." (Standard Ops).
+    *   **Red (90+)**: "HALT." (Draft Action Plan. Demand Human Review).
+    *   **Ice (0-40)**: "EMERGENCY." (Autopilot Disabled).
+3.  **Skill**: Use `atoms-connectors/.agent/skills/read-temperature/SKILL.md` to interpret the signal.
 
 ## 🏗️ CONTEXT: THE FLEET OF 7
 *   **atoms-core:** The OS (Identity, Routing, Safety). **[YOU ARE HERE]**

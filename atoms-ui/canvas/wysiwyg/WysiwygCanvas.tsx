@@ -23,11 +23,12 @@ import {
 import { SortableBlockWrapper } from './SortableBlockWrapper';
 import { MultiTile, MultiTileItem } from '../../ui-atoms/multi-tile/MultiTile';
 import { MultiTileBlock } from '../../ui-atoms/multi-tile/MultiTileBlock';
+import { HeroWeb } from '../../ui-atoms/hero/Hero.web';
 
 // --- Types ---
 export type Block = {
     id: string;
-    type: 'media' | 'text' | 'copy' | 'cta' | 'row' | 'header';
+    type: 'media' | 'text' | 'copy' | 'cta' | 'row' | 'header' | 'hero';
     // For Rows
     columns?: number;
     children?: Block[][]; // Array of arrays. children[0] = Col 1 items.
@@ -244,17 +245,29 @@ export function WysiwygCanvas({ blocks, setBlocks, activeBlockId, setActiveBlock
 
         const content = (
             <div className="relative group/block bg-white dark:bg-black rounded-xl border border-transparent hover:border-neutral-200 dark:hover:border-neutral-800 transition-colors">
-                {/* Visual: MultiTile */}
-                <MultiTile
-                    items={items}
-                    gridColsDesktop={block.spanDesktop || 6}
-                    gridColsMobile={block.spanMobile || 2}
-                    tileVariant={block.variant || 'generic'}
-                    // Defaults
-                    gridGapXDesktop={16}
-                    gridGapYDesktop={16}
-                    itemsDesktop={12}
-                />
+                {/* Visual: Switch based on Type */}
+                {block.type === 'hero' ? (
+                    <HeroWeb
+                        height={toolState?.['height_desktop'] || 80}
+                        alignment={toolState?.['alignment'] || 'center'}
+                        padding={toolState?.['padding_desktop'] || 24}
+                        overlayOpacity={toolState?.['overlayOpacity'] || 0.4}
+                        overlayColor={toolState?.['overlayColor'] || '#000000'}
+                        textColor={toolState?.['textColor'] || '#FFFFFF'}
+                    // Ensure props are passed from toolState if managed there
+                    />
+                ) : (
+                    <MultiTile
+                        items={items}
+                        gridColsDesktop={block.spanDesktop || 6}
+                        gridColsMobile={block.spanMobile || 2}
+                        tileVariant={block.variant || 'generic'}
+                        // Defaults
+                        gridGapXDesktop={16}
+                        gridGapYDesktop={16}
+                        itemsDesktop={12}
+                    />
+                )}
 
                 {/* Controls Overlay (Only visible when active/selected) */}
                 {/* Controls Overlay REMOVED. Logic moved to generic Toolbar. */}

@@ -1,6 +1,0 @@
-{
-  "dimensions": 768,
-  "distanceMeasureType": "SQUARED_L2",
-  "featureNormType": "NONE",
-  "shardSize": "SHARD_SIZE_SMALL"
-}

@@ -1,4 +1,33 @@
+# 🚨 ATOMIC VISION MANDATE 🚨
+> **CRITICAL**: Every Agent MUST read the [UI Architecture v2.1 (The Fleet & Factory)](file:///Users/jaynowman/dev/atoms-core/docs/plans/2026-01-30_ui_architecture_v2_1.md) before carrying out ANY work.
+> This document defines the "Atomic Facade" law: The Graph is invisible; The Canvas is the Product.
+
+# 🚨 ATOMIC VISION MANDATE 🚨
+> **CRITICAL**: Every Agent MUST read the [UI Architecture v2.1 (The Fleet & Factory)](file:///Users/jaynowman/dev/atoms-core/docs/plans/2026-01-30_ui_architecture_v2_1.md) before carrying out ANY work.
+> This document defines the "Atomic Facade" law: The Graph is invisible; The Canvas is the Product.
+
+
 # Atoms UI - Architectural Standards
+
+## 🏛️ THE HIERARCHY OF POWER (v2.1)
+**Architecture Law**: The relationship between Surfaces and Spaces is **Dynamic Configuration**, not hard-coded logic.
+
+### 1. The Core Hierarchy
+*   **Level 1: The Tenant (Wallet)**: The User Identity. Owns Snax.
+*   **Level 2: The Space (Context)**: The Data Boundary (Nexus + Feeds). Data **NEVER** leaks between Spaces.
+    *   *Shared Assets*: Nexus (Vector Memory), Feeds (RSS/API), Config (Brand Voice).
+*   **Level 3: The Surface (Domain)**: The Brand Wrapper & Demographic Interface.
+    *   *Dynamic Mapping*: A Surface maps to **ONE** Space at a time via `space_surface_mappings`.
+    *   *Contents*: Flows, Canvases, Projects.
+*   **Level 4: The Commercial Units**:
+    *   *AgentFlow*: Unit of Work (Cost per Run).
+    *   *FlowStack*: Unit of Value (Marketplace Asset).
+    *   *Firm*: Unit of Scale (Subscription).
+
+### 2. The Data Contract
+*   **Feed Contract**: Feeds live in the **Space**. Surfaces read from their mapped Space.
+*   **Co-Founder View**: Aggregates Space-level data (Feeds + Nexus) for active BI.
+*   **God Mode Injection**: Auto-creates "Self-Feeds" (YouTube) on onboarding.
 
 ## GOLDEN UI STATE: CHAT RAIL & POPUPS (LOCKED)
 > [!WARNING]
@@ -71,6 +100,18 @@ To maintain continuity across different canvases (Web, Seb, Deck), all Harness U
 2.  **`*ToolPop`**: Any bottom control panel (e.g., `WysiwygToolPop` [Right], `LogicPop` [Left]). default: `ToolPop`.
 3.  **`*ToolPill`**: Any floating action button (e.g., `WebToolPill`, `EmailToolPill`). default: `ToolPill`.
 
+### 3.1 The ToolPill Interaction Law (Locked)
+*   **Shape Rule**: The Add Menu must **ALWAYS** be a pill/lozenge shape (Vertical or Horizontal). **NEVER** render a generic square tile or grid.
+*   **Smart Direction**:
+    *   If the Pill is in the **Lower 50%** of the screen -> Menu pops **UPWARDS**.
+    *   If the Pill is in the **Upper 50%** of the screen -> Menu pops **DOWNWARDS**.
+    *   *Reason*: Allows the menu to spawn relative to the button's dynamic position without going off-screen.
+*   **Categorization Strategy**:
+    *   **Level 1**: Vertical Stack of **Category Icons** (Layout, Media, Commerce).
+    *   **Level 2**: Clicking a Category triggers a **Horizontal Lozenge** (Side Pop-out) containing the specific Atoms.
+    *   *Reason*: Prevents the vertical list from becoming infinitely long.
+*   **Visuals**: Use **Circular Icons** (SVGs). No text labels in the primary view.
+
 ### 6. The "Mother Harness" Strategy
 We are currently building the **Central Mother Harness**.
 *   **Status**: **ACTIVE DEVELOPMENT**. Do not fork yet.
@@ -113,6 +154,7 @@ One central "Rig" (`WysiwygBuilderHarness`) that provides the standard environme
 *   All Canvases share the same **UI Atoms** (Button, Text, Media).
 *   Atoms are polymorphic: A `<ButtonBlock />` renders as a `<button>` in WEB, a `<table>` in SEB, and an `<image>` in DECK.
 *   We will automate the creation of these atoms to rapidly scale our UI library (330+ items).
+*   **Skill Available**: See `atoms-ui/.agent/skills/atom-production-line/SKILL.md` for the automated factory process.
 
 #### D. Next-Gen Harnesses (Future)
 *   **FreeFormHarness**: Moving away from the "Block Builder" to a coordinate-based system (X, Y, Z).

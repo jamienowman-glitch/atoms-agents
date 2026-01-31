@@ -6,84 +6,15 @@ import { DualMagnifier, MagnetItem } from './ui/DualMagnifier';
 import { ContentPicker, ContentPickerItem } from './ui/ContentPicker';
 import { MediaPicker, MediaItem } from './ui/MediaPicker';
 import { SEED_FEEDS } from './data/seed-feeds';
+import { TraitRenderer } from './ui/TraitRenderer';
+import { AtomConfig } from '../../ui-atoms/multi-tile/MultiTile.config';
 
 // --- Types & Interfaces ---
 export type PanelState = 'collapsed' | 'compact' | 'full';
 
-// Simplified Slider Component (Touch-Aware)
-interface UniversalSliderProps {
-    value: number;
-    min: number;
-    max: number;
-    step?: number;
-    onChange: (v: number) => void;
-}
-const UniversalSlider: React.FC<UniversalSliderProps> = ({ value, min, max, step = 1, onChange }) => {
-    const trackRef = useRef<HTMLDivElement>(null);
-    const [isDragging, setIsDragging] = useState(false);
+import { UniversalSlider } from './ui/UniversalSlider';
 
-    const updateValue = (clientX: number) => {
-        if (!trackRef.current) return;
-        const rect = trackRef.current.getBoundingClientRect();
-        let percentage = (clientX - rect.left) / rect.width;
-        percentage = Math.max(0, Math.min(1, percentage));
-
-        const rawValue = min + percentage * (max - min);
-        let stepped = Math.round(rawValue / step) * step;
-        stepped = Math.max(min, Math.min(max, stepped));
-
-        // Avoid precision floating point noise
-        stepped = Number(stepped.toFixed(2));
-
-        onChange(stepped);
-    };
-
-    const handlePointerDown = (e: React.PointerEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-        setIsDragging(true);
-        trackRef.current?.setPointerCapture(e.pointerId);
-        updateValue(e.clientX);
-    };
-
-    const handlePointerMove = (e: React.PointerEvent) => {
-        if (isDragging) {
-            e.preventDefault();
-            e.stopPropagation();
-            updateValue(e.clientX);
-        }
-    };
-
-    const handlePointerUp = (e: React.PointerEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-        setIsDragging(false);
-        trackRef.current?.releasePointerCapture(e.pointerId);
-    };
-
-    return (
-        <div
-            ref={trackRef}
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMove}
-            onPointerUp={handlePointerUp}
-            className="relative w-full h-8 flex items-center group cursor-pointer touch-none select-none"
-        >
-            <div className="absolute w-full h-1 bg-neutral-200 dark:bg-neutral-800 rounded-full overflow-hidden">
-                <div
-                    className="h-full bg-neutral-400 dark:bg-neutral-600 rounded-full transition-all duration-75 ease-out"
-                    style={{ width: `${((value - min) / (max - min)) * 100}%` }}
-                />
-            </div>
-            <div
-                className={`absolute w-4 h-4 bg-black dark:bg-white rounded-full shadow-sm transform -translate-x-1/2 transition-transform duration-75 ${isDragging ? 'scale-125' : 'scale-100'}`}
-                style={{ left: `${((value - min) / (max - min)) * 100}%` }}
-            />
-        </div>
-    );
-};
-
-
+// --- Types & Interfaces ---
 // Constants
 const ASPECT_RATIOS = ['16:9', '4:3', '1:1', '9:16'];
 const COPY_LEVELS = ['h2', 'h3', 'h4', 'body'] as const;
@@ -92,14 +23,15 @@ const COPY_STYLES = ['jumbo', 'headline', 'subtitle', 'tagline', 'quote', 'body'
 // --- Main Component ---
 interface ToolPopProps {
     activeBlockId: string | null;
-    activeBlockType?: 'media' | 'text' | 'copy' | 'cta' | 'header' | 'row' | 'popup' | 'generic';
+    activeBlockType?: 'media' | 'text' | 'copy' | 'cta' | 'header' | 'row' | 'popup' | 'generic' | 'hero';
     isMobileView: boolean;
     toolState: Record<string, any>;
     onToolUpdate: (key: string, value: any) => void;
     onClose?: () => void;
+    atomConfig?: AtomConfig;
 }
 
-export function ToolPop({ activeBlockId, activeBlockType = 'media', isMobileView, toolState, onToolUpdate, onClose }: ToolPopProps) {
+export function ToolPop({ activeBlockId, activeBlockType = 'media', isMobileView, toolState, onToolUpdate, onClose, atomConfig }: ToolPopProps) {
 
     // 1. Visibility & State - STRICT PORT
     const isVisible = true;
@@ -402,6 +334,30 @@ export function ToolPop({ activeBlockId, activeBlockType = 'media', isMobileView
 
     // --- Render Logic: Sliders ---
     const renderSliders = () => {
+        // [REGISTRY OVERRIDE]
+        // If an AtomConfig is provided, and it has traits for this mode, use the Generic Renderer.
+        if (atomConfig) {
+            // Map 'type' mode to 'typography' trait for compatibility if needed, 
+            // or just ensure modes align.
+            let traitCategory: string = activeMode;
+            if (activeMode === 'font' || activeMode === 'type') traitCategory = 'typography';
+            if (activeMode === 'colour') traitCategory = 'style';
+
+            const hasTrait = atomConfig.traits.some(t => t.type === traitCategory);
+
+            if (hasTrait) {
+                return (
+                    <TraitRenderer
+                        traits={atomConfig.traits}
+                        toolState={toolState}
+                        onUpdate={onToolUpdate}
+                        activeCategory={traitCategory}
+                        isMobileView={isMobileView}
+                    />
+                );
+            }
+        }
+
         // Shared Setters Check
         const setCols = isMobileView ? setColsMobile : setColsDesktop;
         const currentCols = isMobileView ? colsMobile : colsDesktop;

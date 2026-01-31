@@ -57,6 +57,16 @@ We will upgrade the template by adding a standardized `src/engine/` directory (o
 *   [ ] **Implement**: `<SnaxBalance />` stub (Connects to `atoms-core` RPC later).
 *   [ ] **Compliance**: Add `components/legal/` (Privacy/Terms placeholders).
 
+### Phase 3: The Agent Skill (Worker C)
+**Goal**: Teach the Agent how to Upgrade Sites & Update Laws.
+*   [ ] **Update Laws**: Update `microsite-template/AGENTS.md` to reflect the new SEO/Analytics/Pricing mandates.
+*   [ ] **Create Skill**: `microsite-template/.agent/skills/upgrade-site/SKILL.md`.
+*   [ ] **Standard**: The Skill must follow **Anthropic Lead Agent Standards**:
+    *   **Role**: Explicit Persona.
+    *   **Context**: Deep understanding of the "Engine".
+    *   **CoT**: Step-by-step reasoning before action.
+    *   **Tools**: Precise usage of file editing tools.
+
 ## 4. Verification Plan
 *   **SEO**: Use `view-source` on localhost to verify `<title>`, `<meta name="description">`, and `<script type="application/ld+json">`.
 *   **Analytics**: Check Network tab for `collect` calls (GA4) or console logs.

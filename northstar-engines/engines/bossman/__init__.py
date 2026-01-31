@@ -1,1 +1,0 @@
-"""Bossman dashboard aggregation routes."""

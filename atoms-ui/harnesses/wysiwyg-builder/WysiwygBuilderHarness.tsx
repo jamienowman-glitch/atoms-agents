@@ -9,7 +9,8 @@ import { ToolPill } from '../../canvas/wysiwyg/ToolPill'; // Formerly WysiwygAdd
 import { TopPill } from './shells/TopPill';
 import { ChatRailShell, ChatMode } from './shells/ChatRailShell';
 import { LoggingLens } from './overlays/LoggingLens';
-// import { ContextPill } from './shells/ContextPill'; // DELETED per user request
+import { MultiTileConfig } from '../../ui-atoms/multi-tile/MultiTile.config';
+import { HeroConfig } from '../../ui-atoms/hero/Hero.config';
 
 // --- Canvas Cartridge Types ---
 type CanvasMode = 'web' | 'seb' | 'deck' | 'dm';
@@ -57,14 +58,31 @@ export function WysiwygBuilderHarness() {
 
     // Mock Add Logic
     const [isAddMenuOpen, setIsAddMenuOpen] = useState(false);
+    const [activeCategory, setActiveCategory] = useState<string | null>(null);
+
     const handleAddBlock = (type: Block['type']) => {
-        const newBlock: Block = {
+        const base: Block = {
             id: `block-${Date.now()}`,
             type,
             spanDesktop: 6,
             spanMobile: 2,
             variant: 'generic'
         };
+
+        // Defaults by Type
+        if (type === 'hero') {
+            base.spanDesktop = 12; // Full width
+            base.spanMobile = 2;
+            base.variant = 'generic'; // Hero doesn't use variant prop same way, but keep safe
+        } else if (type === 'text') {
+            base.spanDesktop = 12;
+            base.variant = 'text';
+        } else if (type === 'media') {
+            base.spanDesktop = 6;
+            base.variant = 'generic';
+        }
+
+        const newBlock = base;
         setBlocks(prev => [...prev, newBlock]);
         setActiveBlockId(newBlock.id);
         setIsAddMenuOpen(false);
@@ -121,25 +139,85 @@ export function WysiwygBuilderHarness() {
                 onClick={() => setIsAddMenuOpen(!isAddMenuOpen)}
             >
                 {/* Expandable Menu Content would go here */}
-                {isAddMenuOpen && (
-                    <div className="absolute bottom-12 right-0 mb-2 bg-white dark:bg-neutral-800 rounded-xl shadow-xl border border-neutral-200 dark:border-neutral-700 p-2 min-w-[200px] animate-in slide-in-from-bottom-2 fade-in duration-200">
-                        <div className="text-xs font-semibold text-neutral-500 mb-2 px-2">Add Block</div>
-                        <div className="space-y-1">
-                            {['Text', 'Image', 'Video', 'Button', 'Spacer'].map(item => (
-                                <button
-                                    key={item}
-                                    className="w-full text-left px-2 py-1.5 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 text-sm transition-colors"
-                                    onClick={() => {
-                                        console.log('Add', item);
-                                        setIsAddMenuOpen(false);
-                                    }}
-                                >
-                                    {item}
-                                </button>
+                {/* Vertical Lozenge Pop-out (Smart Direction) */}
+                {({ anchor }) => {
+                    const isUp = anchor === 'bottom';
+                    // No absolute positioning needed here. ToolPill handles placement.
+                    // Just Stack Direction.
+                    const stackClass = isUp ? 'flex-col-reverse' : 'flex-col';
+
+                    return (
+                        <div className={`flex ${stackClass} items-center gap-3 animate-in fade-in duration-200`}>
+
+                            {/* Categories */}
+                            {[
+                                { id: 'layout', icon: <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />, label: 'Layout' },
+                                { id: 'media', icon: <path d="m21 15-9-7-9 7 21 0 z" />, label: 'Media' },
+                                { id: 'commerce', icon: <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />, label: 'Commerce' }
+                            ].map(cat => (
+                                <div key={cat.id} className="relative">
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation(); // Prevent closing ToolPill
+                                            setActiveCategory(activeCategory === cat.id ? null : cat.id);
+                                        }}
+                                        className={`w-10 h-10 rounded-full shadow-lg border flex items-center justify-center text-xs hover:scale-110 transition-transform ${activeCategory === cat.id ? 'bg-black text-white border-black dark:bg-white dark:text-black' : 'bg-white dark:bg-neutral-800 border-neutral-100 dark:border-neutral-700 text-neutral-600 dark:text-neutral-300'}`}
+                                        title={cat.label}
+                                    >
+                                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                                            {cat.icon}
+                                        </svg>
+                                    </button>
+
+                                    {/* Level 2: Horizontal Pop-out (Active State) */}
+                                    {activeCategory === cat.id && (
+                                        <div className="absolute right-12 top-0 pr-2 flex items-center gap-2 z-[100]">
+                                            <div className="bg-white dark:bg-neutral-900 rounded-full border border-neutral-200 dark:border-neutral-700 shadow-xl p-1 flex items-center gap-2 px-2 h-10 animate-in slide-in-from-right-4 fade-in duration-200">
+
+                                                {/* Layout Atoms */}
+                                                {cat.id === 'layout' && (
+                                                    <>
+                                                        <button onClick={() => handleAddBlock('hero')} className="w-8 h-8 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center justify-center" title="Hero Banner">
+                                                            {/* Hero Icon (Banner) */}
+                                                            <svg className="w-4 h-4 text-neutral-700 dark:text-neutral-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                                                                <rect x="2" y="2" width="20" height="20" rx="2" />
+                                                                <line x1="2" y1="8" x2="22" y2="8" />
+                                                            </svg>
+                                                        </button>
+                                                        <button onClick={() => handleAddBlock('text')} className="w-8 h-8 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center justify-center" title="Text Block">
+                                                            {/* Text Icon */}
+                                                            <svg className="w-4 h-4 text-neutral-700 dark:text-neutral-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                                                                <path d="M4 6h16M4 12h16M4 18h8" />
+                                                            </svg>
+                                                        </button>
+                                                    </>
+                                                )}
+
+                                                {/* Media Atoms */}
+                                                {cat.id === 'media' && (
+                                                    <button onClick={() => handleAddBlock('media')} className="w-8 h-8 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center justify-center" title="Image / Video">
+                                                        {/* Image Icon */}
+                                                        <svg className="w-4 h-4 text-neutral-700 dark:text-neutral-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                                                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                                                            <circle cx="8.5" cy="8.5" r="1.5" />
+                                                            <polyline points="21 15 16 10 5 21" />
+                                                        </svg>
+                                                    </button>
+                                                )}
+
+                                                {/* Commerce Atoms (Placeholder) */}
+                                                {cat.id === 'commerce' && (
+                                                    <div className="text-[10px] uppercase font-bold text-neutral-400 px-2 min-w-12">Soon</div>
+                                                )}
+
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
                             ))}
                         </div>
-                    </div>
-                )}
+                    );
+                }}
             </ToolPill>
 
             {/* 5. CHAT RAIL (Shell Bottom) - z-[90] to be always on top of tools if expanded */}
@@ -165,14 +243,17 @@ export function WysiwygBuilderHarness() {
                 className={`transition-all duration-300 ${showTools ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 pointer-events-none'} fixed left-0 right-0 z-[60]`}
                 style={{ bottom: chatMode === 'full' ? '92vh' : chatMode === 'standard' ? '50vh' : chatMode === 'micro' ? '180px' : '128px' }}
             >
-                <ToolPop
-                    activeBlockId={activeBlockId}
-                    activeBlockType={activeBlockType}
-                    isMobileView={isMobileView}
-                    toolState={toolState}
-                    onToolUpdate={handleToolUpdate}
-                    onClose={() => setShowTools(false)}
-                />
+                <div className="flex-1 w-full pl-0">
+                    <ToolPop
+                        activeBlockId={activeBlockId}
+                        activeBlockType={activeBlockType}
+                        isMobileView={isMobileView}
+                        toolState={toolState}
+                        onToolUpdate={handleToolUpdate}
+                        onClose={() => setShowTools(false)} // Explicit Close Handler
+                        atomConfig={activeBlockType === 'hero' ? HeroConfig : undefined} // <--- REVERT: Only drive Hero via Registry. Keep MultiTile hardcoded.
+                    />
+                </div>
             </div>
 
             {/* 6B. LOGIC POP (Bottom Full Width) - Agent Brain Tools 

@@ -1,7 +1,0 @@
-task_id	priority	repo	area	title	description	files_to_touch	risks	depends_on	acceptance_criteria
-ENG-TOK-01	CRITICAL	northstar-engines	canvas	Implement Catalog Adapter Service	Create service to fetch Atoms + Snapshot and merge into Catalog.	engines/canvas_commands/catalog.py (new)	High: Merge logic must handle missing specs.	None	Service returns merged TokenCatalogItem[].
-ENG-TOK-02	CRITICAL	northstar-engines	canvas	Expose Catalog Endpoint	Create `GET /canvas/{id}/token_catalog` backed by adapter.	engines/canvas_commands/router.py	Medium	ENG-TOK-01	Endpoint returns JSON matching UI expectation.
-ENG-TOK-03	HIGH	northstar-engines	registry	Seed System Atom	Seed `id="system.design_tokens"` using existing `save_atom` to hold global defaults.	engines/registry/seed.py (new)	Low	None	GET /registry/atoms returns the system atom.
-UI-TOK-01	HIGH	atoms_factory	workbench	Wire TokenEditor	Update existing `api.ts` to hit the new endpoint.	apps/workbench/src/client/api.ts	Low	ENG-TOK-02	Editor shows live data.
-AGT-TOK-01	MEDIUM	northstar-agents	client	Implement Atom Client	Add client to fetch from `/registry/atoms`.	northstar-agents/client/registry.py	Low	None	Can list AtomSpecs.
-ENG-TOK-04	MEDIUM	northstar-engines	canvas	Implement strict set_token	Add validation in `apply_command` checking `AtomSpec.token_surface`.	engines/canvas_commands/service.py	Medium	ENG-TOK-01	Invalid token paths are rejected.
