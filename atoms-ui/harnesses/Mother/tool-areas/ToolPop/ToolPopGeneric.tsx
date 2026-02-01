@@ -238,7 +238,7 @@ export function ToolPopGeneric({
 
     return (
         <div className={`${placementClass} bg-white/95 dark:bg-neutral-900/95 backdrop-blur-xl ${borderClass} border-neutral-200 dark:border-neutral-800 rounded-2xl z-[100] shadow-[0_-5px_20px_rgba(0,0,0,0.08)] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] select-none ${visibilityClass}`}>
-            <div className={`flex flex-col transition-all duration-300 ${isCollapsed ? 'h-[60px]' : 'h-[260px]'}`}>
+            <div className={`flex flex-col transition-all duration-300 ${isCollapsed ? 'h-[60px]' : 'h-auto max-h-[280px]'}`}>
                 {/* HEAD: Dual Magnifier */}
                 <div className="flex items-center justify-center p-2 border-b border-neutral-100 dark:border-neutral-800 relative bg-neutral-50/50 dark:bg-neutral-900/50 shrink-0 h-[72px] rounded-t-2xl z-20">
 
@@ -264,7 +264,7 @@ export function ToolPopGeneric({
                 </div>
 
                 {/* BODY: Controls */}
-                <div className={`flex-1 overflow-y-auto px-4 pt-4 pb-[calc(80px+env(safe-area-inset-bottom))] transition-opacity duration-200 ${isCollapsed ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+                <div className={`flex-1 overflow-y-auto px-4 pt-4 pb-4 transition-opacity duration-200 ${isCollapsed ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
                     <div className="max-w-md mx-auto">
                         {renderControls()}
                     </div>

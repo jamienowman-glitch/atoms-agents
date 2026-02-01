@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { WysiwygCanvas, Block } from '../../canvas/wysiwyg/WysiwygCanvas';
 import { ToolPopGeneric } from '@harnesses/Mother/tool-areas/ToolPop/ToolPopGeneric';
 import { LogicPop } from '../../canvas/wysiwyg/LogicPop'; // NEW: Agent Brain/Logging
@@ -44,6 +44,13 @@ export function WysiwygBuilderHarness() {
         'feed.query.limit_desktop': 12,
         'style.bg': 'transparent',
     });
+
+    // Accordion Sync: Force nano mode when tools are open
+    useEffect(() => {
+        if (showTools) {
+            setChatMode('nano');
+        }
+    }, [showTools]);
 
     // --- Actions ---
     const handleToolUpdate = (key: string, value: any) => {
@@ -231,8 +238,7 @@ export function WysiwygBuilderHarness() {
 
             {/* 6A. TOOL POP (Bottom Right) - Canvas Output Tools */}
             <div
-                className={`transition-all duration-300 ${showTools ? 'translate-y-0 opacity-100 pointer-events-auto' : 'translate-y-full opacity-0 pointer-events-none'} fixed left-0 right-0 z-[100]`}
-                style={{ bottom: chatMode === 'full' ? '92vh' : chatMode === 'standard' ? '50vh' : chatMode === 'micro' ? '180px' : '128px' }}
+                className={`transition-all duration-300 ${showTools ? 'translate-y-0 opacity-100 pointer-events-auto' : 'translate-y-full opacity-0 pointer-events-none'} fixed left-0 right-0 z-[100] bottom-[128px]`}
             >
                 <div className="flex-1 w-full pl-0">
                     {activeBlockType === 'bleeding_hero' ? (

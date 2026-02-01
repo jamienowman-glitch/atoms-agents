@@ -1,0 +1,60 @@
+{
+    "name": "junior-agent-security",
+    "version": "1.0.0",
+    "description": "The Adult in the Room for your AI Agents",
+    "license": "Proprietary",
+    "mcp": {
+        "server_name": "junior-agent-security",
+        "executable": "junior-agent-security",
+        "tools": [
+            {
+                "name": "vault_write_secret",
+                "description": "Writes a secret to the Vault. Requires TOTP code.",
+                "requires_totp": true,
+                "firearms_type": "VAULT_WRITE"
+            },
+            {
+                "name": "setup_totp_generate",
+                "description": "Generates a QR code for initial setup.",
+                "requires_totp": false
+            },
+            {
+                "name": "setup_totp_verify",
+                "description": "Verifies the setup code and saves the secret.",
+                "requires_totp": false
+            }
+        ]
+    },
+    "onboarding": {
+        "steps": [
+            {
+                "step": 1,
+                "action": "Install Dependencies",
+                "command": "poetry install"
+            },
+            {
+                "step": 2,
+                "action": "Run Setup",
+                "command": "poetry run junior-agent-security call setup_totp_generate"
+            },
+            {
+                "step": 3,
+                "action": "Verify Code",
+                "command": "poetry run junior-agent-security call setup_totp_verify --secret <SECRET> --code <CODE>"
+            },
+            {
+                "step": 4,
+                "action": "Configure IDE",
+                "config": {
+                    "junior-agent-security": {
+                        "command": "poetry",
+                        "args": [
+                            "run",
+                            "junior-agent-security"
+                        ]
+                    }
+                }
+            }
+        ]
+    }
+}

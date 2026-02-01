@@ -1,3 +1,112 @@
+# 🚨 ATOMS-MUSCLE AGENTS.MD 🚨
+
+# 🛡️ JUNIOR AGENT SECURITY (JAS)
+**"The Adult in the Room for your AI Agents"**
+
+*   **Location**: [`/agents-services/junior-agent-security`](file:///Users/jaynowman/dev/agents-services/junior-agent-security)
+*   **Status**: ✅ Production (V1.0.0)
+*   **Type**: Local Security Sidecar (Desktop App)
+
+**What it does:**
+JAS sits between your Agents/IDE and your Secrets.
+1.  **Intercepts**: Writers trying to save secrets to `.key` files (the Vault).
+2.  **Gates**: Demands a **6-digit TOTP Code** from your phone (using `pyotp`).
+3.  **Audits**: Logs every action to a **Merkle Tree** (SHA-256 chain) for immutable accountability.
+
+**How to use:**
+*   **Desktop App**: Double-click `JuniorAgentSecurity.app` (Dashboard at http://localhost:9090).
+*   **MCP Server**: Configure your IDE to run the bundled binary (`mcp-serve` mode).
+*   **Cost**: **$0.00**. Runs on Localhost + SQLite.
+
+## 🛒 MARKETPLACE PIVOT (2026-02-01) - "AGENT-GAINS"
+> **MASTER EXECUTION PLAN**: `docs/plans/2026-02-01_marketplace_pivot_master_plan.md`
+> **The Strategy**:
+> 1.  **Payout Engine**: `docs/plans/2026-02-01_marketplace_payout_engine_plan.md` (Crypto Payouts).
+> 2.  **Economic Model**: `docs/plans/2026-02-01_marketplace_economic_model.md` (Dynamic Floor vs Fixed Peg).
+> 3.  **Trust Anchor**: `docs/plans/2026-02-01_marketplace_trust_strategy.md` (The Merkle Man).
+
+> **⚠️ CRITICAL WARNING ⚠️**  
+> **THE WYSIWYG CANVAS AND HARNESS ARE NOW PRODUCTION-READY AND LOCKED.**  
+> **DO NOT TOUCH THESE FILES WITHOUT EXPLICIT USER PERMISSION.**  
+> **IF YOU NEED TO EXTEND THE SYSTEM, READ THE SKILL DOCUMENTATION BELOW.**
+
+---
+
+## 🔒 LOCKED COMPONENTS (DO NOT EDIT)
+
+### Golden UI State - Contract-Driven Architecture
+
+We have successfully moved from hard-wired UI to a **Contract-Driven Discovery** model:
+- **The Mother Harness is the Brain**
+- **The Canvas is the Product**
+
+**Status**: ✅ **PRODUCTION-READY** — All features tested and verified
+
+### Protected Files
+
+**Harness (The Brain)**:
+- `harnesses/wysiwyg-builder/WysiwygBuilderHarness.tsx` ⛔ LOCKED
+- `harnesses/wysiwyg-builder/shells/TopPill.tsx` ⛔ LOCKED  
+- `harnesses/wysiwyg-builder/shells/ChatRailShell.tsx` ⛔ LOCKED
+- `harnesses/Mother/tool-areas/ToolPop/ToolPopGeneric.tsx` ⛔ LOCKED
+
+**Canvas (The Product)**:
+- `canvas/wysiwyg/WysiwygCanvas.tsx` ⛔ LOCKED
+- `canvas/wysiwyg/ToolPill.tsx` ⛔ LOCKED
+- `canvas/wysiwyg/LogicPop.tsx` ⛔ LOCKED
+
+### Verified Features
+
+1. ✅ **ToolPop Visibility**: Z-index stacking (Tools: 100, Chat: 40) — Tools sit perfectly above Nano-Rail
+2. ✅ **Synchronized Accordion**: Opening tools auto-shrinks chat to nano (128px), maximizing canvas space
+3. ✅ **ToolPill Evolution**: Vertical→Horizontal lozenge (Copy/Image/Feeds/CTA categories)
+4. ✅ **Typography Trait Inheritance**: New copy blocks inherit weight/slant from last edited block
+5. ✅ **Motion Axis Labels**: "Bulk Up"/"Slim Down" (wght), "Stand Up"/"Lean Back" (slnt)
+6. ✅ **Project Context Drawer**: TopPill right-side drawer with Project/Page selectors and SEO metadata
+
+---
+
+## 🛠️ HOW TO EXTEND THE SYSTEM
+
+**IF YOU NEED TO CREATE NEW ATOMS OR CANVASES, READ THIS SKILL:**
+
+📖 **[Extension Skill](file:///Users/jaynowman/dev/atoms-ui/.agent/skills/wysiwyg-extension/SKILL.md)**
+
+This skill teaches you:
+- How to create a new atom with a contract
+- How to plug a new atom into the ToolPill
+- How to create a new canvas type  
+- How to plug a new canvas into the Mother Harness
+- **What NOT to touch** in the stable system
+
+---
+
+## 📜 DEVELOPMENT RULES (MANDATORY)
+
+### 1. Contract-Driven Development ⚡ IMMUTABLE
+
+**NO MANUAL CONNECTIONS**: Do not wire a slider to an atom prop manually.
+
+**THE ONLY WAY**: Update the `.contract.ts` file and let the `ToolPopGeneric` handle it programmatically.
+
+**Example**:
+```typescript
+// ❌ WRONG: Manual wiring in component
+<Slider onChange={(val) => setImageOffset(val)} />
+
+// ✅ RIGHT: Define in contract
+{
+  id: 'layout.image_offset',
+  type: 'slider',
+  label: 'Image Offset',
+  targetVar: 'layout.image_offset',
+  min: 0,
+  max: 100
+}
+```
+
+---
+
 # 🚨 ATOMIC VISION MANDATE 🚨
 > **CRITICAL**: Every Agent MUST read the [UI Architecture v2.1 (The Fleet & Factory)](file:///Users/jaynowman/dev/atoms-core/docs/plans/2026-01-30_ui_architecture_v2_1.md) before carrying out ANY work.
 > **PATH LAW**: Use `atoms_core.config.aliases.resolve_path()` to locate repos. NEVER hardcode paths.
@@ -119,6 +228,38 @@ python3 scripts/batch_prepare_deploy.py --clean-after
 - **Multi-pass development**: Document progress in muscle-level `AGENTS.md`
 - **Status tracking**: `dev` → `prod` when MCP + SKILL are complete
 
+## 🔧 MUSCLE HARDENING WORKFLOW (UPGRADING EXISTING MUSCLES)
+
+> **For surgical upgrades** (e.g., 1080p → 4K, CPU → GPU), see the [`harden-muscle` skill](.agent/skills/harden-muscle/SKILL.md).
+
+### When to Harden (Not Create):
+- Muscle already exists (scaffolding done)
+- You need to improve the core implementation
+- Examples: Add 4K support, enable GPU, add error handling
+
+### Quick Hardening Sequence:
+```bash
+# 1. Locate muscle
+cd src/{category}/{name}
+
+# 2. Edit service.py ONLY (implement upgrade)
+# Example: Add 4K resolution support
+
+# 3. Update muscle-level AGENTS.md (track the pass)
+# Example: Mark "Pass 2: 4K Support [x] Complete"
+
+# 4. Test locally (verify backward compatibility)
+
+# 5. Update SKILL.md ONLY IF schema/capabilities changed
+# Example: Add new "resolution" parameter to schema
+
+# 6. Re-sync ONLY IF you updated SKILL.md
+python3 scripts/sync_muscles.py
+```
+
+### The Golden Rule of Hardening:
+**Edit ONLY `service.py` and muscle-level `AGENTS.md`.** Do NOT touch `mcp.py`, root `AGENTS.md`, or re-run scaffold scripts.
+
 ## 📋 STANDARD FOLDER STRUCTURE
 ```text
 atoms-muscle/
@@ -179,4 +320,18 @@ Before running `scripts/sync_muscles.py` or any Supabase registry update, comple
 - **Firearms Licenses Registry (Locked):** `firearms_licenses` registry table with `license_key` (pk), `category`, `description`. Seed initial licenses for Financial, Communication, System/Founder.
 - **Naming Engine Rule (Locked):** `formatProviderKey(platformName, rule)` is pure; basic slugify → uppercase → underscores; apply `rule` as a token template (e.g., `PROVIDER_{PLATFORM}_KEY`).
 - **Core KPIs Schema (Locked):** `core_kpis.missing_components` is jsonb array of strings; `core_kpis.metadata` is jsonb (store and do not drop).
+
+---
+
+## 🔫 TOTP FIREARMS LICENSING (IMMUTABLE)
+> Agents CANNOT self-approve dangerous actions. A HUMAN must provide a 6-digit Authenticator code.
+
+1. Agent requests a Firearms License (e.g., `AD_SPEND_EXECUTE`).
+2. Human provides code: `FIREARMS: 847291 AD_SPEND_EXECUTE`
+3. Agent calls `/api/firearms/verify`.
+4. System issues 15-minute JWT ticket.
+5. **No code = No access.**
+
+Gateway: `atoms_core.connectors.registry.validate_firearms_ticket(ticket, license)`
+
 

@@ -1,42 +1,23 @@
+from mcp.server.fastmcp import FastMCP
+from atoms_core.src.budget.snax_guard import require_snax, PaymentRequired
+from .service import SiteSpawnerService
 
-"""
-ATOM SPAWNER: MCP Wrapper.
-Path: atoms-muscle/src/atoms_muscle/factory/site_spawner/mcp.py
-"""
-try:
-    from mcp.server.fastmcp import FastMCP
-    from .service import SiteSpawnerService
-except ImportError as e:
-    # Fallback for when running in dev/test without installed package
-    from fastmcp import FastMCP
-    try:
-        from service import SiteSpawnerService
-    except ImportError:
-         from .service import SiteSpawnerService
+mcp = FastMCP("muscle-factory-site_spawner")
 
-mcp = FastMCP("Muscle Site Spawner")
 service = SiteSpawnerService()
 
 @mcp.tool()
-def check_domain_availability(domain: str) -> dict:
-    """Check if a domain is available to buy."""
-    return service.check_domain(domain)
-
-@mcp.tool()
-def buy_and_deploy_site(muscle_key: str, domain: str, provider: str = "cloudflare") -> dict:
-    """Orchestrates the purchase of a domain and deployment of a muscle microsite."""
-    # 1. Buy
-    purchase = service.purchase_domain(domain, provider)
-    if purchase.get("status") != "success":
-        return {"error": "Domain purchase failed"}
-    
-    # 2. Deploy
-    deployment = service.deploy_microsite(muscle_key, domain)
-    
-    return {
-        "purchase": purchase,
-        "deployment": deployment
-    }
+@require_snax(tool_key="muscle-factory-site_spawner")
+def run_site_spawner(input_path: str, **kwargs) -> dict:
+    """
+    Executes SiteSpawnerService.
+    """
+    try:
+        return service.run(input_path, **kwargs)
+    except PaymentRequired as exc:
+        return {"error": "payment_required", "detail": str(exc)}
+    except Exception as exc:
+        return {"error": str(exc), "error_type": type(exc).__name__}
 
 if __name__ == "__main__":
     mcp.run()

@@ -1,0 +1,1226 @@
+{
+  "version": "1.0.0",
+  "publisher": {
+    "name": "Atoms-Fam Factory",
+    "url": "https://atoms.fam",
+    "author_identity": "Atoms Orchestrator"
+  },
+  "agents": [
+    {
+      "id": "atoms_muscle.muscle-video-air_canvas",
+      "name": "Muscle-Video-Air Canvas",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-video-air_canvas capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-air_canvas"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-video-video_multicam",
+      "name": "Muscle-Video-Video Multicam",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-video-video_multicam capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_multicam"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-video-animation_kernel",
+      "name": "Muscle-Video-Animation Kernel",
+      "description": "Procedural animation engine (Auto-Rig, IK, Motion Planning). Brain Only.",
+      "pitch_headline": "Professional muscle-video-animation_kernel capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-animation_kernel"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-video-video_anonymise",
+      "name": "Muscle-Video-Video Anonymise",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-video-video_anonymise capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_anonymise"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-video-video_planet_preview",
+      "name": "Muscle-Video-Video Planet Preview",
+      "description": "Orchestrate the surface renderer + runner automation into a preview plan with optional CPU fallback.",
+      "pitch_headline": "Professional muscle-video-video_planet_preview capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_planet_preview"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-video-video_focus_automation",
+      "name": "Muscle-Video-Video Focus Automation",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-video-video_focus_automation capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_focus_automation"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-video-video_timeline",
+      "name": "Muscle-Video-Video Timeline",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-video-video_timeline capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_timeline"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-video-video_planet_runner",
+      "name": "Muscle-Video-Video Planet Runner",
+      "description": "Simulate a grounded FPS run around the planet with normals preserved for automation.",
+      "pitch_headline": "Professional muscle-video-video_planet_runner capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_planet_runner"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-video-video_planet_surface_renderer",
+      "name": "Muscle-Video-Video Planet Surface Renderer",
+      "description": "Generate glowing planetary surface frames plus lighting/curvature metadata for preview pipelines.",
+      "pitch_headline": "Professional muscle-video-video_planet_surface_renderer capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_planet_surface_renderer"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-video-video_stabilise",
+      "name": "Muscle-Video-Video Stabilise",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-video-video_stabilise capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_stabilise"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-video-video_visual_meta",
+      "name": "Muscle-Video-Video Visual Meta",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-video-video_visual_meta capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_visual_meta"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-video-auto_test",
+      "name": "Muscle-Video-Auto Test",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-video-auto_test capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-auto_test"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-video-video_regions",
+      "name": "Muscle-Video-Video Regions",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-video-video_regions capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_regions"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-video-video_text",
+      "name": "Muscle-Video-Video Text",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-video-video_text capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_text"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-video-video_preview",
+      "name": "Muscle-Video-Video Preview",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-video-video_preview capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_preview"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-video-video_captions",
+      "name": "Muscle-Video-Video Captions",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-video-video_captions capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_captions"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-video-video_presets",
+      "name": "Muscle-Video-Video Presets",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-video-video_presets capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_presets"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-video-video_assist",
+      "name": "Muscle-Video-Video Assist",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-video-video_assist capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_assist"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-video-video_360",
+      "name": "Muscle-Video-Video 360",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-video-video_360 capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_360"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-video-video_render",
+      "name": "Muscle-Video-Video Render",
+      "description": "Generates a render plan (FFmpeg command) for video composition. Brain Only.",
+      "pitch_headline": "Professional muscle-video-video_render capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_render"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-video-video_history",
+      "name": "Muscle-Video-Video History",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-video-video_history capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_history"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-video-video_mask",
+      "name": "Muscle-Video-Video Mask",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-video-video_mask capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_mask"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-video-video_motifs",
+      "name": "Muscle-Video-Video Motifs",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-video-video_motifs capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_motifs"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-video-video_batch_render",
+      "name": "Muscle-Video-Video Batch Render",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-video-video_batch_render capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_batch_render"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-video-video_edit_templates",
+      "name": "Muscle-Video-Video Edit Templates",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-video-video_edit_templates capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_edit_templates"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "system.vault_writer",
+      "name": "Vault Writer",
+      "description": "Securely writes secrets to the Northstar Vault.",
+      "pitch_headline": "Professional vault_writer capability.",
+      "category": "system",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "system processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/system.vault_writer"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-cad-cad_diff",
+      "name": "Muscle-Cad-Cad Diff",
+      "description": "Compare versions of CAD, BoQ, Cost, and Plan artifacts to assess impact.",
+      "pitch_headline": "Professional muscle-cad-cad_diff capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-cad-cad_diff"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-cad-cad_semantics",
+      "name": "Muscle-Cad-Cad Semantics",
+      "description": "Classify CAD entities into semantic elements (walls, doors, etc.) and build spatial graph.",
+      "pitch_headline": "Professional muscle-cad-cad_semantics capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-cad-cad_semantics"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-cad-cad_ingest",
+      "name": "Muscle-Cad-Cad Ingest",
+      "description": "Ingest DXF or IFC-lite files, normalize geometry, and heal topology.",
+      "pitch_headline": "Professional muscle-cad-cad_ingest capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-cad-cad_ingest"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-cad-cad_viewer",
+      "name": "Muscle-Cad-Cad Viewer",
+      "description": "Generate view-models (Gantt, Overlay) from CAD/Plan/Cost data.",
+      "pitch_headline": "Professional muscle-cad-cad_viewer capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-cad-cad_viewer"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-nexus-embeddings",
+      "name": "Muscle-Nexus-Embeddings",
+      "description": "One-line summary",
+      "pitch_headline": "Professional muscle-nexus-embeddings capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-nexus-embeddings"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-audio-audio_render",
+      "name": "Muscle-Audio-Audio Render",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-audio-audio_render capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_render"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-audio-audio_resample",
+      "name": "Muscle-Audio-Audio Resample",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-audio-audio_resample capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_resample"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-audio-audio_service",
+      "name": "Muscle-Audio-Audio Service",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-audio-audio_service capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_service"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-audio-audio_separation",
+      "name": "Muscle-Audio-Audio Separation",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-audio-audio_separation capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_separation"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-audio-rootsmanuva_engine",
+      "name": "Muscle-Audio-Rootsmanuva Engine",
+      "description": "One-line summary",
+      "pitch_headline": "Professional muscle-audio-rootsmanuva_engine capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-rootsmanuva_engine"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-audio-audio_voice_phrases",
+      "name": "Muscle-Audio-Audio Voice Phrases",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-audio-audio_voice_phrases capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_voice_phrases"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-audio-audio_field_to_samples",
+      "name": "Muscle-Audio-Audio Field To Samples",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-audio-audio_field_to_samples capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_field_to_samples"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-audio-audio_loops",
+      "name": "Muscle-Audio-Audio Loops",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-audio-audio_loops capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_loops"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-audio-audio_mix_snapshot",
+      "name": "Muscle-Audio-Audio Mix Snapshot",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-audio-audio_mix_snapshot capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_mix_snapshot"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-audio-audio_semantic_timeline",
+      "name": "Muscle-Audio-Audio Semantic Timeline",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-audio-audio_semantic_timeline capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_semantic_timeline"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-audio-audio_arrangement_engine",
+      "name": "Muscle-Audio-Audio Arrangement Engine",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-audio-audio_arrangement_engine capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_arrangement_engine"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-audio-audio_macro_engine",
+      "name": "Muscle-Audio-Audio Macro Engine",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-audio-audio_macro_engine capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_macro_engine"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-audio-audio_performance_capture",
+      "name": "Muscle-Audio-Audio Performance Capture",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-audio-audio_performance_capture capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_performance_capture"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "audio.test_unit",
+      "name": "Test Unit",
+      "description": "A new heavy lifting muscle.",
+      "pitch_headline": "Professional test_unit capability.",
+      "category": "audio",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "audio processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/audio.test_unit"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-audio-audio_structure_engine",
+      "name": "Muscle-Audio-Audio Structure Engine",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-audio-audio_structure_engine capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_structure_engine"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-audio-audio_pattern_engine",
+      "name": "Muscle-Audio-Audio Pattern Engine",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-audio-audio_pattern_engine capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_pattern_engine"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-audio-audio_harmony",
+      "name": "Muscle-Audio-Audio Harmony",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-audio-audio_harmony capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_harmony"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-audio-audio_normalise",
+      "name": "Muscle-Audio-Audio Normalise",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-audio-audio_normalise capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_normalise"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-audio-audio_mix_buses",
+      "name": "Muscle-Audio-Audio Mix Buses",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-audio-audio_mix_buses capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_mix_buses"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-audio-audio_groove",
+      "name": "Muscle-Audio-Audio Groove",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-audio-audio_groove capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_groove"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-audio-audio_fx_chain",
+      "name": "Muscle-Audio-Audio Fx Chain",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-audio-audio_fx_chain capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_fx_chain"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-audio-audio_sample_library",
+      "name": "Muscle-Audio-Audio Sample Library",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-audio-audio_sample_library capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_sample_library"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-audio-sample_pack_engine",
+      "name": "Muscle-Audio-Sample Pack Engine",
+      "description": "One-line summary",
+      "pitch_headline": "Professional muscle-audio-sample_pack_engine capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-sample_pack_engine"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-audio-audio_capture_normalize",
+      "name": "Muscle-Audio-Audio Capture Normalize",
+      "description": "Normalize audio captures from MAYBES UI for waveform display and playback.",
+      "pitch_headline": "Professional muscle-audio-audio_capture_normalize capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_capture_normalize"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-audio-audio_voice_enhance",
+      "name": "Muscle-Audio-Audio Voice Enhance",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-audio-audio_voice_enhance capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_voice_enhance"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-audio-audio_hits",
+      "name": "Muscle-Audio-Audio Hits",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-audio-audio_hits capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_hits"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-audio-audio_timeline",
+      "name": "Muscle-Audio-Audio Timeline",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-audio-audio_timeline capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_timeline"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-audio-audio_to_video_origin",
+      "name": "Muscle-Audio-Audio To Video Origin",
+      "description": "Auto-generated description.",
+      "pitch_headline": "Professional muscle-audio-audio_to_video_origin capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_to_video_origin"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-knowledge-search_assistant",
+      "name": "Muscle-Knowledge-Search Assistant",
+      "description": "RAG assistant for semantic search across Nexus domains with Haze logging.",
+      "pitch_headline": "Professional muscle-knowledge-search_assistant capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-knowledge-search_assistant"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-construction-boq_quantities",
+      "name": "Muscle-Construction-Boq Quantities",
+      "description": "Calculate Bill of Quantities (areas, volumes, counts) from a semantic model.",
+      "pitch_headline": "Professional muscle-construction-boq_quantities capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-construction-boq_quantities"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-construction-boq_costing",
+      "name": "Muscle-Construction-Boq Costing",
+      "description": "Generate cost estimates from Bill of Quantities using rate catalogs.",
+      "pitch_headline": "Professional muscle-construction-boq_costing capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-construction-boq_costing"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "atoms_muscle.muscle-media-media_v2",
+      "name": "Muscle-Media-Media V2",
+      "description": "Media V2 asset management - upload, get, and list media assets for MAYBES UI.",
+      "pitch_headline": "Professional muscle-media-media_v2 capability.",
+      "category": "atoms_muscle",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "atoms_muscle processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/atoms_muscle.muscle-media-media_v2"
+      },
+      "status": "prod"
+    },
+    {
+      "id": "system.vault_writer",
+      "name": "Vault Writer",
+      "description": "Securely writes secrets to the Northstar Vault.",
+      "pitch_headline": "Professional vault_writer capability.",
+      "category": "system",
+      "pricing": {
+        "model": "snax_metered",
+        "rate": 10,
+        "unit": "minute"
+      },
+      "capabilities": [
+        "system processing"
+      ],
+      "endpoints": {
+        "mcp": "sse://atoms.fam/mcp/system.vault_writer"
+      },
+      "status": "prod"
+    }
+  ]
+}

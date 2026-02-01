@@ -80,6 +80,15 @@ SKILL_TEMPLATE = """---
 name: {muscle_name}
 description: {description}
 category: {category}
+aeo_keywords:
+  - {category} processing
+  - GPU-accelerated {description_short}
+pitch_headline: "Stop waiting for renders. {description_short} in seconds."
+author_identity: Compute Engineer
+pitch: |
+  [TODO: Add 2-3 paragraph editorial pitch describing this muscle's value to 
+  non-technical buyers (Shopify owners, agencies, athletes). Focus on outcomes, 
+  not implementation. Make it magazine-ready.]
 ---
 
 # {muscle_title} Skill
@@ -103,6 +112,77 @@ category: {category}
   "action": "default_action"
 }
 ```
+
+## Fun Check
+> [TODO: Add one random hip-hop question, favorite era, or album recommendation]
+"""
+
+TEST_BENCH_TEMPLATE = """import unittest
+from .service import {class_name}Service
+
+class Test{class_name}(unittest.IsolatedAsyncioTestCase):
+    async def asyncSetUp(self):
+        self.service = {class_name}Service()
+    
+    async def test_basic_functionality(self):
+        \"\"\"Test core capability\"\"\"
+        # TODO: Replace with actual test case
+        result = await self.service.execute_task({{
+            "action": "default_action"
+        }})
+        self.assertEqual(result["status"], "success")
+    
+    async def test_error_handling(self):
+        \"\"\"Test graceful failure on invalid input\"\"\"
+        # TODO: Add error case (e.g., missing file, invalid param)
+        result = await self.service.execute_task({{
+            "action": "invalid_action"
+        }})
+        self.assertIn("error", result)
+    
+    async def test_backward_compatibility(self):
+        \"\"\"Ensure existing params still work after upgrades\"\"\"
+        # TODO: Test that old API calls (without new params) still function
+        pass
+"""
+
+QA_SKILL_TEMPLATE = """---
+name: qa-{muscle_name}
+description: Quality assurance criteria for {muscle_name}
+auditor_role: Vision-capable QA Agent
+---
+
+# QA Acceptance Criteria: {muscle_title}
+
+## Functional Tests (Automated)
+- [ ] Run `pytest test_bench.py` - All tests pass
+- [ ] Verify backward compatibility (existing params still work)
+- [ ] Check error handling (invalid inputs return clean errors)
+
+## Visual Verification (Vision Agent Required)
+**Input**: [Generated output file from test_bench.py]
+
+**Checks**:
+1. **Output Quality**: Meets professional/broadcast standards
+2. **Consistency**: No artifacts, glitches, or degradation
+3. **Accuracy**: Output matches expected result
+
+**Luxury Criteria**:
+- Would this output pass for a $500/month SaaS product?
+- Is the quality indistinguishable from industry-standard tools?
+- Does it feel "heavyweight" or "budget"?
+
+## Performance Benchmarks
+- [ ] Processing speed: [TODO: Define acceptable range]
+- [ ] Resource usage: [TODO: Define CPU/GPU/Memory limits]
+
+## Audit Outcome
+- **PASS**: All functional tests + visual checks pass
+- **FAIL**: Any critical issue (functional break, visual artifact)
+- **LUXURY FAIL**: Works but feels "budget" (acceptable for dev, not prod)
+
+## Notes
+[Space for auditor to record observations]
 """
 
 def to_camel_case(snake_str):
@@ -184,6 +264,19 @@ def main():
         print("⚖️  Injected AGENTS.md (Muscle Law)")
     else:
         print("⚠️ Could not find root AGENTS.md to copy.")
+
+    # test_bench.py (Phase 8)
+    test_content = TEST_BENCH_TEMPLATE.replace("{class_name}", class_name)
+    with open(target_dir / "test_bench.py", "w") as f:
+        f.write(test_content)
+    print("✅ Created test_bench.py (Phase 8: Audit Prep)")
+
+    # QA_SKILL.md (Phase 8)
+    qa_skill_content = QA_SKILL_TEMPLATE.replace("{muscle_name}", name)\
+                                        .replace("{muscle_title}", name.replace("_", " ").title())
+    with open(target_dir / "QA_SKILL.md", "w") as f:
+        f.write(qa_skill_content)
+    print("✅ Created QA_SKILL.md (Phase 8: Auditor Criteria)")
 
     # 4. Success
     print("\n🎉 MUSCLE SCAFFOLDED SUCCESSFULLY!")

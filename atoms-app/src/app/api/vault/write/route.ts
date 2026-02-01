@@ -29,14 +29,24 @@ export async function POST(request: NextRequest) {
             fs.mkdirSync(KEY_STORAGE_PATH, { recursive: true });
         }
 
-        // 2. Generate Secure Filename
-        // Use a hash of the key + timestamp to ensure uniqueness but opacity
-        const hash = crypto.createHash('sha256').update(secret_key + Date.now().toString()).digest('hex').substring(0, 16);
-        const vaultFilename = `${driver}_${hash}.key`;
+        // 2. Generate Secure Filename (Canonical)
+        // Use the Naming Engine to ensure deterministic lookup by Muscles
+        // "Marketplace Solana Wallet" -> "MARKETPLACE_SOLANA_WALLET.key"
+
+        // Import canonical naming logic (ported from lib/engines/naming-engine.ts)
+        // Since we are in an API route, let's keep it simple and consistent.
+        // Logic: slugify -> uppercase -> underscores
+        const canonicalName = name.trim().toLowerCase()
+            .replace(/[^a-z0-9]+/g, '_')
+            .replace(/^_+|_+$/g, '')
+            .toUpperCase();
+
+        const vaultFilename = `${canonicalName}.key`;
         const fullPath = path.join(KEY_STORAGE_PATH, vaultFilename);
 
         // 3. Write Secret to Disk
         // Permissions: 600 (Read/Write for owner only)
+        // Overwrite if exists (standard behavior for updating keys)
         fs.writeFileSync(fullPath, secret_key, { encoding: 'utf-8', mode: 0o600 });
 
         // 4. Save Metadata to DB

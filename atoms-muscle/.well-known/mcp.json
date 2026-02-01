@@ -1,0 +1,256 @@
+{
+  "mcpServers": {
+    "atoms_muscle.muscle-video-air_canvas": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-air_canvas",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-video-video_multicam": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_multicam",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-video-animation_kernel": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-animation_kernel",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-video-video_anonymise": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_anonymise",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-video-video_planet_preview": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_planet_preview",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-video-video_focus_automation": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_focus_automation",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-video-video_timeline": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_timeline",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-video-video_planet_runner": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_planet_runner",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-video-video_planet_surface_renderer": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_planet_surface_renderer",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-video-video_stabilise": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_stabilise",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-video-video_visual_meta": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_visual_meta",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-video-auto_test": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-auto_test",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-video-video_regions": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_regions",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-video-video_text": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_text",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-video-video_preview": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_preview",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-video-video_captions": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_captions",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-video-video_presets": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_presets",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-video-video_assist": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_assist",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-video-video_360": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_360",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-video-video_render": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_render",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-video-video_history": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_history",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-video-video_mask": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_mask",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-video-video_motifs": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_motifs",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-video-video_batch_render": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_batch_render",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-video-video_edit_templates": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-video-video_edit_templates",
+      "requires_auth": true
+    },
+    "system.vault_writer": {
+      "url": "sse://atoms.fam/mcp/system.vault_writer",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-cad-cad_diff": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-cad-cad_diff",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-cad-cad_semantics": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-cad-cad_semantics",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-cad-cad_ingest": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-cad-cad_ingest",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-cad-cad_viewer": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-cad-cad_viewer",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-nexus-embeddings": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-nexus-embeddings",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-audio-audio_render": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_render",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-audio-audio_resample": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_resample",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-audio-audio_service": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_service",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-audio-audio_separation": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_separation",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-audio-rootsmanuva_engine": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-rootsmanuva_engine",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-audio-audio_voice_phrases": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_voice_phrases",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-audio-audio_field_to_samples": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_field_to_samples",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-audio-audio_loops": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_loops",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-audio-audio_mix_snapshot": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_mix_snapshot",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-audio-audio_semantic_timeline": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_semantic_timeline",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-audio-audio_arrangement_engine": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_arrangement_engine",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-audio-audio_macro_engine": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_macro_engine",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-audio-audio_performance_capture": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_performance_capture",
+      "requires_auth": true
+    },
+    "audio.test_unit": {
+      "url": "sse://atoms.fam/mcp/audio.test_unit",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-audio-audio_structure_engine": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_structure_engine",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-audio-audio_pattern_engine": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_pattern_engine",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-audio-audio_harmony": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_harmony",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-audio-audio_normalise": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_normalise",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-audio-audio_mix_buses": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_mix_buses",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-audio-audio_groove": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_groove",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-audio-audio_fx_chain": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_fx_chain",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-audio-audio_sample_library": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_sample_library",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-audio-sample_pack_engine": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-sample_pack_engine",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-audio-audio_capture_normalize": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_capture_normalize",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-audio-audio_voice_enhance": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_voice_enhance",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-audio-audio_hits": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_hits",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-audio-audio_timeline": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_timeline",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-audio-audio_to_video_origin": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-audio-audio_to_video_origin",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-knowledge-search_assistant": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-knowledge-search_assistant",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-construction-boq_quantities": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-construction-boq_quantities",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-construction-boq_costing": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-construction-boq_costing",
+      "requires_auth": true
+    },
+    "atoms_muscle.muscle-media-media_v2": {
+      "url": "sse://atoms.fam/mcp/atoms_muscle.muscle-media-media_v2",
+      "requires_auth": true
+    }
+  }
+}

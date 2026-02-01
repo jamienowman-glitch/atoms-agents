@@ -1,54 +1,23 @@
-from typing import Any, Dict, List
+from mcp.server.fastmcp import FastMCP
+from atoms_core.src.budget.snax_guard import require_snax, PaymentRequired
 from .service import VaultWriterService
+
+mcp = FastMCP("muscle-system-vault_writer")
 
 service = VaultWriterService()
 
-def list_tools() -> List[Dict[str, Any]]:
-    return [
-        {
-            "name": "write_secret",
-            "description": "Securely writes a secret string to the local vault (disk). NEVER outputs the value.",
-            "input_schema": {
-                "type": "object",
-                "properties": {
-                    "key": {
-                        "type": "string",
-                        "description": "The secret name. Must be UPPERCASE_UNDERSCORE (e.g., PROVIDER_API_KEY)."
-                    },
-                    "value": {
-                        "type": "string",
-                        "description": "The secret value to store."
-                    }
-                },
-                "required": ["key", "value"]
-            }
-        }
-    ]
+@mcp.tool()
+@require_snax(tool_key="muscle-system-vault_writer")
+def run_vault_writer(input_path: str, **kwargs) -> dict:
+    """
+    Executes VaultWriterService.
+    """
+    try:
+        return service.run(input_path, **kwargs)
+    except PaymentRequired as exc:
+        return {"error": "payment_required", "detail": str(exc)}
+    except Exception as exc:
+        return {"error": str(exc), "error_type": type(exc).__name__}
 
-async def call_tool(name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:
-    if name == "write_secret":
-        try:
-            result = await service.write_secret(
-                key=arguments["key"],
-                value=arguments["value"]
-            )
-            return {
-                "content": [
-                    {
-                        "type": "text",
-                        "text": f"Status: {result}"
-                    }
-                ]
-            }
-        except Exception as e:
-            return {
-                "content": [
-                    {
-                        "type": "text",
-                        "text": f"Error writing secret: {str(e)}"
-                    }
-                ],
-                "isError": True
-            }
-
-    raise ValueError(f"Unknown tool: {name}")
+if __name__ == "__main__":
+    mcp.run()

@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "junior-agent-security"
+version = "0.1.0"
+description = "The Adult in the Room for your AI Agents. Local security sidecar."
+authors = ["Atoms <security@atoms.dev>"]
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.13"
+mcp = "*"
+pyotp = "*"
+qrcode = "*"
+httpx = "*"
+fastapi = "*"
+uvicorn = "*"
+sqlite-utils = "*"
+jinja2 = "*"
+typer = "*"
+
+[tool.poetry.group.dev.dependencies]
+pyinstaller = "^6.4.0"
+
+[tool.poetry.scripts]
+junior-agent-security = "junior_agent_security.main:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

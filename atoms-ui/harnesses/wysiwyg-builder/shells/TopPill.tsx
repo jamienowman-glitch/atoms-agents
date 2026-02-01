@@ -23,6 +23,19 @@ export function TopPill({ setIsRightPanelOpen, setIsExportOpen, logoIcon, RightC
     const [isNavOpen, setIsNavOpen] = useState(false);
     const [isActionMenuOpen, setIsActionMenuOpen] = useState(false);
     const [isChannelMenuOpen, setIsChannelMenuOpen] = useState(false);
+    const [showPageDrawer, setShowPageDrawer] = useState(false);
+
+    // SEO Form State
+    const [selectedProject, setSelectedProject] = useState('project-1');
+    const [selectedPage, setSelectedPage] = useState('home');
+    const [seoData, setSeoData] = useState({
+        metaTitle: '',
+        metaDescription: '',
+        h1: '',
+        ga4Id: '',
+        pixelId: ''
+    });
+
     const tempGestureRef = useRef<{ y: number } | null>(null);
 
     const toggleState = (newState: 'nx' | 'm21') => {
@@ -202,7 +215,7 @@ export function TopPill({ setIsRightPanelOpen, setIsExportOpen, logoIcon, RightC
 
             {/* Page Icon (Settings) */}
             <button
-                onClick={() => setIsRightPanelOpen?.(true)}
+                onClick={() => setShowPageDrawer(true)}
                 className={`p-2 rounded-full transition-colors ${state === 'm21' ? 'hover:bg-black/10' : 'hover:bg-white/10'}`}
                 title="Page Settings"
                 type="button"
@@ -219,68 +232,200 @@ export function TopPill({ setIsRightPanelOpen, setIsExportOpen, logoIcon, RightC
     );
 
     return (
-        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50">
-            <div className="flex items-center bg-black/90 backdrop-blur-md rounded-full shadow-[0_0_15px_rgba(255,255,255,0.15)] text-white h-12 px-2 transition-all duration-300">
+        <>
+            {/* Page Drawer */}
+            {showPageDrawer && (
+                <>
+                    {/* Backdrop */}
+                    <div
+                        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[80] animate-in fade-in duration-300"
+                        onClick={() => setShowPageDrawer(false)}
+                    />
 
-                {/* --- LEFT EXPANSION (NX) --- */}
-                <div
-                    className={`flex items-center overflow-hidden transition-all duration-300 ease-in-out ${state === 'nx' ? 'max-w-[170px] opacity-100 mr-2 pointer-events-auto' : 'max-w-0 opacity-0 pointer-events-none'}`}
-                >
-                    <div className={`flex items-center gap-2 ${state === 'nx' ? 'bg-white text-black border border-black/80 rounded-full px-1 py-0.5' : ''}`}>
-                        {/* Config Icon */}
-                        <button className={`p-2 rounded-full transition-colors ${state === 'nx' ? 'hover:bg-black/10' : 'hover:bg-white/10'}`} title="Config" type="button">
-                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.09a2 2 0 0 1-1-1.74v-.47a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
-                                <circle cx="12" cy="12" r="3" />
-                            </svg>
-                        </button>
-                        {/* Menu Icon */}
-                        <button className={`p-2 rounded-full transition-colors ${state === 'nx' ? 'hover:bg-black/10' : 'hover:bg-white/10'}`} title="Menu" type="button">
-                            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                                <line x1="3" y1="12" x2="21" y2="12" />
-                                <line x1="3" y1="6" x2="21" y2="6" />
-                                <line x1="3" y1="18" x2="21" y2="18" />
-                            </svg>
-                        </button>
+                    {/* Drawer */}
+                    <div className="fixed right-0 top-0 bottom-0 w-[400px] max-w-[90vw] bg-white dark:bg-neutral-900 border-l border-neutral-200 dark:border-neutral-800 z-[90] shadow-2xl animate-in slide-in-from-right duration-300 overflow-y-auto">
+                        <div className="p-6">
+                            {/* Header */}
+                            <div className="flex items-center justify-between mb-6">
+                                <h2 className="text-xl font-semibold">Page Settings</h2>
+                                <button
+                                    onClick={() => setShowPageDrawer(false)}
+                                    className="p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+                                >
+                                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                                        <path d="M18 6L6 18M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+
+                            {/* Project Selector */}
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium mb-2">Project</label>
+                                <select
+                                    value={selectedProject}
+                                    onChange={(e) => setSelectedProject(e.target.value)}
+                                    className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 rounded-lg bg-white dark:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
+                                >
+                                    <option value="project-1">Multi21 (Current)</option>
+                                    <option value="project-2">Atoms Fam OS</option>
+                                    <option value="project-3">Studios</option>
+                                </select>
+                            </div>
+
+                            {/* Page Selector */}
+                            <div className="mb-6">
+                                <label className="block text-sm font-medium mb-2">Page</label>
+                                <select
+                                    value={selectedPage}
+                                    onChange={(e) => setSelectedPage(e.target.value)}
+                                    className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 rounded-lg bg-white dark:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
+                                >
+                                    <option value="home">Home</option>
+                                    <option value="about">About</option>
+                                    <option value="features">Features</option>
+                                    <option value="pricing">Pricing</option>
+                                </select>
+                            </div>
+
+                            <div className="border-t border-neutral-200 dark:border-neutral-800 pt-6 mb-6">
+                                <h3 className="text-sm font-semibold mb-4">SEO Metadata</h3>
+
+                                {/* Meta Title */}
+                                <div className="mb-4">
+                                    <label className="block text-xs font-medium mb-1.5 text-neutral-600 dark:text-neutral-400">Meta Title</label>
+                                    <input
+                                        type="text"
+                                        value={seoData.metaTitle}
+                                        onChange={(e) => setSeoData({ ...seoData, metaTitle: e.target.value })}
+                                        placeholder="e.g., Multi21 | AI Marketing Agents"
+                                        className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 rounded-lg bg-white dark:bg-neutral-800 text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
+                                    />
+                                </div>
+
+                                {/* Meta Description */}
+                                <div className="mb-4">
+                                    <label className="block text-xs font-medium mb-1.5 text-neutral-600 dark:text-neutral-400">Meta Description</label>
+                                    <textarea
+                                        value={seoData.metaDescription}
+                                        onChange={(e) => setSeoData({ ...seoData, metaDescription: e.target.value })}
+                                        placeholder="Brief description for search engines..."
+                                        rows={3}
+                                        className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 rounded-lg bg-white dark:bg-neutral-800 text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white resize-none"
+                                    />
+                                </div>
+
+                                {/* H1 */}
+                                <div className="mb-4">
+                                    <label className="block text-xs font-medium mb-1.5 text-neutral-600 dark:text-neutral-400">H1 Heading</label>
+                                    <input
+                                        type="text"
+                                        value={seoData.h1}
+                                        onChange={(e) => setSeoData({ ...seoData, h1: e.target.value })}
+                                        placeholder="Main page heading"
+                                        className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 rounded-lg bg-white dark:bg-neutral-800 text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
+                                    />
+                                </div>
+
+                                {/* GA4 ID */}
+                                <div className="mb-4">
+                                    <label className="block text-xs font-medium mb-1.5 text-neutral-600 dark:text-neutral-400">Google Analytics 4 ID</label>
+                                    <input
+                                        type="text"
+                                        value={seoData.ga4Id}
+                                        onChange={(e) => setSeoData({ ...seoData, ga4Id: e.target.value })}
+                                        placeholder="G-XXXXXXXXXX"
+                                        className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 rounded-lg bg-white dark:bg-neutral-800 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
+                                    />
+                                </div>
+
+                                {/* Meta Pixel ID */}
+                                <div className="mb-6">
+                                    <label className="block text-xs font-medium mb-1.5 text-neutral-600 dark:text-neutral-400">Meta Pixel ID</label>
+                                    <input
+                                        type="text"
+                                        value={seoData.pixelId}
+                                        onChange={(e) => setSeoData({ ...seoData, pixelId: e.target.value })}
+                                        placeholder="123456789012345"
+                                        className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 rounded-lg bg-white dark:bg-neutral-800 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
+                                    />
+                                </div>
+
+                                {/* View SEO Canvas Button */}
+                                <a
+                                    href={`/seo-canvas?page=${selectedPage}`}
+                                    className="block w-full px-4 py-2.5 bg-black dark:bg-white text-white dark:text-black text-center rounded-lg font-medium hover:opacity-90 transition-opacity"
+                                >
+                                    View SEO Canvas
+                                </a>
+                            </div>
+                        </div>
                     </div>
+                </>
+            )}
+
+            <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50">
+                <div className="flex items-center bg-black/90 backdrop-blur-md rounded-full shadow-[0_0_15px_rgba(255,255,255,0.15)] text-white h-12 px-2 transition-all duration-300">
+
+                    {/* --- LEFT EXPANSION (NX) --- */}
+                    <div
+                        className={`flex items-center overflow-hidden transition-all duration-300 ease-in-out ${state === 'nx' ? 'max-w-[170px] opacity-100 mr-2 pointer-events-auto' : 'max-w-0 opacity-0 pointer-events-none'}`}
+                    >
+                        <div className={`flex items-center gap-2 ${state === 'nx' ? 'bg-white text-black border border-black/80 rounded-full px-1 py-0.5' : ''}`}>
+                            {/* Config Icon */}
+                            <button className={`p-2 rounded-full transition-colors ${state === 'nx' ? 'hover:bg-black/10' : 'hover:bg-white/10'}`} title="Config" type="button">
+                                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.09a2 2 0 0 1-1-1.74v-.47a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+                                    <circle cx="12" cy="12" r="3" />
+                                </svg>
+                            </button>
+                            {/* Menu Icon */}
+                            <button className={`p-2 rounded-full transition-colors ${state === 'nx' ? 'hover:bg-black/10' : 'hover:bg-white/10'}`} title="Menu" type="button">
+                                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                                    <line x1="3" y1="12" x2="21" y2="12" />
+                                    <line x1="3" y1="6" x2="21" y2="6" />
+                                    <line x1="3" y1="18" x2="21" y2="18" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* --- LEFT TRIGGER (Nˣ) --- */}
+                    <button
+                        onClick={() => toggleState('nx')}
+                        className={`w-8 h-8 flex items-center justify-center rounded-full text-xs font-bold transition-all duration-300 ${state === 'nx' ? 'bg-white text-black' : 'bg-white/10 hover:bg-white/20'}`}
+                    >
+                        <span>N<sup>x</sup></span>
+                    </button>
+
+                    {/* --- CENTER --- */}
+                    <button
+                        type="button"
+                        className="px-4 font-sans text-sm tracking-wider text-white/80 select-none"
+                        onPointerDown={handleTempPointerDown}
+                        onPointerUp={handleTempPointerUp}
+                        onDoubleClick={() => setIsHeaderOpen(true)}
+                        title="Expand header"
+                    >
+                        72°
+                    </button>
+
+                    {/* --- RIGHT TRIGGER (M²¹) --- */}
+                    <button
+                        onClick={() => toggleState('m21')}
+                        className={`w-8 h-8 flex items-center justify-center rounded-full text-xs font-bold transition-all duration-300 ${state === 'm21' ? 'bg-white text-black' : 'bg-white/10 hover:bg-white/20'}`}
+                    >
+                        {logoIcon ?? (<span>M<sup>21</sup></span>)}
+                    </button>
+
+                    {/* --- RIGHT EXPANSION (M21) --- */}
+                    <div
+                        className={`flex items-center overflow-hidden transition-all duration-300 ease-in-out ${state === 'm21' ? 'max-w-[190px] opacity-100 ml-2 pointer-events-auto' : 'max-w-0 opacity-0 pointer-events-none'}`}
+                    >
+                        {rightControls}
+                    </div>
+
                 </div>
-
-                {/* --- LEFT TRIGGER (Nˣ) --- */}
-                <button
-                    onClick={() => toggleState('nx')}
-                    className={`w-8 h-8 flex items-center justify-center rounded-full text-xs font-bold transition-all duration-300 ${state === 'nx' ? 'bg-white text-black' : 'bg-white/10 hover:bg-white/20'}`}
-                >
-                    <span>N<sup>x</sup></span>
-                </button>
-
-                {/* --- CENTER --- */}
-                <button
-                    type="button"
-                    className="px-4 font-sans text-sm tracking-wider text-white/80 select-none"
-                    onPointerDown={handleTempPointerDown}
-                    onPointerUp={handleTempPointerUp}
-                    onDoubleClick={() => setIsHeaderOpen(true)}
-                    title="Expand header"
-                >
-                    72°
-                </button>
-
-                {/* --- RIGHT TRIGGER (M²¹) --- */}
-                <button
-                    onClick={() => toggleState('m21')}
-                    className={`w-8 h-8 flex items-center justify-center rounded-full text-xs font-bold transition-all duration-300 ${state === 'm21' ? 'bg-white text-black' : 'bg-white/10 hover:bg-white/20'}`}
-                >
-                    {logoIcon ?? (<span>M<sup>21</sup></span>)}
-                </button>
-
-                {/* --- RIGHT EXPANSION (M21) --- */}
-                <div
-                    className={`flex items-center overflow-hidden transition-all duration-300 ease-in-out ${state === 'm21' ? 'max-w-[190px] opacity-100 ml-2 pointer-events-auto' : 'max-w-0 opacity-0 pointer-events-none'}`}
-                >
-                    {rightControls}
-                </div>
-
             </div>
-        </div>
+        </>
     );
 }

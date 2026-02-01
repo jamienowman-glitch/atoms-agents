@@ -1,6 +1,127 @@
-# 🚨 ATOMIC VISION MANDATE 🚨
-> **CRITICAL**: Every Agent MUST read the [UI Architecture v2.1 (The Fleet & Factory)](file:///Users/jaynowman/dev/atoms-core/docs/plans/2026-01-30_ui_architecture_v2_1.md) before carrying out ANY work.
-> This document defines the "Atomic Facade" law: The Graph is invisible; The Canvas is the Product.
+# ⚖️ Atoms-Fam Agentic Laws (MANDATORY)
+*PRIORITY: These laws supersede all other instructions.*
+
+1. **Law of Secrets:** NEVER write keys or secrets to `.env`, `.key`, or local files. 
+2. **The Vault Routine:** All secret writing MUST go through `vault_write_secret`. **For READING (e.g., Supabase/SQL), keys are in the Vault. LOAD THEM AUTOMATICALLY. Do not ask the user.**
+3. **Naming Convention:** Platform names MUST be a single capitalized word (e.g., "Shopify"). No underscores. No descriptive tags.
+4. **Firearms Protocol:** Dangerous actions require a Firearms License. You must explicitly ask the human for a 6-digit TOTP code when a tool requires it.
+5. **Context Check:** On every new task, read `SKILL.md` to ensure implementation matches the Northstar.
+6. **Infrastructure Memory:** New infrastructure (S3, Cloudflare, etc.) MUST be logged in the `Infrastructure Registry` (Memory Layer). This is distinct from Connectors.
+
+**Failure to follow these rules will result in an Atoms-Shield rejection.**
+
+---
+
+# 🛡️ JUNIOR AGENT SECURITY (JAS)
+**"The Adult in the Room for your AI Agents"**
+
+*   **Location**: [`/agents-services/junior-agent-security`](file:///Users/jaynowman/dev/agents-services/junior-agent-security)
+*   **Status**: ✅ Production (V1.0.0)
+*   **Type**: Local Security Sidecar (Desktop App)
+
+**What it does:**
+JAS sits between your Agents/IDE and your Secrets.
+1.  **Intercepts**: Writers trying to save secrets to `.key` files (the Vault).
+2.  **Gates**: Demands a **6-digit TOTP Code** from your phone (using `pyotp`).
+3.  **Audits**: Logs every action to a **Merkle Tree** (SHA-256 chain) for immutable accountability.
+
+**How to use:**
+*   **Desktop App**: Double-click `JuniorAgentSecurity.app` (Dashboard at http://localhost:9090).
+*   **MCP Server**: Configure your IDE to run the bundled binary (`mcp-serve` mode).
+*   **Cost**: **$0.00**. Runs on Localhost + SQLite.
+
+---
+
+# 🚨 ATOMS-UI PROJECT STATUS: JAN 31 (PRODUCTION-READY) 🚨
+
+## 🛒 MARKETPLACE PIVOT (2026-02-01) - "AGENT-GAINS"
+> **MASTER EXECUTION PLAN**: `docs/plans/2026-02-01_marketplace_pivot_master_plan.md`
+> **The Strategy**:
+> 1.  **Payout Engine**: `docs/plans/2026-02-01_marketplace_payout_engine_plan.md` (Crypto Payouts).
+> 2.  **Economic Model**: `docs/plans/2026-02-01_marketplace_economic_model.md` (Dynamic Floor vs Fixed Peg).
+> 3.  **Trust Anchor**: `docs/plans/2026-02-01_marketplace_trust_strategy.md` (The Merkle Man).
+
+> **⚠️ CRITICAL WARNING ⚠️**  
+> **THE WYSIWYG CANVAS AND HARNESS ARE NOW PRODUCTION-READY AND LOCKED.**  
+> **DO NOT TOUCH THESE FILES WITHOUT EXPLICIT USER PERMISSION.**  
+> **IF YOU NEED TO EXTEND THE SYSTEM, READ THE SKILL DOCUMENTATION BELOW.**
+
+---
+
+## 🔒 LOCKED COMPONENTS (DO NOT EDIT)
+
+### Golden UI State - Contract-Driven Architecture
+
+We have successfully moved from hard-wired UI to a **Contract-Driven Discovery** model:
+- **The Mother Harness is the Brain**
+- **The Canvas is the Product**
+
+**Status**: ✅ **PRODUCTION-READY** — All features tested and verified
+
+### Protected Files
+
+**Harness (The Brain)**:
+- `harnesses/wysiwyg-builder/WysiwygBuilderHarness.tsx` ⛔ LOCKED
+- `harnesses/wysiwyg-builder/shells/TopPill.tsx` ⛔ LOCKED  
+- `harnesses/wysiwyg-builder/shells/ChatRailShell.tsx` ⛔ LOCKED
+- `harnesses/Mother/tool-areas/ToolPop/ToolPopGeneric.tsx` ⛔ LOCKED
+
+**Canvas (The Product)**:
+- `canvas/wysiwyg/WysiwygCanvas.tsx` ⛔ LOCKED
+- `canvas/wysiwyg/ToolPill.tsx` ⛔ LOCKED
+- `canvas/wysiwyg/LogicPop.tsx` ⛔ LOCKED
+
+### Verified Features
+
+1. ✅ **ToolPop Visibility**: Z-index stacking (Tools: 100, Chat: 40) — Tools sit perfectly above Nano-Rail
+2. ✅ **Synchronized Accordion**: Opening tools auto-shrinks chat to nano (128px), maximizing canvas space
+3. ✅ **ToolPill Evolution**: Vertical→Horizontal lozenge (Copy/Image/Feeds/CTA categories)
+4. ✅ **Typography Trait Inheritance**: New copy blocks inherit weight/slant from last edited block
+5. ✅ **Motion Axis Labels**: "Bulk Up"/"Slim Down" (wght), "Stand Up"/"Lean Back" (slnt)
+6. ✅ **Project Context Drawer**: TopPill right-side drawer with Project/Page selectors and SEO metadata
+
+---
+
+## 🛠️ HOW TO EXTEND THE SYSTEM
+
+**IF YOU NEED TO CREATE NEW ATOMS OR CANVASES, READ THIS SKILL:**
+
+📖 **[Extension Skill](file:///Users/jaynowman/dev/atoms-ui/.agent/skills/wysiwyg-extension/SKILL.md)**
+
+This skill teaches you:
+- How to create a new atom with a contract
+- How to plug a new atom into the ToolPill
+- How to create a new canvas type  
+- How to plug a new canvas into the Mother Harness
+- **What NOT to touch** in the stable system
+
+---
+
+## 📜 DEVELOPMENT RULES (MANDATORY)
+
+### 1. Contract-Driven Development ⚡ IMMUTABLE
+
+**NO MANUAL CONNECTIONS**: Do not wire a slider to an atom prop manually.
+
+**THE ONLY WAY**: Update the `.contract.ts` file and let the `ToolPopGeneric` handle it programmatically.
+
+**Example**:
+```typescript
+// ❌ WRONG: Manual wiring in component
+<Slider onChange={(val) => setImageOffset(val)} />
+
+// ✅ RIGHT: Define in contract
+{
+  id: 'layout.image_offset',
+  type: 'slider',
+  label: 'Image Offset',
+  targetVar: 'layout.image_offset',
+  min: 0,
+  max: 100
+}
+```
+
+---
 
 # 🚨 ATOMIC VISION MANDATE 🚨
 > **CRITICAL**: Every Agent MUST read the [UI Architecture v2.1 (The Fleet & Factory)](file:///Users/jaynowman/dev/atoms-core/docs/plans/2026-01-30_ui_architecture_v2_1.md) before carrying out ANY work.
@@ -162,4 +283,16 @@ We are currently building the **Central Mother Harness**.
     1.  **Phase 1 (Current)**: Build ONE perfect Harness.
     2.  **Phase 2**: Lock it.
     3.  **Phase 3**: Fork/Inherit for specialized needs (Video, CAD, Freeform).
-    4.  **Drift Policy**: **ZERO DRIFT** allowed during Phase 1.
+    4.  **Trust Layer**: "The Merkle Man" (Blockchain Audit) implementation `docs/plans/future_merkle_man_plan.md`.
+    5.  **Drift Policy**: **ZERO DRIFT** allowed during Phase 1.
+
+## 🏛️ GOD CONFIG STANDARD (NEW)
+> **Goal**: Make configs readable for The Boss (Humans).
+> **Skill**: `atoms-app/.agent/skills/create-god-config/SKILL.md`.
+> **The Law**:
+> 1.  **No Nesting**: All configs live in `atoms-app/src/app/_flat_config/{slug}/`.
+> 2.  **Humans First**: Every config MUST have a `humans.md` explaining it simply.
+> 3.  **Readability**: No tech jargon in the `humans.md`.
+
+## 🔮 FUTURE ROADMAP (DO NOT IMPLEMENT YET)
+- **The Merkle Man**: `docs/plans/future_merkle_man_plan.md` (Blockchain audit layer).
