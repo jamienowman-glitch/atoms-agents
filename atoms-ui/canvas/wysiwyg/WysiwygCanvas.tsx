@@ -25,6 +25,7 @@ import { MultiTile, MultiTileItem } from '@atoms/multi-tile/MultiTile';
 import { MultiTileBlock } from '@atoms/multi-tile/MultiTileBlock';
 import { HeroWeb } from '@atoms/hero/Hero.web';
 import { BleedingHero } from '@atoms/BleedingHero';
+import { HeaderAtom } from '@atoms/HeaderAtom';
 
 // --- Types ---
 export type Block = {
@@ -124,6 +125,23 @@ interface WysiwygCanvasProps {
 
 export function WysiwygCanvas({ blocks, setBlocks, activeBlockId, setActiveBlockId, toolState = {} }: WysiwygCanvasProps) {
     const [activeId, setActiveId] = useState<string | null>(null);
+
+    // --- Snap-to-Top Logic ---
+    useEffect(() => {
+        if (activeBlockId) {
+            // Only snap if it's a NEWLY added block or explicitly selected?
+            // User Request: "When a new atom is added... scroll so Top aligns with Top of screen"
+            // For now, we trigger on any activation, which is standard "Focus Mode" behavior.
+            const element = document.getElementById(activeBlockId);
+            if (element) {
+                element.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start',
+                    inline: 'nearest'
+                });
+            }
+        }
+    }, [activeBlockId]);
 
     // --- DnD Sensors ---
     const sensors = useSensors(
@@ -259,10 +277,28 @@ export function WysiwygCanvas({ blocks, setBlocks, activeBlockId, setActiveBlock
                 {/* Visual: Switch based on Type */}
                 {block.type === 'bleeding_hero' ? (
                     <BleedingHero
+                        id={block.id}
                         imageOffset={toolState?.['layout.image_offset']}
                         textColumnWidth={toolState?.['layout.text_width']}
                         axisWeight={toolState?.['typo.weight']}
                         axisSlant={toolState?.['typo.slant']}
+                    />
+                ) : block.type === 'header' ? (
+                    <HeaderAtom
+                        id={block.id}
+                        heading={(block as any).heading}
+                        subheading={(block as any).subheading}
+                        axisWeight={(block as any).axisWeight}
+                        axisSlant={(block as any).axisSlant}
+                        positionX={(block as any).positionX}
+                        positionY={(block as any).positionY}
+                        onUpdate={(id, updates) => {
+                            // Map contract vars back to block props
+                            const mapped: any = {};
+                            if (updates['content.heading']) mapped.heading = updates['content.heading'];
+                            if (updates['content.subheading']) mapped.subheading = updates['content.subheading'];
+                            updateBlock(id, mapped);
+                        }}
                     />
                 ) : block.type === 'hero' ? (
                     <HeroWeb
@@ -317,7 +353,8 @@ export function WysiwygCanvas({ blocks, setBlocks, activeBlockId, setActiveBlock
     };
 
     return (
-        <div className="w-full h-full p-8 overflow-y-auto">
+        // Added pb-[50vh] for "Canvas Extension" so last atom is visible above ChatRail
+        <div className="w-full h-full p-8 pb-[50vh] overflow-y-auto">
             <div className="max-w-[1200px] mx-auto min-h-[500px]">
                 <DndContext
                     sensors={sensors}

@@ -141,7 +141,7 @@ export function ToolPill({ onAddAtom }: ToolPillProps) {
                 transform: `translate(${position.x}px, ${position.y}px)`,
                 touchAction: 'none'
             }}
-            className="fixed bottom-32 right-4 z-[95] flex flex-col items-center justify-center cursor-grab active:cursor-grabbing"
+            className="fixed bottom-32 right-4 z-[200] flex flex-col items-center justify-center cursor-grab active:cursor-grabbing"
         >
             {/* Level 1: Vertical Category Lozenge */}
             {isOpen && (
@@ -156,8 +156,8 @@ export function ToolPill({ onAddAtom }: ToolPillProps) {
                                 key={category}
                                 onClick={() => handleCategoryClick(category)}
                                 className={`w-12 h-12 rounded-full shadow-lg flex items-center justify-center transition-all duration-200 ${activeCategory === category
-                                        ? 'bg-black text-white scale-110'
-                                        : 'bg-white text-black hover:scale-105'
+                                    ? 'bg-black text-white scale-110'
+                                    : 'bg-white text-black hover:scale-105'
                                     }`}
                                 aria-label={config.label}
                             >
@@ -188,7 +188,7 @@ export function ToolPill({ onAddAtom }: ToolPillProps) {
 
             {/* The Trigger Button */}
             <button
-                className="w-12 h-12 bg-white text-black rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.3)] flex items-center justify-center active:scale-95 transition-transform duration-100 pointer-events-none"
+                className="w-12 h-12 bg-white text-black rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.3)] flex items-center justify-center active:scale-95 transition-transform duration-100"
                 aria-label="Add Item"
             >
                 <svg className={`w-6 h-6 transition-transform duration-200 ${isOpen ? 'rotate-45' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">

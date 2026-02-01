@@ -1,7 +1,8 @@
-import React from 'react';
-import { useVarioEngine } from '@hooks/useVarioEngine'; // Corrected alias
+import { disableDragAndDrop } from '../../../canvas/wysiwyg/utils/interactionUtils';
+import { useEffect } from 'react';
 
 interface BleedingHeroProps {
+    id?: string;
     // Content
     title?: string;
     subtitle?: string;
@@ -17,6 +18,7 @@ interface BleedingHeroProps {
 }
 
 export const BleedingHero: React.FC<BleedingHeroProps> = ({
+    id,
     title = "The Bleeding Edge",
     subtitle = "This layout breaks the grid to create dynamic tension.",
     imageUrl = "https://picsum.photos/seed/bleed/800/1200",
@@ -25,6 +27,15 @@ export const BleedingHero: React.FC<BleedingHeroProps> = ({
     axisWeight = 400,
     axisSlant = 0
 }) => {
+    // Disable drag
+    useEffect(() => {
+        if (id) {
+            const el = document.getElementById(id); // Target the wrapper or specific elements?
+            // Since BleedingHero is complex, we might want to target the image specifically or the whole root.
+            // Let's rely on the ref approach effectively via ID if provided.
+            // Actually, we need to assign the ID to the root div of this component to find it.
+        }
+    }, [id]);
     // Vario Engine Hook (Mock implementation if real one missing)
     // In real implementation: const fontStyle = useVarioEngine({ weight: axisWeight, slant: axisSlant });
     // For now, manual style:
@@ -34,8 +45,15 @@ export const BleedingHero: React.FC<BleedingHeroProps> = ({
         fontVariationSettings: `'wght' ${axisWeight}, 'slnt' ${axisSlant}`
     };
 
+    useEffect(() => {
+        if (id) {
+            const el = document.getElementById(id);
+            if (el) disableDragAndDrop(el);
+        }
+    }, [id]);
+
     return (
-        <div className="relative w-full overflow-hidden bg-neutral-100 dark:bg-neutral-900 min-h-[600px] flex items-center">
+        <div id={id} className="relative w-full overflow-hidden bg-neutral-100 dark:bg-neutral-900 min-h-[600px] flex items-center">
 
             {/* 1. Bleeding Image Container */}
             <div

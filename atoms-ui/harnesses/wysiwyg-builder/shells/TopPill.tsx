@@ -13,8 +13,8 @@ interface TopPillProps {
     logoIcon?: React.ReactNode;
     RightControls?: React.ReactNode;
     // Added for Wysiwyg Harness integration
-    previewMode: 'desktop' | 'mobile';
-    setPreviewMode: (mode: 'desktop' | 'mobile') => void;
+    previewMode: 'desktop' | 'mobile' | 'visitor';
+    setPreviewMode: (mode: 'desktop' | 'mobile' | 'visitor') => void;
 }
 
 export function TopPill({ setIsRightPanelOpen, setIsExportOpen, logoIcon, RightControls, previewMode, setPreviewMode }: TopPillProps) {
@@ -202,6 +202,19 @@ export function TopPill({ setIsRightPanelOpen, setIsExportOpen, logoIcon, RightC
                     <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2" /><path d="M12 18h.01" /></svg>
                 </button>
             </div>
+
+            {/* Visitor View (Eye) */}
+            <button
+                onClick={() => setPreviewMode(previewMode === 'visitor' ? 'desktop' : 'visitor')}
+                className={`p-2 rounded-full transition-colors ${previewMode === 'visitor' ? 'bg-white text-black' : 'hover:bg-white/10'}`}
+                title="Visitor Preview"
+                type="button"
+            >
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                    <circle cx="12" cy="12" r="3" />
+                </svg>
+            </button>
 
             {/* Export Icon */}
             <button

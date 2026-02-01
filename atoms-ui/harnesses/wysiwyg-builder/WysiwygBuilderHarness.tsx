@@ -13,18 +13,35 @@ import { MultiTileConfig } from '@atoms/multi-tile/MultiTile.config';
 import { HeroConfig } from '@atoms/hero/Hero.config';
 import { BleedingHeroContract } from '@atoms/BleedingHero.contract';
 
+import { HeaderAtomContract } from '@atoms/HeaderAtom.contract';
+
 // --- Canvas Cartridge Types ---
 type CanvasMode = 'web' | 'seb' | 'deck' | 'dm';
 
 export function WysiwygBuilderHarness() {
     // --- State ---
     const [canvasMode, setCanvasMode] = useState<CanvasMode>('web'); // The "Cartridge" Selector
+
+    // CLEAN ROOM: Initial state is just one Header Atom
     const [blocks, setBlocks] = useState<Block[]>([
-        { id: 'block-1', type: 'media', spanDesktop: 6, spanMobile: 2, variant: 'generic' },
-        { id: 'block-2', type: 'bleeding_hero', spanDesktop: 12, spanMobile: 4, variant: 'generic' }
+        {
+            id: 'header-1',
+            type: 'header',
+            variant: 'generic',
+            // Default Header Props
+            ...({
+                heading: "Welcome to Your Canvas",
+                subheading: "Start building by adding atoms with the + button",
+                axisWeight: 600,
+                axisSlant: 0,
+                positionX: 40,
+                positionY: 100
+            } as any)
+        }
     ]);
-    const [activeBlockId, setActiveBlockId] = useState<string | null>('block-1');
-    const [previewMode, setPreviewMode] = useState<'desktop' | 'mobile'>('desktop');
+
+    const [activeBlockId, setActiveBlockId] = useState<string | null>('header-1');
+    const [previewMode, setPreviewMode] = useState<'desktop' | 'mobile' | 'visitor'>('desktop');
     const [chatMode, setChatMode] = useState<ChatMode>('nano');
     const [showTools, setShowTools] = useState(true);
     const [showLogic, setShowLogic] = useState(false); // Default logic brain hidden
@@ -102,6 +119,11 @@ export function WysiwygBuilderHarness() {
                     // Bleeding Hero Mappings
                     'layout.image_offset': 'imageOffset',
                     'layout.text_width': 'textColumnWidth',
+                    // Header Mappings
+                    'content.heading': 'heading',
+                    'content.subheading': 'subheading',
+                    'position.x': 'positionX',
+                    'position.y': 'positionY',
                 };
 
                 const propName = keyMap[key];
@@ -152,6 +174,13 @@ export function WysiwygBuilderHarness() {
         } else if (type === 'media') {
             base.spanDesktop = 6;
             base.variant = 'generic';
+        } else if (type === 'header') {
+            // Header constraints
+            (base as any).heading = "New Header";
+            (base as any).subheading = "Double tap to edit";
+            (base as any).axisWeight = 600;
+            (base as any).positionX = 20;
+            (base as any).positionY = 200; // Offset defaults
         }
 
         const newBlock = base;
@@ -161,12 +190,13 @@ export function WysiwygBuilderHarness() {
     };
 
     const isMobileView = previewMode === 'mobile';
+    const isVisitorView = previewMode === 'visitor';
 
     return (
         <div className="relative w-full h-[100dvh] bg-neutral-50 dark:bg-neutral-950 overflow-hidden flex flex-col">
 
             {/* 0. LOGGING LENS OVERLAY */}
-            {showLogging && (
+            {!isVisitorView && showLogging && (
                 <LoggingLens onClose={() => setShowLogging(false)} />
             )}
 
@@ -178,8 +208,6 @@ export function WysiwygBuilderHarness() {
                 setIsExportOpen={() => console.log('Export Open')}
             />
 
-
-
             {/* 2. MAIN CANVAS AREA */}
             <div
                 className={`flex-1 overflow-hidden relative transition-colors duration-300 ${isMobileView ? 'flex justify-center items-center bg-neutral-200/50 dark:bg-neutral-900/50' : 'pt-16 pb-32'}`} // Added padding for desktop to avoid overlap
@@ -190,8 +218,9 @@ export function WysiwygBuilderHarness() {
                         <WysiwygCanvas
                             blocks={blocks}
                             setBlocks={setBlocks}
-                            activeBlockId={activeBlockId}
+                            activeBlockId={isVisitorView ? null : activeBlockId}
                             setActiveBlockId={(id) => {
+                                if (isVisitorView) return; // Read only
                                 setActiveBlockId(id);
                                 if (id) setShowTools(true);
                             }}
@@ -205,57 +234,66 @@ export function WysiwygBuilderHarness() {
                 </div>
             </div>
 
-            {/* 3. CONTEXT PILL (REMOVED) */}
-            {/* The user requested to remove the 'Selected' lozenge entirely. */}
-
-
             {/* 4. TOOL PILL (Floating Add Menu) */}
-            <ToolPill
-                onAddAtom={(atomType, atomId) => {
-                    handleAddBlock(atomType, atomId);
-                    setIsAddMenuOpen(false);
-                }}
-            />
-
-            {/* 5. CHAT RAIL (Shell Bottom) - z-[90] to be always on top of tools if expanded */}
-            {/* 5. CHAT RAIL (Shell Bottom) - z-[40] (Requested) */}
-            <div className="z-[40] relative">
-                <ChatRailShell
-                    mode={chatMode}
-                    onModeChange={setChatMode}
-                    showTools={showTools}
-                    onToggleTools={() => {
-                        setShowTools(!showTools);
-                        if (!showTools) setShowLogic(false); // Mutually exclusive (optional but cleaner)
-                    }}
-                    showLogic={showLogic}
-                    onToggleLogic={() => {
-                        setShowLogic(!showLogic);
-                        if (!showLogic) setShowTools(false); // Mutually exclusive
+            {!isVisitorView && (
+                <ToolPill
+                    onAddAtom={(atomType, atomId) => {
+                        handleAddBlock(atomType, atomId);
+                        setIsAddMenuOpen(false);
                     }}
                 />
-            </div>
+            )}
+
+            {/* 5. CHAT RAIL (Shell Bottom) - z-[40] (Requested) */}
+            {!isVisitorView && (
+                <div className="z-[40] relative">
+                    <ChatRailShell
+                        mode={chatMode}
+                        onModeChange={setChatMode}
+                        showTools={showTools}
+                        onToggleTools={() => {
+                            setShowTools(!showTools);
+                            if (!showTools) setShowLogic(false); // Mutually exclusive (optional but cleaner)
+                        }}
+                        showLogic={showLogic}
+                        onToggleLogic={() => {
+                            setShowLogic(!showLogic);
+                            if (!showLogic) setShowTools(false); // Mutually exclusive
+                        }}
+                    />
+                </div>
+            )}
 
             {/* 6A. TOOL POP (Bottom Right) - Canvas Output Tools */}
-            <div
-                className={`transition-all duration-300 ${showTools ? 'translate-y-0 opacity-100 pointer-events-auto' : 'translate-y-full opacity-0 pointer-events-none'} fixed left-0 right-0 z-[100] bottom-[128px]`}
-            >
-                <div className="flex-1 w-full pl-0">
-                    {activeBlockType === 'bleeding_hero' ? (
-                        <ToolPopGeneric
-                            activeAtomContract={BleedingHeroContract}
-                            toolState={toolState}
-                            onToolUpdate={handleToolUpdate}
-                            onClose={() => setShowTools(false)}
-                            isMobileView={isMobileView}
-                        />
-                    ) : (
-                        <div className="fixed left-0 right-0 bottom-0 bg-white/95 dark:bg-neutral-900/95 backdrop-blur-xl border-t border-neutral-200 dark:border-neutral-800 rounded-2xl z-[100] h-[260px] flex items-center justify-center">
-                            <div className="text-xs text-neutral-400">Select Bleeding Hero to use tools</div>
-                        </div>
-                    )}
+            {!isVisitorView && (
+                <div
+                    className={`transition-all duration-300 ${showTools ? 'translate-y-0 opacity-100 pointer-events-auto' : 'translate-y-full opacity-0 pointer-events-none'} fixed left-0 right-0 z-[100] bottom-[128px]`}
+                >
+                    <div className="flex-1 w-full pl-0">
+                        {activeBlockType === 'bleeding_hero' ? (
+                            <ToolPopGeneric
+                                activeAtomContract={BleedingHeroContract}
+                                toolState={toolState}
+                                onToolUpdate={handleToolUpdate}
+                                onClose={() => setShowTools(false)}
+                                isMobileView={isMobileView}
+                            />
+                        ) : activeBlockType === 'header' ? (
+                            <ToolPopGeneric
+                                activeAtomContract={HeaderAtomContract}
+                                toolState={toolState}
+                                onToolUpdate={handleToolUpdate}
+                                onClose={() => setShowTools(false)}
+                                isMobileView={isMobileView}
+                            />
+                        ) : (
+                            <div className="fixed left-0 right-0 bottom-0 bg-white/95 dark:bg-neutral-900/95 backdrop-blur-xl border-t border-neutral-200 dark:border-neutral-800 rounded-2xl z-[100] h-[260px] flex items-center justify-center">
+                                <div className="text-xs text-neutral-400">Tools not available for {activeBlockType}</div>
+                            </div>
+                        )}
+                    </div>
                 </div>
-            </div>
+            )}
 
             {/* 6B. LOGIC POP (Bottom Full Width) - Agent Brain Tools 
                  Attached to top of ChatRail (which is h-[44px]). 
