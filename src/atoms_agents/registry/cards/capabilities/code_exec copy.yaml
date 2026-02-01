@@ -1,0 +1,5 @@
+card_type: capability
+capability_id: eat_dog_food
+capability_name: Code Execution
+embedded_or_separate: EMBEDDED
+description: Enables Code Execution
