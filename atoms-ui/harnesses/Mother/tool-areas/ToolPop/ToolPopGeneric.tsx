@@ -111,12 +111,23 @@ export function ToolPopGeneric({
         }
     };
 
-    // Derived: Mode Options (Left Magnifier) -> Traits
-    const modeOptions: MagnetItem[] = activeAtomContract?.traits?.map(t => ({
-        id: t.id || 'unknown',
-        label: t.id ? (t.id.charAt(0).toUpperCase() + t.id.slice(1)) : 'Unknown',
-        icon: <div className="w-2 h-2 rounded-full bg-current" />
-    })) || [];
+    // Derived: Mode Options (Left Magnifier) -> Trait Mapping
+    const modeOptions: MagnetItem[] = activeAtomContract?.traits?.map(t => {
+        let icon = <div className="w-2 h-2 rounded-full bg-current" />;
+
+        // Icon Mapping (Layout, Typography, Appearance, Motion)
+        if (t.id === 'layout') icon = <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /></svg>;
+        if (t.id === 'typography') icon = <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><line x1="4" y1="6" x2="20" y2="6" /><line x1="4" y1="12" x2="16" y2="12" /><line x1="4" y1="18" x2="18" y2="18" /></svg>;
+        if (t.id === 'appearance') icon = <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" /></svg>;
+        // Motion Icon (Running Man / Film Strip)
+        if (t.id === 'motion') icon = <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" /><polyline points="16 6 12 2 8 6" /><line x1="12" y1="2" x2="12" y2="15" /></svg>;
+
+        return {
+            id: t.id || 'unknown',
+            label: t.id ? (t.id.charAt(0).toUpperCase() + t.id.slice(1)) : 'Unknown',
+            icon
+        };
+    }) || [];
 
     // Derived: Tool Options (Right Magnifier) -> SubGroups of active Trait
     const activeTrait = activeAtomContract?.traits?.find(t => t.id === activeTraitId);

@@ -2,6 +2,8 @@ import { AtomContract } from '../../../types/AtomContract';
 
 export const HeaderAtomContract: AtomContract = {
     id: 'header',
+    family: 'wysiwyg',
+    category: 'copy',
     traits: [
         {
             id: 'position',
@@ -29,11 +31,12 @@ export const HeaderAtomContract: AtomContract = {
                 }
             ]
         },
+
         {
-            id: 'motion',
+            id: 'typography',
             subGroups: [
                 {
-                    id: 'typography',
+                    id: 'details',
                     controls: [
                         {
                             id: 'typo.weight',
@@ -71,6 +74,35 @@ export const HeaderAtomContract: AtomContract = {
                             axisLabels: {
                                 increase: 'Wide',
                                 decrease: 'Tight'
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            // NEW: The 4th Category (Motion)
+            id: 'motion',
+            subGroups: [
+                {
+                    id: 'entrance',
+                    controls: [
+                        {
+                            id: 'typewriter',
+                            type: 'toggle',
+                            label: 'Typewriter',
+                            targetVar: 'motion.typewriter'
+                        },
+                        {
+                            id: 'vario_scroll',
+                            type: 'slider',
+                            label: 'Vario-Scroll',
+                            targetVar: 'motion.scroll_speed',
+                            min: 0,
+                            max: 100,
+                            axisLabels: {
+                                increase: 'Fast',
+                                decrease: 'Slow'
                             }
                         }
                     ]

@@ -31,13 +31,8 @@ class UniversalExportService:
         date_str = datetime.utcnow().strftime("%Y-%m-%d")
         s3_key = f"tenants/{tenant_id}/exports/{date_str}/{job_id}/{filename}"
         
-        try:
-            self.s3_client.upload_file(local_path, self.bucket_name, s3_key)
-            return f"s3://{self.bucket_name}/{s3_key}"
-        except Exception as e:
-            # Fallback for dev/offline if no creds
-            print(f"S3 Upload Failed (Mocking Response): {e}")
-            return f"s3://{self.bucket_name}/{s3_key}"
+        self.s3_client.upload_file(local_path, self.bucket_name, s3_key)
+        return f"s3://{self.bucket_name}/{s3_key}"
 
     def export(self, job: ExportJob) -> ExportResult:
         try:

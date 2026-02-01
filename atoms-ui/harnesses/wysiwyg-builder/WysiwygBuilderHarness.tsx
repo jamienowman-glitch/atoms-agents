@@ -203,7 +203,13 @@ export function WysiwygBuilderHarness() {
                 previewMode={previewMode}
                 setPreviewMode={setPreviewMode}
                 setIsRightPanelOpen={() => console.log('Settings Open')}
-                setIsExportOpen={() => console.log('Export Open')}
+
+                setIsExportOpen={() => {
+                    // Logic: Trigger MuscleRegistry Export
+                    console.log('[MuscleRegistry] Triggering sequence: canvas.export');
+                    // In future: MuscleRegistry.execute('canvas.export', { blocks });
+                    alert('Exporting Canvas... (Check Console)');
+                }}
             />
 
             {/* 2. MAIN CANVAS AREA */}

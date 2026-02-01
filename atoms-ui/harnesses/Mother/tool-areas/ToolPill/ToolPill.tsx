@@ -37,7 +37,7 @@ const CTAIcon = () => (
 );
 
 // Category and Atom definitions
-type Category = 'copy' | 'image' | 'feeds' | 'cta';
+type Category = string;
 
 interface AtomDefinition {
     id: string;
@@ -45,43 +45,41 @@ interface AtomDefinition {
     type: string;
 }
 
-const CATEGORY_CONFIG: Record<Category, { icon: React.FC; label: string; atoms: AtomDefinition[] }> = {
-    copy: {
-        icon: CopyIcon,
-        label: 'Copy',
-        atoms: [
-            { id: 'jumbo', label: 'Jumbo', type: 'text' },
-            { id: 'headline', label: 'Headline', type: 'text' },
-            { id: 'subtitle', label: 'Subtitle', type: 'text' },
-            { id: 'body', label: 'Body', type: 'text' }
-        ]
-    },
-    image: {
-        icon: ImageIcon,
-        label: 'Image',
-        atoms: [
-            { id: 'hero', label: 'Hero', type: 'hero' },
-            { id: 'bleeding_hero', label: 'Bleeding', type: 'bleeding_hero' },
-            { id: 'media', label: 'Media', type: 'media' }
-        ]
-    },
-    feeds: {
-        icon: FeedsIcon,
-        label: 'Feeds',
-        atoms: [
-            { id: 'news', label: 'News', type: 'generic' },
-            { id: 'products', label: 'Products', type: 'generic' }
-        ]
-    },
-    cta: {
-        icon: CTAIcon,
-        label: 'CTA',
-        atoms: [
-            { id: 'button', label: 'Button', type: 'cta' },
-            { id: 'link', label: 'Link', type: 'cta' }
-        ]
-    }
+import { AVAILABLE_ATOMS } from '../../../../canvases/multi21/registry';
+
+// Dynamic Category Configuration
+const getDynamicCategories = () => {
+    const categories: Record<string, { icon: React.FC; label: string; atoms: AtomDefinition[] }> = {};
+
+    AVAILABLE_ATOMS.forEach(atom => {
+        const catKey = atom.category || 'misc';
+
+        // Initialize category if missing
+        if (!categories[catKey]) {
+            let Icon = CTAIcon; // Default
+            let label = 'Misc';
+
+            if (catKey === 'copy') { Icon = CopyIcon; label = 'Copy'; }
+            if (catKey === 'media') { Icon = ImageIcon; label = 'Media'; }
+            if (catKey === 'feeds') { Icon = FeedsIcon; label = 'Feeds'; }
+            if (catKey === 'cta') { Icon = CTAIcon; label = 'CTA'; }
+            // Add interaction/motion icons if needed
+
+            categories[catKey] = { icon: Icon, label, atoms: [] };
+        }
+
+        // Add atom to category
+        categories[catKey].atoms.push({
+            id: atom.id,
+            label: atom.id.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '), // simple title case
+            type: atom.id // Use ID as type for now or map if needed
+        });
+    });
+
+    return categories;
 };
+
+const CATEGORY_CONFIG = getDynamicCategories();
 
 interface ToolPillProps {
     onAddAtom: (atomType: string, atomId: string) => void;

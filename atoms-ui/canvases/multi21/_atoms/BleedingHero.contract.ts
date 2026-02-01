@@ -1,8 +1,10 @@
 
-import { AtomContract } from '../../../../types/AtomContract';
+import { AtomContract } from '../../../types/AtomContract';
 
 export const BleedingHeroContract: AtomContract = {
     id: 'bleeding_hero',
+    family: 'wysiwyg',
+    category: 'media',
     traits: [
         {
             id: 'layout',

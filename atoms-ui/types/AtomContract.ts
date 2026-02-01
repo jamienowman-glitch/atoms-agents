@@ -19,6 +19,10 @@ export interface TraitDefinition {
 }
 
 export interface AtomContract {
-    id: string;
+    id: string; // e.g., 'red-pen-hero'
+    family?: 'wysiwyg' | 'video' | 'gaming'; // Determines which Harness loads it
+    category?: 'copy' | 'media' | 'interaction' | 'feeds' | 'cta'; // Determines ToolPill placement
     traits: TraitDefinition[];
+    // The "Trigger" allows generic actions (e.g., "Generate Text")
+    actions?: Record<string, { label: string; action: 'trigger_muscle' }>;
 }

@@ -46,6 +46,8 @@ JAS sits between your Agents/IDE and your Secrets.
 > **PROTOCOL**: `docs/plans/2026-02-01_universal_export_protocol.md`
 > **The Goal**: Unified Export Engine for 16 formats (PDF, PPTX, HTML, MP4, etc).
 > **Mandate**: All new muscles must support the `ExportJob` JSON handshake. No bytes over wires.
+> **Status**: ✅ **PHASE 1 & 2 COMPLETE** (Skeleton + Visual Engines).
+> **Integration**: UI Developers/Agents see `atoms-ui/AGENTS.md` for connection instructions.
 
 > **⚠️ CRITICAL WARNING ⚠️**  
 > **THE WYSIWYG CANVAS AND HARNESS ARE NOW PRODUCTION-READY AND LOCKED.**  

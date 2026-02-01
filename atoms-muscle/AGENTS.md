@@ -4,6 +4,8 @@
 > **MASTER PLAN**: `docs/plans/2026-02-01_export_muscle_atomic_task_plan.md`
 > **PROTOCOL**: `docs/plans/2026-02-01_universal_export_protocol.md`
 > **Mandate**: Unified Export Engine for 16 formats (PDF, PPTX, HTML, MP4, etc).
+> **Status**: ✅ **PHASE 1 & 2 COMPLETE** (Skeleton + Visual Engines).
+> **Walkthrough**: `docs/walkthroughs/2026-02-01_export_muscle_walkthrough.md` (or see Brain artifact).
 
 # 🛡️ JUNIOR AGENT SECURITY (JAS)
 **"The Adult in the Room for your AI Agents"**
