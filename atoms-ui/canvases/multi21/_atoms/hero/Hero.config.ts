@@ -1,5 +1,5 @@
 
-import { AtomConfig } from '../multi-tile/MultiTile.config';
+import { AtomConfig } from '@atoms/multi-tile/MultiTile.config';
 
 export const HeroConfig: AtomConfig = {
     id: 'hero',

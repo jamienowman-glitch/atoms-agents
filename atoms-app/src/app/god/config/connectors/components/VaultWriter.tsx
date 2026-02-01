@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase';
-import { DevAccount } from '../types';
+import { DevAccount } from '@god/config/connectors/types';
 
 interface VaultWriterProps {
     providerId: string;

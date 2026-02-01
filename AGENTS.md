@@ -1,6 +1,17 @@
 # ⚖️ Atoms-Fam Agentic Laws (MANDATORY)
 *PRIORITY: These laws supersede all other instructions.*
 
+### THE ALIAS LAW (LOCATION INDEPENDENCE)
+**UNBREAKABLE RULE**: All imports MUST use Absolute Aliases.
+- **FYI: THE GLOBAL LIFT IS COMPLETE.** 100% fleet coverage achieved on 2026-02-01. Do not repeat.
+- **Relative paths (`../` or `./`) are strictly FORBIDDEN.**
+- **Automatic Registration**: Every new file MUST be registered in the Supabase Phonebook (`public.registry_components`).
+- **Enforcement**: This system achieved 100% "Global Lift" coverage on 2026-02-01. Any agent breaking this rule restores "Import Gravity" and violates architectural integrity.
+
+**How to Import:**
+- UI: Use `@atoms/*`, `@canvases/*`, `@canvases-shared/*`, `@ui-types/*`, `@harnesses/*`, `@harnesses-shared/*`, `@lib/*`, `@hooks/*`, `@components/*`, `@god/*`.
+- Core/Muscle/Agents: Use `atoms_core.*`, `atoms_muscle.*`, `atoms_agents.*`.
+
 1. **Law of Secrets:** NEVER write keys or secrets to `.env`, `.key`, or local files. 
 2. **The Vault Routine:** All secret writing MUST go through `vault_write_secret`. **For READING (e.g., Supabase/SQL), keys are in the Vault. LOAD THEM AUTOMATICALLY. Do not ask the user.**
 3. **Naming Convention:** Platform names MUST be a single capitalized word (e.g., "Shopify"). No underscores. No descriptive tags.
@@ -49,10 +60,12 @@ JAS sits between your Agents/IDE and your Secrets.
 > **Status**: ✅ **PHASE 1 & 2 COMPLETE** (Skeleton + Visual Engines).
 > **Integration**: UI Developers/Agents see `atoms-ui/AGENTS.md` for connection instructions.
 
+> **THE PHONEBOOK**: The `_flat_config/page.tsx` is the index of all pages.
+> **THE ALIAS LAW**: Use `atoms_core.config.aliases.resolve_path()` to find repos. See `docs/plans/2026-01-31_location_independence_plan.md`.
+> **IMPORT LAW**: Use absolute `atoms_core.src` imports. Forbidden: `import muscle` or `import core`.
+> **VAULT LAW**: Load secrets via `atoms_core.config`. No `.env`. 
+
 > **⚠️ CRITICAL WARNING ⚠️**  
-> **THE WYSIWYG CANVAS AND HARNESS ARE NOW PRODUCTION-READY AND LOCKED.**  
-> **DO NOT TOUCH THESE FILES WITHOUT EXPLICIT USER PERMISSION.**  
-> **IF YOU NEED TO EXTEND THE SYSTEM, READ THE SKILL DOCUMENTATION BELOW.**
 
 ---
 
@@ -250,6 +263,10 @@ This skill teaches you:
 - **Tenant compute first:** interactive render runs on device; server CPU fallback **only** for explicit export/offline.
 - **Automation steps:**
   - After creating/updating a muscle, run `python3 atoms-muscle/scripts/normalize_mcp.py`.
+> **PATH LAW**: Use `atoms_core.config.aliases.resolve_path()` to locate repos. NEVER hardcode paths.
+> **WORKSPACE LAW**: We use a `uv` Workspace at the root `/Users/jaynowman/dev/`. ALWAYS use `uv run` to execute scripts to ensure cross-repo imports resolve.
+> **IMPORT LAW**: Use the [Python Phonebook](docs/python_phonebook.md). Forbidden: `import muscle` or `import core`. Use explicitly `from atoms_core.src.atoms_core...`.
+> **SYNC LAW**: Register tools via `python3 atoms-muscle/scripts/sync_muscles.py`.
   - Before deploy/hand-off, run `python3 atoms-muscle/scripts/batch_prepare_deploy.py --clean-after`.
 
 ## Atoms UI - Architectural Standards (Harness & Canvas)

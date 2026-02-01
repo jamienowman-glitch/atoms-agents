@@ -1,5 +1,5 @@
-import { buildIdentityHeaders, RequestContext } from './identity_headers';
-import { readResponsePayload, TransportEnvelopeError } from './envelope';
+import { buildIdentityHeaders, RequestContext } from '@packages/transport/src/identity_headers';
+import { readResponsePayload, TransportEnvelopeError } from '@packages/transport/src/envelope';
 
 export type SpecKind = 'atom' | 'component' | 'lens';
 

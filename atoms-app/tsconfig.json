@@ -41,8 +41,17 @@
             "@harnesses/*": [
                 "../atoms-ui/harnesses/*"
             ],
+            "@harnesses-shared/*": [
+                "../atoms-ui/harnesses/_shared/*"
+            ],
             "@canvases/*": [
                 "../atoms-ui/canvases/*"
+            ],
+            "@canvases-shared/*": [
+                "../atoms-ui/canvases/_shared/*"
+            ],
+            "@ui-types/*": [
+                "../atoms-ui/types/*"
             ],
             "atoms-ui/*": [
                 "../atoms-ui/*"
@@ -55,6 +64,15 @@
             ],
             "@tool-areas/*": [
                 "../atoms-ui/harnesses/Mother/tool-areas/*"
+            ],
+            "@lib/*": [
+                "./src/lib/*"
+            ],
+            "@hooks/*": [
+                "./src/hooks/*"
+            ],
+            "@components/*": [
+                "./src/components/*"
             ],
             "react": [
                 "./node_modules/@types/react"

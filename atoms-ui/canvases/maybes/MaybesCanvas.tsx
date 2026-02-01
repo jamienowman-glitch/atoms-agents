@@ -1,7 +1,7 @@
 import React from 'react';
 import { ToolHarness } from '../../harness/ToolHarness';
 import { CanvasTransport } from '../../harness/transport';
-import { ConnectedMaybes } from './blocks/ConnectedMaybes';
+import { ConnectedMaybes } from '@canvases/maybes/blocks/ConnectedMaybes';
 import 'reactflow/dist/style.css';
 
 // Import scoped styles for this canvas if needed, or rely on global + inline styles

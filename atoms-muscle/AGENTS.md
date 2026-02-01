@@ -1,8 +1,22 @@
+# ⚖️ THE ALIAS LAW (LOCATION INDEPENDENCE)
+**UNBREAKABLE RULE**: All imports MUST use Absolute Aliases.
+- **FYI: THE GLOBAL LIFT IS COMPLETE.** Do not repeat. This is a law for NEW files only.
+- **FYI: THE GLOBAL LIFT IS COMPLETE.** Do not repeat. This is a law for NEW files only.
+- **Relative paths (../ or ./) are strictly FORBIDDEN.**
+- **Automatic Registration**: Every new file MUST be registered in the Supabase Phonebook (public.registry_components).
+- **Enforcement**: This system achieved 100% "Global Lift" coverage on 2026-02-01. Any agent breaking this rule restores "Import Gravity" and violates architectural integrity.
+
+**How to Import:**
+- UI: Use @atoms/*, @canvases/*, @canvases-shared/*, @ui-types/*, @harnesses/*, @harnesses-shared/*, @lib/*, @hooks/*, @components/*, @god/*.
+- Core/Muscle/Agents: Use atoms_core.*, atoms_muscle.*, atoms_agents.*.
+
+---
 # 🚨 ATOMS-MUSCLE AGENTS.MD 🚨
 
 ## 📦 EXPORT MUSCLE PIVOT (2026-02-01) - "UNIVERSAL FORMATS"
 > **MASTER PLAN**: `docs/plans/2026-02-01_export_muscle_atomic_task_plan.md`
 > **PROTOCOL**: `docs/plans/2026-02-01_universal_export_protocol.md`
+> **THE PHONE BOOK**: For Python paths, use `atoms_core.config.aliases.py`.
 > **Mandate**: Unified Export Engine for 16 formats (PDF, PPTX, HTML, MP4, etc).
 > **Status**: ✅ **PHASE 1 & 2 COMPLETE** (Skeleton + Visual Engines).
 > **Walkthrough**: `docs/walkthroughs/2026-02-01_export_muscle_walkthrough.md` (or see Brain artifact).

@@ -13,7 +13,7 @@ const MOCK_NODES = [
     { id: '2', type: 'blackboard', name: 'Context Board', role: 'Shared Memory', logs: ['Researcher wrote: Quantum Paper'] },
 ];
 
-import { useRealtimeStream } from '../../Mother/logic/hooks/useRealtimeStream';
+import { useRealtimeStream } from '@logic/hooks/useRealtimeStream';
 
 export function LoggingLens({ onClose }: LoggingLensProps) {
     const liveLogs = useRealtimeStream();

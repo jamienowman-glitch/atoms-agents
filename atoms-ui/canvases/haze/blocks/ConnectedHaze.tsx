@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useToolControl } from '../../../harness/ToolControlProvider';
-import { HazeWorld } from './molecules/HazeWorld';
+import { HazeWorld } from '@canvases/haze/blocks/molecules/HazeWorld';
 
 export function ConnectedHaze() {
     const { useToolState } = useToolControl();

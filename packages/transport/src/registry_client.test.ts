@@ -1,6 +1,6 @@
-import { RequestContext } from './identity_headers';
-import { RegistryClient, SpecKind } from './registry_client.ts';
-import { TransportEnvelopeError } from './envelope';
+import { RequestContext } from '@packages/transport/src/identity_headers';
+import { RegistryClient, SpecKind } from '@packages/transport/src/registry_client';
+import { TransportEnvelopeError } from '@packages/transport/src/envelope';
 
 const createMockResponse = (
     payload: unknown,

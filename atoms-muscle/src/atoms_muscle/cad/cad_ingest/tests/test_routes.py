@@ -5,7 +5,7 @@ Tests for CAD ingest routes and context validation.
 import pytest
 from fastapi.testclient import TestClient
 from fastapi import FastAPI, Depends
-from ..routes import router
+from atoms_muscle.cad.cad_ingest.routes import router
 from atoms_core.src.identity.models import RequestContext
 from atoms_core.src.identity.auth import AuthContext
 from atoms_core.src.identity.dependencies import get_request_context, get_auth_context

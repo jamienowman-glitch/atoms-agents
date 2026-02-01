@@ -1,5 +1,5 @@
 
-import { AtomContract } from '../../../types/AtomContract';
+import { AtomContract } from '@ui-types/AtomContract';
 
 export const BleedingHeroContract: AtomContract = {
     id: 'bleeding_hero',

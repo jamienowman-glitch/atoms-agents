@@ -1,4 +1,4 @@
-import { ToolEvent } from './ToolEvent';
+import { ToolEvent } from '@ui-types/ToolEvent';
 
 export interface ConnectionConfig {
     httpHost: string;

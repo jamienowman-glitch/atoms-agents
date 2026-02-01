@@ -1,4 +1,16 @@
-Use the Atoms-Fam Agentic Laws located at the top of AGENTS.md as your primary operating directive. You are physically gated by the Atoms-Shield MCP server. If you attempt to write a secret to a file or use a non-chemical name, the tool will fail. Always ask for TOTP verification for Firearms actions.
+# ⚖️ THE ALIAS LAW (LOCATION INDEPENDENCE)
+**UNBREAKABLE RULE**: All imports MUST use Absolute Aliases.
+- **FYI: THE GLOBAL LIFT IS COMPLETE.** Do not attempt to refactor the fleet. This is an "Always-On" law for FUTURE additions.
+- **Relative paths (`../` or `./`) are strictly FORBIDDEN.**
+- **Automatic Registration**: Every new file MUST be registered in the Supabase Phonebook (`public.registry_components`).
+- **Enforcement**: This system achieved 100% "Global Lift" coverage on 2026-02-01. Any agent breaking this rule restores "Import Gravity" and violates architectural integrity.
+
+**How to Import:**
+- UI: Use `@atoms/*`, `@canvases/*`, `@canvases-shared/*`, `@ui-types/*`, `@harnesses/*`, `@harnesses-shared/*`, `@lib/*`, `@hooks/*`, `@components/*`, `@god/*`.
+- Core/Muscle/Agents: Use `atoms_core.*`, `atoms_muscle.*`, `atoms_agents.*`.
+
+Use the Atoms-Fam Agentic Laws located at the top of AGENTS.md as your primary operating directive. 
+You are physically gated by the Atoms-Shield MCP server. If you attempt to write a secret to a file or use a non-chemical name, the tool will fail. Always ask for TOTP verification for Firearms actions.
 
 PRIORITY RULES:
 1. NEVER write keys or secrets to .env, .key, or local files directly.

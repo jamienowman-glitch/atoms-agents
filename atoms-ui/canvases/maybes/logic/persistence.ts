@@ -1,6 +1,6 @@
 import { get, set } from 'idb-keyval';
 import { Node, Edge } from 'reactflow';
-import { useMaybesStore } from './store';
+import { useMaybesStore } from '@canvases/maybes/logic/store';
 
 const DB_KEY = 'maybes_nodes_v1';
 

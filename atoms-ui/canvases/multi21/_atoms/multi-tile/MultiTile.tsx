@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
-import { VideoThumb } from './VideoThumb';
-import { MultiTileBack } from './MultiTileBack';
+import { VideoThumb } from '@atoms/multi-tile/VideoThumb';
+import { MultiTileBack } from '@atoms/multi-tile/MultiTileBack';
 import { ROBOTO_PRESETS } from '@lib/fonts/roboto-presets';
 import { SEED_FEEDS, FeedItem } from '@lib/data/seed-feeds';
 

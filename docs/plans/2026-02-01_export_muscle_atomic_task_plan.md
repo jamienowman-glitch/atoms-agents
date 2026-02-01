@@ -6,6 +6,7 @@
 ## 📦 Phase 1: The Skeleton & Protocol
 **Goal**: Create the container and the interface.
 - [ ] **Scaffold**: Run `create-muscle` skill to generate `src/atoms_muscle/export/universal`.
+- [ ] **The Phone Book**: Ensure `service.py` uses `atoms_core.config.aliases.resolve_path()` for any cross-repo logic.
 - [ ] **Dependencies**: Add `Pillow` (Images), `reportlab` (PDF), `python-pptx` (PPTX), `openpyxl` (XLS), `python-docx` (DOC), `pandas` (CSV), `dicttoxml` (XML).
 - [ ] **The Protocol**: Implement `ExportJob` Pydantic model in `models.py` matching the `Universal Export Protocol`.
 - [ ] **The Router**: Create `service.py` with a `switch` statement on `target_format`.

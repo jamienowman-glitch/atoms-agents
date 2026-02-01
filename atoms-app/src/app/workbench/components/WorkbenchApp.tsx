@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from 'react';
-import { ControlPanel } from './ControlPanel';
-import { ChatWindow } from './ChatWindow';
-import { WorkbenchLayout } from './WorkbenchLayout';
+import { ControlPanel } from '@/app/workbench/components/ControlPanel';
+import { ChatWindow } from '@/app/workbench/components/ChatWindow';
+import { WorkbenchLayout } from '@/app/workbench/components/WorkbenchLayout';
 
 interface WorkbenchAppProps {
   registryData: any;

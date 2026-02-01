@@ -1,4 +1,4 @@
-import { AtomContract } from '../../../types/AtomContract';
+import { AtomContract } from '@ui-types/AtomContract';
 
 export const HeaderAtomContract: AtomContract = {
     id: 'header',

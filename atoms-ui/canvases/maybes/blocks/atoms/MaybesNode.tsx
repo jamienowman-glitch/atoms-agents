@@ -1,9 +1,9 @@
 import React, { memo } from 'react';
 import { Handle, Position, NodeProps } from 'reactflow';
-import { BuildingText } from './nodes/BuildingText';
-import { BuildingAudio } from './nodes/BuildingAudio';
-import { BuildingImage } from './nodes/BuildingImage';
-import { useCanvasActions } from '../../logic/CanvasActionContext';
+import { BuildingText } from '@canvases/maybes/blocks/atoms/nodes/BuildingText';
+import { BuildingAudio } from '@canvases/maybes/blocks/atoms/nodes/BuildingAudio';
+import { BuildingImage } from '@canvases/maybes/blocks/atoms/nodes/BuildingImage';
+import { useCanvasActions } from '@canvases/maybes/logic/CanvasActionContext';
 
 
 // This wrapper handles the common building "shell" (selection state, handles)

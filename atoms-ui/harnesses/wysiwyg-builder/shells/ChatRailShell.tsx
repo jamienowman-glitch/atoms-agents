@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageStream } from './chat/MessageStream';
-import { InputController } from './chat/InputController';
+import { MessageStream } from '@harnesses/wysiwyg-builder/shells/chat/MessageStream';
+import { InputController } from '@harnesses/wysiwyg-builder/shells/chat/InputController';
 
 export type ChatMode = 'nano' | 'micro' | 'standard' | 'full';
 

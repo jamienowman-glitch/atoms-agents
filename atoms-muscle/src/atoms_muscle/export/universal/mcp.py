@@ -1,8 +1,8 @@
 from mcp.server.fastmcp import FastMCP
-from atoms_core.src.billing.decorators import require_snax, PaymentRequired
+from atoms_core.billing.decorators import require_snax, PaymentRequired
 import json
-from .service import service
-from .models import ExportJob
+from atoms_muscle.export.universal.service import service
+from atoms_muscle.export.universal.models import ExportJob
 
 mcp = FastMCP("muscle-export-universal")
 

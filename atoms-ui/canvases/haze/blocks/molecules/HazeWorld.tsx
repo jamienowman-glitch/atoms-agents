@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef, useEffect } from 'react';
-import { HazeNode } from '../atoms/HazeNode';
+import { HazeNode } from '@canvases/haze/blocks/atoms/HazeNode';
 
 interface HazeWorldProps {
     deltaForward: number;

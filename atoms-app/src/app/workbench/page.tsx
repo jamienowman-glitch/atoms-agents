@@ -1,5 +1,5 @@
 import React from 'react';
-import { WorkbenchApp } from './components/WorkbenchApp';
+import { WorkbenchApp } from '@/app/workbench/components/WorkbenchApp';
 
 // Force dynamic rendering so we fetch fresh data on navigation
 export const dynamic = 'force-dynamic';

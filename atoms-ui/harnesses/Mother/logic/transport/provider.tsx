@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { CanvasTransport, TransportConfig } from './index';
+import { CanvasTransport, TransportConfig } from '@logic/transport/index';
 
 const TransportContext = createContext<CanvasTransport | null>(null);
 

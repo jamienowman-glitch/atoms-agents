@@ -3,8 +3,8 @@ import uuid
 from pathlib import Path
 from PIL import Image, ImageDraw
 
-from .base import ExportEngine
-from ..models import ExportJob
+from atoms_muscle.export.universal.engines.base import ExportEngine
+from atoms_muscle.export.universal.models import ExportJob
 
 class PngEngine(ExportEngine):
     def get_content_type(self) -> str:

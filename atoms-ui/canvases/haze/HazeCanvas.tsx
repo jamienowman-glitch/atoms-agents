@@ -1,9 +1,9 @@
 'use client';
 
 import React from 'react';
-import { HazeToolHarness } from './HazeToolHarness';
-import { ConnectedHaze } from './blocks/ConnectedHaze';
-import { HAZE_TOOL_REGISTRY } from './tool-registry';
+import { HazeToolHarness } from '@canvases/haze/HazeToolHarness';
+import { ConnectedHaze } from '@canvases/haze/blocks/ConnectedHaze';
+import { HAZE_TOOL_REGISTRY } from '@canvases/haze/tool-registry';
 
 export function HazeCanvas() {
     return (

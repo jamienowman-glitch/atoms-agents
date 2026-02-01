@@ -1,4 +1,4 @@
-import './globals.css';
+import '@/app/globals';
 import type { Metadata } from 'next';
 import { Roboto_Flex } from 'next/font/google';
 

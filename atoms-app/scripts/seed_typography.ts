@@ -2,7 +2,7 @@
 import { createClient } from '@supabase/supabase-js';
 import fs from 'fs';
 import path from 'path';
-import { SYSTEM_FONTS } from '../src/lib/fonts/registry-data';
+import { SYSTEM_FONTS } from '@/lib/fonts/registry-data';
 
 // Load keys from Vault
 const VAULT_DIR = '/Users/jaynowman/northstar-keys';

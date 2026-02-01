@@ -3,12 +3,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase';
-import { ConnectorProvider } from './types';
-import { ConnectorSidebar } from './components/ConnectorSidebar';
-import { ScopeManager } from './components/ScopeManager';
-import { KpiMapper } from './components/KpiMapper';
-import { VaultWriter } from './components/VaultWriter';
-import { ApproveButton } from './components/ApproveButton';
+import { ConnectorProvider } from '@god/config/connectors/types';
+import { ConnectorSidebar } from '@god/config/connectors/components/ConnectorSidebar';
+import { ScopeManager } from '@god/config/connectors/components/ScopeManager';
+import { KpiMapper } from '@god/config/connectors/components/KpiMapper';
+import { VaultWriter } from '@god/config/connectors/components/VaultWriter';
+import { ApproveButton } from '@god/config/connectors/components/ApproveButton';
 
 export default function ConnectorsConfigPage() {
     const router = useRouter();

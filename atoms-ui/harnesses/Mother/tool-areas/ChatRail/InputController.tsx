@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { useChat } from '../../harness/ChatContext';
+import { useChat } from '@harnesses/Mother/harness/ChatContext';
 
 export const InputController = ({ autoFocus = false }: { autoFocus?: boolean }) => {
     const inputRef = useRef<HTMLInputElement>(null);

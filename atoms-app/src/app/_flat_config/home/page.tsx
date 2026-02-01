@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClient } from '../lib/supabase';
+import { createClient } from '@/app/_flat_config/lib/supabase';
 
 // Hardcoded God List (In future, check User Role in DB/Claims)
 const GODS = ['god@atoms.app', 'jay@atoms.app'];

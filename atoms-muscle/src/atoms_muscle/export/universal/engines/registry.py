@@ -1,13 +1,13 @@
 from typing import Type
-from .base import ExportEngine
-from .stubs import (
+from atoms_muscle.export.universal.engines.base import ExportEngine
+from atoms_muscle.export.universal.engines.stubs import (
     JpegEngineStub, Mp4EngineStub,
     PptxEngineStub, XlsxEngineStub, DocxEngineStub, XmlEngineStub,
     TxtEngineStub, MdEngineStub, HtmlEngineStub, TsxEngineStub,
     CssEngineStub, JsonEngineStub, SvgEngineStub
 )
-from .png_engine import PngEngine
-from .pdf_engine import PdfEngine
+from atoms_muscle.export.universal.engines.png_engine import PngEngine
+from atoms_muscle.export.universal.engines.pdf_engine import PdfEngine
 
 ENGINE_MAP = {
     "png": PngEngine,

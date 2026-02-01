@@ -4,9 +4,11 @@
 
 -- Enums
 DO $$ BEGIN
-    CREATE TYPE repo_source AS ENUM ('ui', 'app', 'core', 'muscle', 'connectors', 'agents', 'tuning', 'templates', 'safety');
+    CREATE TYPE repo_source AS ENUM ('ui', 'app', 'core', 'muscle', 'connectors', 'agents', 'tuning', 'templates', 'safety', 'packages', 'system');
 EXCEPTION
-    WHEN duplicate_object THEN null;
+    WHEN duplicate_object THEN 
+        ALTER TYPE repo_source ADD VALUE IF NOT EXISTS 'packages';
+        ALTER TYPE repo_source ADD VALUE IF NOT EXISTS 'system';
 END $$;
 
 DO $$ BEGIN

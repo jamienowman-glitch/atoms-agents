@@ -6,7 +6,7 @@ from typing import Dict, List, Optional, Set
 
 from fastapi import HTTPException
 
-from src.identity.models import RequestContext
+from atoms_core.identity.models import RequestContext
 
 VALID_MODES = frozenset({"saas", "enterprise", "lab"})
 

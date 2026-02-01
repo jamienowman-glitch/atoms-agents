@@ -1,5 +1,5 @@
 
-import { RobotoAxes } from './roboto-presets';
+import { RobotoAxes } from '@/lib/fonts/roboto-presets';
 
 export interface FontDefinition {
     name: string;

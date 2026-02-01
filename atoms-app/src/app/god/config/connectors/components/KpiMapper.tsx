@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase';
-import { PlatformMetric, CoreKpi, KpiMapping } from '../types';
+import { PlatformMetric, CoreKpi, KpiMapping } from '@god/config/connectors/types';
 
 interface KpiMapperProps {
     providerId: string;

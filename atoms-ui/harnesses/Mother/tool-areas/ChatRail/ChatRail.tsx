@@ -1,8 +1,8 @@
 import React, { useRef, useEffect } from 'react';
-import { MessageStream } from './MessageStream';
-import { InputController } from './InputController';
-import { ToolTray } from './ToolTray';
-import { ContextPills } from './ContextPills';
+import { MessageStream } from '@tool-areas/ChatRail/MessageStream';
+import { InputController } from '@tool-areas/ChatRail/InputController';
+import { ToolTray } from '@tool-areas/ChatRail/ToolTray';
+import { ContextPills } from '@tool-areas/ChatRail/ContextPills';
 
 type ChatMode = 'nano' | 'micro' | 'standard' | 'full';
 

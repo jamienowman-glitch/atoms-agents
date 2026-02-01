@@ -45,7 +45,7 @@ interface AtomDefinition {
     type: string;
 }
 
-import { AVAILABLE_ATOMS } from '../../../../canvases/multi21/registry';
+import { AVAILABLE_ATOMS } from '@canvases/multi21/registry';
 
 // Dynamic Category Configuration
 const getDynamicCategories = () => {

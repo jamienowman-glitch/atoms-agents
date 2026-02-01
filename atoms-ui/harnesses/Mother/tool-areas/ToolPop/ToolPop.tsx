@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { useToolControl } from '../../logic/ToolControlContext';
-import { ColorRibbon } from '../ui/ColorRibbon';
-import { DualMagnifier, MagnetItem } from './DualMagnifier';
-import { ContentPicker, ContentPickerItem } from './ui/ContentPicker';
-import { MediaPicker, MediaItem } from './ui/MediaPicker';
+import { useToolControl } from '@logic/ToolControlContext';
+import { ColorRibbon } from '@tool-areas/ui/ColorRibbon';
+import { DualMagnifier, MagnetItem } from '@tool-areas/ToolPop/DualMagnifier';
+import { ContentPicker, ContentPickerItem } from '@tool-areas/ToolPop/ui/ContentPicker';
+import { MediaPicker, MediaItem } from '@tool-areas/ToolPop/ui/MediaPicker';
 // import { SEED_FEEDS } from '../../../../lib/data/seed-feeds'; // Decoupled
 
 // --- Types & Interfaces ---

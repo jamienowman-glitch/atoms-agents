@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { DualMagnifier, MagnetItem } from '@harnesses/Mother/tool-areas/ToolPop/DualMagnifier';
-import { AtomContract, ControlDefinition } from '../../../../types/AtomContract';
-import { ColorRibbon } from '../ui/ColorRibbon';
+import { AtomContract, ControlDefinition } from '@ui-types/AtomContract';
+import { ColorRibbon } from '@tool-areas/ui/ColorRibbon';
 
 // --- Simplified Slider Component (Copied from ToolPop.tsx to preserve Sacred Visuals) ---
 interface UniversalSliderProps {

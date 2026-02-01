@@ -1,7 +1,7 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Optional
-from .models import ExportJob, ExportResult
+from atoms_muscle.export.universal.models import ExportJob, ExportResult
 
 class ExportEngine(ABC):
     """

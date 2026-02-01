@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase';
-import { ConnectorScope, ScopeCategory, FirearmType } from '../types';
+import { ConnectorScope, ScopeCategory, FirearmType } from '@god/config/connectors/types';
 
 interface ScopeManagerProps {
     providerId: string;

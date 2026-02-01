@@ -1,7 +1,7 @@
 from typing import Any, Dict
 from pydantic import BaseModel, Field
 
-from ..service import get_cad_viewer_service
+from atoms_muscle.cad.cad_viewer.service import get_cad_viewer_service
 
 class CadViewInput(BaseModel):
     project_id: str

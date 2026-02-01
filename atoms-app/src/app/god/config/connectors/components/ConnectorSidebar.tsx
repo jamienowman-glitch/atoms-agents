@@ -1,5 +1,5 @@
 import React from 'react';
-import { ConnectorProvider } from '../types';
+import { ConnectorProvider } from '@god/config/connectors/types';
 
 interface ConnectorSidebarProps {
     providers: ConnectorProvider[];

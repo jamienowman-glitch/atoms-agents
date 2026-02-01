@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useChat } from '../../harness/ChatContext';
+import { useChat } from '@harnesses/Mother/harness/ChatContext';
 
 const Icons = {
     Notes: () => <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><path d="M4 7h10" /><path d="M4 11h10" /><path d="M4 15h7" /><path d="M14 3h5a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-3" /></svg>,

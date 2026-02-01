@@ -6,10 +6,10 @@ import { ToolDefinition } from '@logic/ToolControlContext';
 import { ChatProvider } from '@logic/ChatContext';
 import { TopPill } from '@tool-areas/TopPill/TopPill';
 import { ChatRailShell } from '@tool-areas/ChatRail/ChatRail';
-import { CanvasScope } from '../../types/CanvasContext';
+import { CanvasScope } from '@ui-types/CanvasContext';
 
 // HAZE-specific ToolPop with custom navigation controls
-import { HazeToolPop } from './HazeToolPop';
+import { HazeToolPop } from '@canvases/haze/HazeToolPop';
 
 interface HazeToolHarnessProps {
     children: React.ReactNode;

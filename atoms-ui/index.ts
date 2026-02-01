@@ -6,16 +6,16 @@
 // export * from './harness/ToolControlProvider';
 // export * from './harness/ChatContext';
 
-export * from './types/ToolEvent';
-export * from './types/CanvasContext';
+export * from '@ui-types/ToolEvent';
+export * from '@ui-types/CanvasContext';
 
-export * from './harnesses/Mother/tool-areas/TopPill/TopPill';
-export * from './harnesses/Mother/tool-areas/ToolPill/ToolPill';
-export * from './harnesses/Mother/tool-areas/ToolPop/ToolPop';
-export * from './harnesses/Mother/tool-areas/ChatRail/ChatRail';
+export * from '@tool-areas/TopPill/TopPill';
+export * from '@tool-areas/ToolPill/ToolPill';
+export * from '@tool-areas/ToolPop/ToolPop';
+export * from '@tool-areas/ChatRail/ChatRail';
 // export * from './harness/registry/client';
 // export * from './harness/console/SurfaceCard';
 // export * from './harness/console/LauncherGrid';
 
-export * from './canvases/haze';
-// export * from './canvases/draft_harness';
+export * from '@canvases/haze';
+// export * from '@canvases/draft_harness';

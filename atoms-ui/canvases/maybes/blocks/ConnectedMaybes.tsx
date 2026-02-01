@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect } from 'react';
 import { useToolControl, useToolState } from '../../../harness/ToolControlProvider';
 import { useCanvasTransport } from '../../../harness/transport/provider'; // Canonical hook
-import { MaybesCity } from './molecules/MaybesCity';
-import { useMaybesStore } from '../logic/store';
-import { saveLocal, loadLocal } from '../logic/persistence';
-import { CanvasActionContext } from '../logic/CanvasActionContext';
-import { MaybesToolPill } from './MaybesToolPill';
+import { MaybesCity } from '@canvases/maybes/blocks/molecules/MaybesCity';
+import { useMaybesStore } from '@canvases/maybes/logic/store';
+import { saveLocal, loadLocal } from '@canvases/maybes/logic/persistence';
+import { CanvasActionContext } from '@canvases/maybes/logic/CanvasActionContext';
+import { MaybesToolPill } from '@canvases/maybes/blocks/MaybesToolPill';
 
 export const ConnectedMaybes = () => {
     const transport = useCanvasTransport();

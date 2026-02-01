@@ -1,14 +1,14 @@
 from fastapi import APIRouter, HTTPException, Depends
-from muscle.engines.identity.auth_stub import AuthContext, get_auth_context
-from atoms_core.src.billing.decorators import require_snax
+from atoms_core.identity.auth import AuthContext, get_optional_auth_context as get_auth_context
+from atoms_core.billing.decorators import require_snax
 import boto3
 import os
 import uuid
 from datetime import datetime
 from pathlib import Path
 
-from .models import ExportJob, ExportResult, ExportArtifact, NexusMetadata
-from .engines.registry import get_engine
+from atoms_muscle.export.universal.models import ExportJob, ExportResult, ExportArtifact, NexusMetadata
+from atoms_muscle.export.universal.engines.registry import get_engine
 
 router = APIRouter(prefix="/export", tags=["universal_export"])
 

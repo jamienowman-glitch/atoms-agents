@@ -4,8 +4,8 @@ from pathlib import Path
 from reportlab.pdfgen import canvas
 from reportlab.lib import colors
 
-from .base import ExportEngine
-from ..models import ExportJob
+from atoms_muscle.export.universal.engines.base import ExportEngine
+from atoms_muscle.export.universal.models import ExportJob
 
 class PdfEngine(ExportEngine):
     def get_content_type(self) -> str:

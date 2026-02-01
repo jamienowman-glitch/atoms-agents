@@ -1,1 +1,1 @@
-export { MaybesCanvas } from './MaybesCanvas';
+export { MaybesCanvas } from '@canvases/maybes/MaybesCanvas';

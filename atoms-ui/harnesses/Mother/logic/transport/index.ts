@@ -8,7 +8,7 @@ import {
     EventType,
     RoutingKeys,
     validateMediaSidecar,
-} from './contracts';
+} from '@logic/transport/contracts';
 
 export interface RequestContext {
     tenant_id: string;

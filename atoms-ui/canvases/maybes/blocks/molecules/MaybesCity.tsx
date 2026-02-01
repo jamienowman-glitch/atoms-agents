@@ -6,8 +6,8 @@ import ReactFlow, {
     useEdgesState,
     NodeTypes
 } from 'reactflow';
-import { MaybesNode } from '../atoms/MaybesNode';
-import { useMaybesStore } from '../../logic/store';
+import { MaybesNode } from '@canvases/maybes/blocks/atoms/MaybesNode';
+import { useMaybesStore } from '@canvases/maybes/logic/store';
 
 
 // Define node types map
@@ -20,7 +20,7 @@ interface MaybesCityProps {
     transport: any;
 }
 
-import { WeatherLayer } from './WeatherLayer';
+import { WeatherLayer } from '@canvases/maybes/blocks/molecules/WeatherLayer';
 
 export const MaybesCity: React.FC<MaybesCityProps> = ({ mode, transport }) => {
     const nodes = useMaybesStore((state) => state.nodes);

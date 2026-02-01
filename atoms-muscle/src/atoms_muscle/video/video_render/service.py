@@ -5,12 +5,9 @@ from typing import Optional, List
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from muscle.engines.common.identity_stub import (
-    RequestContext,
-    assert_context_matches,
-    get_request_context,
-)
-from muscle.engines.identity.auth_stub import AuthContext, get_auth_context
+from atoms_core.src.atoms_core.identity.models import RequestContext
+from atoms_core.src.atoms_core.identity.dependencies import get_request_context, assert_context_matches
+from atoms_core.src.atoms_core.identity.auth import AuthContext, get_auth_context
 
 from atoms_core.src.video.models import (
     RenderRequest,

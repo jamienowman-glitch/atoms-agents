@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { ToolHarness } from '../../harness/ToolHarness';
-import { HazeCanvas } from './HazeCanvas';
-import { HAZE_TOOL_REGISTRY } from './tool-registry';
+import { HazeCanvas } from '@canvases/haze/HazeCanvas';
+import { HAZE_TOOL_REGISTRY } from '@canvases/haze/tool-registry';
 import { MagnetItem } from '../../components/workbench/DualMagnifier';
 
 // HAZE-specific magnifier configuration

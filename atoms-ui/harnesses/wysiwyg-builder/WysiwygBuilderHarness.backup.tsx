@@ -5,9 +5,9 @@ import { WysiwygCanvas, Block } from '../../canvas/wysiwyg/WysiwygCanvas';
 import { WysiwygToolbar } from '../../canvas/wysiwyg/WysiwygToolbar';
 import { WysiwygAddMenu } from '../../canvas/wysiwyg/WysiwygAddMenu';
 import { WysiwygFloatingControls } from '../../canvas/wysiwyg/WysiwygFloatingControls';
-import { TopPill } from './shells/TopPill';
-import { ChatRailShell, ChatMode } from './shells/ChatRailShell';
-import { ToolPop } from './shells/ToolPop';
+import { TopPill } from '@harnesses/wysiwyg-builder/shells/TopPill';
+import { ChatRailShell, ChatMode } from '@harnesses/wysiwyg-builder/shells/ChatRailShell';
+import { ToolPop } from '@harnesses/wysiwyg-builder/shells/ToolPop';
 
 export function WysiwygBuilderHarness() {
     // --- State ---
