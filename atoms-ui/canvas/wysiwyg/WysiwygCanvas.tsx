@@ -288,10 +288,17 @@ export function WysiwygCanvas({ blocks, setBlocks, activeBlockId, setActiveBlock
                         id={block.id}
                         heading={(block as any).heading}
                         subheading={(block as any).subheading}
-                        axisWeight={(block as any).axisWeight}
-                        axisSlant={(block as any).axisSlant}
-                        positionX={(block as any).positionX}
-                        positionY={(block as any).positionY}
+                        // Use toolState for live editing, fallback to block data
+                        axisWeight={toolState?.['typo.weight'] ?? (block as any).axisWeight}
+                        axisSlant={toolState?.['typo.slant'] ?? (block as any).axisSlant}
+                        axisWidth={toolState?.['typo.width'] ?? (block as any).axisWidth}
+                        // Updated to use x_axis / y_axis from new contract
+                        positionX={toolState?.['x_axis'] ?? (block as any).positionX}
+                        positionY={toolState?.['y_axis'] ?? (block as any).positionY}
+                        // New Color Props
+                        styleBlockBg={toolState?.['style.block_bg']}
+                        styleText={toolState?.['style.text']}
+
                         onUpdate={(id, updates) => {
                             // Map contract vars back to block props
                             const mapped: any = {};

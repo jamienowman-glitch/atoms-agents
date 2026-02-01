@@ -3,6 +3,11 @@
 ## 🛒 MARKETPLACE PIVOT (2026-02-01) - "AGENT-GAINS"
 > **MASTER EXECUTION PLAN**: `docs/plans/2026-02-01_marketplace_pivot_master_plan.md`
 > **The Strategy**:
+
+## 📦 EXPORT MUSCLE PIVOT (2026-02-01) - "UNIVERSAL FORMATS"
+> **MASTER PLAN**: `docs/plans/2026-02-01_export_muscle_atomic_task_plan.md`
+> **PROTOCOL**: `docs/plans/2026-02-01_universal_export_protocol.md`
+> **Mandate**: Unified Export Engine for 16 formats (PDF, PPTX, HTML, MP4, etc).
 > 1.  **Payout Engine**: `docs/plans/2026-02-01_marketplace_payout_engine_plan.md` (Crypto Payouts).
 > 2.  **Economic Model**: `docs/plans/2026-02-01_marketplace_economic_model.md` (Dynamic Floor vs Fixed Peg).
 > 3.  **Trust Anchor**: `docs/plans/2026-02-01_marketplace_trust_strategy.md` (The Merkle Man).
@@ -94,7 +99,9 @@ This skill teaches you:
 - `@harnesses/*` → `harnesses/*`
 - `@canvas/*` → `canvas/*`
 
-**DEPRECATED**: Relative paths (`../`) are forbidden.
+**BANNED**: RELATIVE PATHS ARE FORBIDDEN.
+
+**STRICT RULE**: We are strictly moving to a non-deterministic non-relative alias architecture. Hardcoded brittle relative paths should NEVER ever be used.
 
 ### 3. Legacy Code Quarantine ⚡ IMMUTABLE
 
@@ -105,6 +112,16 @@ This skill teaches you:
 **ALL NEW TILE WORK**: Use `BaseTile.tsx` (when it exists).
 
 **Reason**: MultiTile is legacy, hard-wired, and unmaintainable.
+
+### 5. Typography Mandate ⚡ IMMUTABLE
+
+**VARIABLE FONTS ONLY**:
+- We ONLY use **Variable Fonts** (e.g., Roboto Flex).
+- Static fonts (tth/otf collections) are **FORBIDDEN**.
+- We must support the FULL range of axes:
+  - Weight: 100 (Thin) -> 1000 (Extra Black)
+  - Slant: -10 (Italic) -> 0 (Upright)
+  - Width: 25 -> 151 (if supported)
 
 ### 4. Immutable Workflow ⚡ CRITICAL
 

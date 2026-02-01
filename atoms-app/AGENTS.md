@@ -1,3 +1,8 @@
+## 📦 EXPORT MUSCLE PIVOT (2026-02-01) - "UNIVERSAL FORMATS"
+> **MASTER PLAN**: `docs/plans/2026-02-01_export_muscle_atomic_task_plan.md`
+> **PROTOCOL**: `docs/plans/2026-02-01_universal_export_protocol.md`
+> **Mandate**: Unified Export Engine for 16 formats (PDF, PPTX, HTML, MP4, etc).
+
 # 🛡️ JUNIOR AGENT SECURITY (JAS)
 **"The Adult in the Room for your AI Agents"**
 

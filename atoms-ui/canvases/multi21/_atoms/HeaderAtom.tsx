@@ -9,8 +9,11 @@ export interface HeaderAtomProps {
     subheading?: string;
     axisWeight?: number;
     axisSlant?: number;
+    axisWidth?: number; // New
     positionX?: number;
     positionY?: number;
+    styleBlockBg?: string; // New
+    styleText?: string;    // New
     onUpdate?: (id: string, updates: any) => void;
 }
 
@@ -20,8 +23,11 @@ export function HeaderAtom({
     subheading = "Start building by adding atoms with the + button",
     axisWeight = 600,
     axisSlant = 0,
+    axisWidth = 100, // Default Normal
     positionX = 0,
     positionY = 0,
+    styleBlockBg = 'transparent',
+    styleText = 'inherit',
     onUpdate
 }: HeaderAtomProps) {
 
@@ -53,13 +59,15 @@ export function HeaderAtom({
                 position: 'absolute',
                 left: `${positionX}px`,
                 top: `${positionY}px`,
-                fontVariationSettings: `"wght" ${axisWeight}, "slnt" ${axisSlant}`,
+                fontVariationSettings: `"wght" ${axisWeight}, "slnt" ${axisSlant}, "wdth" ${axisWidth}`,
                 width: '100%',
                 maxWidth: '600px',
                 padding: '24px',
-                zIndex: 10
+                zIndex: 10,
+                backgroundColor: styleBlockBg, // Applied
+                color: styleText // Applied
             }}
-            className="pointer-events-auto"
+            className="pointer-events-auto transition-colors duration-200 rounded-xl"
         >
             <h1
                 id={`${id}-heading`}
@@ -69,7 +77,7 @@ export function HeaderAtom({
             </h1>
             <p
                 id={`${id}-subheading`}
-                className="text-lg text-neutral-600 outline-none"
+                className="text-lg opacity-80 outline-none" // Use opacity for text color inheritance
             >
                 {subheading}
             </p>

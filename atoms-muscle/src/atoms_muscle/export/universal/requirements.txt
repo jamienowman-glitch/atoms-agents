@@ -1,0 +1,11 @@
+reportlab
+Pillow
+python-pptx
+openpyxl
+python-docx
+pandas
+dicttoxml
+moviepy
+ffmpeg-python
+jinja2
+tc_core_python>=1.0.0

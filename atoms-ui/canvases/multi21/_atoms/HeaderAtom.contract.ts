@@ -10,17 +10,17 @@ export const HeaderAtomContract: AtomContract = {
                     id: 'placement',
                     controls: [
                         {
-                            id: 'position.x',
+                            id: 'x_axis',
                             type: 'slider',
-                            label: 'X Position',
+                            label: 'X Axis',
                             targetVar: 'position.x',
                             min: 0,
                             max: 600
                         },
                         {
-                            id: 'position.y',
+                            id: 'y_axis',
                             type: 'slider',
-                            label: 'Y Position',
+                            label: 'Y Axis',
                             targetVar: 'position.y',
                             min: 0,
                             max: 2000
@@ -41,7 +41,7 @@ export const HeaderAtomContract: AtomContract = {
                             label: 'Weight',
                             targetVar: 'typo.weight',
                             min: 100,
-                            max: 900,
+                            max: 1000,
                             axisLabels: {
                                 increase: 'Bulk Up',
                                 decrease: 'Slim Down'
@@ -59,6 +59,41 @@ export const HeaderAtomContract: AtomContract = {
                                 increase: 'Stand Up',
                                 decrease: 'Lean Back'
                             }
+                        },
+                        {
+                            id: 'typo.width',
+                            type: 'slider',
+                            label: 'Width',
+                            targetVar: 'typo.width',
+                            min: 25,
+                            max: 151,
+                            // Roboto Flex: 25 (Compressed) -> 151 (Expanded)
+                            axisLabels: {
+                                increase: 'Wide',
+                                decrease: 'Tight'
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            id: 'appearance',
+            subGroups: [
+                {
+                    id: 'colour',
+                    controls: [
+                        {
+                            id: 'bg_color',
+                            type: 'color_ribbon',
+                            label: 'Background',
+                            targetVar: 'style.block_bg',
+                        },
+                        {
+                            id: 'text_color',
+                            type: 'color_ribbon',
+                            label: 'Text',
+                            targetVar: 'style.text',
                         }
                     ]
                 }

@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+    <url>
+        <loc>https://atoms.org</loc>
+        <changefreq>daily</changefreq>
+        <priority>1.0</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-video-air_canvas</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-video-video_multicam</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-video-animation_kernel</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-video-video_anonymise</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-video-video_planet_preview</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-video-video_focus_automation</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-video-video_timeline</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-video-video_planet_runner</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-video-video_planet_surface_renderer</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-video-video_stabilise</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-video-video_visual_meta</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-video-auto_test</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-video-video_regions</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-video-video_text</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-video-video_preview</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-video-video_captions</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-video-video_presets</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-video-video_assist</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-video-video_360</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-video-video_render</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-video-video_history</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-video-video_mask</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-video-video_motifs</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-video-video_batch_render</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-video-video_edit_templates</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/system.vault_writer</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-cad-cad_diff</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-cad-cad_semantics</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-cad-cad_ingest</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-cad-cad_viewer</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-nexus-embeddings</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-audio-audio_render</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-audio-audio_resample</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-audio-audio_service</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-audio-audio_separation</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-audio-rootsmanuva_engine</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-audio-audio_voice_phrases</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-audio-audio_field_to_samples</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-audio-audio_loops</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-audio-audio_mix_snapshot</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-audio-audio_semantic_timeline</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-audio-audio_arrangement_engine</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-audio-audio_macro_engine</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-audio-audio_performance_capture</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/audio.test_unit</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-audio-audio_structure_engine</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-audio-audio_pattern_engine</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-audio-audio_harmony</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-audio-audio_normalise</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-audio-audio_mix_buses</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-audio-audio_groove</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-audio-audio_fx_chain</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-audio-audio_sample_library</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-audio-sample_pack_engine</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-audio-audio_capture_normalize</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-audio-audio_voice_enhance</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-audio-audio_hits</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-audio-audio_timeline</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-audio-audio_to_video_origin</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-knowledge-search_assistant</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-construction-boq_quantities</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-construction-boq_costing</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/atoms_muscle.muscle-media-media_v2</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://atoms.org/agent/system.vault_writer</loc>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+</urlset>

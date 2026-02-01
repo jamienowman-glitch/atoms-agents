@@ -3,16 +3,14 @@
 import React, { useState, useEffect } from 'react';
 import { WysiwygCanvas, Block } from '../../canvas/wysiwyg/WysiwygCanvas';
 import { ToolPopGeneric } from '@harnesses/Mother/tool-areas/ToolPop/ToolPopGeneric';
-import { LogicPop } from '../../canvas/wysiwyg/LogicPop'; // NEW: Agent Brain/Logging
-import { ToolPill } from '../../canvas/wysiwyg/ToolPill'; // Formerly WysiwygAddMenu
-// import { WysiwygFloatingControls } from '../../canvas/wysiwyg/WysiwygFloatingControls'; // Removed
+import { LogicPop } from '../../canvas/wysiwyg/LogicPop';
+import { ToolPill } from '@harnesses/Mother/tool-areas/ToolPill/ToolPill';
 import { TopPill } from './shells/TopPill';
 import { ChatRailShell, ChatMode } from './shells/ChatRailShell';
 import { LoggingLens } from './overlays/LoggingLens';
 import { MultiTileConfig } from '@atoms/multi-tile/MultiTile.config';
 import { HeroConfig } from '@atoms/hero/Hero.config';
 import { BleedingHeroContract } from '@atoms/BleedingHero.contract';
-
 import { HeaderAtomContract } from '@atoms/HeaderAtom.contract';
 
 // --- Canvas Cartridge Types ---
@@ -229,12 +227,10 @@ export function WysiwygBuilderHarness() {
                     )}
                     {/* Future Cartridges: */}
                     {/* canvasMode === 'seb' && <EmailCanvas ... /> */}
-                    {/* canvasMode === 'deck' && <DeckCanvas ... /> */}
-                    {/* canvasMode === 'dm' && <MessagingCanvas ... /> */}
                 </div>
             </div>
 
-            {/* 4. TOOL PILL (Floating Add Menu) */}
+            {/* 3. TOOL PILL (Floating Add Menu) */}
             {!isVisitorView && (
                 <ToolPill
                     onAddAtom={(atomType, atomId) => {
@@ -286,11 +282,7 @@ export function WysiwygBuilderHarness() {
                                 onClose={() => setShowTools(false)}
                                 isMobileView={isMobileView}
                             />
-                        ) : (
-                            <div className="fixed left-0 right-0 bottom-0 bg-white/95 dark:bg-neutral-900/95 backdrop-blur-xl border-t border-neutral-200 dark:border-neutral-800 rounded-2xl z-[100] h-[260px] flex items-center justify-center">
-                                <div className="text-xs text-neutral-400">Tools not available for {activeBlockType}</div>
-                            </div>
-                        )}
+                        ) : null}
                     </div>
                 </div>
             )}

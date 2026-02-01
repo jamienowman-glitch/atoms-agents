@@ -5,7 +5,7 @@ export interface AxisLabel {
 
 export interface ControlDefinition {
     id: string;
-    type: 'slider' | 'toggle' | 'select' | 'joystick'; // Added joystick for future
+    type: 'slider' | 'toggle' | 'select' | 'joystick' | 'trigger' | 'panel_pop' | 'color_ribbon'; // Added color_ribbon
     label: string;
     targetVar: string;
     min?: number; max?: number;

@@ -1,0 +1,6 @@
+id: export_universal
+name: Universal Export Muscle
+maturity: alpha
+scopes:
+  - name: export:any
+    description: Export canvas to any supported format

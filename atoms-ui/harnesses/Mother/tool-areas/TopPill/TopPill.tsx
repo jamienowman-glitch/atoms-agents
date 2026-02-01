@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useToolControl } from '@logic/ToolControlContext';
+import { useToolControl } from '../../logic/ToolControlContext';
 
 interface TopPillProps {
     setIsRightPanelOpen?: (isOpen: boolean) => void;
@@ -41,7 +41,8 @@ export function TopPill({
     const { useToolState } = useToolControl();
 
     // View State (Global) - Now scoped automatically by the Harness!
-    const [previewMode, setPreviewMode] = useToolState<'desktop' | 'mobile'>('previewMode', 'desktop');
+    // Updated to support 'visitor' mode
+    const [previewMode, setPreviewMode] = useToolState<'desktop' | 'mobile' | 'visitor'>('previewMode', 'desktop');
 
     const toggleState = (newState: 'nx' | 'm21') => {
         if (state === newState) {
@@ -245,6 +246,19 @@ export function TopPill({
                 type="button"
             >
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" x2="12" y1="15" y2="3" /></svg>
+            </button>
+
+            {/* Eye (Visitor Preview) Icon */}
+            <button
+                className={`p-2 rounded-full transition-colors ${state === 'm21' ? 'hover:bg-black/10' : 'hover:bg-white/10'} ${previewMode === 'visitor' ? (state === 'm21' ? 'bg-black text-white' : 'bg-white text-black') : ''}`}
+                title={previewMode === 'visitor' ? 'Exit Preview' : 'Visitor Preview'}
+                onClick={() => setPreviewMode(previewMode === 'visitor' ? 'desktop' : 'visitor')}
+                type="button"
+            >
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                    <circle cx="12" cy="12" r="3" />
+                </svg>
             </button>
 
             {/* Page Icon (Settings) */}

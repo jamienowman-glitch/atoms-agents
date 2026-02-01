@@ -9,14 +9,26 @@ export function generateOrganizationSchema() {
   };
 }
 
-export function generateMuscleProductSchema(muscle: { name: string; description: string; price: number }) {
+export function generateMuscleProductSchema(muscle: {
+  name: string;
+  description: string;
+  price: number;
+  pitch_headline?: string;
+  author_identity?: string;
+  category?: string;
+}) {
   return {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": muscle.name,
     "description": muscle.description,
-    "applicationCategory": "BusinessApplication",
-    "operatingSystem": "Cloud",
+    "headline": muscle.pitch_headline,
+    "author": {
+      "@type": "Person",
+      "name": muscle.author_identity || "Atoms Orchestrator"
+    },
+    "applicationCategory": muscle.category ? `BusinessApplication/${muscle.category}` : "BusinessApplication",
+    "operatingSystem": "Cloud/Atoms-VM",
     "offers": {
       "@type": "Offer",
       "price": muscle.price,

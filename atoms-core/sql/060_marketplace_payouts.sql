@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS public.marketplace_contracts (
 
 -- RLS
 ALTER TABLE public.marketplace_contracts ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Tenants View Own Contract" ON public.marketplace_contracts;
 CREATE POLICY "Tenants View Own Contract" ON public.marketplace_contracts 
     FOR SELECT USING (auth.uid() IN (SELECT user_id FROM public.tenant_members WHERE tenant_id = marketplace_contracts.tenant_id));
 
@@ -38,6 +39,7 @@ CREATE TABLE IF NOT EXISTS public.developer_balance (
 
 -- RLS
 ALTER TABLE public.developer_balance ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Tenants View Own Balance" ON public.developer_balance;
 CREATE POLICY "Tenants View Own Balance" ON public.developer_balance 
     FOR SELECT USING (auth.uid() IN (SELECT user_id FROM public.tenant_members WHERE tenant_id = developer_balance.tenant_id));
 
@@ -57,6 +59,7 @@ CREATE TABLE IF NOT EXISTS public.payout_history (
 
 -- RLS
 ALTER TABLE public.payout_history ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Tenants View Own Payouts" ON public.payout_history;
 CREATE POLICY "Tenants View Own Payouts" ON public.payout_history 
     FOR SELECT USING (auth.uid() IN (SELECT user_id FROM public.tenant_members WHERE tenant_id = payout_history.tenant_id));
 

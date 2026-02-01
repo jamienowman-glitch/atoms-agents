@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { DualMagnifier, MagnetItem } from '@harnesses/Mother/tool-areas/ToolPop/DualMagnifier';
 import { AtomContract, ControlDefinition } from '../../../../types/AtomContract';
+import { ColorRibbon } from '../ui/ColorRibbon';
 
 // --- Simplified Slider Component (Copied from ToolPop.tsx to preserve Sacred Visuals) ---
 interface UniversalSliderProps {
@@ -111,16 +112,14 @@ export function ToolPopGeneric({
     };
 
     // Derived: Mode Options (Left Magnifier) -> Traits
-    const modeOptions: MagnetItem[] = activeAtomContract.traits.map(t => ({
+    const modeOptions: MagnetItem[] = activeAtomContract?.traits?.map(t => ({
         id: t.id || 'unknown',
         label: t.id ? (t.id.charAt(0).toUpperCase() + t.id.slice(1)) : 'Unknown',
-        // Use generic icon since we don't have mapping yet, or mapping based on ID.
-        // Reusing icons from main ToolPop if ids match would be ideal, but for now simple fallback.
         icon: <div className="w-2 h-2 rounded-full bg-current" />
-    }));
+    })) || [];
 
     // Derived: Tool Options (Right Magnifier) -> SubGroups of active Trait
-    const activeTrait = activeAtomContract.traits.find(t => t.id === activeTraitId);
+    const activeTrait = activeAtomContract?.traits?.find(t => t.id === activeTraitId);
     const toolOptions: MagnetItem[] = activeTrait?.subGroups.map(g => ({
         id: g.id || 'unknown',
         label: g.id ? (g.id.charAt(0).toUpperCase() + g.id.slice(1)) : 'Unknown',
@@ -222,6 +221,29 @@ export function ToolPopGeneric({
                             {control.type === 'joystick' && (
                                 <div className="h-24 bg-neutral-100 dark:bg-neutral-800 rounded-lg flex items-center justify-center">
                                     <span className="text-[10px] uppercase font-bold text-neutral-400">Joystick</span>
+                                </div>
+                            )}
+
+                            {control.type === 'trigger' && (
+                                <div key={control.id} className="flex flex-col gap-1">
+                                    {/* Trigger: Simple Action Button */}
+                                    <button
+                                        className="w-full flex items-center justify-center gap-2 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 active:scale-95 transition-all text-xs font-semibold py-3 rounded-xl border border-neutral-200 dark:border-neutral-700"
+                                        onClick={() => onToolUpdate(control.targetVar, true)} // Simple trigger signal
+                                    >
+                                        {/* Icon placehoder if needed */}
+                                        {control.label}
+                                    </button>
+                                </div>
+                            )}
+
+                            {control.type === 'color_ribbon' && (
+                                <div key={control.id} className="flex flex-col gap-1">
+                                    <span className="text-[10px] text-neutral-500 font-medium">{control.label}</span>
+                                    <ColorRibbon
+                                        value={String(currentValue)}
+                                        onChange={(color) => onToolUpdate(control.targetVar, color)}
+                                    />
                                 </div>
                             )}
                         </div>

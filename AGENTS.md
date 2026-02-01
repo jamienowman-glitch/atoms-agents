@@ -41,6 +41,12 @@ JAS sits between your Agents/IDE and your Secrets.
 > 2.  **Economic Model**: `docs/plans/2026-02-01_marketplace_economic_model.md` (Dynamic Floor vs Fixed Peg).
 > 3.  **Trust Anchor**: `docs/plans/2026-02-01_marketplace_trust_strategy.md` (The Merkle Man).
 
+## 📦 EXPORT MUSCLE PIVOT (2026-02-01) - "UNIVERSAL FORMATS"
+> **MASTER PLAN**: `docs/plans/2026-02-01_export_muscle_atomic_task_plan.md`
+> **PROTOCOL**: `docs/plans/2026-02-01_universal_export_protocol.md`
+> **The Goal**: Unified Export Engine for 16 formats (PDF, PPTX, HTML, MP4, etc).
+> **Mandate**: All new muscles must support the `ExportJob` JSON handshake. No bytes over wires.
+
 > **⚠️ CRITICAL WARNING ⚠️**  
 > **THE WYSIWYG CANVAS AND HARNESS ARE NOW PRODUCTION-READY AND LOCKED.**  
 > **DO NOT TOUCH THESE FILES WITHOUT EXPLICIT USER PERMISSION.**  
