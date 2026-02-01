@@ -1,8 +1,0 @@
-id: "example_connector"
-name: "Example Connector"
-summary: "Template for new connectors"
-scopes:
-  - name: "sample_action"
-    description: "A sample action"
-    handler: "handle_sample"
-    input_model: "SampleInput" # Name of Pydantic model in impl.py

@@ -1,8 +1,0 @@
-name: "Media Storage"
-key: "aws_s3_media"
-type: "storage"
-status: "active"
-config:
-  provider: "aws"
-  bucket: "northstar-media-dev"
-  region: "us-east-1"

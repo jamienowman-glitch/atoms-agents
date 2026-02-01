@@ -1,8 +1,0 @@
-id: cad_viewer
-name: CAD Viewer
-maturity: demo
-scopes:
-  - name: cad:gantt
-    description: View Gantt charts
-  - name: cad:overlay
-    description: View CAD overlays

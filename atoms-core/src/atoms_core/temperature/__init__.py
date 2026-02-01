@@ -1,1 +1,0 @@
-from src.temperature.service import get_temperature_service

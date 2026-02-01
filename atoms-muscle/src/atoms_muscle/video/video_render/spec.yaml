@@ -1,8 +1,0 @@
-id: video_render
-name: Video Render
-maturity: demo
-scopes:
-  - name: render:720p
-    description: Render video at 720p resolution
-  - name: render:1080p
-    description: Render video at 1080p resolution
