@@ -134,12 +134,18 @@ All entities in this registry must be defined as **Atomic Cards** (YAML files wi
 `atoms-agents` is a self-contained unit comprising:
 1.  **Registry**: The database of atomic cards.
 2.  **Runtime**: The execution engine (adapters, providers, modes).
+*   **Level 2: The Space (Context)**: The Shared Data Boundary (Nexus + Feeds).
+    *   **Shared Context**: Exists outside of Canvas/Flow; state is persistent across transitions.
+    *   **Logging (Event V2)**: Mandatory `EventV2` envelope for all Space-level telemetry.
+    *   *Shared Assets*: Nexus (Vector Memory), Feeds (RSS/API), Config (Brand Voice).
 3.  **Workbench**: The API surface for interacting with agents.
 
 This repository consumes `atoms-core` (if applicable) but maintains strict separation from `northstar-engines` (stateful OS) and `agentflow` (UI).
 
 ## 🧷 EVENT SPINE V2 CONTRACT (SUPABASE‑FIRST)
 **Canonical Doc:** `docs/plans/2026-01-29_event-spine-v2-contract.md`
+**Mandate**: All agent/system logs MUST use the `EventV2` envelope (v, type, ts, ids, routing, data, meta).
+**Visualization**: `LoggingLens` provides the authoritative Space-Level view of these events.
 
 ## 🧷 TUNING ARCHITECTURE (DECOUPLED)
 - `atoms-tuning` is external and produces adapters (LoRA/other).
@@ -190,3 +196,5 @@ This repository consumes `atoms-core` (if applicable) but maintains strict separ
 ### Gateway
 `atoms_core.connectors.registry.validate_firearms_ticket(ticket, required_license)`
 
+
+> **REAL-TIME LAW**: You MUST follow the [Real-time Contract (REALTIME_SPEC_V1)](file:///Users/jaynowman/dev/atoms-core/docs/REALTIME_CONTRACT.md) for all transport logic. SSE=Truth, POST=Command, WS=Gesture.
