@@ -1,0 +1,1 @@
+"""Shot Detection capability."""

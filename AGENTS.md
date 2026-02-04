@@ -124,6 +124,19 @@ This skill teaches you:
 ## Vault Law
 This repository (`atoms-agents`) serves as the strict contract boundary for Agent Definitions and Runtime execution. It is the single source of truth for Agent Identity, Reasoning Profiles, and Capability Licensing.
 
+## Provider Integration Status (2026-02-03)
+- **Groq**: OpenAI-compatible endpoint in use; model IDs updated to live catalog and passing live tests.
+- **NVIDIA**: `integrate.api.nvidia.com/v1/chat/completions` in use; model IDs updated to live NIM catalog and passing live tests.
+- **Mistral**: `v1/chat/completions` in use; model IDs updated to live Mistral catalog and passing live tests.
+- **Vault**: Providers/tests load secrets via VaultLoader (vault-first with env fallback for compatibility).
+- **Bedrock**: `bedrock-runtime` invoke_model enabled; model IDs mapped to live on-demand catalog, but **daily token quota is throttled** (tests skipped).
+- **OpenRouter**: `/api/v1` endpoint + free model IDs (Molmo2 + others) configured, but **current vault key returns 401** (tests blocked until key is replaced).
+- **Expectation**: If keys/quota are missing, tests skip; do not mock. Document failures here.
+
+## Provider Onboarding Skill
+Read the atomic provider skill before adding new providers/models:
+`/Users/jaynowman/dev/atoms-agents/.codex/skills/atomic-model-providers/SKILL.md`
+
 ## Cards Only
 All entities in this registry must be defined as **Atomic Cards** (YAML files with a `card_type`).
 *   Agents are compositions of other cards (Models, Personas, Tasks, Reasoning Profiles).

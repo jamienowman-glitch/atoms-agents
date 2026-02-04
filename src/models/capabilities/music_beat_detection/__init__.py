@@ -1,0 +1,1 @@
+"""Music Beat Detection capability."""
