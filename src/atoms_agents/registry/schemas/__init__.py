@@ -16,8 +16,13 @@ from .profiles import RunProfileCard
 from .providers_models import ProviderConfigCard, ModelCard, ModelFamilyCard
 from .capabilities import CapabilityCard, CapabilityBindingCard
 from .atomic_cards import PersonaCard, TaskCard, ArtifactSpecCard
-from .nodes import NodeCard
+from .nodes import NodeCard  # Legacy Typed Node (deprecated, kept for backwards compatibility)
 from .flows import FlowCard, FlowEdge
+from .manifests import ManifestCard
+from .firearms import FirearmsLicenseCard
+from .reasoning import ReasoningProfileCard
+from .agents import AgentCard
+from .overlays import LensOverlayCard
 
 __all__ = [
     "FrameworkAdapterCard",
@@ -35,4 +40,9 @@ __all__ = [
     "NodeCard",
     "FlowCard",
     "FlowEdge",
+    "ManifestCard",
+    "FirearmsLicenseCard",
+    "ReasoningProfileCard",
+    "AgentCard",
+    "LensOverlayCard",
 ]

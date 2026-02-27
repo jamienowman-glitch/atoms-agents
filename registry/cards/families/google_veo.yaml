@@ -1,0 +1,6 @@
+card_type: model_family
+family_id: google.veo
+name: Veo
+description: Google's video generation models.
+provider_ids:
+- gcp_vertex

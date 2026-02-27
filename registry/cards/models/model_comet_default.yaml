@@ -1,0 +1,13 @@
+card_type: model
+model_id: model.comet_default
+provider_id: comet
+official_id: comet-default
+family_id: comet
+version: '1.0'
+variant: default
+reasoning_effort: low
+context_window: 4096
+platform_api_surface: openai_compat
+invocation_primitive: REST
+streaming_support: none
+confidence: experimental

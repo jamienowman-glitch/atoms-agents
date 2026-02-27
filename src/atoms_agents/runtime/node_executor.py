@@ -212,8 +212,41 @@ class NodeExecutor:
                     nexus_context=nexus_context
                 )
 
+                # --- PRIVACY SCRUBBER (WIRING: pii_strategy) ---
+                pii_strategy = profile.pii_strategy or "strict"
+                messages_clean = messages
+
+                if pii_strategy in ["infra", "strict"]:
+                    from atoms_agents.runtime.privacy.scrubber import RecursiveScrubber
+                    from atoms_agents.runtime.privacy.policy import FailClosedPolicy
+
+                    scrubber = RecursiveScrubber()
+                    policy = FailClosedPolicy()
+                    
+                    scrub_result = scrubber.scrub(messages)
+                    # Enforce policy (raises if invalid)
+                    messages_clean = policy.enforce(scrub_result)
+                    
+                    if scrub_result.pii_found:
+                        self._log_event(
+                            events, 
+                            "privacy_scrub", 
+                            summary=scrub_result.summary,
+                            status="PII_REDACTED",
+                            strategy=pii_strategy
+                        )
+                elif pii_strategy == "passthrough":
+                    self._log_event(
+                        events,
+                        "privacy_warning",
+                        message="PII scrubbing skipped (passthrough strategy enabled)",
+                        severity="WARN"
+                    )
+                else:
+                    raise ValueError(f"Unknown pii_strategy: {pii_strategy}. Failing closed for safety.")
+
                 response = self._invoke_gateway(
-                    node, gateway, messages, model_id, provider_id, events, request_context
+                    node, gateway, messages_clean, model_id, provider_id, events, request_context
                 )
 
                 if response.get("status") == "FAIL":

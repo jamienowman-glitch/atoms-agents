@@ -1,3 +1,4 @@
+card_type: capability
 capability_id: spatial_grounding
 name: Spatial Grounding
 description: Enables point/box XML tagging output for object localization.

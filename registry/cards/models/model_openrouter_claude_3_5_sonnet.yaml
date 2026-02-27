@@ -1,0 +1,13 @@
+card_type: model
+model_id: model.openrouter_claude_3_5_sonnet
+provider_id: openrouter
+official_id: anthropic/claude-3.5-sonnet
+family_id: anthropic.claude
+version: '3.5'
+variant: sonnet
+reasoning_effort: high
+context_window: 200000
+platform_api_surface: openai_compat
+invocation_primitive: REST
+streaming_support: token
+confidence: production

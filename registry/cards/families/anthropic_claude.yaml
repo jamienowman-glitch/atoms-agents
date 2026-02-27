@@ -1,0 +1,8 @@
+card_type: model_family
+family_id: anthropic.claude
+name: Claude
+description: Anthropic's high-intelligence reasoning and coding models.
+provider_ids:
+- aws_bedrock
+- gcp_vertex
+- openrouter

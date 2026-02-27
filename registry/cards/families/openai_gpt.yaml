@@ -1,0 +1,7 @@
+card_type: model_family
+family_id: openai.gpt
+name: GPT
+description: OpenAI's Generative Pre-trained Transformer models.
+provider_ids:
+- azure_openai
+- openrouter

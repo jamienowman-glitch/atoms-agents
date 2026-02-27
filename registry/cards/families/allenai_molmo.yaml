@@ -1,0 +1,7 @@
+card_type: model_family
+family_id: allenai.molmo
+name: Molmo
+description: AllenAI's open multimodal models.
+provider_ids:
+- openrouter
+- huggingface

@@ -51,6 +51,7 @@ class RegistryContext:
     personas: Dict[str, PersonaCard]
     tasks: Dict[str, TaskCard]
     artifact_specs: Dict[str, ArtifactSpecCard]
+    # Legacy Typed Nodes (deprecated). Kept so workspace overlays don't explode.
     nodes: Dict[str, NodeCard]
     flows: Dict[str, FlowCard]
     overlays: Dict[str, LensOverlayCard]
@@ -91,7 +92,6 @@ class RegistryLoader:
         cards_personas = self.load_cards_from_dir("personas")
         cards_tasks = self.load_cards_from_dir("tasks")
         cards_artifact_specs = self.load_cards_from_dir("artifact_specs")
-        cards_nodes = self.load_cards_from_dir("nodes")
         cards_flows = self.load_cards_from_dir("flows")
         cards_overlays = self.load_cards_from_dir("overlays")
         cards_tenants = self.load_cards_from_dir("tenants")
@@ -123,7 +123,7 @@ class RegistryLoader:
             personas={c.persona_id: c for c in cards_personas if isinstance(c, PersonaCard)},
             tasks={c.task_id: c for c in cards_tasks if isinstance(c, TaskCard)},
             artifact_specs={c.artifact_spec_id: c for c in cards_artifact_specs if isinstance(c, ArtifactSpecCard)},
-            nodes={c.node_id: c for c in cards_nodes if isinstance(c, NodeCard)},
+            nodes={},
             flows={c.flow_id: c for c in cards_flows if isinstance(c, FlowCard)},
             overlays={c.overlay_id: c for c in cards_overlays if hasattr(c, 'overlay_id')},
             tenants={c.tenant_id: c for c in cards_tenants if isinstance(c, TenantCard)},
@@ -176,7 +176,7 @@ class RegistryLoader:
             parse_provider, parse_model, parse_model_family, parse_capability,
             parse_capability_binding, parse_persona,
             parse_task, parse_artifact_spec,
-            parse_node, parse_flow,
+            parse_flow,
             parse_manifest, parse_firearms_license, parse_reasoning_profile, parse_agent
         )
 
@@ -210,8 +210,6 @@ class RegistryLoader:
                     loaded.append(parse_task(doc))
                 elif card_type == "artifact_spec":
                     loaded.append(parse_artifact_spec(doc))
-                elif card_type == "node":
-                    loaded.append(parse_node(doc))
                 elif card_type == "flow":
                     loaded.append(parse_flow(doc))
 

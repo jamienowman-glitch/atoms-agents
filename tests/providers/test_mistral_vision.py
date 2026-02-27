@@ -1,7 +1,7 @@
 import os
 import pytest
 from tests.providers.utils import random_prompt, has_env_or_vault
-from atoms_agents.src.models.providers.mistral.mistral_vision import MistralVisionProvider
+from atoms_agents.models.providers.mistral.mistral_vision import MistralVisionProvider
 
 
 @pytest.mark.asyncio

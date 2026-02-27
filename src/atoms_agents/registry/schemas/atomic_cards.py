@@ -1,40 +1,16 @@
-from dataclasses import dataclass, field
-from typing import List, Optional, Dict
+"""
+Legacy shim module.
 
-@dataclass
-class PersonaCard:
-    persona_id: str
-    name: str
-    description: str
-    style_tags: List[str] = field(default_factory=list)
-    principles: List[str] = field(default_factory=list)
-    system_guidance_ref: Optional[str] = None
-    version: Optional[str] = None
-    icon_light: Optional[str] = None
-    icon_dark: Optional[str] = None
-    notes: str = ""
-    card_type: str = "persona"
+Atomic card schemas were split into 1-class-per-file modules:
+- atoms_agents.registry.schemas.persona.PersonaCard
+- atoms_agents.registry.schemas.task.TaskCard
+- atoms_agents.registry.schemas.artifact_spec.ArtifactSpecCard
 
-@dataclass
-class TaskCard:
-    task_id: str
-    name: str
-    goal: str
-    constraints: List[str] = field(default_factory=list)
-    acceptance_criteria: List[str] = field(default_factory=list)
-    inputs_schema_ref: Optional[str] = None
-    outputs_schema_ref: Optional[str] = None
-    notes: str = ""
-    card_type: str = "task"
+This file remains to avoid breaking older imports.
+"""
 
-@dataclass
-class ArtifactSpecCard:
-    artifact_spec_id: str
-    name: str
-    artifact_kind: str
-    mime_type: Optional[str] = None
-    required_fields: List[str] = field(default_factory=list)
-    max_bytes: Optional[int] = None
-    viewer_hints: Dict[str, str] = field(default_factory=dict)
-    notes: str = ""
-    card_type: str = "artifact_spec"
+from atoms_agents.registry.schemas.persona import PersonaCard
+from atoms_agents.registry.schemas.task import TaskCard
+from atoms_agents.registry.schemas.artifact_spec import ArtifactSpecCard
+
+__all__ = ["PersonaCard", "TaskCard", "ArtifactSpecCard"]

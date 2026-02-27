@@ -1,0 +1,8 @@
+card_type: model_family
+family_id: meta.llama
+name: Llama
+description: Meta's open weights models.
+provider_ids:
+- aws_bedrock
+- nvidia
+- openrouter

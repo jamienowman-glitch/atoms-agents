@@ -1,0 +1,13 @@
+card_type: model
+model_id: model.openrouter_gpt4o
+provider_id: openrouter
+official_id: openai/gpt-4o
+family_id: openai.gpt
+version: 4o
+variant: default
+reasoning_effort: high
+context_window: 128000
+platform_api_surface: openai_compat
+invocation_primitive: REST
+streaming_support: token
+confidence: production

@@ -14,7 +14,11 @@ from .schemas import (
     ArtifactSpecCard,
     NodeCard,
     FlowCard,
-    FlowEdge
+    FlowEdge,
+    ManifestCard,
+    FirearmsLicenseCard,
+    ReasoningProfileCard,
+    AgentCard,
 )
 from atoms_agents.core.identifiers import generate_deterministic_edge_id
 
@@ -67,7 +71,7 @@ def parse_profile(data: Dict[str, Any]) -> RunProfileCard:
         name=data.get("name", data["profile_id"]),
         persistence_backend=data["persistence_backend"],
         blackboard_backend=data.get("blackboard_backend", "local"),
-        pii_strategy=data.get("pii_strategy", "passthrough"),
+        pii_strategy=data.get("pii_strategy", "strict"),
         nexus_strategy=data.get("nexus_strategy", "disabled"),
         allow_local_fallback=data.get("allow_local_fallback", False),
         description=data.get("description", ""),
@@ -81,7 +85,12 @@ def parse_provider(data: Dict[str, Any]) -> ProviderConfigCard:
     return ProviderConfigCard(
         provider_id=data["provider_id"],
         name=data.get("name", "Unknown"),
-        required_fields=data.get("required_fields", []),
+        required_fields=data.get("required_fields", []) or [],
+        provider_type=data.get("provider_type", ""),
+        api_base_url=data.get("api_base_url"),
+        description=data.get("description", ""),
+        python_module=data.get("python_module", ""),
+        env_var_keys=data.get("env_var_keys", []) or [],
         notes=data.get("notes", "")
     )
 
@@ -125,14 +134,16 @@ def parse_model(data: Dict[str, Any]) -> ModelCard:
     )
 
 def parse_capability(data: Dict[str, Any]) -> CapabilityCard:
-    if "capability_id" not in data or "capability_name" not in data:
+    name = data.get("capability_name") or data.get("name")
+    if "capability_id" not in data or not name:
         raise ValueError("CapabilityCard missing required fields")
 
     return CapabilityCard(
         capability_id=data["capability_id"],
-        capability_name=data["capability_name"],
+        capability_name=name,
         description=data.get("description", ""),
-        embedded_or_separate=data.get("embedded_or_separate", "EMBEDDED")
+        embedded_or_separate=data.get("embedded_or_separate", "EMBEDDED"),
+        parameters=data.get("parameters", {}) or {},
     )
 
 def parse_capability_binding(data: Dict[str, Any]) -> CapabilityBindingCard:
@@ -220,6 +231,11 @@ def parse_artifact_spec(data: Dict[str, Any]) -> ArtifactSpecCard:
     )
 
 def parse_node(data: Dict[str, Any]) -> NodeCard:
+    """
+    Legacy Typed Node parser.
+    This is deprecated in favor of NeutralNodeCard + lenses/graphs, but is kept
+    so workspace overlays and older flows can still be loaded.
+    """
     required = ["node_id", "name", "kind"]
     for r in required:
         if r not in data:
@@ -242,6 +258,9 @@ def parse_node(data: Dict[str, Any]) -> NodeCard:
         blackboard_reads=data.get("blackboard_reads", []),
         model_ref=data.get("model_ref"),
         provider_ref=data.get("provider_ref"),
+        routing_ref=data.get("routing_ref"),
+        manifest_ref=data.get("manifest_ref"),
+        strength_ref=data.get("strength_ref"),
         capability_ids=data.get("capability_ids", []),
         tool_refs=data.get("tool_refs", []),
         framework_mode_ref=data.get("framework_mode_ref"),
@@ -297,4 +316,83 @@ def parse_flow(data: Dict[str, Any]) -> FlowCard:
         defaults=data.get("defaults", {}),
         contracts=data.get("contracts", {}),
         notes=data.get("notes", "")
+    )
+
+def parse_manifest(data: Dict[str, Any]) -> ManifestCard:
+    required = ["manifest_id", "name", "system_prompt", "description"]
+    for r in required:
+        if r not in data:
+            raise ValueError(f"ManifestCard missing required field: {r}")
+
+    return ManifestCard(
+        manifest_id=data["manifest_id"],
+        name=data["name"],
+        description=data["description"],
+        system_prompt=data["system_prompt"],
+        metadata=data.get("metadata", {}) or {},
+    )
+
+def parse_firearms_license(data: Dict[str, Any]) -> FirearmsLicenseCard:
+    required = ["license_id", "name", "description"]
+    for r in required:
+        if r not in data:
+            raise ValueError(f"FirearmsLicenseCard missing required field: {r}")
+
+    return FirearmsLicenseCard(
+        license_id=data["license_id"],
+        name=data["name"],
+        description=data["description"],
+        allows_tools=bool(data.get("allows_tools", False)),
+        allowed_tool_families=data.get("allowed_tool_families", []) or [],
+        allows_code_execution=bool(data.get("allows_code_execution", False)),
+        allows_web_grounding=bool(data.get("allows_web_grounding", False)),
+        allows_vision=bool(data.get("allows_vision", False)),
+        allows_audio=bool(data.get("allows_audio", False)),
+        allows_write_access=bool(data.get("allows_write_access", False)),
+    )
+
+def parse_reasoning_profile(data: Dict[str, Any]) -> ReasoningProfileCard:
+    required = ["reasoning_id", "name"]
+    for r in required:
+        if r not in data:
+            raise ValueError(f"ReasoningProfileCard missing required field: {r}")
+
+    return ReasoningProfileCard(
+        reasoning_id=data["reasoning_id"],
+        name=data["name"],
+        description=data.get("description", ""),
+        notes=data.get("notes", ""),
+        request_overrides=data.get("request_overrides", {}) or {},
+        provider_id=data.get("provider_id"),
+    )
+
+def parse_agent(data: Dict[str, Any]) -> AgentCard:
+    required = [
+        "agent_id",
+        "name",
+        "description",
+        "manifest_ref",
+        "persona_ref",
+        "task_ref",
+        "model_ref",
+        "reasoning_ref",
+        "firearms_license_ref",
+    ]
+    for r in required:
+        if r not in data:
+            raise ValueError(f"AgentCard missing required field: {r}")
+
+    return AgentCard(
+        agent_id=data["agent_id"],
+        name=data["name"],
+        description=data["description"],
+        manifest_ref=data["manifest_ref"],
+        persona_ref=data["persona_ref"],
+        task_ref=data["task_ref"],
+        model_ref=data["model_ref"],
+        reasoning_ref=data["reasoning_ref"],
+        firearms_license_ref=data["firearms_license_ref"],
+        framework_ref=data.get("framework_ref"),
+        framework_mode_ref=data.get("framework_mode_ref"),
+        capability_refs=data.get("capability_refs", []) or [],
     )

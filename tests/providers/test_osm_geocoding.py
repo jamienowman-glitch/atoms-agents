@@ -1,6 +1,6 @@
 import os
 import pytest
-from atoms_agents.src.models.providers.maps.osm.osm_geocoding import OsmGeocodingProvider
+from atoms_agents.models.providers.maps.osm.osm_geocoding import OsmGeocodingProvider
 
 
 @pytest.mark.asyncio

@@ -1,7 +1,7 @@
 import os
 import pytest
 from tests.providers.utils import random_prompt, has_env_or_vault
-from atoms_agents.src.models.providers.openrouter.claude_3_opus_openrouter import Claude3OpusOpenRouterProvider
+from atoms_agents.models.providers.openrouter.claude_3_opus_openrouter import Claude3OpusOpenRouterProvider
 
 
 @pytest.mark.asyncio

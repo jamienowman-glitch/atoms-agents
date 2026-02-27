@@ -1,0 +1,6 @@
+card_type: provider
+provider_id: comet
+name: Comet
+required_fields:
+- comet_api_key
+notes: Comet LLM Provider.

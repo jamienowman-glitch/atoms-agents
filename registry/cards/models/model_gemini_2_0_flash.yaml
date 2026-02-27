@@ -1,0 +1,14 @@
+card_type: model
+model_id: model.gemini_2_0_flash
+provider_id: gemini
+official_id: gemini-2.0-flash
+family_id: google.gemini
+version: '2.0'
+variant: flash
+reasoning_effort: medium
+context_window: 1000000
+platform_api_surface: google_ai_studio
+invocation_primitive: REST
+streaming_support: token
+confidence: production
+notes: Ultra-fast multimodal model (2.0).

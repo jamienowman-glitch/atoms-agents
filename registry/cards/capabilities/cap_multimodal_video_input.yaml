@@ -1,0 +1,5 @@
+card_type: capability
+capability_id: cap.multimodal.video_input
+capability_name: Video Input
+description: Ability to process video files.
+embedded_or_separate: EMBEDDED

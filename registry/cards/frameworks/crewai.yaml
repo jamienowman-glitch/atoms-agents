@@ -1,0 +1,23 @@
+card_type: framework
+framework_id: crewai
+name: CrewAI
+description: Orchestration for role-playing agents.
+supported_modes:
+- crewai.crew_hierarchical
+- crewai.crew_sequential
+- crewai.execution_async
+- crewai.flow_basic
+- crewai.flow_control
+- crewai.flow_hybrid
+- crewai.flow_persistence
+- crewai.flow_router
+- crewai.hierarchical
+- crewai.hitl
+- crewai.knowledge_file
+- crewai.knowledge_string
+- crewai.knowledge_web
+- crewai.manager_custom
+- crewai.memory_demo
+- crewai.planning_demo
+- crewai.sequential
+- crewai.tools_custom

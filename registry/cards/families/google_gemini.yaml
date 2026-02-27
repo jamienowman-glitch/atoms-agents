@@ -1,0 +1,7 @@
+card_type: model_family
+family_id: google.gemini
+name: Gemini
+description: Google's multimodal reasoning models.
+provider_ids:
+- gcp_vertex
+- gemini

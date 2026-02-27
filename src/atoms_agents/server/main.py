@@ -15,9 +15,9 @@ registry = None
 @app.on_event("startup")
 async def startup_event():
     global registry
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    root_dir = os.path.join(base_dir, "../../../../atoms-agents/registry/cards")
-    root_dir = os.path.abspath(root_dir)
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    repo_root = os.path.abspath(os.path.join(current_dir, "../../../.."))
+    root_dir = os.path.join(repo_root, "registry/cards")
 
     print(f"Loading registry from: {root_dir}")
     loader = RegistryLoader(root_dir)

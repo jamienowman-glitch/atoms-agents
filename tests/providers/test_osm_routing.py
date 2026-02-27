@@ -1,6 +1,6 @@
 import os
 import pytest
-from atoms_agents.src.models.providers.maps.osm.osm_routing import OsmRoutingProvider
+from atoms_agents.models.providers.maps.osm.osm_routing import OsmRoutingProvider
 
 
 @pytest.mark.asyncio

@@ -1,3 +1,4 @@
+card_type: provider
 provider_id: elevenlabs
 name: ElevenLabs
 provider_type: api

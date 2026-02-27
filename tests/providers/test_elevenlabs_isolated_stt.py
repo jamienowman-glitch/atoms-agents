@@ -3,7 +3,7 @@ import pytest
 import tempfile
 from pathlib import Path
 from tests.providers.utils import build_dummy_wav, has_env_or_vault
-from atoms_agents.src.models.providers.elevenlabs.elevenlabs_isolated_stt import ElevenLabsIsolatedSttProvider
+from atoms_agents.models.providers.elevenlabs.elevenlabs_isolated_stt import ElevenLabsIsolatedSttProvider
 
 
 @pytest.mark.asyncio

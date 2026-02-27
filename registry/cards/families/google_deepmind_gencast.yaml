@@ -1,0 +1,6 @@
+card_type: model_family
+family_id: google.deepmind.gencast
+name: GenCast
+description: Google DeepMind's weather prediction models.
+provider_ids:
+- gcp_vertex

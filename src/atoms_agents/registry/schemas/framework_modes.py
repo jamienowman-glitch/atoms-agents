@@ -1,24 +1,13 @@
-from dataclasses import dataclass, field
-from typing import List, Optional, Any, Dict
+"""
+Legacy shim module.
 
-@dataclass
-class FrameworkAdapterCard:
-    framework_id: str  # e.g. "autogen", "crewai"
-    adapter_import_path: str  # e.g. "atoms_agents.runtime.adapters.autogen_adapter"
+Framework/mode schemas were split into 1-class-per-file modules:
+- atoms_agents.registry.schemas.framework_adapter.FrameworkAdapterCard
+- atoms_agents.registry.schemas.mode.ModeCard
+"""
 
-@dataclass
-class ModeCard:
-    id: str  # e.g. "autogen-basic"
-    framework: str  # e.g. "autogen"
-    official_name: str  # e.g. "AutoGen Basic Chat"
-    invoke_primitive: str  # e.g. "single_turn", "chat_loop"
-    entrypoint: str  # e.g. "atoms_agents.runtime.modes.autogen.basic.run"
+from atoms_agents.registry.schemas.framework_adapter import FrameworkAdapterCard
+from atoms_agents.registry.schemas.mode import ModeCard
 
-    # Optional fields with defaults
-    params: Dict[str, Any] = field(default_factory=dict)
-    streaming_support: bool = False
-    docs_urls: List[str] = field(default_factory=list)
-    pinned_version: Optional[str] = None
-    confidence: str = "experimental"  # experimental, beta, stable
-    notes: str = ""
-    card_type: str = "mode"
+__all__ = ["FrameworkAdapterCard", "ModeCard"]
+

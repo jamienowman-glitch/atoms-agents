@@ -1,3 +1,4 @@
+card_type: provider
 provider_id: gemini
 name: Google Gemini
 provider_type: api

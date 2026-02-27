@@ -1,7 +1,7 @@
 import os
 import pytest
 from tests.providers.utils import random_prompt, has_env_or_vault
-from atoms_agents.src.models.providers.groq.mixtral_8x7b_groq import Mixtral8x7bGroqProvider
+from atoms_agents.models.providers.groq.mixtral_8x7b_groq import Mixtral8x7bGroqProvider
 
 
 @pytest.mark.asyncio

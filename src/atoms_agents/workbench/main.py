@@ -14,10 +14,10 @@ from atoms_agents.registry.schemas import ModelCard
 app = FastAPI(title="Atoms Workbench")
 
 def get_registry() -> RegistryContext:
-    # Path relative to src/atoms_agents/workbench/main.py
-    # to src/atoms_agents/registry/cards
+    # Source of truth lives in the repo-level registry (not the src/ package tree).
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    registry_path = os.path.join(current_dir, "../registry/cards")
+    repo_root = os.path.abspath(os.path.join(current_dir, "../../../.."))
+    registry_path = os.path.join(repo_root, "registry/cards")
     loader = RegistryLoader(root_path=registry_path)
     return loader.load_context()
 
@@ -27,7 +27,7 @@ def get_registry_index():
     return {
         "agents": list(ctx.agents.keys()),
         "reasoning_profiles": list(ctx.reasoning_profiles.keys()),
-        "licenses": list(ctx.licenses.keys()),
+        "licenses": list(ctx.firearms_licenses.keys()),
         "models": list(ctx.models.keys()),
         "personas": list(ctx.personas.keys()),
     }
@@ -83,10 +83,25 @@ async def chat(request: ChatRequest):
 
     messages.append({"role": "user", "content": request.message})
 
+    # --- PRIVACY SCRUBBER (WORKBENCH EGRESS) ---
+    try:
+        from atoms_agents.runtime.privacy.scrubber import RecursiveScrubber
+        from atoms_agents.runtime.privacy.policy import FailClosedPolicy
+        
+        scrubber = RecursiveScrubber()
+        policy = FailClosedPolicy()
+        
+        scrub_result = scrubber.scrub(messages)
+        # Workbench uses 'strict' by default for sanity
+        messages_clean = policy.enforce(scrub_result)
+    except Exception as e:
+        # Fail closed on workbench error - do not leak raw PII to provider
+        raise HTTPException(status_code=500, detail=f"Privacy scrubbing failed: {str(e)}")
+
     # Execute
     try:
         response = gateway.generate(
-            messages=messages,
+            messages=messages_clean,
             model_card=model_card,
             provider_config={},
             stream=False # Force non-stream for simple API response

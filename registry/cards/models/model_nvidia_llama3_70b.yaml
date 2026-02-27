@@ -1,0 +1,13 @@
+card_type: model
+model_id: model.nvidia_llama3_70b
+provider_id: nvidia
+official_id: meta/llama3-70b-instruct
+family_id: meta.llama
+version: '3'
+variant: 70b
+reasoning_effort: medium
+context_window: 8192
+platform_api_surface: openai_compat
+invocation_primitive: REST
+streaming_support: token
+confidence: production

@@ -1,7 +1,7 @@
 import os
 import pytest
 from tests.providers.utils import has_env_or_vault
-from atoms_agents.src.models.providers.maps.google.google_maps_routing import GoogleMapsRoutingProvider
+from atoms_agents.models.providers.maps.google.google_maps_routing import GoogleMapsRoutingProvider
 
 
 @pytest.mark.asyncio

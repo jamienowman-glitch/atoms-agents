@@ -1,7 +1,7 @@
 import os
 import pytest
 from tests.providers.utils import random_prompt, has_env_or_vault
-from atoms_agents.src.models.providers.openrouter.solar_10_7b import Solar107BProvider
+from atoms_agents.models.providers.openrouter.solar_10_7b import Solar107BProvider
 
 
 @pytest.mark.asyncio

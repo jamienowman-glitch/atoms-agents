@@ -1,7 +1,7 @@
 import os
 import pytest
 from tests.providers.utils import random_prompt, has_env_or_vault
-from atoms_agents.src.models.providers.elevenlabs.elevenlabs_multilingual_v1 import ElevenLabsMultilingualV1Provider
+from atoms_agents.models.providers.elevenlabs.elevenlabs_multilingual_v1 import ElevenLabsMultilingualV1Provider
 
 
 @pytest.mark.asyncio

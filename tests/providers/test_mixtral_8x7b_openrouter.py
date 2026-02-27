@@ -1,7 +1,7 @@
 import os
 import pytest
 from tests.providers.utils import random_prompt, has_env_or_vault
-from atoms_agents.src.models.providers.openrouter.mixtral_8x7b_openrouter import Mixtral8x7bOpenRouterProvider
+from atoms_agents.models.providers.openrouter.mixtral_8x7b_openrouter import Mixtral8x7bOpenRouterProvider
 
 
 @pytest.mark.asyncio

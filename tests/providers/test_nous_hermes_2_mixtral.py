@@ -1,7 +1,7 @@
 import os
 import pytest
 from tests.providers.utils import random_prompt, has_env_or_vault
-from atoms_agents.src.models.providers.openrouter.nous_hermes_2_mixtral import NousHermes2MixtralProvider
+from atoms_agents.models.providers.openrouter.nous_hermes_2_mixtral import NousHermes2MixtralProvider
 
 
 @pytest.mark.asyncio

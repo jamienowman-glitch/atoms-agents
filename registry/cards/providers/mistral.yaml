@@ -1,3 +1,4 @@
+card_type: provider
 provider_id: mistral
 name: Mistral AI
 provider_type: api

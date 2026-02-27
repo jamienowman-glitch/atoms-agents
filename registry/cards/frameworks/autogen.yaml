@@ -1,0 +1,19 @@
+card_type: framework
+framework_id: autogen
+name: AutoGen
+description: Multi-agent conversation framework.
+supported_modes:
+- autogen.code_execution
+- autogen.handoff_swarm
+- autogen.human_input
+- autogen.nested_chat
+- autogen.rag_retrieval
+- autogen.round_robin_groupchat
+- autogen.selection_random
+- autogen.selector_groupchat
+- autogen.sequential_chat
+- autogen.stub_control
+- autogen.teachable_agent
+- autogen.termination
+- autogen.tools_function
+- autogen.two_agent_chat

@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Dict, Any, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 import uuid
 
 
@@ -21,7 +21,7 @@ class EventType(str, Enum):
 class AuditEvent:
     event_type: EventType
     run_id: str
-    timestamp: str = field(default_factory=lambda: datetime.utcnow().isoformat())
+    timestamp: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     event_id: str = field(default_factory=lambda: str(uuid.uuid4()))
     tenant_id: Optional[str] = None
     mode: Optional[str] = None

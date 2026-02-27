@@ -1,0 +1,5 @@
+card_type: model_family
+family_id: family.jules
+name: Jules Family
+provider_ids:
+- provider.jules

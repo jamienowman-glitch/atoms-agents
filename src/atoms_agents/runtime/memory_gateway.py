@@ -16,30 +16,36 @@ class MemoryRecord(TypedDict):
     modified_by: str
 
 class MemoryGateway(Protocol):
-    def read_whiteboard(self, edge_id: str) -> Dict[str, Any]:
-        """Reads the whiteboard state used for caching/dedup."""
+    def read_whiteboard(self, scope_type: str, memory_scope_id: str, key: Optional[str] = None) -> Any:
+        """
+        Reads from whiteboard (Scoped).
+        If key provided, returns value. If None, returns all entries as Dict.
+        """
         ...
 
     def write_whiteboard(
         self,
-        edge_id: str,
-        data: Dict[str, Any],
+        scope_type: str,
+        memory_scope_id: str,
+        key: str,
+        value: Any,
         *,
         agent_id: Optional[str] = None,
         source_node_id: Optional[str] = None,
     ) -> None:
-        """Writes run-global data to the whiteboard."""
+        """Writes to whiteboard (Scoped)."""
         ...
 
     def write_blackboard(
         self,
         edge_id: str,
-        data: Dict[str, Any],
+        key: str,
+        value: Any,
         *,
         agent_id: Optional[str] = None,
         source_node_id: Optional[str] = None,
     ) -> None:
-        """Writes output to the edge's blackboard."""
+        """Writes to blackboard (Run+Edge)."""
         ...
 
     def get_inbound_blackboards(self, edge_ids: List[str]) -> Dict[str, Dict[str, Any]]:
@@ -54,65 +60,98 @@ class HttpMemoryGateway:
         self.client = client
         self.ctx = ctx
 
-    def read_whiteboard(self, edge_id: str) -> Dict[str, Any]:
-        path = f"/v1/memory/whiteboard/{edge_id}"
-        try:
-            return self.client.request_json("GET", path, self.ctx)
-        except Exception:
-            # Fallback to empty if not found or error, strictness can be configurable later
-            return {}
+    def _require_id(self, field: str) -> str:
+        val = getattr(self.ctx, field, None)
+        if not val:
+            raise ValueError(f"Memory Gateway Strict Contract Violation: Context field '{field}' is required but missing.")
+        return cast(str, val)
+
+    def read_whiteboard(self, scope_type: str, memory_scope_id: str, key: Optional[str] = None) -> Any:
+        tenant_id = self._require_id("tenant_id")
+        path = "/v1/memory/whiteboard"
+        params = {
+            "scope_type": scope_type,
+            "memory_scope_id": memory_scope_id,
+            "request_tenant_id": tenant_id
+        }
+        if key:
+            params["key"] = key
+            
+        return self.client.request_json("GET", path, self.ctx, params=params)
 
     def write_whiteboard(
         self,
-        edge_id: str,
-        data: Dict[str, Any],
+        scope_type: str,
+        memory_scope_id: str,
+        key: str,
+        value: Any,
         *,
         agent_id: Optional[str] = None,
         source_node_id: Optional[str] = None,
     ) -> None:
-        path = f"/v1/memory/whiteboard/{edge_id}"
+        path = "/v1/memory/whiteboard/write"
         agent_identifier = agent_id or self.ctx.actor_id or self.ctx.user_id
+        
+        # Determine strict identity context
+        tenant_id = self._require_id("tenant_id")
+        project_id = self._require_id("project_id") 
+        run_id = self._require_id("run_id")
+
         payload = {
-            "data": data,
-            "modified_by": self.ctx.user_id,
+            "project_id": project_id,
+            "scope_type": scope_type,
+            "memory_scope_id": memory_scope_id,
+            "run_id": run_id,
+            "key": key,
+            "value": value,
+            "source_node_id": source_node_id,
+            "agent_id": agent_identifier
         }
-        if agent_identifier:
-            payload["agent_id"] = agent_identifier
-        if source_node_id:
-            payload["source_node_id"] = source_node_id
-        provenance = _build_provenance(agent_identifier, source_node_id)
-        if provenance:
-            payload["provenance"] = provenance
-        self.client.request_json("POST", path, self.ctx, json=payload)
+        
+        params = {"request_tenant_id": tenant_id}
+        self.client.request_json("POST", path, self.ctx, params=params, json=payload)
 
     def write_blackboard(
         self,
         edge_id: str,
-        data: Dict[str, Any],
+        key: str,
+        value: Any,
         *,
         agent_id: Optional[str] = None,
         source_node_id: Optional[str] = None,
     ) -> None:
-        path = f"/v1/memory/blackboard/{edge_id}"
+        path = "/v1/memory/blackboard/write"
         agent_identifier = agent_id or self.ctx.actor_id or self.ctx.user_id
+        
+        tenant_id = self._require_id("tenant_id")
+        project_id = self._require_id("project_id")
+        run_id = self._require_id("run_id")
+
         payload = {
-            "data": data,
-            "modified_by": self.ctx.user_id,  # Ensure attribution
+            "project_id": project_id,
+            "run_id": run_id,
+            "edge_id": edge_id,
+            "key": key,
+            "value": value,
+            "source_node_id": source_node_id,
+            "agent_id": agent_identifier
         }
-        if agent_identifier:
-            payload["agent_id"] = agent_identifier
-        if source_node_id:
-            payload["source_node_id"] = source_node_id
-        provenance = _build_provenance(agent_identifier, source_node_id)
-        if provenance:
-            payload["provenance"] = provenance
-        self.client.request_json("POST", path, self.ctx, json=payload)
+        
+        params = {"request_tenant_id": tenant_id}
+        self.client.request_json("POST", path, self.ctx, params=params, json=payload)
 
     def get_inbound_blackboards(self, edge_ids: List[str]) -> Dict[str, Dict[str, Any]]:
         if not edge_ids:
             return {}
-
-        path = "/v1/memory/blackboards/batch"
-        payload = {"edge_ids": edge_ids}
-        response = self.client.request_json("POST", path, self.ctx, json=payload)
-        return cast(Dict[str, Dict[str, Any]], response.get("blackboards", {}))
+            
+        tenant_id = self._require_id("tenant_id")
+        run_id = self._require_id("run_id")
+        
+        path = "/v1/memory/blackboard/batch"
+        payload = {
+            "run_id": run_id,
+            "edge_ids": edge_ids
+        }
+        params = {"request_tenant_id": tenant_id}
+        
+        return self.client.request_json("POST", path, self.ctx, params=params, json=payload)

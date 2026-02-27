@@ -1,0 +1,7 @@
+card_type: capability_binding
+binding_id: binding.jules_msg
+provider_id: jules
+model_or_deployment_id: default
+capability_id: cap.jules.sessions.send_message
+toggle_mechanism: inferred
+minimal_toggle_snippet: Call SendMessage

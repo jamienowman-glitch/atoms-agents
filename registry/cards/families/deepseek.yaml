@@ -1,0 +1,7 @@
+card_type: model_family
+family_id: deepseek
+name: DeepSeek
+description: DeepSeek's reasoning and coding models.
+provider_ids:
+- deepseek
+- openrouter

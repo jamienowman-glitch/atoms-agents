@@ -1,0 +1,6 @@
+card_type: model_family
+family_id: amazon.nova
+name: Amazon Nova
+description: Amazon's family of models balancing intelligence, speed, and cost.
+provider_ids:
+- aws_bedrock

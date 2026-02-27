@@ -1,0 +1,5 @@
+card_type: capability
+capability_id: cap.jules.sessions.create
+capability_name: 'Jules: Create Session'
+description: Create a new interaction session.
+embedded_or_separate: SEPARATE

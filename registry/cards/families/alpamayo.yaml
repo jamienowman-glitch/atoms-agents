@@ -1,0 +1,6 @@
+card_type: model_family
+family_id: alpamayo
+name: Alpamayo
+description: Reasoning VLA for Action Analysis.
+provider_ids:
+- nvidia

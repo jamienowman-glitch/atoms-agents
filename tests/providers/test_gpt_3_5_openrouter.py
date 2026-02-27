@@ -1,7 +1,7 @@
 import os
 import pytest
 from tests.providers.utils import random_prompt, has_env_or_vault
-from atoms_agents.src.models.providers.openrouter.gpt_3_5_openrouter import GPT35OpenRouterProvider
+from atoms_agents.models.providers.openrouter.gpt_3_5_openrouter import GPT35OpenRouterProvider
 
 
 @pytest.mark.asyncio

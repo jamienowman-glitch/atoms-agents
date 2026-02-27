@@ -1,0 +1,6 @@
+card_type: model_family
+family_id: comet
+name: Comet
+description: Comet default models.
+provider_ids:
+- comet

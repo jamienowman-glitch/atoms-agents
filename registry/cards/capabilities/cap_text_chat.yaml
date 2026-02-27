@@ -1,0 +1,5 @@
+card_type: capability
+capability_id: cap.text.chat
+capability_name: Text Chat
+description: Standard LLM conversational ability.
+embedded_or_separate: EMBEDDED

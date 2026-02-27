@@ -1,7 +1,7 @@
 import os
 import pytest
 from tests.providers.utils import random_prompt, has_env_or_vault
-from atoms_agents.src.models.providers.groq.gemma_7b_groq import Gemma7bGroqProvider
+from atoms_agents.models.providers.groq.gemma_7b_groq import Gemma7bGroqProvider
 
 
 @pytest.mark.asyncio

@@ -1,7 +1,7 @@
 import os
 import pytest
 from tests.providers.utils import random_prompt, has_env_or_vault
-from atoms_agents.src.models.providers.openrouter.toppy_m_7b import ToppyM7BProvider
+from atoms_agents.models.providers.openrouter.toppy_m_7b import ToppyM7BProvider
 
 
 @pytest.mark.asyncio

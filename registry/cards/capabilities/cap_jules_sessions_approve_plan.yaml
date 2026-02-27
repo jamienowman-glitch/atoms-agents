@@ -1,0 +1,5 @@
+card_type: capability
+capability_id: cap.jules.sessions.approve_plan
+capability_name: 'Jules: Approve Plan'
+description: Signal approval for a proposed plan.
+embedded_or_separate: SEPARATE

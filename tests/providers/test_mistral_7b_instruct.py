@@ -1,7 +1,7 @@
 import os
 import pytest
 from tests.providers.utils import random_prompt, has_env_or_vault
-from atoms_agents.src.models.providers.openrouter.mistral_7b_instruct import Mistral7BInstructProvider
+from atoms_agents.models.providers.openrouter.mistral_7b_instruct import Mistral7BInstructProvider
 
 
 @pytest.mark.asyncio

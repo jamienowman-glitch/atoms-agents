@@ -1,0 +1,11 @@
+card_type: framework
+framework_id: langgraph
+name: LangGraph
+description: Graph-based control flow for agents.
+supported_modes:
+- langgraph.conditional_router
+- langgraph.human_approval
+- langgraph.map_reduce
+- langgraph.memory
+- langgraph.sequential_chain
+- langgraph.streaming_astream

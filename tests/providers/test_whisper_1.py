@@ -3,7 +3,7 @@ import pytest
 import tempfile
 from pathlib import Path
 from tests.providers.utils import build_dummy_wav, has_env_or_vault
-from atoms_agents.src.models.providers.openai.whisper_1 import Whisper1Provider
+from atoms_agents.models.providers.openai.whisper_1 import Whisper1Provider
 
 @pytest.mark.asyncio
 @pytest.mark.skipif(not has_env_or_vault('OPENAI_API_KEY'), reason="Required key missing")

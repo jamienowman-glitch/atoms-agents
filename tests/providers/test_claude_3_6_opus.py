@@ -2,7 +2,7 @@
 import os
 import pytest
 from tests.providers.utils import random_prompt, has_env_or_vault
-from atoms_agents.src.models.providers.anthropic.claude_3_6_opus import Claude36OpusProvider
+from atoms_agents.models.providers.anthropic.claude_3_6_opus import Claude36OpusProvider
 
 @pytest.mark.asyncio
 @pytest.mark.skipif(not has_env_or_vault('ANTHROPIC_API_KEY'), reason="Required key missing")

@@ -1,0 +1,5 @@
+card_type: capability
+capability_id: cap.jules.sessions.list
+capability_name: 'Jules: List Sessions'
+description: List existing sessions.
+embedded_or_separate: SEPARATE

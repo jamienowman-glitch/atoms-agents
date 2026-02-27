@@ -45,7 +45,8 @@ def compose_messages(
             # user_parts.append(f"From {edge_id}:")
             # In V1, we just dump the data dict.
             # The edge_id is internal plumbing, the agent cares about the content.
-            user_parts.append(json.dumps(data, indent=2))
+            # ensure_ascii=False to keep utf-8 characters as is, which is better for global PII regexes
+            user_parts.append(json.dumps(data, indent=2, ensure_ascii=False))
 
     if nexus_context:
         user_parts.append("\nRelevant Context from Nexus:")

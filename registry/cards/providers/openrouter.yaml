@@ -1,3 +1,4 @@
+card_type: provider
 provider_id: openrouter
 name: OpenRouter
 provider_type: api

@@ -1,7 +1,7 @@
 import os
 import pytest
 from tests.providers.utils import random_prompt, has_env_or_vault
-from atoms_agents.src.models.providers.openrouter.gpt_neo_x_20b import GPTNeoX20bProvider
+from atoms_agents.models.providers.openrouter.gpt_neo_x_20b import GPTNeoX20bProvider
 
 
 @pytest.mark.asyncio

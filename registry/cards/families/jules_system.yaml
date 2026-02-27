@@ -1,0 +1,6 @@
+card_type: model_family
+family_id: jules.system
+name: Jules System
+description: Internal system capabilities.
+provider_ids:
+- jules

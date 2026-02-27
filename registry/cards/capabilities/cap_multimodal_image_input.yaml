@@ -1,0 +1,5 @@
+card_type: capability
+capability_id: cap.multimodal.image_input
+capability_name: Image Input (Vision)
+description: Ability to process images in prompt.
+embedded_or_separate: EMBEDDED

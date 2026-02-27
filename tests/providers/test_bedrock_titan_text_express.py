@@ -2,7 +2,7 @@
 import os
 import pytest
 from tests.providers.utils import random_prompt, has_env_or_vault, skip_bedrock_unavailable
-from atoms_agents.src.models.providers.bedrock.bedrock_titan_text_express import TitanTextExpressBedrockProvider
+from atoms_agents.models.providers.bedrock.bedrock_titan_text_express import TitanTextExpressBedrockProvider
 
 @pytest.mark.asyncio
 @pytest.mark.skipif(not has_env_or_vault('AWS_ACCESS_KEY_ID') or not has_env_or_vault('AWS_SECRET_ACCESS_KEY'), reason="Required key missing")
