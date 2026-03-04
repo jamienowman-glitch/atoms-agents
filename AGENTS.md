@@ -1,3 +1,9 @@
+## Runtime Placement Law (Date: 2026-02-27)
+1. Backend logic and backend APIs must live in `/Users/jaynowman/dev/atoms-core`.
+2. GPU/heavy execution and muscle runtime wrappers must live in `/Users/jaynowman/dev/atoms-muscle`.
+3. Agent runtime/framework/provider wiring must live in `/Users/jaynowman/dev/atoms-agents`.
+4. `flow-factory` is factory UI/config orchestration only; it may call backend services but must not own canonical backend business logic.
+
 # Atoms Agents AGENTS.md (Local Notes)
 Last Updated: 2026-02-17
 
